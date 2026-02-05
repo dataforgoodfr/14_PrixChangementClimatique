@@ -1,9 +1,11 @@
-import re
-import pdfplumber
-import pandas as pd
-import numpy as np
-import fitz  # PyMuPDF
 import argparse
+import re
+
+import fitz  # PyMuPDF
+import numpy as np
+import pandas as pd
+import pdfplumber
+
 
 def run_extract_information_from_pdf(pdf_path: str, out_path: str) -> pd.DataFrame:
     """
@@ -20,6 +22,8 @@ def run_extract_information_from_pdf(pdf_path: str, out_path: str) -> pd.DataFra
     df = transform_information_from_dataframe(df)
     df.to_csv(out_path + ".csv", index=False)
     return df
+
+
 def transform_information_from_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Transform the raw DataFrame into a clean, usable format.
@@ -36,17 +40,23 @@ def transform_information_from_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Cleaned and transformed DataFrame.
     """
-    df_one_hot = extract_one_hot(df["Problème(s) majeur(s) évoqué(s)"]).replace(0, np.nan)
+    df_one_hot = extract_one_hot(df["Problème(s) majeur(s) évoqué(s)"]).replace(
+        0, np.nan
+    )
     df_transform = pd.concat([df, df_one_hot], axis=1)
-    df_transform = df_transform.pipe(extract_department_code_name).pipe(extract_administrative_unit)
+    df_transform = df_transform.pipe(extract_department_code_name).pipe(
+        extract_administrative_unit
+    )
     cols_to_drop = ["Problème(s) majeur(s) évoqué(s)", "departement", "Collectivité"]
     df_transform = df_transform.drop(columns=cols_to_drop)
-    cols = ["collectivite_name"] + [c for c in df_transform.columns if c != "collectivite_name"]
+    cols = ["collectivite_name"] + [
+        c for c in df_transform.columns if c != "collectivite_name"
+    ]
     return df_transform[cols]
 
+
 def extract_questions_from_pdf(pdf_path: str) -> list:
-    """
-    Extract all bold questions ending with ":" from a PDF.
+    """Extract all bold questions ending with ":" from a PDF.
 
     Args:
         pdf_path (str): Path to the PDF file.
@@ -65,7 +75,9 @@ def extract_questions_from_pdf(pdf_path: str) -> list:
                     text = span["text"].strip()
                     if "bold" in span["font"].lower() and text.endswith(":"):
                         results.append(text)
-    cleaned = [re.sub(r"\s+", " ", q).rstrip(":").strip() for q in results if q.strip() != ":"]
+    cleaned = [
+        re.sub(r"\s+", " ", q).rstrip(":").strip() for q in results if q.strip() != ":"
+    ]
     return sorted(set(cleaned))
 
 
@@ -95,7 +107,10 @@ def split_departments(text: str) -> list:
     """
     pattern = re.compile(r"(?m)^(?:\d{2}|2A|2B)\s*-\s*.+$")
     matches = list(pattern.finditer(text))
-    return [(matches[i].group().strip(), text[matches[i].start():matches[i+1].start()]) for i in range(len(matches)-1)]
+    return [
+        (matches[i].group().strip(), text[matches[i].start() : matches[i + 1].start()])
+        for i in range(len(matches) - 1)
+    ]
 
 
 def split_collectivities(block: str) -> list:
@@ -108,7 +123,9 @@ def split_collectivities(block: str) -> list:
     Returns:
         list: List of text blocks for each collectivity.
     """
-    return [c.strip() for c in re.split(r"(?m)^Collectivité\s*:\s*", block)[1:] if c.strip()]
+    return [
+        c.strip() for c in re.split(r"(?m)^Collectivité\s*:\s*", block)[1:] if c.strip()
+    ]
 
 
 def parse_collectivity(text: str, department: str, questions: list) -> dict:
@@ -129,7 +146,10 @@ def parse_collectivity(text: str, department: str, questions: list) -> dict:
     record = {"departement": department, "Collectivité": text.split("\n")[0].strip()}
 
     for key in questions:
-        if key == "Solutions proposées pour régler les problèmes d’assurance des collectivités":
+        if (
+            key
+            == "Solutions proposées pour régler les problèmes d’assurance des collectivités"
+        ):
             pattern = re.compile(
                 rf"(?ms){re.escape(key)}\s*:\s*(.*?)(?=^Collectivité\s*:|^(?:\d{{2}}|2A|2B)\s*-|\Z)"
             )
@@ -157,7 +177,10 @@ def parse_department(block: str, name: str, questions: list) -> list:
     Returns:
         list: List of dictionaries for each collectivity.
     """
-    return [parse_collectivity(city, name, questions) for city in split_collectivities(block)]
+    return [
+        parse_collectivity(city, name, questions)
+        for city in split_collectivities(block)
+    ]
 
 
 def extract_information_from_pdf(pdf_path: str) -> pd.DataFrame:
@@ -172,7 +195,13 @@ def extract_information_from_pdf(pdf_path: str) -> pd.DataFrame:
     """
     text = read_pdf(pdf_path)
     questions = extract_questions_from_pdf(pdf_path)
-    return pd.DataFrame([rec for dept, block in split_departments(text) for rec in parse_department(block, dept, questions)])
+    return pd.DataFrame(
+        [
+            rec
+            for dept, block in split_departments(text)
+            for rec in parse_department(block, dept, questions)
+        ]
+    )
 
 
 def extract_department_code_name(df: pd.DataFrame) -> pd.DataFrame:
@@ -187,7 +216,9 @@ def extract_department_code_name(df: pd.DataFrame) -> pd.DataFrame:
     """
     df = df.copy()
     df["code_department"] = df["departement"].str.extract(r"^(\d{2}|2A|2B)")
-    df["name_department"] = df["departement"].str.extract(r"^(?:\d{2}|2A|2B)\s*-\s*(.+)")
+    df["name_department"] = df["departement"].str.extract(
+        r"^(?:\d{2}|2A|2B)\s*-\s*(.+)"
+    )
     return df
 
 
@@ -202,8 +233,12 @@ def extract_administrative_unit(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with 'collectivite_name' and 'administrative_unit'.
     """
     df = df.copy()
-    df["collectivite_name"] = df["Collectivité"].str.replace(r"\s*\(.*\)", "", regex=True).str.strip()
-    df["administrative_unit"] = df["Collectivité"].str.findall(r"\(([^()]*)\)").str.join(" ")
+    df["collectivite_name"] = (
+        df["Collectivité"].str.replace(r"\s*\(.*\)", "", regex=True).str.strip()
+    )
+    df["administrative_unit"] = (
+        df["Collectivité"].str.findall(r"\(([^()]*)\)").str.join(" ")
+    )
     return df
 
 
@@ -219,16 +254,19 @@ def extract_one_hot(series: pd.Series) -> pd.DataFrame:
     """
     s = series.fillna("").astype(str).str.strip()
     s = s[s.str.startswith("-")]
-    s = s.str.lower().str.replace("’", "'", regex=False).str.replace(r"^-+\s*", "", regex=True).str.replace(r"\s+", " ", regex=True)
+    s = (
+        s.str.lower()
+        .str.replace("’", "'", regex=False)
+        .str.replace(r"^-+\s*", "", regex=True)
+        .str.replace(r"\s+", " ", regex=True)
+    )
     return pd.get_dummies(s)
 
 
-
-
-
-
 def main():
-    parser = argparse.ArgumentParser(description="Extract and transform data from a PDF of municipalities")
+    parser = argparse.ArgumentParser(
+        description="Extract and transform data from a PDF of municipalities"
+    )
     parser.add_argument("pdf_path", type=str, help="Path to the input PDF file")
     parser.add_argument("csv_path", type=str, help="Path to the output CSV file")
     args = parser.parse_args()
@@ -243,6 +281,7 @@ def main():
     run_extract_information_from_pdf(pdf_path, out_path)
 
     print("Extraction completed!")
+
 
 if __name__ == "__main__":
     main()
