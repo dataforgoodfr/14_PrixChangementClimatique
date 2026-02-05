@@ -16,5 +16,7 @@ dependencies = [
     "jupysql>=0.10.17",
     "matplotlib>=3.10.0",
     "pandas>=2.2.3",
+    "pre-commit>=4.5.1",
     "requests>=2.32.3",
+    "tox>=4.34.1",
 ]
