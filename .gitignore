@@ -167,6 +167,7 @@ data/csv/
 
 # AI stuff
 CLAUDE.md
+.agent/
 
 # Other
 .DS_Store
