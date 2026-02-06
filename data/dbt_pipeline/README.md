@@ -1,9 +1,31 @@
 ### Run the projet
 
-- uv run dbt seed
-- uv run dbt run
+Pour faire tourner le dbt de bout en bout, suivre les étapes suivantes :
 
-Then open the output with duckdb (`duckdb --ui dev.duckdb`, see ../README.md for duckdb cli installation)
+(optionnel) Si vous aviez déjà fait tourner le projet, supprimer l'ancienne base de donnée :
+
+`rm data/dbt_pipeline/dev.duckdb`
+
+Télécharger tous les fichiers sources depuis le s3 :
+
+`uv run python data/utils/download_pipeline_inputs.py`
+
+Se placer dans le dossier du projet dbt pour le faire tourner :
+
+`cd data/dbt_pipeline`
+
+Lancer le seed :
+
+`uv run dbt seed`
+
+Lancer le dbt :
+
+`uv run dbt run`
+
+Observer le résultat :
+
+`duckdb --ui dev.duckdb`
+
 
 ### Tests
 
