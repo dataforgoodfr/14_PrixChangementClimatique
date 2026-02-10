@@ -31,11 +31,25 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_pipeline:
-    # Config indicated by + and applies to all files under models/example/
-    example:
+
+    +persist_docs:
+      relation: true
+      columns: true
+
+    bronze:
+      +schema: bronze
       +materialized: view
+    
+    silver:
+      +schema: silver
+      +materialized: table
+
+    gold:
+      +schema: gold
+      +materialized: table
 
 seeds:
   dbt_pipeline:
     +enabled: true
+    +schema: bronze
     +delimiter: ";"
