@@ -177,4 +177,4 @@ data/dbt_pipeline/pipeline_inputs/
 data/dbt_pipeline/.user.yml
 
 # VSCode settings
-.vscode/
+.vscode
