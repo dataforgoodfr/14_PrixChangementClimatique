@@ -1,13 +1,16 @@
-name: update_duckdb
+name: update-dev-duckdb
 
 on:
   push:
     branches:
-      - feat/ci-autoupdate-duckdb-s3
+      - main
+    paths:
+      - 'data/dbt_pipeline/models/**' 
   workflow_dispatch:
 
 jobs:
   run-pipeline:
+    name: Update DuckDB from S3-hosted csv files
     runs-on: ubuntu-latest
 
     env:
