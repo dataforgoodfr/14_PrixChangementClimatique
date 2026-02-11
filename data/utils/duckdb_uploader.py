@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 SCRIPT_DIR = Path(__file__).parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
-LOCAL_DUCKDB_PATH = REPO_ROOT / "dev.duckdb"
+LOCAL_DUCKDB_PATH = REPO_ROOT / "data" / "dbt_pipeline" / "dev.duckdb"
 
 load_dotenv(Path.cwd() / ".env")
 BUCKET_NAME = os.getenv("S3_PCC_BUCKET")
