@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: bronze_rei
+    description: >
+      Données brutes REI 2022 importées depuis le fichier CSV stocké dans
+      le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
+      couche bronze et ne contient aucune transformation métier.
+
+    columns:
+      - name: DEPARTEMENT
+        description: "Code du département de la commune"
+
+      - name: DIRECTION
+        description: "Code direction administrative"
+
+      - name: COMMUNE
+        description: "Code INSEE de la commune"
+
+      - name: COMMUNE_RECENSEE
+        description: "Indique si la commune est recensée (R)"
+
+      - name: NUMERO_SIREN_EPCI
+        description: "Numéro SIREN de l’EPCI auquel appartient la commune"
+
+      - name: LIBELLE_GROUPEMENT
+        description: "Nom du groupement intercommunal"
+
+      - name: OPTION_FISCALE_EPCI
+        description: "Option fiscale de l’EPCI (FPA, FPU, FPZ)"
+
+      - name: FORME_JURIDIQUE_EPCI
+        description: "Type d’EPCI (CA, CU, CC, SAN, Métropole)"
+
+      - name: LIBELLE_COMMUNE
+        description: "Nom officiel de la commune"
+
+      - name: FNB_COMMUNE_BASE_NETTE
+        description: "Base nette FNB pour la commune"
+
+      - name: FNB_COMMUNE_TAUX_NET
+        description: "Taux net FNB appliqué à la commune"
+
+      - name: FNB_COMMUNE_MONTANT_REEL
+        description: "Montant réel FNB pour la commune"
+
+      - name: TAFNB_BASE_TAXABLE_COMMUNALE
+        description: "Base taxable TAFNB pour la commune"
+
+      - name: TAFNB_COMMUNE_TAUX_NET
+        description: "Taux net TAFNB appliqué à la commune"
+
+      - name: TAFNB_COMMUNE_MONTANT_REEL
+        description: "Montant réel TAFNB pour la commune"
