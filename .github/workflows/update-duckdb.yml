@@ -1,6 +1,9 @@
 name: update_duckdb
 
 on:
+  push:
+    branches:
+      - feat/ci-autoupdate-duckdb-s3
   workflow_dispatch:
 
 jobs:
@@ -42,4 +45,4 @@ jobs:
 
       - name: Upload dev.duckdb to bucket root
         run: |
-          uv run python data/utils/duckdb_uploader.py \
+          uv run python data/utils/duckdb_uploader.py
