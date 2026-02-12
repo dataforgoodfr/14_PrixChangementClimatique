@@ -1,132 +1,164 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import maplibregl from "maplibre-gl";
+import { useCallback, useEffect, useState } from "react";
+import {
+  Map,
+  NavigationControl,
+  Popup,
+  Layer,
+  Source,
+  useMap,
+} from "@vis.gl/react-maplibre";
 import { Protocol } from "pmtiles";
+import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Eye, EyeOff, Layers } from "lucide-react";
+import {stringToColor} from "@/lib/map-utils"
 
-// Source PMTiles locale - Communes de France
 const COMMUNES_PMTILES_URL = "/pmtiles/communes.pmtiles";
 const COMMUNES_LAYER_ID = "communes-fill";
 const COMMUNES_BORDER_LAYER_ID = "communes-border";
 const COMMUNES_SOURCE_ID = "communes-source";
 
-export function MapDemo() {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<maplibregl.Map | null>(null);
-  const [isCommunesLayerVisible, setIsCommunesLayerVisible] = useState(true);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
+function LayerControl({
+  isVisible,
+  onToggle,
+  isMapLoaded,
+}: {
+  isVisible: boolean;
+  onToggle: () => void;
+  isMapLoaded: boolean;
+}) {
+  return (
+    <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10">
+      <div className="flex items-center gap-2 mb-2 text-gray-700 font-medium">
+        <Layers size={18} />
+        <span>Couches</span>
+      </div>
+      <button
+        onClick={onToggle}
+        disabled={!isMapLoaded}
+        className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors w-full text-left ${
+          isMapLoaded
+            ? "hover:bg-gray-100 cursor-pointer"
+            : "opacity-50 cursor-not-allowed"
+        } ${isVisible ? "text-gray-800" : "text-gray-400"}`}
+      >
+        {isVisible ? <Eye size={16} /> : <EyeOff size={16} />}
+        <span className="text-sm">Communes de France</span>
+      </button>
+    </div>
+  );
+}
+
+function CommunesLayer({ isVisible }: { isVisible: boolean }) {
+  const visibility = isVisible ? "visible" : "none";
+
+  return (
+    <Source
+      id={COMMUNES_SOURCE_ID}
+      type="vector"
+      url={`pmtiles://${COMMUNES_PMTILES_URL}`}
+    >
+      <Layer
+        id={COMMUNES_LAYER_ID}
+        type="fill"
+        source-layer="communes"
+        layout={{ visibility }}
+        paint={{
+          "fill-color": "#F5DEB3",
+          "fill-opacity": 0.4,
+        }}
+      />
+      <Layer
+        id={COMMUNES_BORDER_LAYER_ID}
+        type="line"
+        source-layer="communes"
+        layout={{ visibility }}
+        paint={{
+          "line-color": "#191970",
+          "line-width": 1,
+          "line-opacity": 0.8,
+        }}
+      />
+    </Source>
+  );
+}
+
+function CursorHandler() {
+  const { current: map } = useMap();
 
   useEffect(() => {
-    if (map.current || !mapContainer.current) return;
+    if (!map) return;
 
-    // Enregistrer le protocole PMTiles
+    const handleMouseEnter = () => {
+      map.getCanvas().style.cursor = "pointer";
+    };
+
+    const handleMouseLeave = () => {
+      map.getCanvas().style.cursor = "";
+    };
+
+    map.on("mouseenter", COMMUNES_LAYER_ID, handleMouseEnter);
+    map.on("mouseleave", COMMUNES_LAYER_ID, handleMouseLeave);
+
+    return () => {
+      map.off("mouseenter", COMMUNES_LAYER_ID, handleMouseEnter);
+      map.off("mouseleave", COMMUNES_LAYER_ID, handleMouseLeave);
+    };
+  }, [map]);
+
+  return null;
+}
+
+export function MapDemo() {
+  const [isCommunesLayerVisible, setIsCommunesLayerVisible] = useState(true);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [hoverInfo, setHoverInfo] = useState<{
+    longitude: number;
+    latitude: number;
+    name: string;
+    code: string;
+  } | null>(null);
+
+  useEffect(() => {
     const protocol = new Protocol();
     maplibregl.addProtocol("pmtiles", protocol.tile);
 
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: `https://api.protomaps.com/styles/v5/light/fr.json?key=72196f954acb1cae`,
-      center: [2.3522, 48.8566], // Paris
-      zoom: 12,
-    });
-
-    map.current.addControl(new maplibregl.NavigationControl(), "top-right");
-
-    const communesPopup = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      className: "commune-popup",
-    });
-
-    map.current.on("load", () => {
-      if (!map.current) return;
-
-      // Ajouter la source PMTiles Communes (locale)
-      map.current.addSource(COMMUNES_SOURCE_ID, {
-        type: "vector",
-        url: `pmtiles://${COMMUNES_PMTILES_URL}`,
-      });
-
-      // Ajouter la couche de remplissage des communes (fond beige transparent)
-      map.current.addLayer({
-        id: COMMUNES_LAYER_ID,
-        type: "fill",
-        source: COMMUNES_SOURCE_ID,
-        "source-layer": "communes",
-        paint: {
-          "fill-color": "#F5DEB3", // Beige (wheat)
-          "fill-opacity": 0.4,
-        },
-      });
-
-      // Ajouter la couche de bordure des communes (bleu nuit)
-      map.current.addLayer({
-        id: COMMUNES_BORDER_LAYER_ID,
-        type: "line",
-        source: COMMUNES_SOURCE_ID,
-        "source-layer": "communes",
-        paint: {
-          "line-color": "#191970", // Bleu nuit (Midnight Blue)
-          "line-width": 1,
-          "line-opacity": 0.8,
-        },
-      });
-
-      // Événements de survol pour les communes
-      map.current.on("mouseenter", COMMUNES_LAYER_ID, () => {
-        if (map.current) map.current.getCanvas().style.cursor = "pointer";
-      });
-
-      map.current.on("mouseleave", COMMUNES_LAYER_ID, () => {
-        if (map.current) map.current.getCanvas().style.cursor = "";
-        communesPopup.remove();
-      });
-
-      map.current.on("mousemove", COMMUNES_LAYER_ID, (e) => {
-        if (!map.current || !e.features || e.features.length === 0) return;
-
-        const feature = e.features[0];
-        const properties = feature.properties;
-
-        const name = properties.com_name || "Sans nom";
-        const code = properties.com_code || "";
-
-        let html = `<div class="font-semibold text-gray-900">${name}</div>`;
-        if (code) {
-          html += `<div class="text-sm text-gray-600">Code INSEE: ${code}</div>`;
-        }
-
-        communesPopup.setLngLat(e.lngLat).setHTML(html).addTo(map.current);
-      });
-
-      setIsMapLoaded(true);
-    });
-
     return () => {
       maplibregl.removeProtocol("pmtiles");
-      map.current?.remove();
-      map.current = null;
     };
   }, []);
 
-  const toggleCommunesLayerVisibility = () => {
-    if (!map.current || !isMapLoaded) return;
+  const handleLoad = useCallback(() => {
+    setIsMapLoaded(true);
+  }, []);
 
-    const newVisibility = !isCommunesLayerVisible;
-    map.current.setLayoutProperty(
-      COMMUNES_LAYER_ID,
-      "visibility",
-      newVisibility ? "visible" : "none",
-    );
-    map.current.setLayoutProperty(
-      COMMUNES_BORDER_LAYER_ID,
-      "visibility",
-      newVisibility ? "visible" : "none",
-    );
-    setIsCommunesLayerVisible(newVisibility);
-  };
+  const handleMouseMove = useCallback(
+    (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
+      const feature = event.features?.[0];
+      if (feature) {
+        const properties = feature.properties;
+        setHoverInfo({
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          name: properties.com_name || "Sans nom",
+          code: properties.com_code || "",
+        });
+      } else {
+        setHoverInfo(null);
+      }
+    },
+    [],
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setHoverInfo(null);
+  }, []);
+
+  const toggleCommunesLayerVisibility = useCallback(() => {
+    setIsCommunesLayerVisible((prev) => !prev);
+  }, []);
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
@@ -136,27 +168,48 @@ export function MapDemo() {
         </h1>
       </div>
       <div className="relative flex-1 min-h-0">
-        <div ref={mapContainer} className="h-full w-full" />
+        <Map
+          initialViewState={{
+            longitude: 2.3522,
+            latitude: 48.8566,
+            zoom: 12,
+          }}
+          style={{ width: "100%", height: "100%" }}
+          mapStyle="https://api.protomaps.com/styles/v5/light/fr.json?key=72196f954acb1cae"
+          interactiveLayerIds={[COMMUNES_LAYER_ID]}
+          onLoad={handleLoad}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <NavigationControl position="top-right" />
+          <CommunesLayer isVisible={isCommunesLayerVisible} />
+          <CursorHandler />
 
-        {/* Contrôle de visibilité des couches */}
-        <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10">
-          <div className="flex items-center gap-2 mb-2 text-gray-700 font-medium">
-            <Layers size={18} />
-            <span>Couches</span>
-          </div>
-          <button
-            onClick={toggleCommunesLayerVisibility}
-            disabled={!isMapLoaded}
-            className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors w-full text-left ${
-              isMapLoaded
-                ? "hover:bg-gray-100 cursor-pointer"
-                : "opacity-50 cursor-not-allowed"
-            } ${isCommunesLayerVisible ? "text-gray-800" : "text-gray-400"}`}
-          >
-            {isCommunesLayerVisible ? <Eye size={16} /> : <EyeOff size={16} />}
-            <span className="text-sm">Communes de France</span>
-          </button>
-        </div>
+          {hoverInfo && (
+            <Popup
+              longitude={hoverInfo.longitude}
+              latitude={hoverInfo.latitude}
+              closeButton={false}
+              closeOnClick={false}
+              className="commune-popup"
+            >
+              <div className="font-semibold text-gray-900">
+                {hoverInfo.name}
+              </div>
+              {hoverInfo.code && (
+                <div className="text-sm text-gray-600">
+                  Code INSEE: {hoverInfo.code}
+                </div>
+              )}
+            </Popup>
+          )}
+        </Map>
+
+        <LayerControl
+          isVisible={isCommunesLayerVisible}
+          onToggle={toggleCommunesLayerVisibility}
+          isMapLoaded={isMapLoaded}
+        />
       </div>
     </div>
   );
