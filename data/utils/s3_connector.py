@@ -1,5 +1,6 @@
 import boto3
 from pathlib import Path
+from botocore.exceptions import ClientError
 
 import os
 
@@ -42,23 +43,40 @@ def send_file_to_s3(
             ACL='public-read' 
         )
 
-def send_db_to_s3(
+def send_large_file_to_s3(
     s3_client: boto3.client,
     bucket: str,
     filepath: str,
-    s3_filepath: str
+    s3_filepath: str,
+    replace: bool = False
 ):
-    """Upload de gros fichiers S3 avec upload_file (pour db) et le rend public"""
+    """Upload un fichier vers S3 avec option de remplacement"""
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"Fichier non trouvé : {filepath}")
 
-    print(f"Upload de {filepath} vers {bucket}/{s3_filepath} ...")
+    if not replace:
+        try:
+            #pas d'upload si le fichier existe déjà sur S3
+            s3_client.head_object(Bucket=bucket, Key=s3_filepath)
+            print(f"Fichier déjà présent sur S3 : {bucket}/{s3_filepath} → skip")
+            return
+        except ClientError as e:
+            # si l'erreur n'est pas "404 Not Found", lever l'exception
+            if e.response["Error"]["Code"] != "404":
+                raise
+
+    print(
+        f"Upload de {filepath} vers {bucket}/{s3_filepath} "
+        f"(replace={replace}) ..."
+    )
+
     s3_client.upload_file(
         filepath,
         bucket,
         s3_filepath,
         ExtraArgs={"ACL": "public-read"}
     )
+
     print("Upload terminé ✅")
 
     

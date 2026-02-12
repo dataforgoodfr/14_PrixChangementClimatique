@@ -1,4 +1,4 @@
-from s3_connector import get_s3_client, send_db_to_s3
+from s3_connector import get_s3_client, send_large_file_to_s3
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -16,9 +16,10 @@ if __name__ == "__main__":
     """Creates a S3 client and uploads the local DuckDB file to the
     specified bucket and key, making it publicly accessible.
     """
-    send_db_to_s3(
+    send_large_file_to_s3(
         s3_client = get_s3_client(),
         bucket = BUCKET_NAME,
         filepath = LOCAL_DUCKDB_PATH,
-        s3_filepath = REMOTE_KEY
+        s3_filepath = REMOTE_KEY,
+        replace = True,
     )
