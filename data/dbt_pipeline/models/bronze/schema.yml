@@ -6,49 +6,76 @@ models:
       Données brutes REI 2022 importées depuis le fichier CSV stocké dans
       le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
       couche bronze et ne contient aucune transformation métier.
-
     columns:
       - name: DEPARTEMENT
         description: "Code du département de la commune"
-
       - name: DIRECTION
         description: "Code direction administrative"
-
       - name: COMMUNE
         description: "Code INSEE de la commune"
-
       - name: COMMUNE_RECENSEE
         description: "Indique si la commune est recensée (R)"
-
       - name: NUMERO_SIREN_EPCI
         description: "Numéro SIREN de l’EPCI auquel appartient la commune"
-
       - name: LIBELLE_GROUPEMENT
         description: "Nom du groupement intercommunal"
-
       - name: OPTION_FISCALE_EPCI
         description: "Option fiscale de l’EPCI (FPA, FPU, FPZ)"
-
       - name: FORME_JURIDIQUE_EPCI
         description: "Type d’EPCI (CA, CU, CC, SAN, Métropole)"
-
       - name: LIBELLE_COMMUNE
         description: "Nom officiel de la commune"
-
       - name: FNB_COMMUNE_BASE_NETTE
         description: "Base nette FNB pour la commune"
-
       - name: FNB_COMMUNE_TAUX_NET
         description: "Taux net FNB appliqué à la commune"
-
       - name: FNB_COMMUNE_MONTANT_REEL
         description: "Montant réel FNB pour la commune"
-
       - name: TAFNB_BASE_TAXABLE_COMMUNALE
         description: "Base taxable TAFNB pour la commune"
-
       - name: TAFNB_COMMUNE_TAUX_NET
         description: "Taux net TAFNB appliqué à la commune"
-
       - name: TAFNB_COMMUNE_MONTANT_REEL
         description: "Montant réel TAFNB pour la commune"
+  
+  - name: insee_filosofi_2021
+    description: >
+      Données INSEE
+      Principaux indicateurs sur la pauvreté en 2021 : 
+      niveau de vie, taux de pauvreté, part des ménages imposés et décomposition du revenu disponible
+      Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi)
+      Identifiant du jeu de données : DS_FILOSOFI_CC
+      https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC
+    persist_docs:
+      relation: true 
+      columns: true 
+    columns:
+      - name: geo
+        description: "Exemple : 001 pour Paris, 002 pour Lyon, 144 pour Louvier, 32462 pour Vic-Fezensac..."
+        type: STRING
+      - name: geo_object
+        description: "Type de geo : COM, BV2022"
+        type: STRING
+      - name: filosofi_measure
+        description: "Mesures filosofi  - voir les metadonnes https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC"
+        type: STRING
+      - name: unit_measure
+        description: >
+          Unité de mesure : 
+          PT pour pourcentage, EUR_YR pour Euros par an, _Z pour nombre et PS pour personnes
+        type: STRING
+      - name: unit_mult
+        description: "Quantité d'unités (en puissance de 10)"
+        type: INTEGER
+      - name: conf_status
+        description: "Statut de confidentialité : F pour diffusable, C pour Confidentiel (obs_value sera null)"
+        type: STRING
+      - name: obs_status
+        description: "Statut de l'observation : A pour normal, O pour valeur manquante"
+        type: STRING
+      - name: time_period
+        description: "Periode temporelle: année - toujours 2021"
+        type: INTEGER
+      - name: obs_value
+        description: "Valeur numérique"
+        type: FLOAT
