@@ -175,6 +175,7 @@ data/dbt_pipeline/pipeline_inputs/
 
 # DBT user config
 data/dbt_pipeline/.user.yml
+data/dbt_pipeline/package-lock.yml
 
 # VSCode settings
 .vscode

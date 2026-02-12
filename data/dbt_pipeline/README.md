@@ -91,6 +91,38 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 ## Plus de doc svp ?
 
+### Macros dans DBT et langage Jinja
+
+Je veux utiliser des macros dans mes models, pour des selects variables de colonne, des transformations en boucle, effectuer des tests de mon model... :
+- J'installe les dépendances du projet DBT, avec le package dbt-utils qui contient déjà une multitude de fonctions en macros
+`cd data/dbt_pipeline`
+`dbt deps`
+
+- Pour utiliser du langage Jinja dans mes models, mon VSCode doit détecter ces macros:
+    - créer ou aller dans le fichier de config .vscode/settings.json
+    - insérer le code suivant :
+    {
+      "files.associations": {
+      "*.yml": "jinja-yaml",
+      "*.sql": "jinja-sql"
+      },
+    }
+
+- Utiliser une macro dans mon model, j'appelle la macro en double accolade :
+    {{ nom_de_macro(param1, param2,....) }}
+
+- Exempler pour appeler toutes les colonnes en schéma variable dans un csv avec la macro 'star' (équivalent de select *, adapté à un appel de source par DBT)
+    select 
+        {{ dbt_utils.star(from=source('bronze', 'ma_source')) }}
+    from {{ source('bronze', 'ma_source') }}
+
+- Faire une boucle Jinja dans un model DBT
+    {% for '' in [''] %}
+        {% if '' %}
+            {% set '' %}
+        {% endif %}
+    {% endfor %}
+
 ### Tests
 
 - un run dbt test
