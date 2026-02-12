@@ -50,24 +50,39 @@ def send_large_file_to_s3(
     s3_filepath: str,
     replace: bool = False
 ):
-    """Upload un fichier vers S3 avec option de remplacement"""
+    """Upload un fichier vers S3 avec vérification de l'existence et de la taille"""
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"Fichier non trouvé : {filepath}")
 
+    local_size = os.path.getsize(filepath)
+
     if not replace:
         try:
-            #pas d'upload si le fichier existe déjà sur S3
-            s3_client.head_object(Bucket=bucket, Key=s3_filepath)
-            print(f"Fichier déjà présent sur S3 : {bucket}/{s3_filepath} → skip")
-            return
+            # Vérifier si le fichier existe déjà sur S3 et comparer les tailles
+            head = s3_client.head_object(Bucket=bucket, Key=s3_filepath)
+            s3_size = head["ContentLength"]
+
+            if s3_size == local_size:
+                print(
+                    f"Fichier déjà présent sur S3 "
+                    f"({local_size} bytes identiques) → skip"
+                )
+                return
+            else:
+                print(
+                    "Fichier présent sur S3 mais taille différente "
+                    f"(local={local_size}, s3={s3_size}) → upload"
+                )
+
         except ClientError as e:
-            # si l'erreur n'est pas "404 Not Found", lever l'exception
+            #Si l'erreur n'est pas "404 Not Found" ie fichier absent, on la remonte
             if e.response["Error"]["Code"] != "404":
                 raise
 
     print(
-        f"Upload de {filepath} vers {bucket}/{s3_filepath} "
-        f"(replace={replace}) ..."
+        "Upload de "
+        f"{filepath} vers {bucket}/{s3_filepath} "
+        f"(replace={replace} ..."
     )
 
     s3_client.upload_file(
@@ -78,6 +93,7 @@ def send_large_file_to_s3(
     )
 
     print("Upload terminé ✅")
+
 
     
 

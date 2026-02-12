@@ -57,14 +57,14 @@ Uploader le fichier dans le bucket `qppcc-upload`, dans le dossier /pipeline_inp
 
 ou 
 
-2/ utiliser le script python `data/utils/csv_uploader.py` qui upload tous les fichiers CSV présents dans le dossier `data/dbt_pipeline/pipeline_inputs` vers le s3, dans le dossier /pipeline_inputs du bucket.
+2/ utiliser le script python `data/utils/csv_uploader.py` qui upload tous les nouveaux fichiers CSV présents dans le dossier `data/dbt_pipeline/pipeline_inputs` vers le s3, dans le dossier /pipeline_inputs du bucket. Il se base sur la taille des fichiers pour ne remplacer que les fichiers différents.
 Vous aurez besoin de créer les clés d'accès au s3 et de les ajouter dans un fichier .env à la racine du projet, avec les variables d'environnement suivantes :
 ```
 - S3_ACCESS_KEY_ID = la clé projet récupérée
 - 3_SECRET_ACCESS_KEY = la clé secrète projet récupérée 
-- S3_ENDPOINT_URL = `https://s3.fr-par.scw.cloud`
-- S3_REGION = `fr-par`
-- S3_PCC_BUCKET = `qppcc-upload`
+- S3_ENDPOINT_URL = "https://s3.fr-par.scw.cloud"
+- S3_REGION = "fr-par"
+- S3_PCC_BUCKET = "qppcc-upload"
 ```
 
 - Etape 2 : rendre ce fichier public si vous avez chargé le fichier à la main.
