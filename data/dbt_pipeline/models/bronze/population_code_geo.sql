@@ -1,3 +1,9 @@
+{{
+  config(
+    materialized='table'
+  )
+}}
+    
 select
     codgeo               as code_geo,
     libgeo               as nom_geo,
