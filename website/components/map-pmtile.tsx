@@ -13,7 +13,7 @@ import { Protocol } from "pmtiles";
 import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Eye, EyeOff, Layers } from "lucide-react";
-import {stringToColor} from "@/lib/map-utils"
+import { stringToColor } from "@/lib/map-utils";
 
 const COMMUNES_PMTILES_URL = "/pmtiles/communes.pmtiles";
 const COMMUNES_LAYER_ID = "communes-fill";
@@ -51,6 +51,49 @@ function LayerControl({
   );
 }
 
+function CommunesColorUpdater() {
+  const { current: map } = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+
+    const updateFeatureColors = () => {
+      const source = map.getSource(COMMUNES_SOURCE_ID);
+      if (!source) return;
+
+      const features = map.querySourceFeatures(COMMUNES_SOURCE_ID, {
+        sourceLayer: "communes",
+      });
+
+      const seenIds = new Set<string>();
+      for (const feature of features) {
+        const id = feature.id;
+        if (id === undefined || seenIds.has(String(id))) continue;
+        seenIds.add(String(id));
+
+        const comName = feature.properties?.com_name || "";
+        const color = stringToColor(comName);
+
+        map.setFeatureState(
+          { source: COMMUNES_SOURCE_ID, sourceLayer: "communes", id },
+          { color },
+        );
+      }
+    };
+
+    map.on("sourcedata", updateFeatureColors);
+    map.on("moveend", updateFeatureColors);
+    updateFeatureColors();
+
+    return () => {
+      map.off("sourcedata", updateFeatureColors);
+      map.off("moveend", updateFeatureColors);
+    };
+  }, [map]);
+
+  return null;
+}
+
 function CommunesLayer({ isVisible }: { isVisible: boolean }) {
   const visibility = isVisible ? "visible" : "none";
 
@@ -59,6 +102,7 @@ function CommunesLayer({ isVisible }: { isVisible: boolean }) {
       id={COMMUNES_SOURCE_ID}
       type="vector"
       url={`pmtiles://${COMMUNES_PMTILES_URL}`}
+      promoteId="com_code"
     >
       <Layer
         id={COMMUNES_LAYER_ID}
@@ -66,8 +110,8 @@ function CommunesLayer({ isVisible }: { isVisible: boolean }) {
         source-layer="communes"
         layout={{ visibility }}
         paint={{
-          "fill-color": "#F5DEB3",
-          "fill-opacity": 0.4,
+          "fill-color": ["coalesce", ["feature-state", "color"], "#F5DEB3"],
+          "fill-opacity": 0.6,
         }}
       />
       <Layer
@@ -183,6 +227,7 @@ export function MapDemo() {
         >
           <NavigationControl position="top-right" />
           <CommunesLayer isVisible={isCommunesLayerVisible} />
+          <CommunesColorUpdater />
           <CursorHandler />
 
           {hoverInfo && (
