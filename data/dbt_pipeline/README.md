@@ -90,13 +90,16 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 - A ce moment là je merge.
 
-- vérifier que le worflow github actions "update-dev-duckdb" est bien passé, ce qui signifie que le fichier dev.duckdb a été mis à jour dans le s3 du projet en fonction des modifications apportées sur la PR et des nouveaux fichiers csv chargés.
+- vérifier que le worflow github actions "update-dev-duckdb" est bien passé, ce qui signifie que le fichier dev.duckdb a été mis à jour dans le s3 du projet en fonction des modifications apportées sur la PR et des nouveaux fichiers csv chargés. En cas de problème, je peux le faire manuellement : 
 
-En cas de problème, je peux le faire manuellement : 
   - Je checkout main et je pull le nouveau main (localement).
+
   - Je fais tourner la pipeline dbt en entier, voir la procédure plus haut.
+
   - J'obtiens alors un nouveau fichier dev.duckdb dans le dossier data/dbt_pipeline
+
   - J'upload ce fichier à la place du fichier du même nom dans le s3 du projet (voir la "Procédure simple d'import d'un fichier CSV" plus haut pour voir quel outil utiliser)
+
   - Je m'assure que le fichier est public (voir plus haut également)
 
 
