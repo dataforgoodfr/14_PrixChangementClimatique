@@ -50,11 +50,24 @@ Dans cette procédure nous allons utiliser le s3 du projet, dans lequel un dossi
 
 Important : si vous n'avez pas encore les clés, demandez les sur un des canaux mattermost du projet.
 
-Pour uploader le fichier il vous faudra le faire à la main, en utilisant l'outil de votre choix. Si vous n'avez jamais fait de telles opérations, nous conseillons l'outil cyberduck qui permet de la réaliser facilement, avec une interface. Il faudra créer une nouvelle connection en choisissant bien le format "(Amazon) s3".
+Pour uploader le fichier vous pouvez : 
 
+1/ Le faire à la main, en utilisant l'outil de votre choix. Si vous n'avez jamais fait de telles opérations, nous conseillons l'outil cyberduck qui permet de la réaliser facilement, avec une interface. Il faudra créer une nouvelle connection en choisissant bien le format "(Amazon) s3".
 Uploader le fichier dans le bucket `qppcc-upload`, dans le dossier /pipeline_inputs de ce bucket.
 
-- Etape 2 : rendre ce fichier public.
+ou 
+
+2/ utiliser le script python `data/utils/csv_uploader.py` qui upload tous les nouveaux fichiers CSV présents dans le dossier `data/dbt_pipeline/pipeline_inputs` vers le s3, dans le dossier /pipeline_inputs du bucket. Il se base sur la taille des fichiers pour ne remplacer que les fichiers différents.
+Vous aurez besoin de créer les clés d'accès au s3 et de les ajouter dans un fichier .env à la racine du projet, avec les variables d'environnement suivantes :
+```
+S3_ACCESS_KEY_ID = la clé projet récupérée
+3_SECRET_ACCESS_KEY = la clé secrète projet récupérée 
+S3_ENDPOINT_URL = "https://s3.fr-par.scw.cloud"
+S3_REGION = "fr-par"
+S3_PCC_BUCKET = "qppcc-upload"
+```
+
+- Etape 2 : rendre ce fichier public si vous avez chargé le fichier à la main.
 
 C'est important sinon le téléchargement du fichier lors du run de la pipeline ne fonctionnera pas.
 
@@ -73,19 +86,22 @@ Enfin on ajoute dans le schema.yml du dossier, qui décrit tous les modèles de 
 
 En suivant toutes les étapes énnoncées plus haut dans la section "Comment le faire tourner ?"
 
-### Ma PR github est validé, qu'elle est la suite ?
+### Ma PR github est validée, quelle est la suite ?
 
 - A ce moment là je merge.
 
-- Puis je checkout main et je pull le nouveau main (localement).
+- vérifier que le worflow github actions "update-dev-duckdb" est bien passé, ce qui signifie que le fichier dev.duckdb a été mis à jour dans le s3 du projet en fonction des modifications apportées sur la PR et des nouveaux fichiers csv chargés. En cas de problème, je peux le faire manuellement : 
 
-- Je fais tourner la pipeline dbt en entier, voir la procédure plus haut.
+  - Je checkout main et je pull le nouveau main (localement).
 
-- J'obtiens alors un nouveau fichier dev.duckdb dans le dossier data/dbt_pipeline
+  - Je fais tourner la pipeline dbt en entier, voir la procédure plus haut.
 
-- J'upload ce fichier à la place du fichier du même nom dans le s3 du projet (voir la "Procédure simple d'import d'un fichier CSV" plus haut pour voir quel outil utiliser)
+  - J'obtiens alors un nouveau fichier dev.duckdb dans le dossier data/dbt_pipeline
 
-- Je m'assure que le fichier est publique (voir plus haut également)
+  - J'upload ce fichier à la place du fichier du même nom dans le s3 du projet (voir la "Procédure simple d'import d'un fichier CSV" plus haut pour voir quel outil utiliser)
+
+  - Je m'assure que le fichier est public (voir plus haut également)
+
 
 - Je communique sur [le channel Mattermost Data Analyse](https://mattermost.services.dataforgood.fr/data-for-good/channels/14_pcc_dataanalyst) l'ajout de la nouvelle donnée
 

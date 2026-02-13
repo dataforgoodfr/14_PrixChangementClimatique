@@ -1,0 +1,51 @@
+name: update-dev-duckdb
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/dbt_pipeline/models/**' 
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    name: Update DuckDB from S3-hosted csv files
+    runs-on: ubuntu-latest
+
+    env:
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      S3_REGION: ${{ vars.S3_REGION }}
+      S3_ENDPOINT_URL: ${{ vars.S3_ENDPOINT_URL }}
+      S3_PCC_BUCKET: ${{ vars.S3_PCC_BUCKET }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: |
+          pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync
+
+      - name: Download pipeline csv inputs from bucket
+        run: |
+          uv run python data/utils/download_pipeline_inputs.py
+
+      - name: Run dbt (create duckdb.dev)
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt run
+
+      - name: Upload dev.duckdb to bucket root
+        run: |
+          uv run python data/utils/duckdb_uploader.py
