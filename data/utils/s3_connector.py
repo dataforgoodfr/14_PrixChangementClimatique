@@ -1,5 +1,9 @@
 import boto3
 from pathlib import Path
+<<<<<<< ingestion_budget_communes
+=======
+from botocore.exceptions import ClientError
+>>>>>>> main
 
 import os
 
@@ -41,6 +45,7 @@ def send_file_to_s3(
             Key=s3_filepath,
             ACL='public-read' 
         )
+<<<<<<< ingestion_budget_communes
     
 if __name__ == "__main__":
 
@@ -54,3 +59,80 @@ if __name__ == "__main__":
         region_name=os.getenv('S3_REGION')
     )
     print(s3_client.list_objects_v2(Bucket="qppcc-upload"))
+=======
+
+def send_large_file_to_s3(
+    s3_client: boto3.client,
+    bucket: str,
+    filepath: str,
+    s3_filepath: str,
+    replace: bool = False
+):
+    """Upload un fichier vers S3 avec vérification de l'existence et de la taille"""
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"Fichier non trouvé : {filepath}")
+
+    local_size = os.path.getsize(filepath)
+
+    if not replace:
+        try:
+            # Vérifier si le fichier existe déjà sur S3 et comparer les tailles
+            head = s3_client.head_object(Bucket=bucket, Key=s3_filepath)
+            s3_size = head["ContentLength"]
+
+            if s3_size == local_size:
+                print(
+                    f"Fichier déjà présent sur S3 "
+                    f"({local_size} bytes identiques) → skip"
+                )
+                return
+            else:
+                print(
+                    "Fichier présent sur S3 mais taille différente "
+                    f"(local={local_size}, s3={s3_size}) → upload"
+                )
+
+        except ClientError as e:
+            #Si l'erreur n'est pas "404 Not Found" ie fichier absent, on la remonte
+            if e.response["Error"]["Code"] != "404":
+                raise
+
+    print(
+        "Upload de "
+        f"{filepath} vers {bucket}/{s3_filepath} "
+        f"(replace={replace} ..."
+    )
+
+    s3_client.upload_file(
+        filepath,
+        bucket,
+        s3_filepath,
+        ExtraArgs={"ACL": "public-read"}
+    )
+
+    print("Upload terminé ✅")
+
+
+    
+
+def get_s3_client():
+    """Charge le .env et retourne un client S3 configuré pour Scaleway ou AWS."""
+    # Charger .env
+    current_dir = Path.cwd()
+    load_dotenv(current_dir / ".env")
+
+    # Créer le client S3
+    client = boto3.client(
+        "s3",
+        endpoint_url=os.getenv("S3_ENDPOINT_URL"),
+        aws_access_key_id=os.getenv("S3_ACCESS_KEY"),
+        aws_secret_access_key=os.getenv("S3_SECRET_ACCESS_KEY"),
+        region_name=os.getenv("S3_REGION")
+    )
+    return client
+
+
+if __name__ == "__main__":
+
+    print(get_s3_client().list_objects_v2(Bucket="qppcc-upload"))
+>>>>>>> main
