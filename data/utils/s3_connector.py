@@ -1,9 +1,6 @@
 import boto3
 from pathlib import Path
-<<<<<<< ingestion_budget_communes
-=======
 from botocore.exceptions import ClientError
->>>>>>> main
 
 import os
 
@@ -45,21 +42,6 @@ def send_file_to_s3(
             Key=s3_filepath,
             ACL='public-read' 
         )
-<<<<<<< ingestion_budget_communes
-    
-if __name__ == "__main__":
-
-    current_dir = Path.cwd()
-    load_dotenv(current_dir / ".env")
-
-    s3_client = connect_to_s3(
-        endpoint_url=os.getenv('S3_ENDPOINT_URL'),
-        access_key_id=os.getenv('S3_ACCESS_KEY'),
-        secret_access_key=os.getenv('S3_SECRET_ACCESS_KEY'),
-        region_name=os.getenv('S3_REGION')
-    )
-    print(s3_client.list_objects_v2(Bucket="qppcc-upload"))
-=======
 
 def send_large_file_to_s3(
     s3_client: boto3.client,
@@ -135,4 +117,3 @@ def get_s3_client():
 if __name__ == "__main__":
 
     print(get_s3_client().list_objects_v2(Bucket="qppcc-upload"))
->>>>>>> main
