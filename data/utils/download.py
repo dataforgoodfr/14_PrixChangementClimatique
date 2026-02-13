@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Download DuckDB database files from S3."""
+
 import sys
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -11,15 +12,15 @@ def download_file(url: str, destination: Path) -> bool:
 
     try:
         # Open URL and get file size
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req) as response:
-            total_size = int(response.headers.get('content-length', 0))
+            total_size = int(response.headers.get("content-length", 0))
 
             # Download in chunks with progress
             chunk_size = 8192  # 8KB chunks
             downloaded = 0
 
-            with open(destination, 'wb') as f:
+            with open(destination, "wb") as f:
                 while True:
                     chunk = response.read(chunk_size)
                     if not chunk:
@@ -32,7 +33,9 @@ def download_file(url: str, destination: Path) -> bool:
                         progress = (downloaded / total_size) * 100
                         mb_downloaded = downloaded / (1024 * 1024)
                         mb_total = total_size / (1024 * 1024)
-                        print(f"  Progrès: {progress:.1f}% ({mb_downloaded:.1f}/{mb_total:.1f} MB)")
+                        print(
+                            f"  Progrès: {progress:.1f}% ({mb_downloaded:.1f}/{mb_total:.1f} MB)"
+                        )
 
         print(f"✅ Téléchargement réussi : {destination}")
         return True
@@ -62,6 +65,10 @@ def main():
     success_count = 0
     for url, filename in files:
         destination = exploration_dir / filename
+        if filename == "odis.duckdb" and destination.exists():
+            print(f"⏭️  {filename} déjà présent : téléchargement ignoré")
+            success_count += 1
+            continue
         if download_file(url, destination):
             success_count += 1
 
