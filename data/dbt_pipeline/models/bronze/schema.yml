@@ -105,7 +105,7 @@ models:
 
 models:
   - name: primes_assurances_communes
-    description: "Table des balances pour les comptes commençant par 616 (dette) avec toutes les colonnes renommées, depuis 2010 venant de: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)"
+    description: "Table des balances pour les comptes commençant par 616 (assurances) avec toutes les colonnes renommées, depuis 2010 venant de: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)"
     columns:
       - name: exercice
         description: "Année de l'exercice comptable"
@@ -157,5 +157,5 @@ models:
         description: "Opération budgétaire débit nette des annulations"
       - name: operation_budgetaire_nette_credit
         description: "Opération budgétaire crédit nette des annulations"
-      - name: operation_non_budgetai
+      - name: operation_non_budgetaire
 
