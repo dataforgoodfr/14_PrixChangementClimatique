@@ -5,6 +5,9 @@ models:
     description: "(DONNEES GEOGRAPHIQUES) Exposition au phénomène de retrait-gonflement des argiles(RGA) par zone géographique
     
 
+    IMPORTANT LES DONNEES SONT EN PROJECTION LAMBERT93 (= EPSG:2154 https://epsg.io/2154)
+
+
     Source : https://www.georisques.gouv.fr/donnees/bases-de-donnees/retrait-gonflement-des-argiles-version-2026
      Fichier original Shapefile converti en Geopackage sur le S3 pour la simplicité
 
