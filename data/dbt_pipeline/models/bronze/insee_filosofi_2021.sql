@@ -1,12 +1,6 @@
 -- insee_filosofi_2021.sql
 -- Use alias to respect naming convention : snake_case
 
-{{
-  config(
-    materialized='table'
-  )
-}}
-
 SELECT 
     GEO AS geo,
     GEO_OBJECT AS geo_object,
