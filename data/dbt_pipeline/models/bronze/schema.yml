@@ -7,36 +7,38 @@ models:
       le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
       couche bronze et ne contient aucune transformation métier.
     columns:
-      - name: DEPARTEMENT
+      - name: departement
         description: "Code du département de la commune"
-      - name: DIRECTION
+      - name: direction
         description: "Code direction administrative"
-      - name: COMMUNE
+      - name: commune
         description: "Code INSEE de la commune"
-      - name: COMMUNE_RECENSEE
+      - name: commune_recensee
         description: "Indique si la commune est recensée (R)"
-      - name: NUMERO_SIREN_EPCI
+      - name: numero_siren_epci
         description: "Numéro SIREN de l’EPCI auquel appartient la commune"
-      - name: LIBELLE_GROUPEMENT
+      - name: libelle_groupement
         description: "Nom du groupement intercommunal"
-      - name: OPTION_FISCALE_EPCI
+      - name: option_fiscale_epci
         description: "Option fiscale de l’EPCI (FPA, FPU, FPZ)"
-      - name: FORME_JURIDIQUE_EPCI
+      - name: forme_juridique_epci
         description: "Type d’EPCI (CA, CU, CC, SAN, Métropole)"
-      - name: LIBELLE_COMMUNE
+      - name: libelle_commune
         description: "Nom officiel de la commune"
-      - name: FNB_COMMUNE_BASE_NETTE
+      - name: fnb_commune_base_nette
         description: "Base nette FNB pour la commune"
-      - name: FNB_COMMUNE_TAUX_NET
+      - name: fnb_commune_taux_net
         description: "Taux net FNB appliqué à la commune"
-      - name: FNB_COMMUNE_MONTANT_REEL
+      - name: fnb_commune_montant_reel
         description: "Montant réel FNB pour la commune"
-      - name: TAFNB_BASE_TAXABLE_COMMUNALE
+      - name: tafnb_commune_base_taxable_commune
         description: "Base taxable TAFNB pour la commune"
-      - name: TAFNB_COMMUNE_TAUX_NET
+      - name: fnb_commune_taux_net
         description: "Taux net TAFNB appliqué à la commune"
-      - name: TAFNB_COMMUNE_MONTANT_REEL
+      - name: tafnb_commune_montant_reel
         description: "Montant réel TAFNB pour la commune"
+      - name: code_insee
+        description: "Code INSEE de la commune"
   
   - name: insee_filosofi_2021
     description: >
