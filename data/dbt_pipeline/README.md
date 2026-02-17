@@ -10,6 +10,9 @@ Pour faire tourner le dbt de bout en bout, suivre les étapes suivantes :
 
 _(prérequis) Installer les dépendances du projet,_ en installant uv et en faisant `uv sync`
 
+Installer l'extension duckdb pour les données géographiques:
+`uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"`
+
 -> voir le README du projet pour plus de détails
 
 _(optionnel) Si vous aviez déjà fait tourner le projet, supprimer l'ancienne base de donnée :_
