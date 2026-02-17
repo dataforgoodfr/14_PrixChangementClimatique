@@ -1,6 +1,45 @@
 version: 2
 
 models:
+  - name: bronze_rei
+    description: >
+      Données brutes REI 2022 importées depuis le fichier CSV stocké dans
+      le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
+      couche bronze et ne contient aucune transformation métier.
+    columns:
+      - name: departement
+        description: "Code du département de la commune"
+      - name: direction
+        description: "Code direction administrative"
+      - name: commune
+        description: "Code INSEE de la commune"
+      - name: commune_recensee
+        description: "Indique si la commune est recensée (R)"
+      - name: numero_siren_epci
+        description: "Numéro SIREN de l’EPCI auquel appartient la commune"
+      - name: libelle_groupement
+        description: "Nom du groupement intercommunal"
+      - name: option_fiscale_epci
+        description: "Option fiscale de l’EPCI (FPA, FPU, FPZ)"
+      - name: forme_juridique_epci
+        description: "Type d’EPCI (CA, CU, CC, SAN, Métropole)"
+      - name: libelle_commune
+        description: "Nom officiel de la commune"
+      - name: fnb_commune_base_nette
+        description: "Base nette FNB pour la commune"
+      - name: fnb_commune_taux_net
+        description: "Taux net FNB appliqué à la commune"
+      - name: fnb_commune_montant_reel
+        description: "Montant réel FNB pour la commune"
+      - name: tafnb_commune_base_taxable_commune
+        description: "Base taxable TAFNB pour la commune"
+      - name: fnb_commune_taux_net
+        description: "Taux net TAFNB appliqué à la commune"
+      - name: tafnb_commune_montant_reel
+        description: "Montant réel TAFNB pour la commune"
+      - name: code_insee
+        description: "Code INSEE de la commune"
+  
   - name: insee_filosofi_2021
     description: >
       Données INSEE
@@ -12,7 +51,6 @@ models:
     persist_docs:
       relation: true 
       columns: true 
-
     columns:
       - name: geo
         description: "Exemple : 001 pour Paris, 002 pour Lyon, 144 pour Louvier, 32462 pour Vic-Fezensac..."
@@ -43,3 +81,35 @@ models:
       - name: obs_value
         description: "Valeur numérique"
         type: FLOAT
+
+  - name: rga 
+    description: >
+      (DONNEES GEOGRAPHIQUES) Exposition au phénomène de retrait-gonflement des argiles(RGA) par zone géographique
+      
+
+      IMPORTANT LES DONNEES SONT EN PROJECTION LAMBERT93 (= EPSG:2154 https://epsg.io/2154)
+
+
+      Source : https://www.georisques.gouv.fr/donnees/bases-de-donnees/retrait-gonflement-des-argiles-version-2026
+        Fichier original Shapefile converti en Geopackage sur le S3 pour la simplicité
+
+
+      Méthode de calcul et explications : https://www.georisques.gouv.fr/consulter-les-dossiers-thematiques/retrait-gonflement-des-argiles
+        (dans l'onglet 'Exposition du territoire et réglementation')
+
+    persist_docs:
+      relation: true 
+      columns: true 
+
+    columns:
+      - name: geom
+        description: Géométrie du polygone
+      - name: surf_m2
+        description: Surface du polygone en m^2
+      - name: niveau
+        description: "Niveau d'exposition au phénomène de retrait-gonflement des argiles
+          de 1(faible) à 3(fort)"
+      - name: code_departement
+        description: Numéro du département
+      - name: gid
+        description: Index des polygones

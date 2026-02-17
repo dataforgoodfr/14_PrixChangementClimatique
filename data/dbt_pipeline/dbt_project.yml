@@ -36,20 +36,16 @@ models:
       relation: true
       columns: true
 
-    bronze:
-      +schema: bronze
-      +materialized: table
-    
-    silver:
-      +schema: silver
-      +materialized: table
-
-    gold:
-      +schema: gold
-      +materialized: table
+    # Config indicated by + and applies to all files models/
+    +materialized: table
 
 seeds:
   dbt_pipeline:
     +enabled: true
     +schema: bronze
     +delimiter: ";"
+    
+# Loading duckdb extension for geo data
+on-run-start:
+  - "INSTALL spatial;"
+  - "LOAD spatial;"

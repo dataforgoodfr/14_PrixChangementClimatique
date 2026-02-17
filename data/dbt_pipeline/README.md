@@ -13,6 +13,9 @@ _(prérequis) Installer les dépendances du projet,_ en installant uv et en fais
 uv sync
 ```
 
+Installer l'extension duckdb pour les données géographiques:
+`uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"`
+
 -> voir le README du projet pour plus de détails
 
 _(optionnel) Si vous aviez déjà fait tourner le projet, supprimer l'ancienne base de donnée :_
