@@ -40,7 +40,7 @@ jobs:
       - name: Download pipeline csv inputs from bucket
         run: |
           uv run python data/utils/download_pipeline_inputs.py
-
+      
       - name: Run dbt (create duckdb.dev)
         run: |
           cd data/dbt_pipeline

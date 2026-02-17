@@ -41,4 +41,5 @@ seeds:
     
 # Loading duckdb extension for geo data
 on-run-start:
+  - "INSTALL spatial;"
   - "LOAD spatial;"
