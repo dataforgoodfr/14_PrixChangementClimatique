@@ -129,7 +129,7 @@ models:
         description: "Code commune - appelé code_geo dans les données bronze du projet"
         type: STRING
       - name: reg
-        description: 'Code region"
+        description: "Code region"
         type: STRING
       - name: dep
         description: "Code departement - appelé code_departement dans les données bronze du projet"
@@ -170,7 +170,7 @@ models:
         description: "Nom de la commune"
         type: STRING
       - name: siren
-        description: "Le numéro Siren - composé de 9 chiffres
+        description: "Le numéro Siren - composé de 9 chiffres"
         type: STRING
       - name: cog
         description: "Code commune - appelé code_geo dans les données bronze du projet"
