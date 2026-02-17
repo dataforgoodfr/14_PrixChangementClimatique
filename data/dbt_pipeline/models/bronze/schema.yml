@@ -46,116 +46,117 @@ models:
 
 version: 2
 
-models:
-  - name: dettes_communes
-    description: "Table des balances pour les comptes commençant par 16 (dette) avec toutes les colonnes renommées, depuis 2010 venant de: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)"
-    columns:
-      - name: exercice
-        description: "Année de l'exercice comptable"
-        tests:
-          - not_null
-      - name: siret
-        description: "Numéro SIRET de la collectivité"
-        tests:
-          - not_null
-      - name: departement_code
-        description: "Code département"
-      - name: budget_label
-        description: "Libellé du budget"
-      - name: insee_code
-        description: "Code INSEE"
-      - name: budget_type
-        description: "Type de budget"
-      - name: etablissement_type
-        description: "Type d'établissement"
-      - name: etablissement_sous_type
-        description: "Sous-type d'établissement"
-      - name: nomenclature_comptable
-        description: "Nomenclature comptable"
-      - name: siren
-        description: "Numéro SIREN"
-      - name: region_code
-        description: "Code région"
-      - name: activite_code
-        description: "Code activité"
-      - name: secteur_code
-        description: "Code secteur"
-      - name: finess
-        description: "Numéro FINESS"
-      - name: budget_code
-        description: "Code budget"
-      - name: collectivite_categorie
-        description: "Catégorie de collectivité"
-      - name: balance_type
-        description: "Type de balance"
-      - name: fonction
-        description: "Fonction (libellé)"
-      - name: compte
-        description: "Compte comptable (filtré pour commencer par 16 – dette)"
-      - name: balance_entree_debit
-        description: "Balance d'entrée débit"
-      - name: balance_entree_credit
-        description: "Balance d'entrée crédit"
-      - name: operation_budgetaire_nette_debit
-        description: "Opération budgétaire débit nette des annulations"
-      - name: operation_budgetaire_nette_credit
-        description: "Opération budgétaire crédit nette des annulations"
-      - name: operation_non_budgetai
 
+version: 2
 
-models:
+sources:
   - name: primes_assurances_communes
-    description: "Table des balances pour les comptes commençant par 616 (assurances) avec toutes les colonnes renommées, depuis 2010 venant de: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)"
-    columns:
-      - name: exercice
-        description: "Année de l'exercice comptable"
-        tests:
-          - not_null
-      - name: siret
-        description: "Numéro SIRET de la collectivité"
-        tests:
-          - not_null
-      - name: departement_code
-        description: "Code département"
-      - name: budget_label
-        description: "Libellé du budget"
-      - name: insee_code
-        description: "Code INSEE"
-      - name: budget_type
-        description: "Type de budget"
-      - name: etablissement_type
-        description: "Type d'établissement"
-      - name: etablissement_sous_type
-        description: "Sous-type d'établissement"
-      - name: nomenclature_comptable
-        description: "Nomenclature comptable"
-      - name: siren
-        description: "Numéro SIREN"
-      - name: region_code
-        description: "Code région"
-      - name: activite_code
-        description: "Code activité"
-      - name: secteur_code
-        description: "Code secteur"
-      - name: finess
-        description: "Numéro FINESS"
-      - name: budget_code
-        description: "Code budget"
-      - name: collectivite_categorie
-        description: "Catégorie de collectivité"
-      - name: balance_type
-        description: "Type de balance"
-      - name: fonction
-        description: "Fonction (libellé)"
-      - name: compte
-        description: "Compte comptable (filtré pour commencer par 16 – dette)"
-      - name: balance_entree_debit
-        description: "Balance d'entrée débit"
-      - name: balance_entree_credit
-        description: "Balance d'entrée crédit"
-      - name: operation_budgetaire_nette_debit
-        description: "Opération budgétaire débit nette des annulations"
-      - name: operation_budgetaire_nette_credit
-        description: "Opération budgétaire crédit nette des annulations"
-      - name: operation_non_budgetaire
+    description: "Données de primes d'assurances par commune, avec solde débiteur et créditeur"
+    tables:
+      - name: primes_assurances_communes
+        description: "Table regroupant les primes d'assurance par type de compte pour chaque commune"
+        columns:
+          - name: annee
+            description: "Année de l'exercice"
+            tests:
+              - not_null
+            data_type: integer
+          - name: siret
+            description: "SIRET de la commune ou entité"
+            tests:
+              - not_null
+            data_type: string
+          - name: code_departement
+            description: "Code du département"
+            tests:
+              - not_null
+            data_type: string
+          - name: code_insee
+            description: "Code INSEE de la commune"
+            tests:
+              - not_null
+            data_type: string
+          - name: code_region
+            description: "Code de la région"
+            tests:
+              - not_null
+            data_type: string
+          - name: type_compte
+            description: "Type de compte (depenses, produits, primes d’assurances, dettes financières)"
+            tests:
+              - not_null
+            data_type: string
+          - name: solde_debiteur
+            description: "Montant total débiteur (SD)"
+            tests:
+              - not_null
+            data_type: float
+          - name: solde_crediteur
+            description: "Montant total créditeur (SC)"
+            tests:
+              - not_null
+            data_type: float
+          - name: code_geo
+            description: "Concaténation du code département et du code INSEE pour identifier la commune"
+            tests:
+              - not_null
+            data_type: string
+
+version: 2
+
+sources:
+  - name: budget_per_compte_communes
+    description: "Données de primes d'assurances par commune, avec solde débiteur et créditeur"
+    tables:
+      - name: primes_assurances_communes
+        description: "Table regroupant les primes d'assurance par type de compte pour chaque commune"
+        columns:
+          - name: annee
+            description: "Année de l'exercice"
+            tests:
+              - not_null
+            data_type: integer
+          - name: siret
+            description: "SIRET de la commune ou entité"
+            tests:
+              - not_null
+            data_type: string
+          - name: code_departement
+            description: "Code du département"
+            tests:
+              - not_null
+            data_type: string
+          - name: code_insee
+            description: "Code INSEE de la commune"
+            tests:
+              - not_null
+            data_type: string
+          - name: code_region
+            description: "Code de la région"
+            tests:
+              - not_null
+            data_type: string
+          - name: type_compte
+            description: "Type de compte (depenses, produits, primes d’assurances, dettes financières)"
+            tests:
+              - not_null
+            data_type: string
+          - name: solde_debiteur
+            description: "Montant total débiteur (SD)"
+            tests:
+              - not_null
+            data_type: float
+          - name: solde_crediteur
+            description: "Montant total créditeur (SC)"
+            tests:
+              - not_null
+            data_type: float
+          - name: solde
+            description: "Solde net = solde_debiteur - solde_crediteur"
+            data_type: float
+          - name: code_geo
+            description: "Concaténation du code département et du code INSEE pour identifier la commune"
+            tests:
+              - not_null
+            data_type: string
 
