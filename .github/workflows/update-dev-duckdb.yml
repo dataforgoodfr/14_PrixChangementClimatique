@@ -41,6 +41,10 @@ jobs:
         run: |
           uv run python data/utils/download_pipeline_inputs.py
 
+      - name: Install spatial extension
+        run: |
+          uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial;')"
+      
       - name: Run dbt (create duckdb.dev)
         run: |
           cd data/dbt_pipeline
