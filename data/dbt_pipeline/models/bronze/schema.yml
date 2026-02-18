@@ -113,3 +113,63 @@ models:
         description: Numéro du département
       - name: gid
         description: Index des polygones
+
+models:
+  - name: ccr_main_page
+    description: >
+      Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
+      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982. 
+      La colonne code_arrete connecte cette table à la table ccr_details. 
+    columns:
+      - name: nom_peril
+        description: "Type de péril (Inondations, sécheresse, ect...)"
+        type: STRING
+      - name: dateArrete
+        description: "Date officielle de l'arrêté"
+        type: DATE
+      - name: dateParutionJO
+        description: "Date de parution au Journal Officiel"
+        type: DATE
+      - name: codeNOR
+        description: "Code officiel d'indentification de l'arrête"
+        type: STRING
+      - name: codeArrete
+        description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
+        type: INTEGER
+
+models:
+  - name: ccr_details
+    description: >
+      Données scrappées des child pages du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/ (en cliquant sur l'icône en forme d'œil).
+      Example: https://www.ccr.fr/detail-arrete/?codeArrete=000001
+      Ces données contiennent les détails des les communes impactées par une CatNat, 
+      si la arrêté a été reconnue et quel type de franchise a été appliqué.
+      /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune"
+        type: INTEGER
+      - name: nom_commune
+        description: "Nom de la commune"
+        type: STRING
+      - name: date_debut_evenement
+        description: ""
+        type: DATE
+      - name: date_fin_evenement
+        description: ""
+        type: DATE
+      - name: date_arrete
+        description: "Date officielle de l'arrêté"
+        type: STRING
+      - name: nom_peril
+        description: "Type de péril/CatNat"
+        type: STRING
+      - name: franchise
+        description: "Type de franchise (Simple, Doublée, Triplée, Quadruplée)"
+        type: STRING
+      - name: libelle_avis
+        description: "Avis sur l'état de l'arrêté (Reconnue, Non reconnue)"
+        type: STRING
+      - name: codeArrete
+        description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
+        type: INTEGER
