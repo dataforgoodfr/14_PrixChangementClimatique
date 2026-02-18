@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-
 SELECT 
   * EXCEPT(code_insee, departement),
   code_insee AS code_geo,
