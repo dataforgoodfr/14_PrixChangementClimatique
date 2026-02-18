@@ -47,7 +47,7 @@ models:
       niveau de vie, taux de pauvreté, part des ménages imposés et décomposition du revenu disponible
       Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi)
       Identifiant du jeu de données : DS_FILOSOFI_CC
-      https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC
+      URL : https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC
     persist_docs:
       relation: true 
       columns: true 
