@@ -44,12 +44,6 @@ models:
         description: "Valeur numérique"
         type: FLOAT
 
-version: 2
-
-
-version: 2
-
-sources:
   - name: primes_assurances_communes
     description: "Données de primes d'assurances par commune, avec solde débiteur et créditeur"
     tables:
@@ -102,9 +96,6 @@ sources:
               - not_null
             data_type: string
 
-version: 2
-
-sources:
   - name: budget_per_compte_communes
     description: "Données de primes d'assurances par commune, avec solde débiteur et créditeur"
     tables:
