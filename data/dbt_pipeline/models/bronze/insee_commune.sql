@@ -9,7 +9,7 @@ SELECT
     ARR AS arr,
     TNCC AS tncc,
     NCC AS ncc,
-    NCCENR AS NCCENR,
+    NCCENR AS nccenr,
     LIBELLE AS libelle,
     CAN AS can,
     COMPARENT AS com_parent
