@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: population_code_geo 
+    description: "Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. 
+
+
+    Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere
+
+
+    Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143"
+
+    columns:
+    - name: code_geo
+      description: Code Insee de la commune
+
+    - name: nom_geo
+      description: Nom de la commune
+
+    - name: code_departement
+      description: Numéro du département
+
+    - name: code_region
+      description: Code Insee de la région
+
+    - name: pop_2016
+      description: Population municipale 2016 - Recensement 2013
+
+    - name: pop_2017
+      description: Population municipale 2017 - Recensement 2014
+
+    - name: pop_2018
+      description: Population municipale 2018 - Recensement 2015
+
+    - name: pop_2019
+      description: Population municipale 2019 - Recensement 2016
+
+    - name: pop_2020
+      description: Population municipale 2020 - Recensement 2017
+
+    - name: pop_2021
+      description: Population municipale 2021 - Recensement 2018
+
+    - name: pop_2022
+      description: Population municipale 2022 - Recensement 2019
+
+    - name: pop_2023
+      description: Population municipale 2023 - Recensement 2020
+
+    - name: pop_2024
+      description: Population municipale 2024 - Recensement 2021
+
+    - name: pop_2025
+      description: Population municipale 2025 - Recensement 2022
+
+    - name: pop_2026
+      description: Population municipale 2026 - Recensement 2023
