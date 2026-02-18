@@ -1,9 +1,4 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-    
+ 
 SELECT
     codgeo               AS code_geo,
     libgeo               AS nom_geo,
