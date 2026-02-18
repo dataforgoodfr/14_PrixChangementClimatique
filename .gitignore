@@ -172,5 +172,4 @@ CLAUDE.md
 # Files in S3 bucket
 data/dbt_pipeline/pipeline_inputs/
 
-# User specific files of dbt runs
-.user.yml
+data\dbt_pipeline\.user.yml
