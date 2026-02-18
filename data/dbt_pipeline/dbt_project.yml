@@ -42,7 +42,6 @@ models:
 seeds:
   dbt_pipeline:
     +enabled: true
-    +schema: bronze
     +delimiter: ";"
     
 # Loading duckdb extension for geo data
