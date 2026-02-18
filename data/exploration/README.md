@@ -52,3 +52,9 @@ On peut utiliser n'importe quel outil déjà connu.
 3 notebooks d'exemple sont à disposition pour se plonger directement dans les données.
 
 L'ui de duckdb (voir la section précédente de visualisation) propose également des notebooks (attention à bien vérifier comment ils se sauvegardent avant d'aller trop loin).
+
+### Manipulation des données géographiques
+
+Installer l'extension duckdb pour les données géographiques:
+
+`uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"`
