@@ -114,7 +114,6 @@ models:
       - name: gid
         description: Index des polygones
 
-models:
   - name: ccr_main_page
     description: >
       Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
@@ -174,7 +173,6 @@ models:
         description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
         type: INTEGER
         
- models:
   - name: geoportail_ccr_communes
     description: >
       Données extractes du Geoportail ArcGIS de la CCR: https://geoportail.ccr.fr/server/rest/services/CarteToutPublic
