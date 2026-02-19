@@ -7,12 +7,12 @@ models:
       le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
       couche bronze et ne contient aucune transformation métier.
     columns:
-      - name: departement
+      - name: code_departement 
         description: "Code du département de la commune"
       - name: direction
         description: "Code direction administrative"
       - name: commune
-        description: "Code INSEE de la commune"
+        description: "Code de la commune"
       - name: commune_recensee
         description: "Indique si la commune est recensée (R)"
       - name: numero_siren_epci
@@ -37,7 +37,7 @@ models:
         description: "Taux net TAFNB appliqué à la commune"
       - name: tafnb_commune_montant_reel
         description: "Montant réel TAFNB pour la commune"
-      - name: code_insee
+      - name: code_geo
         description: "Code INSEE de la commune"
   
   - name: insee_filosofi_2021
@@ -48,11 +48,8 @@ models:
       Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi)
       Identifiant du jeu de données : DS_FILOSOFI_CC
       URL : https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC
-    persist_docs:
-      relation: true 
-      columns: true 
     columns:
-      - name: geo
+      - name: code_geo
         description: "Exemple : 001 pour Paris, 002 pour Lyon, 144 pour Louvier, 32462 pour Vic-Fezensac..."
         type: STRING
       - name: geo_object
@@ -96,11 +93,6 @@ models:
 
       Méthode de calcul et explications : https://www.georisques.gouv.fr/consulter-les-dossiers-thematiques/retrait-gonflement-des-argiles
         (dans l'onglet 'Exposition du territoire et réglementation')
-
-    persist_docs:
-      relation: true 
-      columns: true 
-
     columns:
       - name: geom
         description: Géométrie du polygone
@@ -113,6 +105,45 @@ models:
         description: Numéro du département
       - name: gid
         description: Index des polygones
+
+  - name: population_code_geo 
+    description: >
+      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. 
+      Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere
+      Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
+
+    columns:
+    - name: code_geo
+      description: Code Insee de la commune
+    - name: nom_geo
+      description: Nom de la commune
+    - name: code_departement
+      description: Numéro du département
+    - name: code_region
+      description: Code Insee de la région
+    - name: pop_2016
+      description: Population municipale 2016 - Recensement 2013
+    - name: pop_2017
+      description: Population municipale 2017 - Recensement 2014
+    - name: pop_2018
+      description: Population municipale 2018 - Recensement 2015
+    - name: pop_2019
+      description: Population municipale 2019 - Recensement 2016
+    - name: pop_2020
+      description: Population municipale 2020 - Recensement 2017
+    - name: pop_2021
+      description: Population municipale 2021 - Recensement 2018
+    - name: pop_2022
+      description: Population municipale 2022 - Recensement 2019
+    - name: pop_2023
+      description: Population municipale 2023 - Recensement 2020
+    - name: pop_2024
+      description: Population municipale 2024 - Recensement 2021
+    - name: pop_2025
+      description: Population municipale 2025 - Recensement 2022
+    - name: pop_2026
+      description: Population municipale 2026 - Recensement 2023
+
 
   - name: ccr_main_page
     description: >
@@ -136,7 +167,6 @@ models:
         description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
         type: INTEGER
 
-models:
   - name: ccr_details
     description: >
       Données scrappées des child pages du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/ (en cliquant sur l'icône en forme d'œil).
@@ -500,3 +530,81 @@ models:
             tests:
               - not_null
             data_type: string
+
+  - name: insee_commune
+    description: >
+      Données INSEE
+      Code officiel géographique au 1er janvier 2025 
+      Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées 
+      au 1er janvier 2025, avec le code des niveaux supérieurs (canton ou pseudo-canton, département, région)
+      URL : https://www.insee.fr/fr/information/8377162
+    columns:
+      - name: type_com
+        description: "Type de commune"
+        type: STRING
+      - name: com
+        description: "Code commune - appelé code_geo dans les données bronze du projet"
+        type: STRING
+      - name: reg
+        description: "Code region"
+        type: STRING
+      - name: dep
+        description: "Code departement - appelé code_departement dans les données bronze du projet"
+        type: STRING
+      - name: ctcd
+        description: "Code de la collectivité territoriale ayant les compétences départementales"
+        type: STRING
+      - name: arr
+        description: "Code arrondissement"
+        type: STRING
+      - name: tncc
+        description: "Type de nom en clair"
+        type: STRING
+      - name: ncc
+        description: "Nom en clair (majuscules)"
+        type: STRING
+      - name: nccenr
+        description: "Nom en clair (typographie riche)"
+        type: STRING
+      - name: libelle
+        description: "Nom en clair (typographie riche) avec article"
+        type: STRING
+      - name: can
+        description: "Code canton. Pour les communes « multi-cantonales », code décliné de 99 à 90 (pseudo-canton) ou de 89 à 80 (communes nouvelles)"
+        type: STRING
+      - name: com_parent
+        description: "Code de la commune parente pour les arrondissements municipaux et les communes associées ou déléguées."
+        type: STRING
+
+  - name: datactivist_commune
+    description: >
+      Données datagouv de datactivist
+      Identifiants des collectivités territoriales et leurs établissements
+      Sous-titre : identifiants-communes-2024
+      URL : https://www.data.gouv.fr/datasets/identifiants-des-collectivites-territoriales-et-leurs-etablissements
+    columns:
+      - name: nom
+        description: "Nom de la commune"
+        type: STRING
+      - name: siren
+        description: "Le numéro Siren - composé de 9 chiffres"
+        type: STRING
+      - name: cog
+        description: "Code commune - appelé code_geo dans les données bronze du projet"
+        type: STRING
+      - name: type 
+        description: "Type de commune"
+        type: STRING
+      - name: code_departement
+        description: "Code departement"
+        type: STRING
+      - name: code_departement_3digits
+        description: "Code departement sur 3 digit"
+        type: STRING
+      - name: code_region
+        description: "Code region"
+        type: STRING
+      - name: population
+      - name: code_postal
+        description: "Code postal"
+        type: STRING
