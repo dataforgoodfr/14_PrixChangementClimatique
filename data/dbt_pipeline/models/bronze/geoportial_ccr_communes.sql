@@ -73,4 +73,4 @@ SELECT
     cla_sp_vcy AS sp_vcy,
     cla_sp_aut AS sp_aut
 FROM 
-    'pipeline_inputs/geoportial_ccr_communes.csv'
+    'pipeline_inputs/geoportail_ccr_communes.csv'
