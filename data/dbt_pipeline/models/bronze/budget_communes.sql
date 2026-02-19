@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='table'
-    )
-}}
-
 SELECT 
     "Exercice" as annee,
     "Code Insee 2024 Commune" as code_geo,
