@@ -12,43 +12,29 @@ Utilisation API
 => Ce coefficient est un proxy pour le taux de chomage au niveau communal
 """
 
+import os
 from pathlib import Path
 
 import pandas as pd
+from dotenv import load_dotenv
+from s3_connector import connect_to_s3, send_file_to_s3
 
 current_dir = Path.cwd()
-dbt_pipeline_dir = current_dir / "data" / "dbt_pipeline"
-analysis_dir = dbt_pipeline_dir / "analyses"
-seeds_dir = dbt_pipeline_dir / "seeds"
+download_file_dir = current_dir / "data" / "utils" / "downloaded_files"
+
+load_dotenv(current_dir / ".env")
 
 # Taux de chomage par departement
 taux_chomage_departement = pd.read_excel(
-    analysis_dir / "downloaded_files" / "sl_etc_2025T3.xls",
+    download_file_dir / "downloaded_files" / "sl_etc_2025T3.xls",
     sheet_name="Département",
     skiprows=3,
     skipfooter=4,
 )[["Code", "Libellé", "T3_2025"]]
 
-# Données Communes Inscrit à France Travail API (Seulement 2024-T4, ABC pas seulement A)
-""" Not in use
-import requests
-
-url = "https://data.dares.travail-emploi.gouv.fr/api/explore/v2.1/catalog/datasets/dares_defm_communales-brutes/records?where=date%20%3D%20%222024-T4%22"
-
-response = requests.get(url)
-if response.status_code == 200:
-    communes_france_travail = pd.DataFrame(response.json()["results"]).drop(
-        columns="date"
-    )
-    communes_france_travail = communes_france_travail[
-        communes_france_travail["tranche_d_age"] == "Total"
-    ]
-else:
-    print("Error in retrival:", response.status_code)
-"""
 
 communes_france_travail = pd.read_parquet(
-    analysis_dir / "downloaded_files" / "dares_defm_communales-brutes.parquet"
+    download_file_dir / "downloaded_files" / "dares_defm_communales-brutes.parquet"
 )
 communes_france_travail = communes_france_travail[
     (communes_france_travail["date"] == "2024-T4")
@@ -58,7 +44,9 @@ communes_france_travail = communes_france_travail[
 
 # Données population par commune (2023) (Tout la population pas simplement pop active)
 pop_communes = pd.read_excel(
-    analysis_dir / "downloaded_files" / "POPULATION_MUNICIPALE_COMMUNES_FRANCE.xlsx"
+    download_file_dir
+    / "downloaded_files"
+    / "POPULATION_MUNICIPALE_COMMUNES_FRANCE.xlsx"
 )
 pop_communes = pop_communes[["dep", "cv", "codgeo", "p23_pop"]]
 
@@ -117,4 +105,20 @@ taux_chomage_communes = taux_chomage_communes[reordered_cols]
 taux_chomage_communes["T3_2025_proxy_commune"] = taux_chomage_communes[
     "T3_2025_proxy_commune"
 ].round(2)
-taux_chomage_communes.to_csv(seeds_dir / "taux_chomage_communes.csv", index=False)
+taux_chomage_communes.to_csv(
+    download_file_dir / "taux_chomage_communes.csv", index=False
+)
+
+s3_client = connect_to_s3(
+    endpoint_url=os.getenv("S3_ENDPOINT_URL"),
+    access_key_id=os.getenv("S3_ACCESS_KEY"),
+    secret_access_key=os.getenv("S3_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("S3_REGION"),
+)
+
+send_file_to_s3(
+    s3_client=s3_client,
+    bucket=os.getenv("QPPCC_BUCKET"),
+    filepath=download_file_dir / "taux_chomage_communes.csv",
+    s3_filepath="pipeline_inputs/taux_chomage_communes.csv",
+)
