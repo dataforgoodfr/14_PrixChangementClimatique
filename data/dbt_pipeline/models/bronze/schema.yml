@@ -534,7 +534,7 @@ models:
 
   - name: recensement_hors_com
     description: >
-      Séries historiques en 2022 - Données hors outre-mer -
+      Séries historiques en 2022 - Données hors collectivités d'outre-mer -
       Recensement de la population - Base des principaux indicateurs -
       Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales,
       les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages.
@@ -763,7 +763,7 @@ models:
 
   - name: recensement_com
     description: >
-      Séries historiques en 2022 -  Données outre-mer - 
+      Séries historiques en 2022 -  Données collectivités d'outre-mer - 
       Recensement de la population - Base des principaux indicateurs - 
       Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales, les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages. - 
       Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025. - 
