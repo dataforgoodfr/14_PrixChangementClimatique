@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Download database",
+      "type": "shell",
+      "command": "uv run python data/utils/download.py",
+      "group": "none",
+      "icon": {
+        "id": "cloud-download"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Open DuckDB UI (odis)",
+      "type": "shell",
+      "command": "uv run python data/utils/launch_ui.py odis.duckdb",
+      "group": "none",
+      "icon": {
+        "id": "database"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}
