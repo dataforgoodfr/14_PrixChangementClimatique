@@ -1,10 +1,3 @@
-{{
-  config(
-    materialized='table'
-  )
-}}
-
-
 WITH source_data AS (
     SELECT
         CODGEO AS code_geo,
