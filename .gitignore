@@ -165,7 +165,8 @@ cython_debug/
 # Local files containing exploration data
 dev.duckdb
 odis.duckdb
-data/csv/
+# data/csv/
+data/csv_large/
 
 # AI stuff
 CLAUDE.md
