@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "init-data": "./scripts/init-dev-data.sh"
+"init-data": "./scripts/init-dev-data.sh",
+    "init-db": "node scripts/create-duckdb.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
+    "@duckdb/node-api": "^1.4.4-r.1",
     "@vis.gl/react-maplibre": "^8.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
