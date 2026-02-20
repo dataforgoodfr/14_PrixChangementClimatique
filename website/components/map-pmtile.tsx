@@ -12,25 +12,36 @@ import {
 import { Protocol } from "pmtiles";
 import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Eye, EyeOff, Layers } from "lucide-react";
+import { Eye, EyeOff, Layers, Loader2 } from "lucide-react";
 import { stringToColor } from "@/lib/map-utils";
+import { Button } from "@/components/ui/button";
+import { useBasicData } from "@/hooks/use-basic-data";
+import { useCityData } from "@/hooks/use-city-data";
 
 const COMMUNES_PMTILES_URL = "/pmtiles/communes.pmtiles";
 const COMMUNES_LAYER_ID = "communes-fill";
 const COMMUNES_BORDER_LAYER_ID = "communes-border";
 const COMMUNES_SOURCE_ID = "communes-source";
 
+type LoadFakeDataStatus = "idle" | "loading" | "success" | "error";
+
 function LayerControl({
   isVisible,
   onToggle,
   isMapLoaded,
+  onLoadFakeData,
+  loadFakeDataStatus,
+  loadFakeDataMessage,
 }: {
   isVisible: boolean;
   onToggle: () => void;
   isMapLoaded: boolean;
+  onLoadFakeData: () => void;
+  loadFakeDataStatus: LoadFakeDataStatus;
+  loadFakeDataMessage: string | null;
 }) {
   return (
-    <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10">
+    <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10 min-w-[200px]">
       <div className="flex items-center gap-2 mb-2 text-gray-700 font-medium">
         <Layers size={18} />
         <span>Couches</span>
@@ -47,6 +58,29 @@ function LayerControl({
         {isVisible ? <Eye size={16} /> : <EyeOff size={16} />}
         <span className="text-sm">Communes de France</span>
       </button>
+      <div className="mt-3 pt-3 border-t border-gray-200">
+        <Button
+          size="sm"
+          variant="outline"
+          className="w-full gap-2"
+          disabled={!isMapLoaded || loadFakeDataStatus === "loading"}
+          onClick={onLoadFakeData}
+        >
+          {loadFakeDataStatus === "loading" && (
+            <Loader2 size={14} className="animate-spin shrink-0" />
+          )}
+          <span className="text-sm">Charger fausses données</span>
+        </Button>
+        {loadFakeDataMessage ? (
+          <p
+            className={`mt-2 text-xs ${
+              loadFakeDataStatus === "error" ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {loadFakeDataMessage}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -165,6 +199,50 @@ export function MapDemo() {
     code: string;
   } | null>(null);
 
+  const [clickedDemo, setClickedDemo] = useState<{
+    longitude: number;
+    latitude: number;
+    code: string;
+    name: string;
+  } | null>(null);
+
+  const {
+    data: basicData,
+    loading: basicLoading,
+    error: basicError,
+    refetch: refetchBasic,
+  } = useBasicData({ enabled: false });
+  const [basicSuccessMessage, setBasicSuccessMessage] = useState(false);
+  useEffect(() => {
+    if (!basicData || basicLoading) return;
+    const showId = setTimeout(() => setBasicSuccessMessage(true), 0);
+    const hideId = setTimeout(() => setBasicSuccessMessage(false), 3000);
+    return () => {
+      clearTimeout(showId);
+      clearTimeout(hideId);
+    };
+  }, [basicData, basicLoading]);
+  const loadFakeDataStatus: LoadFakeDataStatus = basicLoading
+    ? "loading"
+    : basicError
+      ? "error"
+      : basicData
+        ? "success"
+        : "idle";
+  const loadFakeDataMessage: string | null = basicError
+    ? "Échec du chargement"
+    : basicSuccessMessage
+      ? "Données chargées"
+      : null;
+
+  const {
+    data: cityData,
+    loading: cityLoading,
+    error: cityError,
+  } = useCityData({
+    code: clickedDemo?.code ?? null,
+  });
+
   useEffect(() => {
     const protocol = new Protocol();
     maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -200,9 +278,33 @@ export function MapDemo() {
     setHoverInfo(null);
   }, []);
 
+  const handleLoadFakeData = useCallback(() => {
+    refetchBasic();
+  }, [refetchBasic]);
+
+  const handleMapClick = useCallback(
+    (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
+      const feature = event.features?.[0];
+      if (!feature) {
+        setClickedDemo(null);
+        return;
+      }
+      const properties = feature.properties;
+      setClickedDemo({
+        longitude: event.lngLat.lng,
+        latitude: event.lngLat.lat,
+        code: properties.com_code || "",
+        name: properties.com_name || "",
+      });
+    },
+    [],
+  );
+
   const toggleCommunesLayerVisibility = useCallback(() => {
     setIsCommunesLayerVisible((prev) => !prev);
   }, []);
+
+  const popupInfo = clickedDemo ?? hoverInfo;
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
@@ -224,26 +326,50 @@ export function MapDemo() {
           onLoad={handleLoad}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onClick={handleMapClick}
         >
           <NavigationControl position="top-right" />
           <CommunesLayer isVisible={isCommunesLayerVisible} />
           <CommunesColorUpdater />
           <CursorHandler />
 
-          {hoverInfo && (
+          {popupInfo && (
             <Popup
-              longitude={hoverInfo.longitude}
-              latitude={hoverInfo.latitude}
-              closeButton={false}
+              longitude={popupInfo.longitude}
+              latitude={popupInfo.latitude}
+              closeButton={!!clickedDemo}
               closeOnClick={false}
+              onClose={clickedDemo ? () => setClickedDemo(null) : undefined}
               className="commune-popup"
             >
               <div className="font-semibold text-gray-900">
-                {hoverInfo.name}
+                {popupInfo.name}
               </div>
-              {hoverInfo.code && (
+              {popupInfo.code && (
                 <div className="text-sm text-gray-600">
-                  Code INSEE: {hoverInfo.code}
+                  Code INSEE: {popupInfo.code}
+                </div>
+              )}
+              {clickedDemo && popupInfo.code === clickedDemo.code && (
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <div className="text-xs font-medium text-gray-500">
+                    Données démo pour {cityData?.com_name}
+                  </div>
+                  {cityLoading && (
+                    <div className="text-sm text-gray-500 mt-1">
+                      Chargement…
+                    </div>
+                  )}
+                  {cityError && (
+                    <div className="text-sm text-red-600 mt-1">
+                      {cityError.message}
+                    </div>
+                  )}
+                  {cityData && !cityLoading && (
+                    <pre className="text-xs mt-1 bg-gray-100 p-2 rounded overflow-auto max-h-24">
+                      {JSON.stringify(cityData, null, 2)}
+                    </pre>
+                  )}
                 </div>
               )}
             </Popup>
@@ -254,6 +380,9 @@ export function MapDemo() {
           isVisible={isCommunesLayerVisible}
           onToggle={toggleCommunesLayerVisibility}
           isMapLoaded={isMapLoaded}
+          onLoadFakeData={handleLoadFakeData}
+          loadFakeDataStatus={loadFakeDataStatus}
+          loadFakeDataMessage={loadFakeDataMessage}
         />
       </div>
     </div>
