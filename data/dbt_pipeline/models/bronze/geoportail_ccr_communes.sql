@@ -1,4 +1,4 @@
--- geoportial_ccr.sql
+-- geoportail_ccr.sql
 -- Use alias to respect naming convention : snake_case
 
 SELECT
@@ -73,4 +73,4 @@ SELECT
     cla_sp_vcy AS sp_vcy,
     cla_sp_aut AS sp_aut
 FROM 
-    'pipeline_inputs/geoportial_ccr_communes.csv'
+    '{{ var("project_root") }}/pipeline_inputs/geoportail_ccr_communes.csv'

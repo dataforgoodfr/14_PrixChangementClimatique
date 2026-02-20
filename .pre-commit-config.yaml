@@ -1,3 +1,5 @@
+default_stages: ['pre-commit']
+
 repos:
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     # Ruff version.
@@ -10,3 +12,18 @@ repos:
     hooks:
       - id: check-merge-conflict
       - id: mixed-line-ending
+
+  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+    rev: v2.0.8
+    hooks:
+      - id: dbt-run
+        language: python
+        additional_dependencies: ["dbt-core==1.11.6", "dbt-duckdb==1.10.1"]
+        args: [
+          "--cmd-flags",
+          "++project-dir", "./data/dbt_pipeline",
+          "++profiles-dir", "./data/dbt_pipeline",
+          "++vars", '{"project_root": "./data/dbt_pipeline"}',
+          "--"]
+        files: ^data/dbt_pipeline/models/
+

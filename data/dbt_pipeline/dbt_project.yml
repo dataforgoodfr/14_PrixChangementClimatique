@@ -41,6 +41,11 @@ seeds:
   dbt_pipeline:
     +enabled: true
     +delimiter: ";"
+    +data_path: "pipeline_inputs/"
+
+vars:
+  project_root: "./"
+
     
 # Loading duckdb extension for geo data
 on-run-start:
