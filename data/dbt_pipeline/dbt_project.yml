@@ -41,7 +41,6 @@ seeds:
   dbt_pipeline:
     +enabled: true
     +delimiter: ";"
-    +data_path: "pipeline_inputs/"
 
 vars:
   project_root: "./"
