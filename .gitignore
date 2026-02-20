@@ -16,7 +16,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# Keep lib folder in website directory
+/lib/
 lib64/
 lib64
 parts/
