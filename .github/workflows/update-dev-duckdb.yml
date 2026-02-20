@@ -41,9 +41,13 @@ jobs:
         run: |
           uv run python data/utils/download_pipeline_inputs.py
 
+      - name: Install dbt dependencies
+        run : |
+          cd data/dbt_pipeline
+          uv run dbt deps
+
       - name: Run dbt (create duckdb.dev)
         run: |
-          cd data/dbt_pipeline
           uv run dbt run
 
       - name: Upload dev.duckdb to bucket root
