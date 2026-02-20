@@ -5,7 +5,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Iterable, List
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
 
@@ -133,7 +133,7 @@ def main():
             print(f"⏭️  Déjà présent, ignoré : {relative_path}")
             success_count += 1
             continue
-        url = f"{bucket_base_url}/{prefix}{relative_path}"
+        url = f"{bucket_base_url}/{prefix}{quote(relative_path)}"
         destination = pipeline_inputs_dir / relative_path
         destination.parent.mkdir(parents=True, exist_ok=True)
         if download_file(url, destination):
