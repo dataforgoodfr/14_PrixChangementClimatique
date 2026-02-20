@@ -1,16 +1,20 @@
+import os
+import shutil
 from functools import reduce
 from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 from requests.adapters import HTTPAdapter
+from s3_connector import connect_to_s3, send_file_to_s3
 from tqdm import tqdm
 from urllib3.util.retry import Retry
 
 current_dir = Path.cwd()
-target_dir = current_dir / "data" / "utils" / "downloaded_files"
-target_dir.mkdir(parents=True, exist_ok=True)
+download_file_dir = current_dir / "data" / "utils" / "downloaded_files"
+download_file_dir.mkdir(parents=True, exist_ok=True)
 
 
 def helper_payload_catnat(length="10000", code=None):
@@ -149,7 +153,7 @@ def reconnaissance_catnat():
     Collecting data from website https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
 
     Data collected:
-    - ccr_main_page_data (main page informations, all arrete and arrete code to access details)
+    - ccr_main_page (main page informations, all arrete and arrete code to access details)
     - ccr_details (information of communes affected for the specific arrete)
 
     Data is saved in downloaded_files/geoportail_ccr
@@ -190,14 +194,14 @@ def reconnaissance_catnat():
         df_main = pd.DataFrame(response_data_main["data"])
 
         # Saving main data as CSV and parquet
-        df_main.to_csv(target_dir / "ccr_main_page_data.csv", index=False)
+        df_main.to_csv(download_file_dir / "ccr_main_page.csv", index=False)
 
         # Collect data for each record based on codeArrete (POST request)
         codes = df_main["codeArrete"].tolist()
 
         df_details = pd.DataFrame()
 
-        for code in codes:
+        for code in tqdm(codes, desc="Downloading arrête"):
             response = session.post(
                 url, data=helper_payload_catnat(code=code), headers=headers, timeout=10
             )
@@ -212,7 +216,7 @@ def reconnaissance_catnat():
                 print("Error for code:", code)
 
         # Saving details data as CSV and parquet
-        df_details.to_csv(target_dir / "ccr_details.csv", index=False)
+        df_details.to_csv(download_file_dir / "ccr_details.csv", index=False)
 
     else:
         print("Request failed with status code:", response_main.status_code)
@@ -253,7 +257,7 @@ def geoportail_ccr():
     }
 
     for carte_id, carte_info in tqdm(cartes_info.items()):
-        output_path = target_dir / "geoportail_ccr"
+        output_path = download_file_dir / "geoportail_ccr"
         output_path.mkdir(parents=True, exist_ok=True)
 
         service_url = f"{main_url}/{carte_id}/MapServer"
@@ -320,44 +324,78 @@ def merge_geoportail_ccr_data():
     Merging all geoportail data in a single DataFrame (removing geometry [geopandas])"
     """
 
-    sub_dir = target_dir / "geoportail_ccr"
+    sub_dir = download_file_dir / "geoportail_ccr"
     all_files = list(sub_dir.glob("*.geojson"))
     departements_list = [f for f in all_files if "_com_" not in f.name]
     communes_list = list(sub_dir.glob("*_com_*.geojson"))
 
-    loop_dict = {"departements": departements_list, "communes": communes_list}
+    loop_dict = {
+        "communes": communes_list,
+        "departements": departements_list,
+    }
 
     for level, geojson_list in loop_dict.items():
-        gdf_list = [gpd.read_file(f) for f in geojson_list]
+        gdf_list = [
+            gpd.read_file(f).drop(columns=["geometry", "Shape_Area", "Shape_Length"])
+            for f in geojson_list
+        ]
         merge_on = [
             "INSEE_DEP",
-            "Shape_Area",
             "NOM_DEP",
-            "Shape_Length",
             "OBJECTID",
-            "geometry",
         ]
 
         if level == "communes":
             merge_on.extend(["INSEE_COM", "NOM"])
 
         full_gdf = reduce(
-            lambda left, right: left.merge(
-                right,
-                on=merge_on,
-            ),
+            lambda left, right: left.merge(right, on=merge_on, how="left"),
             gdf_list,
         )
 
-        full_gdf.drop(columns="geometry").to_csv(
-            target_dir / f"geoportail_ccr_{level}.csv", index=False
-        )
+        full_gdf.to_csv(download_file_dir / f"geoportail_ccr_{level}.csv", index=False)
+
+    # Removing geojson files
+    folder_path = download_file_dir / "geoportail_ccr"
+    if folder_path.exists() and folder_path.is_dir():
+        shutil.rmtree(folder_path)
 
 
 def main():
-    # reconnaissance_catnat()
-    # geoportail_ccr()
+    load_dotenv(current_dir / ".env")
+
+    # Running local functions
+    reconnaissance_catnat()
+    geoportail_ccr()
     merge_geoportail_ccr_data()
+
+    csv_names = [
+        "ccr_main_page.csv",
+        "ccr_details.csv",
+        "geoportail_ccr_communes.csv",
+        "geoportail_ccr_departements.csv",
+    ]
+
+    for csv_name in csv_names:
+        s3_client = connect_to_s3(
+            endpoint_url=os.getenv("S3_ENDPOINT_URL"),
+            access_key_id=os.getenv("S3_ACCESS_KEY"),
+            secret_access_key=os.getenv("S3_SECRET_ACCESS_KEY"),
+            region_name=os.getenv("S3_REGION"),
+        )
+
+        send_file_to_s3(
+            s3_client=s3_client,
+            bucket=os.getenv("QPPCC_BUCKET"),
+            filepath=download_file_dir / csv_name,
+            s3_filepath=f"pipeline_inputs/{csv_name}",
+        )
+
+        # Removing local csv and geojson
+        file_path = download_file_dir / csv_name
+        file_path.unlink(missing_ok=True)
+
+    s3_client.close()
 
 
 if __name__ == "__main__":
