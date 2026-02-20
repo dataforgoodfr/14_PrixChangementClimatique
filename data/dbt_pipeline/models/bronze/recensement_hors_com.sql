@@ -37,7 +37,7 @@ WITH source_data AS (
         P22_LOG AS p22_log,
         P16_LOG AS p16_log,
         P11_LOG AS p11_log,
-        P06_LOG AS p006_log,
+        P06_LOG AS p06_log,
         D99_LOG AS d99_log,
         D90_LOG AS d90_log,
         D82_LOG AS d82_log,
