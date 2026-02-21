@@ -33,6 +33,11 @@ _Se placer dans le dossier du projet dbt pour le faire tourner :_
 cd data/dbt_pipeline
 ```
 
+_Download dependencies :_
+```bash
+uv run dbt deps
+```
+
 _Lancer le seed :_
 ```bash
 uv run dbt seed
