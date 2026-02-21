@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "charliermarsh.ruff",
+    "github.vscode-pull-request-github",
+    "actboy168.tasks",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ]
+}
