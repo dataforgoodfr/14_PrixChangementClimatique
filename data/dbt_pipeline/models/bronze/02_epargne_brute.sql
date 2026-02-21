@@ -1,0 +1,1 @@
+SELECT * FROM 'pipeline_inputs/02_epargne_brute.csv'

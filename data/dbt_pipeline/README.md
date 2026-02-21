@@ -25,7 +25,8 @@ Lancer le dbt :
 Observer le résultat :
 
 `duckdb --ui dev.duckdb`
-
+ou
+`uv run launch_data_ui.py`
 
 ### Tests
 

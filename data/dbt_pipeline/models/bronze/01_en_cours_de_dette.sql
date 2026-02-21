@@ -1,0 +1,1 @@
+SELECT * FROM 'pipeline_inputs/01_en_cours_de_dette.csv'
