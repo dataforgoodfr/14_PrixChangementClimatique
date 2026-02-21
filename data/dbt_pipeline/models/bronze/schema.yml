@@ -7,7 +7,7 @@ models:
       le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
       couche bronze et ne contient aucune transformation métier.
     columns:
-      - name: code_departement 
+      - name: code_departement
         description: "Code du département de la commune"
       - name: direction
         description: "Code direction administrative"
@@ -39,11 +39,11 @@ models:
         description: "Montant réel TAFNB pour la commune"
       - name: code_geo
         description: "Code INSEE de la commune"
-  
+
   - name: insee_filosofi_2021
     description: >
       Données INSEE
-      Principaux indicateurs sur la pauvreté en 2021 : 
+      Principaux indicateurs sur la pauvreté en 2021 :
       niveau de vie, taux de pauvreté, part des ménages imposés et décomposition du revenu disponible
       Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi)
       Identifiant du jeu de données : DS_FILOSOFI_CC
@@ -60,7 +60,7 @@ models:
         type: STRING
       - name: unit_measure
         description: >
-          Unité de mesure : 
+          Unité de mesure :
           PT pour pourcentage, EUR_YR pour Euros par an, _Z pour nombre et PS pour personnes
         type: STRING
       - name: unit_mult
@@ -79,10 +79,10 @@ models:
         description: "Valeur numérique"
         type: FLOAT
 
-  - name: rga 
+  - name: rga
     description: >
       (DONNEES GEOGRAPHIQUES) Exposition au phénomène de retrait-gonflement des argiles(RGA) par zone géographique
-      
+
 
       IMPORTANT LES DONNEES SONT EN PROJECTION LAMBERT93 (= EPSG:2154 https://epsg.io/2154)
 
@@ -99,57 +99,57 @@ models:
       - name: surf_m2
         description: Surface du polygone en m^2
       - name: niveau
-        description: "Niveau d'exposition au phénomène de retrait-gonflement des argiles
+        description:
+          "Niveau d'exposition au phénomène de retrait-gonflement des argiles
           de 1(faible) à 3(fort)"
       - name: code_departement
         description: Numéro du département
       - name: gid
         description: Index des polygones
 
-  - name: population_code_geo 
+  - name: population_code_geo
     description: >
-      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. 
+      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV.
       Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere
       Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
 
     columns:
-    - name: code_geo
-      description: Code Insee de la commune
-    - name: nom_geo
-      description: Nom de la commune
-    - name: code_departement
-      description: Numéro du département
-    - name: code_region
-      description: Code Insee de la région
-    - name: pop_2016
-      description: Population municipale 2016 - Recensement 2013
-    - name: pop_2017
-      description: Population municipale 2017 - Recensement 2014
-    - name: pop_2018
-      description: Population municipale 2018 - Recensement 2015
-    - name: pop_2019
-      description: Population municipale 2019 - Recensement 2016
-    - name: pop_2020
-      description: Population municipale 2020 - Recensement 2017
-    - name: pop_2021
-      description: Population municipale 2021 - Recensement 2018
-    - name: pop_2022
-      description: Population municipale 2022 - Recensement 2019
-    - name: pop_2023
-      description: Population municipale 2023 - Recensement 2020
-    - name: pop_2024
-      description: Population municipale 2024 - Recensement 2021
-    - name: pop_2025
-      description: Population municipale 2025 - Recensement 2022
-    - name: pop_2026
-      description: Population municipale 2026 - Recensement 2023
-
+      - name: code_geo
+        description: Code Insee de la commune
+      - name: nom_geo
+        description: Nom de la commune
+      - name: code_departement
+        description: Numéro du département
+      - name: code_region
+        description: Code Insee de la région
+      - name: pop_2016
+        description: Population municipale 2016 - Recensement 2013
+      - name: pop_2017
+        description: Population municipale 2017 - Recensement 2014
+      - name: pop_2018
+        description: Population municipale 2018 - Recensement 2015
+      - name: pop_2019
+        description: Population municipale 2019 - Recensement 2016
+      - name: pop_2020
+        description: Population municipale 2020 - Recensement 2017
+      - name: pop_2021
+        description: Population municipale 2021 - Recensement 2018
+      - name: pop_2022
+        description: Population municipale 2022 - Recensement 2019
+      - name: pop_2023
+        description: Population municipale 2023 - Recensement 2020
+      - name: pop_2024
+        description: Population municipale 2024 - Recensement 2021
+      - name: pop_2025
+        description: Population municipale 2025 - Recensement 2022
+      - name: pop_2026
+        description: Population municipale 2026 - Recensement 2023
 
   - name: ccr_main_page
     description: >
       Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
-      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982. 
-      La colonne code_arrete connecte cette table à la table ccr_details. 
+      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982.
+      La colonne code_arrete connecte cette table à la table ccr_details.
     columns:
       - name: nom_peril
         description: "Type de péril (Inondations, sécheresse, ect...)"
@@ -171,7 +171,7 @@ models:
     description: >
       Données scrappées des child pages du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/ (en cliquant sur l'icône en forme d'œil).
       Example: https://www.ccr.fr/detail-arrete/?codeArrete=000001
-      Ces données contiennent les détails des les communes impactées par une CatNat, 
+      Ces données contiennent les détails des les communes impactées par une CatNat,
       si la arrêté a été reconnue et quel type de franchise a été appliqué.
       /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
     columns:
@@ -202,13 +202,13 @@ models:
       - name: codeArrete
         description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
         type: INTEGER
-        
+
   - name: geoportail_ccr_communes
     description: >
       Données extractes du Geoportail ArcGIS de la CCR: https://geoportail.ccr.fr/server/rest/services/CarteToutPublic
       Ces données figure sur la page Visualiser de la CCR: https://www.ccr.fr/portail-catastrophes-naturelles/visualiser/
       /!\ Les données sont sous forme de categories/classes et pas sous forme de valeur numérique /!\
-      
+
       -- DATA --
       cout_cumul: coûts cumulés des sinistres
       cout_moy: coûts moyen des sinistres
@@ -216,13 +216,13 @@ models:
       nb_risque: nombre de risques assurées
       prime: primes catnat
       va: valeurs assurées
-      sp: ratio sinistres et primes 
+      sp: ratio sinistres et primes
 
       -- PERIL --
       tout: tout type de péril
         tout_ino: tout type d'inondations
           icb: inondation et/ou coulée de boue
-          irn: inondation par remontées de nappes 
+          irn: inondation par remontées de nappes
           sub: inondation par submersion marine
         sec: sécheresse
         mvt: mouvement de terrain
@@ -230,7 +230,7 @@ models:
         ava: avalanche
         vcy: vent cyclonique
         aut: autres périls
-        
+
       -- DEMOGRAPHIE --
       part: particulier
       pro: professionel/entreprises
@@ -414,16 +414,11 @@ models:
       - name: sp_aut
         description: "Ratio S/P pour les autres périls"
         type: STRING
-   
-   
 
-
-
- 
   - name: primes_assurances_communes
-    description:  >
-         Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010. 
-          Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
+    description: >
+      Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010.
+       Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     tables:
       - name: primes_assurances_communes
         description: "Table regroupant les primes d'assurance par type de compte pour chaque commune"
@@ -476,8 +471,8 @@ models:
 
   - name: budget_per_compte_communes
     description: >
-     Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010. 
-     Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
+      Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010.
+      Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     tables:
       - name: primes_assurances_communes
         description: "Table regroupant les primes d'assurance par type de compte pour chaque commune"
@@ -534,8 +529,8 @@ models:
   - name: insee_commune
     description: >
       Données INSEE
-      Code officiel géographique au 1er janvier 2025 
-      Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées 
+      Code officiel géographique au 1er janvier 2025
+      Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées
       au 1er janvier 2025, avec le code des niveaux supérieurs (canton ou pseudo-canton, département, région)
       URL : https://www.insee.fr/fr/information/8377162
     columns:
@@ -592,7 +587,7 @@ models:
       - name: cog
         description: "Code commune - appelé code_geo dans les données bronze du projet"
         type: STRING
-      - name: type 
+      - name: type
         description: "Type de commune"
         type: STRING
       - name: code_departement
@@ -608,3 +603,84 @@ models:
       - name: code_postal
         description: "Code postal"
         type: STRING
+
+  - name: communes
+    description: >
+      Table des communes françaises avec géométries spatiales (polygones).
+      Source : HuWise / Georef France Commune
+      URL : https://hub.huwise.com/api/explore/v2.1/catalog/datasets/georef-france-commune/exports/geojson
+      Cette table contient les données administratives et géographiques complètes
+      de toutes les communes françaises avec leurs polygones géométriques.
+      Source non officielle, alternatives envisageable: IGN ADMIN-EXPRESS 2026 France Entière
+      ("https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16.7z")
+      ou données OpenStreeMap via Ouverture Maps ("https://docs.overturemaps.org/getting-data/duckdb/")
+    columns:
+      - name: code_commune
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: nom_commune
+        description: "Nom officiel de la commune"
+        type: STRING
+      - name: code_commune_actuel
+        description: "Code INSEE actuel (en cas de fusion/changement)"
+        type: STRING
+      - name: nom_commune_majuscule
+        description: "Nom de la commune en majuscules"
+        type: STRING
+      - name: nom_commune_minuscule
+        description: "Nom de la commune en minuscules"
+        type: STRING
+      - name: code_zone_superficie
+        description: "Code de la zone de superficie"
+        type: STRING
+      - name: type_commune
+        description: "Type de commune (COM, ARM, COMD, etc.)"
+        type: STRING
+      - name: code_siren
+        description: "Code SIREN de la commune (9 chiffres)"
+        type: STRING
+      - name: zone_montagne
+        description: "Indicateur si la commune est en zone de montagne"
+        type: STRING
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: nom_departement
+        description: "Nom du département"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
+      - name: nom_region
+        description: "Nom de la région"
+        type: STRING
+      - name: code_arrondissement_departemental
+        description: "Code de l'arrondissement départemental"
+        type: STRING
+      - name: nom_arrondissement_departemental
+        description: "Nom de l'arrondissement départemental"
+        type: STRING
+      - name: code_epci
+        description: "Code de l'EPCI (Établissement Public de Coopération Intercommunale)"
+        type: STRING
+      - name: nom_epci
+        description: "Nom de l'EPCI"
+        type: STRING
+      - name: code_zone_emploi_2020
+        description: "Code de la zone d'emploi 2020"
+        type: STRING
+      - name: nom_zone_emploi_2020
+        description: "Nom de la zone d'emploi 2020"
+        type: STRING
+      - name: code_bassin_vie_2022
+        description: "Code du bassin de vie 2022"
+        type: STRING
+      - name: nom_bassin_vie_2022
+        description: "Nom du bassin de vie 2022"
+        type: STRING
+      - name: geo_point_2d
+        description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
+        type: GEOMETRY
