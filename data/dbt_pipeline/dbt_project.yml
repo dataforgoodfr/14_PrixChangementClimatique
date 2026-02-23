@@ -31,11 +31,18 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_pipeline:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    # Config indicated by + and applies to all files under models/
+    +persist_docs:
+      relation: true
+      columns: true
+    +materialized: table
 
 seeds:
   dbt_pipeline:
     +enabled: true
     +delimiter: ";"
+    
+# Loading duckdb extension for geo data
+on-run-start:
+  - "INSTALL spatial;"
+  - "LOAD spatial;"

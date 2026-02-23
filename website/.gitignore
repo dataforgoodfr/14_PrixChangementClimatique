@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Temporary local data for development
+/public/geojson/*.geojson
+/public/pmtiles/*.pmtiles

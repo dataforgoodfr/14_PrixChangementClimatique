@@ -16,7 +16,8 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# Keep lib folder in website directory
+/lib/
 lib64/
 lib64
 parts/
@@ -28,6 +29,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+.DS_Store
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -160,6 +163,9 @@ cython_debug/
 # Precommit hooks: ruff cache
 .ruff_cache
 
+# Duckdb launch file for debug
+data/dbt_pipeline/launch_data_ui.py
+
 # Local files containing exploration data
 dev.duckdb
 odis.duckdb
@@ -169,3 +175,13 @@ CLAUDE.md
 
 # Files in S3 bucket
 data/dbt_pipeline/pipeline_inputs/
+
+# User specific files of dbt runs
+.user.yml
+
+# DBT user config
+data/dbt_pipeline/.user.yml
+data/dbt_pipeline/package-lock.yml
+
+# VSCode settings
+.vscode
