@@ -27,4 +27,5 @@ dependencies = [
     "requests>=2.32.3",
     "tox>=4.34.1",
     "seaborn>=0.13.2",
+    "polars>=1.38.1",
 ]
