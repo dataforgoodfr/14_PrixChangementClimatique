@@ -7,7 +7,7 @@ models:
       le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
       couche bronze et ne contient aucune transformation métier.
     columns:
-      - name: code_departement 
+      - name: departement 
         description: "Code du département de la commune"
       - name: direction
         description: "Code direction administrative"
@@ -15,8 +15,8 @@ models:
         description: "Code de la commune"
       - name: commune_recensee
         description: "Indique si la commune est recensée (R)"
-      - name: numero_siren_epci
-        description: "Numéro SIREN de l’EPCI auquel appartient la commune"
+      - name: numero_national_de_groupement 
+        description: "Lien entre les impots percus au niveau de la commune et les groupes de communes"
       - name: libelle_groupement
         description: "Nom du groupement intercommunal"
       - name: option_fiscale_epci
@@ -31,11 +31,11 @@ models:
         description: "Taux net FNB appliqué à la commune"
       - name: fnb_commune_montant_reel
         description: "Montant réel FNB pour la commune"
-      - name: tafnb_commune_base_taxable_commune
+      - name: tafnb_base_taxable_communale
         description: "Base taxable TAFNB pour la commune"
       - name: fnb_commune_taux_net
         description: "Taux net TAFNB appliqué à la commune"
-      - name: tafnb_commune_montant_reel
+      - name: tafnb_commune_montant_reel_net
         description: "Montant réel TAFNB pour la commune"
       - name: code_geo
         description: "Code INSEE de la commune"
