@@ -154,16 +154,16 @@ models:
       - name: nom_peril
         description: "Type de péril (Inondations, sécheresse, ect...)"
         type: STRING
-      - name: dateArrete
+      - name: date_arrete
         description: "Date officielle de l'arrêté"
         type: DATE
-      - name: dateParutionJO
+      - name: date_parution_jo
         description: "Date de parution au Journal Officiel"
         type: DATE
-      - name: codeNOR
+      - name: code_nor
         description: "Code officiel d'indentification de l'arrête"
         type: STRING
-      - name: codeArrete
+      - name: code_arrete
         description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
         type: INTEGER
 
@@ -545,448 +545,449 @@ models:
     columns:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
-        type: char(5)
+        type: VARCHAR
       - name: p22_pop
         description: Population en 2022
-        type: num(7)
+        type: INT
       - name: p16_pop
         description: Population en 2016
-        type: num(7)
+        type: INT
       - name: p11_pop
         description: Population en 2011
-        type: num(7)
+        type: INT
       - name: p06_pop
         description: Population en 2006
-        type: num(7)
+        type: INT
       - name: d99_pop
         description: Population en 1999
-        type: num(7)
+        type: INT
       - name: d90_pop
         description: Population sans les doubles comptes en 1990
-        type: num(7)
+        type: INT
       - name: d82_pop
         description: Population sans les doubles comptes en 1982
-        type: num(7)
+        type: INT
       - name: d75_pop
         description: Population sans les doubles comptes en 1975 (en 1974 pour les DOM)
-        type: num(7)
+        type: INT
       - name: d68_pop
         description: Population sans les doubles comptes en 1968 (en 1967 pour les DOM)
-        type: num(7)
+        type: INT
       - name: superf
         description: Superficie (en km²)
-        type: num(16)
+        type: FLOAT
       - name: nais1621
         description: Nombre de naissances entre le 01/01/2016 et le 31/12/2021
-        type: num(6)
+        type: INT
       - name: nais1115
         description: Nombre de naissances entre le 01/01/2011 et le 31/12/2015
-        type: num(6)
+        type: INT
       - name: nais0610
         description: Nombre de naissances entre le 01/01/2006 et le 31/12/2010
-        type: num(6)
+        type: INT
       - name: nais9905
         description: Nombre de naissances entre le RP1999 et le 31/12/2005
-        type: num(6)
+        type: INT
       - name: nais9099
         description: Nombre de naissances entre le RP1990 et le RP1999
-        type: num(6)
+        type: INT
       - name: nais8290
         description: Nombre de naissances entre le RP1982 et le RP1990
-        type: num(6)
+        type: INT
       - name: nais7582
         description: Nombre de naissances entre le RP1975 (en 1974 pour les DOM) et le RP1982
-        type: num(6)
+        type: INT
       - name: nais6875
         description: Nombre de naissances entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
-        type: num(6)
+        type: INT
       - name: dece1621
         description: Nombre de décès entre le 01/01/2016 et le 31/12/2021
-        type: num(6)
+        type: INT
       - name: dece1115
         description: Nombre de décès entre le 01/01/2011 et le 31/12/2015
-        type: num(6)
+        type: INT
       - name: dece0610
         description: Nombre de décès entre le 01/01/2006 et le 31/12/2010
-        type: num(6)
+        type: INT
       - name: dece9905
         description: Nombre de décès entre le RP1999 et le 31/12/2005
-        type: num(6)
+        type: INT
       - name: dece9099
         description: Nombre de décès entre le RP1990 et le RP1999
-        type: num(6)
+        type: INT
       - name: dece8290
         description: Nombre de décès entre le RP1982 et le RP1990
-        type: num(6)
+        type: INT
       - name: dece7582
         description: Nombre de décès entre le RP1975 (en 1974 pour les DOM) et le RP1982
-        type: num(6)
+        type: INT
       - name: dece6875
         description: Nombre de décès entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
-        type: num(6)
+        type: INT
       - name: p22_log
         description: Nombre de logements en 2022
-        type: num(16)
+        type: INT
       - name: p16_log
         description: Nombre de logements en 2016
-        type: num(16)
+        type: INT
       - name: p11_log
         description: Nombre de logements en 2011
-        type: num(16)
+        type: INT
       - name: p06_log
         description: Nombre de logements en 2006
-        type: num(16)
+        type: INT
       - name: d99_log
         description: Nombre de logements en 1999
-        type: num(16)
+        type: INT
       - name: d90_log
         description: Nombre de logements en 1990
-        type: num(16)
+        type: INT
       - name: d82_log
         description: Nombre de logements en 1982
-        type: num(16)
+        type: INT
       - name: d75_log
         description: Nombre de logements en 1975 (en 1974 pour les DOM)
-        type: num(16)
+        type: INT
       - name: d68_log
         description: Nombre de logements en 1968 (en 1967 pour les DOM)
-        type: num(16)
+        type: INT
       - name: p22_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2022
-        type: num(16)
+        type: INT
       - name: p16_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2016
-        type: num(16)
+        type: INT
       - name: p11_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2011
-        type: num(16)
+        type: INT
       - name: p06_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2006
-        type: num(16)
+        type: INT
       - name: d99_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1999
-        type: num(16)
+        type: INT
       - name: d90_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1990
-        type: num(16)
+        type: INT
       - name: d82_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1982
-        type: num(16)
+        type: INT
       - name: d75_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1975 (en 1974 pour les DOM)
-        type: num(16)
+        type: INT
       - name: d68_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1968 (en 1967 pour les DOM)
-        type: num(16)
+        type: INT
       - name: p22_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2022
-        type: num(17)
+        type: INT
       - name: p16_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2016
-        type: num(17)
+        type: INT
       - name: p11_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2011
-        type: num(17)
+        type: INT
       - name: p06_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2006
-        type: num(17)
+        type: INT
       - name: d99_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1999
-        type: num(17)
+        type: INT
       - name: d90_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1990
-        type: num(17)
+        type: INT
       - name: d82_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1982
-        type: num(17)
+        type: INT
       - name: d75_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1975 (en 1974 pour les DOM)
-        type: num(17)
+        type: INT
       - name: d68_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1968 (en 1967 pour les DOM)
-        type: num(17)
+        type: INT
       - name: p22_logvac
         description: Nombre de logements vacants en 2022
-        type: num(17)
+        type: INT
       - name: p16_logvac
         description: Nombre de logements vacants en 2016
-        type: num(17)
+        type: INT
       - name: p11_logvac
         description: Nombre de logements vacants en 2011
-        type: num(17)
+        type: INT
       - name: p06_logvac
         description: Nombre de logements vacants en 2006
-        type: num(17)
+        type: INT
       - name: d99_logvac
         description: Nombre de logements vacants en 1999
-        type: num(17)
+        type: INT
       - name: d90_logvac
         description: Nombre de logements vacants en 1990
-        type: num(17)
+        type: INT
       - name: d82_logvac
         description: Nombre de logements vacants en 1982
-        type: num(17)
+        type: INT
       - name: d75_logvac
         description: Nombre de logements vacants en 1975 (en 1974 pour les DOM)
-        type: num(17)
+        type: INT
       - name: d68_logvac
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
-        type: num(17)
+        type: INT
       - name: p22_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2022
-        type: num(16)
+        type: INT
       - name: p16_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2016
-        type: num(16)
+        type: INT
       - name: p11_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2011
-        type: num(16)
+        type: INT
       - name: p06_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2006
-        type: num(16)
+        type: INT
       - name: d99_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1999
-        type: num(16)
+        type: INT
       - name: d90_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1990
-        type: num(16)
+        type: INT
       - name: d82_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1982
-        type: num(16)
+        type: INT
       - name: d75_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1975 (en 1974 pour les DOM)
-        type: num(16)
+        type: INT
       - name: d68_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1968 (en 1967 pour les DOM)
-        type: num(16)
+        type: INT
+
 
 
   - name: recensement_com
     description: >
-      Séries historiques en 2022 -  Données collectivités d'outre-mer - 
-      Recensement de la population - Base des principaux indicateurs - 
-      Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales, les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages. - 
-      Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025. - 
-      Niveau géographique : commune, arrondissement municipal. - 
-      Résultats : les indicateurs sont disponibles pour 1968, 1975, 1982, 1990, 1999, 2006, 2011, 2016 et 2022. - 
+      Séries historiques en 2022 -  Données collectivités d'outre-mer -
+      Recensement de la population - Base des principaux indicateurs -
+      Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales, les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages. -
+      Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025. -
+      Niveau géographique : commune, arrondissement municipal. -
+      Résultats : les indicateurs sont disponibles pour 1968, 1975, 1982, 1990, 1999, 2006, 2011, 2016 et 2022. -
       https://www.insee.fr/fr/statistiques/8582555#documentation
     columns:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
-        type: char(5)
+        type: VARCHAR(5)
       - name: p22_pop
         description: Population en 2022
-        type: num(7)
+        type: INT
       - name: p16_pop
         description: Population en 2016
-        type: num(7)
+        type: INT
       - name: p11_pop
         description: Population en 2011
-        type: num(7)
+        type: INT
       - name: p06_pop
         description: Population en 2006
-        type: num(7)
+        type: INT
       - name: d99_pop
         description: Population en 1999
-        type: num(7)
+        type: INT
       - name: d90_pop
         description: Population sans les doubles comptes en 1990
-        type: num(7)
+        type: INT
       - name: d82_pop
         description: Population sans les doubles comptes en 1982
-        type: num(7)
+        type: INT
       - name: d75_pop
         description: Population sans les doubles comptes en 1975 (en 1974 pour les DOM)
-        type: num(7)
+        type: INT
       - name: d68_pop
         description: Population sans les doubles comptes en 1968 (en 1967 pour les DOM)
-        type: num(7)
+        type: INT
       - name: superf
         description: Superficie (en km²)
-        type: num(16)
+        type: FLOAT
       - name: nais1621
         description: Nombre de naissances entre le 01/01/2016 et le 31/12/2021
-        type: num(6)
+        type: INT
       - name: nais1115
         description: Nombre de naissances entre le 01/01/2011 et le 31/12/2015
-        type: num(6)
+        type: INT
       - name: nais0610
         description: Nombre de naissances entre le 01/01/2006 et le 31/12/2010
-        type: num(6)
+        type: INT
       - name: nais9905
         description: Nombre de naissances entre le RP1999 et le 31/12/2005
-        type: num(6)
+        type: INT
       - name: nais9099
         description: Nombre de naissances entre le RP1990 et le RP1999
-        type: num(6)
+        type: INT
       - name: nais8290
         description: Nombre de naissances entre le RP1982 et le RP1990
-        type: num(6)
+        type: INT
       - name: nais7582
         description: Nombre de naissances entre le RP1975 (en 1974 pour les DOM) et le RP1982
-        type: num(6)
+        type: INT
       - name: nais6875
         description: Nombre de naissances entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
-        type: num(6)
+        type: INT
       - name: dece1621
         description: Nombre de décès entre le 01/01/2016 et le 31/12/2021
-        type: num(6)
+        type: INT
       - name: dece1115
         description: Nombre de décès entre le 01/01/2011 et le 31/12/2015
-        type: num(6)
+        type: INT
       - name: dece0610
         description: Nombre de décès entre le 01/01/2006 et le 31/12/2010
-        type: num(6)
+        type: INT
       - name: dece9905
         description: Nombre de décès entre le RP1999 et le 31/12/2005
-        type: num(6)
+        type: INT
       - name: dece9099
         description: Nombre de décès entre le RP1990 et le RP1999
-        type: num(6)
+        type: INT
       - name: dece8290
         description: Nombre de décès entre le RP1982 et le RP1990
-        type: num(6)
+        type: INT
       - name: dece7582
         description: Nombre de décès entre le RP1975 (en 1974 pour les DOM) et le RP1982
-        type: num(6)
+        type: INT
       - name: dece6875
         description: Nombre de décès entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
-        type: num(6)
+        type: INT
       - name: p22_log
         description: Nombre de logements en 2022
-        type: num(16)
+        type: INT
       - name: p16_log
         description: Nombre de logements en 2016
-        type: num(16)
+        type: INT
       - name: p11_log
         description: Nombre de logements en 2011
-        type: num(16)
+        type: INT
       - name: p06_log
         description: Nombre de logements en 2006
-        type: num(16)
+        type: INT
       - name: d99_log
         description: Nombre de logements en 1999
-        type: num(16)
+        type: INT
       - name: d90_log
         description: Nombre de logements en 1990
-        type: num(16)
+        type: INT
       - name: d82_log
         description: Nombre de logements en 1982
-        type: num(16)
+        type: INT
       - name: d75_log
         description: Nombre de logements en 1975 (en 1974 pour les DOM)
-        type: num(16)
+        type: INT
       - name: d68_log
         description: Nombre de logements en 1968 (en 1967 pour les DOM)
-        type: num(16)
+        type: INT
       - name: p22_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2022
-        type: num(16)
+        type: INT
       - name: p16_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2016
-        type: num(16)
+        type: INT
       - name: p11_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2011
-        type: num(16)
+        type: INT
       - name: p06_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2006
-        type: num(16)
+        type: INT
       - name: d99_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1999
-        type: num(16)
+        type: INT
       - name: d90_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1990
-        type: num(16)
+        type: INT
       - name: d82_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1982
-        type: num(16)
+        type: INT
       - name: d75_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1975 (en 1974 pour les DOM)
-        type: num(16)
+        type: INT
       - name: d68_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1968 (en 1967 pour les DOM)
-        type: num(16)
+        type: INT
       - name: p22_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2022
-        type: num(17)
+        type: INT
       - name: p16_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2016
-        type: num(17)
+        type: INT
       - name: p11_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2011
-        type: num(17)
+        type: INT
       - name: p06_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2006
-        type: num(17)
+        type: INT
       - name: d99_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1999
-        type: num(17)
+        type: INT
       - name: d90_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1990
-        type: num(17)
+        type: INT
       - name: d82_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1982
-        type: num(17)
+        type: INT
       - name: d75_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1975 (en 1974 pour les DOM)
-        type: num(17)
+        type: INT
       - name: d68_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1968 (en 1967 pour les DOM)
-        type: num(17)
+        type: INT
       - name: p22_logvac
         description: Nombre de logements vacants en 2022
-        type: num(17)
+        type: INT
       - name: p16_logvac
         description: Nombre de logements vacants en 2016
-        type: num(17)
+        type: INT
       - name: p11_logvac
         description: Nombre de logements vacants en 2011
-        type: num(17)
+        type: INT
       - name: p06_logvac
         description: Nombre de logements vacants en 2006
-        type: num(17)
+        type: INT
       - name: d99_logvac
         description: Nombre de logements vacants en 1999
-        type: num(17)
+        type: INT
       - name: d90_logvac
         description: Nombre de logements vacants en 1990
-        type: num(17)
+        type: INT
       - name: d82_logvac
         description: Nombre de logements vacants en 1982
-        type: num(17)
+        type: INT
       - name: d75_logvac
         description: Nombre de logements vacants en 1975 (en 1974 pour les DOM)
-        type: num(17)
+        type: INT
       - name: d68_logvac
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
-        type: num(17)
+        type: INT
       - name: p22_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2022
-        type: num(16)
+        type: INT
       - name: p16_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2016
-        type: num(16)
+        type: INT
       - name: p11_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2011
-        type: num(16)
+        type: INT
       - name: p06_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2006
-        type: num(16)
+        type: INT
       - name: d99_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1999
-        type: num(16)
+        type: INT
       - name: d90_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1990
-        type: num(16)
+        type: INT
       - name: d82_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1982
-        type: num(16)
+        type: INT
       - name: d75_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1975 (en 1974 pour les DOM)
-        type: num(16)
+        type: INT
       - name: d68_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1968 (en 1967 pour les DOM)
-        type: num(16)
+        type: INT
 
   - name: insee_commune
     description: >
@@ -1062,6 +1063,413 @@ models:
         description: "Code region"
         type: STRING
       - name: population
+        description: "Population de la commune"
+        type: INT
       - name: code_postal
         description: "Code postal"
         type: STRING
+
+  - name: pprm_gaspar
+    description: |-
+      1. Définition - 
+      Le plan de prévention des risques miniers est un document réalisé 
+      par l’État qui réglemente l'utilisation des sols en fonction des risques 
+      miniers auxquels ils sont soumis. Cette réglementation va de l'interdiction
+       de construire à la possibilité de construire sous certaines conditions.
+
+      2. Structure
+      Chaque procédure est décrite par une ligne par commune et par risque traité.
+      La table comprend les procédures en vigueur, les procédures en cours, les 
+      procédures annulées, abrogées et déprescrites, ainsi que les procédures
+       révisées par une autre procédure.
+
+      3. Dictionnaire de données (erreur) -  
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf 
+    columns:
+      - name: code_geo
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+
+
+  - name: dicrim_gaspar
+    description: |-
+      1. Définition -
+      Le document d’information communal sur les risques majeurs (DICRIM) recense
+       les mesures de sauvegarde répondant aux risques naturels et technologiques majeurs 
+       sur le territoire de la commune, conformément au décret du 11 octobre 1990.
+      http://www.georisques.gouv.fr/articles/le-document-dinformation-communal-sur-les-risquesmajeurs-dicrim
+
+      2. Structure -
+      Un DICRIM par commune (identification et suppression des doublons en cours).
+
+      3. Dictionnaire de données - 
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+
+      4. Nota - données incomplètes par rapport au dictionnaire
+    columns:
+      - name: cod_commune
+        description: Code de la commune concernée
+        data_type: varchar
+      - name: lib_commune
+        description: Nom de la commune concernée
+        data_type: varchar
+      - name: dat_publi_dicrim
+        description: Date de publication
+        data_type: timestamp
+
+
+
+  - name: pprn_gaspar
+    description: |-
+      1. Définition -
+      Le plan de prévention des risques naturels est un document réalisé par l’État qui
+       réglemente l'utilisation des sols en fonction des risques naturels auxquels ils sont soumis.
+       Cette réglementation va de l'interdiction de construire à la possibilité de construire sous certaines
+      conditions.
+      http://www.georisques.gouv.fr/articles/les-plans-de-prevention-des-risques-naturels-pprn
+
+      2. Structure - 
+      Chaque procédure est décrite par une ligne par commune et par risque traité.
+      La table comprend les procédures en vigueur, les procédures en cours, les procédures annulées, 
+      abrogées et déprescrites, ainsi que les procédures révisées par une autre procédure.
+
+      3. Dictionnaire de données (erreur)- https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: code_geo
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+
+  - name: pprt_gaspar
+    description: |-
+      8.1. Définition - 
+      Le plan de prévention des risques technologiques est un document réalisé par l’État qui 
+      réglemente l'utilisation des sols en fonction des risques technologiques auxquels ils sont soumis.
+      Cette réglementation va de l'interdiction de construire à la possibilité de construire sous certaines conditions.
+      http://www.georisques.gouv.fr/articles/les-plans-de-prevention-des-risques-naturels-pprn
+
+      2. Structure -
+      Chaque procédure est décrite par une ligne par commune et par risque traité. 
+      La table comprend les procédures en vigueur, les procédures en cours, les procédures annulées, abrogées et déprescrites, ainsi que les procédures révisées par une autre procédure.
+
+      3. Dictionnaire de données (erreur) - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: code_geo
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+
+  - name: ccr_details
+    description: |-
+        Liste des arrêtés de catastrophe naturelle par commune
+        affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
+        et récupérés depuis l'API de la CCR - 
+        https://www.ccr.fr/wp-admin/admin-ajax.php
+    columns:
+      - name: code_geo
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+      - name: date_arrete
+        description: Date de l'arrêté de catastrophe naturelle
+        type: DATE
+      - name: date_debut_evenement
+        description: Date de début de l'événement de catastrophe naturelle
+        type: DATE
+      - name: date_fin_evenement
+        description: Date de fin de l'événement de catastrophe naturelle
+        type: DATE
+      - name: nom_commune
+        description: Nom de la commune concernée par l'arrêté de catastrophe naturelle
+        type: VARCHAR
+      - name: nom_peril
+        description: Nom du risque concerné par l'arrêté de catastrophe naturelle
+        type: VARCHAR
+      - name: date_parution_jo
+        description: Date de publication de l'arrêté de catastrophe naturelle au journal officiel
+        type: DATE
+      - name: franchise
+        description: Type de franchise applicable à la commune
+        type: VARCHAR
+      - name: libelle_avis
+        description: Décision de reconnaissance de l'état de catastrophe naturelle
+        type: VARCHAR
+      - name: code_arrete
+        description: Identifiant de l'arrêté de la CCR relatif à la déclaration de catastrophe naturelle
+        type: INT
+
+
+  - name: azi_gaspar
+    description: 1. Définition -
+      Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
+      
+      2. Structure -
+      Un atlas est décrit par une ligne par commune concernée. Une commune peut être décrite par plusieurs atlas.
+      
+      3. Dictionnaire des données - 
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: cod_nat_azi
+        description: Code unique identifiant l’atlas (code national généré par Gaspar)
+        data_type: varchar
+      - name: lib_azi
+        data_type: varchar
+        description: Nom de l’atlas
+      - name: lib_bassin_risque
+        data_type: varchar
+        description: Nom du bassin de risque décrit (bassin versant, bassin hydrographique, ensemble de communes, département, région...)
+      - name: list_risques
+        data_type: varchar
+        description: Libellé du risque (un seul possible)
+      - name: cod_commune
+        data_type: varchar
+        description: Code de la commune concernée
+      - name: lib_commune
+        data_type: varchar
+        description: Nom de la commune concernée
+      - name: dat_program_deb
+        data_type: timestamp
+        description: Date de début de programmation
+      - name: dat_program_fin
+        data_type: timestamp
+        description: Date de fin de programmation
+      - name: dat_etu_deb
+        data_type: timestamp
+        description: Date de début des études
+      - name: dat_etu_fin
+        data_type: timestamp
+        description: Date de fin des études
+      - name: dat_info_deb
+        data_type: timestamp
+        description: Date de début d’information des communes
+      - name: dat_info_fin
+        data_type: timestamp
+        description: Date de fin d’information des communes
+      - name: dat_realisation
+        data_type: timestamp
+        description: Date de réalisation de l’atlas
+      - name: dat_diffusion
+        data_type: timestamp
+        description: Date de diffusion de l’atlas (accès aux cartes)
+      - name: dat_pub_net
+        data_type: timestamp
+        description: Date de publication sur Internet
+      - name: dat_maj
+        data_type: timestamp
+        description: Date de mise à jour de la fiche GASPAR
+
+
+  - name: catnat_gaspar
+    description: |-
+      1. Définition -
+      Les arrêtés interministériels de reconnaissances de l’état de catastrophe naturelle sont
+      délivrés pour un ensemble de communes, un aléa et une période donnée, après examen des
+      demandes de reconnaissance déposées par les maires des communes concernées.
+      http://www.georisques.gouv.fr/articles/guide-juridique-indemnisation-des-castastrophesnaturelles
+
+      2. Structure -
+      Une ligne correspond à une reconnaissance, qui concerne une commune, un événement
+      (date de début et de fin) et un risque. On peut avoir plusieurs reconnaissances sur une
+      même commune pour un même événement (ex : tempête et inondation).
+
+      3. Dictionnaire données -
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: cod_nat_catnat
+        description: |-
+          Code unique identifiant une reconnaissance (code national généré par
+          Gaspar)
+        data_type: varchar
+      - name: cod_commune
+        description: Code de la commune concernée
+        data_type: varchar
+      - name: lib_commune
+        description: Nom de la commune concernée
+        data_type: varchar
+      - name: num_risque_jo
+        description: Numéro du risque mentionné
+        data_type: varchar
+      - name: lib_risque_jo
+        description: Libellé du risque mentionné dans le journal officiel
+        data_type: varchar
+      - name: dat_deb
+        description: Date de début de l’événement
+        data_type: date
+      - name: dat_fin
+        description: Date de fin de l’événement
+        data_type: date
+      - name: dat_pub_arrete
+        description: Date de l’arrêté
+        data_type: date
+      - name: dat_pub_jo
+        description: Date de publication au journal officiel
+        data_type: date
+      - name: dat_maj
+        description: Date de mise à jour de la fiche GASPAR
+        data_type: timestamp
+
+  - name: tim_gaspar
+    description: |-
+      1. Définition -
+      Le dossier de transmission des informations au maire (TIM) a remplacé le dossier communal synthétique (DCS) et le porté à connaissance (PAC-risques). Il contient les informations nécessaires à la réalisation de l’information préventive sur leur territoire et notamment du DICRIM (Document d’Information Communal sur les Risques Majeurs).
+      http://www.georisques.gouv.fr/articles/le-dossier-departemental-sur-les-risques-majeurs-ddrm
+
+      2. Structure - 
+      Chaque transmission est décrite par une ligne par risque y figurant. Une transmission es dans la plupart des cas monocommunale, à quelques rares exceptions près : transmissions spécifiques sur un risque à un ensemble de communes (sismique, canalisations de matières dangereuses…).
+
+      3. Dictionnaire de données -
+    columns:
+      - name: codeInsee
+        data_type: varchar
+        quote: true
+      - name: nomCommune
+        data_type: varchar
+        quote: true
+      - name: dateDebutEvenement
+        data_type: date
+        quote: true
+      - name: dateFinEvenement
+        data_type: date
+        quote: true
+      - name: dateArrete
+        data_type: date
+        quote: true
+      - name: dateParutionJO
+        data_type: date
+        quote: true
+      - name: nomPeril
+        data_type: varchar
+        quote: true
+      - name: franchise
+        data_type: varchar
+      - name: libelleAvis
+        data_type: varchar
+        quote: true
+      - name: code_arrete
+        data_type: bigint
+
+
+  - name: risq_gaspar
+    description: |-
+      1. Définition -
+        Le DDRM (le Dossier Départemental sur les Risques Majeurs) est un document où le préfet
+        (Conformément à l’article R125-11 du Code de l’Environnement) consigne toutes les
+        informations essentielles sur les risques naturels et technologiques majeurs au niveau de
+        son département, ainsi que sur les mesures de prévention et de sauvegarde prévues pour
+        limiter leurs effets. En précisant les notions d'aléa et de risque majeur, le DDRM doit
+        recenser toutes les communes à risques du département, dans lesquelles une information
+        préventive des populations doit être réalisée.
+        http://www.georisques.gouv.fr/articles/le-dossier-departemental-sur-les-risques-majeurs-ddrm
+
+      2. Structure - 
+        Chaque commune est décrite par une ligne par risque recensé
+
+      3. Dictionnaire de données - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+
+    columns:
+      - name: cod_commune
+        description: Code de la commune concernée
+        type: VARCHAR
+      - name: lib_commune
+        description: Nom de la commune concernée
+        type: VARCHAR
+      - name: num_risque
+        description: Numéro du risque mentionné dans le DDRM
+        type: INT
+      - name: lib_risque
+        description: Libellé du risque mentionné dans le DDRM
+        type: VARCHAR
+
+  
+  - name: taux_chomage_communes
+    description: |-
+      Taux de chômage par commune - 
+      Source Pôle Emploi, données au 3ème trimestre 2025 - 
+
+      https://www.insee.fr/fr/statistiques/1893230 - 
+      https://www.insee.fr/fr/statistiques/2012804 - 
+      https://dares.travail-emploi.gouv.fr/donnees/les-inscrits-france-travail-donnees-communales
+    columns:
+       - name: code_region
+         description: Code de la région
+         type: INT
+       - name: region
+         description: Nom de la région
+         type: VARCHAR
+       - name: code_departement
+         description: Code du département
+         type: VARCHAR
+       - name: departement
+         description: Nom du département
+         type: VARCHAR
+       - name: code_commune
+         description: Code de la commune
+         type: VARCHAR
+       - name: commune
+         description: Nom de la commune
+         type: VARCHAR
+       - name: code_geo
+         description: Code géographique de la commune (code INSEE à 5 chiffres)
+         type: VARCHAR
+       - name: nombre_de_demandeurs_d_emploi
+         description: Nombre de demandeurs d'emploi
+         type: INT
+       - name: p23_pop
+         description: Population de la commune en 2023
+         type: INT
+       - name: ratio_ABC_pop_commune
+         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
+         type: FLOAT
+       - name: ratio_ABC_pop_dep
+         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale du département
+         type: FLOAT
+       - name: T3_2025_departement
+         description: Taux de chômage au 3ème trimestre 2025 pour le département
+         type: FLOAT
+       - name: T3_2025_proxy_commune
+         description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
+         type: FLOAT
+
+
+  - name: res2_insee
+    description: |-
+      Part de résidences secondaires par commune - 
+      Source INSEE, données au 1er janvier 2022 - 
+      https://www.observatoire-des-territoires.gouv.fr/part-des-residences-secondaires-et-logements-occasionnels
+    columns:
+    - name: code_geo
+      description: Code géographique de la commune (code INSEE à 5 chiffres)
+      type: VARCHAR
+    - name: lib_geo
+      description: Nom de la commune
+      type: VARCHAR
+    - name: an
+      description: Année de référence de la donnée
+      type: INT 
+    - name: part_resid2
+      description: Part en % des résidences secondaires et logements occasionnels
+       dans le total des résidences principales, secondaires et logements occasionnels
+      type: FLOAT
+
+  - name: budget_communes
+    description: |-
+      Budget des communes - 
+      https://data.ofgl.fr/pages/acces-donnees-comptables-detaillees/
+    columns:
+      - name: annee
+        description: Exercice budgétaire de référence de la donnée
+        type: INT
+      - name: code_geo
+        description: Code INSEE 2024de la commune
+        type: VARCHAR
+      - name: siret_budget
+        description: Siret de l'entité juridique à laquelle correspond le budget
+        type: VARCHAR
+      - name: libelle_budget
+        description: Libellé du budget
+        type: VARCHAR
+      - name: type_budget
+        description: Type de budget (principal / annexe)
+        type: VARCHAR
+      - name: montant
+        description: Montant du budget en euros
+        type: FLOAT
+
+        

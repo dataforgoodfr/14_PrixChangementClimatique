@@ -1,4 +1,4 @@
--- geoportial_ccr.sql
+-- geoportail_ccr.sql
 -- Use alias to respect naming convention : snake_case
 
 SELECT
