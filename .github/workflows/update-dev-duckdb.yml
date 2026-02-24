@@ -36,11 +36,20 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync
+      
+      - name: Set all files on S3 to public read
+        run: |
+          uv run python data/utils/set_all_files_to_public_read.py
 
       - name: Download pipeline csv inputs from bucket
         run: |
           uv run python data/utils/download_pipeline_inputs.py
-      
+
+      - name: Install dbt dependencies
+        run : |
+          cd data/dbt_pipeline
+          uv run dbt deps
+
       - name: Run dbt (create duckdb.dev)
         run: |
           cd data/dbt_pipeline

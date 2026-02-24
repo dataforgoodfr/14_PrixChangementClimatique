@@ -2,7 +2,7 @@
 
 SELECT 
     TYPECOM AS type_com,
-    COM AS geo,
+    COM AS com, -- code commune - appelé code_geo dans les données bronze du projet
     REG AS reg,
     DEP AS dep,
     CTCD AS  ctcd,
