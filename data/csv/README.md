@@ -39,10 +39,10 @@ Historique des arrêtés de Catastrophe Naturelle (CatNat) issus de la base GASP
 
 ## Sources de données
 
-- **BDNB (CSTB)** : Base de Données Nationale des Bâtiments. Utilisée pour le parc de maisons et les années de construction.
-- **TRI (DGPR)** : Territoires à Risque d'Inondation. Zones d'aléa inondation par scénario.
+- **BDNB (CSTB)** : Base de Données Nationale des Bâtiments. Utilisée pour le parc de maisons et les années de construction. [lien](https://bdnb.io/)
+- **TRI (DGPR)** : Territoires à Risque d'Inondation. Zones d'aléa inondation par scénario. [lien](https://www.data.gouv.fr/datasets/territoire-a-risque-dinondation-tri-du-sig-directive-inondation-france-metropolitaine-rapportage-2020-241)
 - **GASPAR / CatNat (Ministère de la Transition Écologique)** : Base de gestion des procédures administratives relatives aux risques naturels et technologiques.
-- **Géorisques** : Données d'exposition aux risques naturels (Argile/RGA).
+- **Géorisques** : Données d'exposition aux risques naturels (Argile/RGA). Intégrées dans la base BDNB.
 
 ---
 
