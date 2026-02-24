@@ -166,42 +166,46 @@ models:
       - name: code_arrete
         description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
         type: INTEGER
-
+        
   - name: ccr_details
-    description: >
-      Données scrappées des child pages du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/ (en cliquant sur l'icône en forme d'œil).
-      Example: https://www.ccr.fr/detail-arrete/?codeArrete=000001
-      Ces données contiennent les détails des les communes impactées par une CatNat, 
-      si la arrêté a été reconnue et quel type de franchise a été appliqué.
-      /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
+    description: |-
+        Liste des arrêtés de catastrophe naturelle par commune
+        affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
+        et récupérés depuis l'API de la CCR - 
+        https://www.ccr.fr/wp-admin/admin-ajax.php
+        /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
     columns:
       - name: code_geo
-        description: "Code INSEE de la commune"
-        type: INTEGER
-      - name: nom_commune
-        description: "Nom de la commune"
-        type: STRING
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+      - name: date_arrete
+        description: Date de l'arrêté de catastrophe naturelle
+        type: DATE
       - name: date_debut_evenement
-        description: ""
+        description: Date de début de l'événement de catastrophe naturelle
         type: DATE
       - name: date_fin_evenement
-        description: ""
+        description: Date de fin de l'événement de catastrophe naturelle
         type: DATE
-      - name: date_arrete
-        description: "Date officielle de l'arrêté"
-        type: STRING
+      - name: nom_commune
+        description: Nom de la commune concernée par l'arrêté de catastrophe naturelle
+        type: VARCHAR
       - name: nom_peril
-        description: "Type de péril/CatNat"
-        type: STRING
+        description: Nom du risque concerné par l'arrêté de catastrophe naturelle
+        type: VARCHAR
+      - name: date_parution_jo
+        description: Date de publication de l'arrêté de catastrophe naturelle au journal officiel
+        type: DATE
       - name: franchise
-        description: "Type de franchise (Simple, Doublée, Triplée, Quadruplée)"
-        type: STRING
+        description: Type de franchise applicable à la commune
+        type: VARCHAR
       - name: libelle_avis
-        description: "Avis sur l'état de l'arrêté (Reconnue, Non reconnue)"
-        type: STRING
-      - name: codeArrete
-        description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
-        type: INTEGER
+        description: Décision de reconnaissance de l'état de catastrophe naturelle
+        type: VARCHAR
+      - name: code_arrete
+        description: Identifiant de l'arrêté de la CCR relatif à la déclaration de catastrophe naturelle
+        type: INT
+
         
   - name: geoportail_ccr_communes
     description: >
@@ -1156,44 +1160,6 @@ models:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
-
-  - name: ccr_details
-    description: |-
-        Liste des arrêtés de catastrophe naturelle par commune
-        affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
-        et récupérés depuis l'API de la CCR - 
-        https://www.ccr.fr/wp-admin/admin-ajax.php
-    columns:
-      - name: code_geo
-        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
-        type: VARCHAR
-      - name: date_arrete
-        description: Date de l'arrêté de catastrophe naturelle
-        type: DATE
-      - name: date_debut_evenement
-        description: Date de début de l'événement de catastrophe naturelle
-        type: DATE
-      - name: date_fin_evenement
-        description: Date de fin de l'événement de catastrophe naturelle
-        type: DATE
-      - name: nom_commune
-        description: Nom de la commune concernée par l'arrêté de catastrophe naturelle
-        type: VARCHAR
-      - name: nom_peril
-        description: Nom du risque concerné par l'arrêté de catastrophe naturelle
-        type: VARCHAR
-      - name: date_parution_jo
-        description: Date de publication de l'arrêté de catastrophe naturelle au journal officiel
-        type: DATE
-      - name: franchise
-        description: Type de franchise applicable à la commune
-        type: VARCHAR
-      - name: libelle_avis
-        description: Décision de reconnaissance de l'état de catastrophe naturelle
-        type: VARCHAR
-      - name: code_arrete
-        description: Identifiant de l'arrêté de la CCR relatif à la déclaration de catastrophe naturelle
-        type: INT
 
 
   - name: azi_gaspar
