@@ -1,8 +1,8 @@
 SELECT
-    "Exercice" as annee,
-    "Code Insee 2024 Commune" as code_geo,
-    "Siret Budget" as siret_budget,
-    "Libellé Budget" as libelle_budget,
-    "Type de budget" as type_budget,
-    "Montant" as montant
+    Exercice AS Annee,
+    "Code Insee 2024 Commune" AS Code_geo,
+    "Siret Budget" AS Siret_budget,
+    "Libellé Budget" AS Libelle_budget,
+    "Type de budget" AS Type_budget,
+    Montant
 FROM 'pipeline_inputs/budget-communes.csv'

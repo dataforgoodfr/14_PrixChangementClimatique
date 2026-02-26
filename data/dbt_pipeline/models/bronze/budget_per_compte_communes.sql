@@ -1,12 +1,12 @@
 SELECT
-    EXER AS annee,
-    IDENT AS siret,
-    NDEPT AS code_departement,
-    INSEE AS code_insee,
-    CREGI AS code_region,
-    type_compte AS type_compte,
-    SD AS solde_debiteur,
-    SC AS solde_crediteur,
-    (SD - SC) AS solde,
-    (CAST(NDEPT AS TEXT) || CAST(INSEE AS TEXT)) AS code_geo
+    EXER AS ANNEE,
+    IDENT AS SIRET,
+    NDEPT AS CODE_DEPARTEMENT,
+    INSEE AS CODE_INSEE,
+    CREGI AS CODE_REGION,
+    TYPE_COMPTE,
+    SD AS SOLDE_DEBITEUR,
+    SC AS SOLDE_CREDITEUR,
+    (SD - SC) AS SOLDE,
+    (CAST(NDEPT AS TEXT) || CAST(INSEE AS TEXT)) AS CODE_GEO
 FROM 'pipeline_inputs/budget_per_compte_communes.csv'

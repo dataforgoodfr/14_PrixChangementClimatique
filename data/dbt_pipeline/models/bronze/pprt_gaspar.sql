@@ -1,4 +1,3 @@
-
 SELECT
     "CODE MODELE" AS code_modele,
     "LIBELLE MODELE" AS libelle_modele,
@@ -8,7 +7,8 @@ SELECT
     "BASSIN RISQUE" AS bassin_risque,
     "BASSINS HYDROGRAPHIQUES" AS bassins_hydrographiques,
     "COURS EAU" AS cours_eau,
-    "CODE INSEE COMMUNE" AS code_geo, -- code commune - appelé code_geo dans les données bronze du projet
+    -- code commune - appelé code_geo dans les données bronze du projet
+    "CODE INSEE COMMUNE" AS code_geo,
     "CODE RISQUE 1" AS code_risque_1,
     "LIBELLE RISQUE 1" AS libelle_risque_1,
     "CODE RISQUE 2" AS code_risque_2,
@@ -19,19 +19,18 @@ SELECT
     "CODES REVISES" AS codes_revises,
     "PROCEDURE REVISEE" AS procedure_revisee,
     "CODES REVISANTS" AS codes_revisants,
-    "PRESCRIPTION" AS prescription,
-    "ENQUETE_PUBL_DEBUT" AS enquete_publ_debut,
-    "ENQUETE_PUBL_FIN" AS enquete_publ_fin,
-    "ANNEX_PLU" AS annex_plu,
-    "DEPRESCRIPTION" AS deprescription,
-    "APPROBATION" AS approbation,
-    "ANNULATION" AS annulation,
-    "ABROGATION" AS abrogation,
+    prescription,
+    enquete_publ_debut,
+    enquete_publ_fin,
+    annex_plu,
+    deprescription,
+    approbation,
+    annulation,
+    abrogation,
     "LIBELLE ETAT" AS libelle_etat,
     "DATE ETAT" AS date_etat,
     "LIBELLE SOUS-ETAT" AS libelle_sous_etat,
     "DATE SOUS-ETAT" AS date_sous_etat,
     "DATE DERNIERE MISE A JOUR" AS date_derniere_mise_a_jour
 
-
- FROM 'pipeline_inputs/pprt_gaspar.csv'
+FROM 'pipeline_inputs/pprt_gaspar.csv'

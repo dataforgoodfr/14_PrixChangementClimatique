@@ -2,8 +2,8 @@
 
 SELECT
     nom,
-    SIREN AS siren,
-    COG AS cog,
+    siren,
+    cog,
     type,
     code_departement,
     code_departement_3digits,

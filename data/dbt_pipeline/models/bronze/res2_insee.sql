@@ -1,7 +1,6 @@
-
 SELECT
-    codgeo as code_geo,
-    libgeo as lib_geo,
+    codgeo AS code_geo,
+    libgeo AS lib_geo,
     an,
     part_resid2
 

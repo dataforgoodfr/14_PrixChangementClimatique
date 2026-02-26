@@ -1,17 +1,18 @@
 -- insee_commune.sql
 
 SELECT
-    TYPECOM AS type_com,
-    COM AS com, -- code commune - appelé code_geo dans les données bronze du projet
-    REG AS reg,
-    DEP AS dep,
-    CTCD AS  ctcd,
-    ARR AS arr,
-    TNCC AS tncc,
-    NCC AS ncc,
-    NCCENR AS nccenr,
-    LIBELLE AS libelle,
-    CAN AS can,
-    COMPARENT AS com_parent
+    TYPECOM AS TYPE_COM,
+    -- code commune - appelé code_geo dans les données bronze du projet
+    COM,
+    REG,
+    DEP,
+    CTCD,
+    ARR,
+    TNCC,
+    NCC,
+    NCCENR,
+    LIBELLE,
+    CAN,
+    COMPARENT AS COM_PARENT
 FROM
     'pipeline_inputs/insee_commune_2025.csv'

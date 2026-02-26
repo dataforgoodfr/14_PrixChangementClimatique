@@ -1,6 +1,6 @@
 SELECT
-  * EXCLUDE (COMMUNE, DEPARTEMENT),
-  COMMUNE AS code_geo,
-  DEPARTEMENT AS code_departement
+    * EXCLUDE (COMMUNE, DEPARTEMENT),
+    COMMUNE AS CODE_GEO,
+    DEPARTEMENT AS CODE_DEPARTEMENT
 FROM
-  'pipeline_inputs/impots_REI_2022.csv'
+    'pipeline_inputs/impots_REI_2022.csv'

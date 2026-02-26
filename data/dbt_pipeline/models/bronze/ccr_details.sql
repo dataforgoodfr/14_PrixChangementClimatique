@@ -2,15 +2,15 @@
 -- Use alias to respect naming convention : snake_case
 
 SELECT
-    codeInsee as code_geo,
-    nomCommune as nom_commune,
-    dateDebutEvenement as date_debut_evenement,
-    dateFinEvenement as date_fin_evenement,
-    dateArrete as date_arrete,
-    dateParutionJO as date_parution_jo,
-    nomPeril as nom_peril,
-    franchise,
-    libelleAvis as libelle_avis,
-    code_arrete
+    CODEINSEE AS CODE_GEO,
+    NOMCOMMUNE AS NOM_COMMUNE,
+    DATEDEBUTEVENEMENT AS DATE_DEBUT_EVENEMENT,
+    DATEFINEVENEMENT AS DATE_FIN_EVENEMENT,
+    DATEARRETE AS DATE_ARRETE,
+    DATEPARUTIONJO AS DATE_PARUTION_JO,
+    NOMPERIL AS NOM_PERIL,
+    FRANCHISE,
+    LIBELLEAVIS AS LIBELLE_AVIS,
+    CODE_ARRETE
 FROM
     'pipeline_inputs/ccr_details.csv'

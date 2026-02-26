@@ -1,11 +1,11 @@
 SELECT
-    EXER AS annee,
-    IDENT AS siret,
-    NDEPT AS code_departement,
-    INSEE AS code_insee,
-    CREGI AS code_region,
-    COMPTE AS compte,
-    SD AS solde_debiteur,
-    SC AS solde_crediteur,
-    (CAST(NDEPT AS TEXT) || CAST(INSEE AS TEXT)) AS code_geo
+    EXER AS ANNEE,
+    IDENT AS SIRET,
+    NDEPT AS CODE_DEPARTEMENT,
+    INSEE AS CODE_INSEE,
+    CREGI AS CODE_REGION,
+    COMPTE,
+    SD AS SOLDE_DEBITEUR,
+    SC AS SOLDE_CREDITEUR,
+    (CAST(NDEPT AS TEXT) || CAST(INSEE AS TEXT)) AS CODE_GEO
 FROM 'pipeline_inputs/primes_assurances_communes.csv'
