@@ -12,10 +12,8 @@ import {
 import { Protocol } from "pmtiles";
 import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Eye, EyeOff, Layers, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Layers } from "lucide-react";
 import { stringToColor } from "@/lib/map-utils";
-import { Button } from "@/components/ui/button";
-import { useBasicData } from "@/hooks/use-basic-data";
 import { useCityData } from "@/hooks/use-city-data";
 
 const COMMUNES_PMTILES_URL = "/pmtiles/communes.pmtiles";
@@ -23,22 +21,14 @@ const COMMUNES_LAYER_ID = "communes-fill";
 const COMMUNES_BORDER_LAYER_ID = "communes-border";
 const COMMUNES_SOURCE_ID = "communes-source";
 
-type LoadFakeDataStatus = "idle" | "loading" | "success" | "error";
-
 function LayerControl({
   isVisible,
   onToggle,
   isMapLoaded,
-  onLoadFakeData,
-  loadFakeDataStatus,
-  loadFakeDataMessage,
 }: {
   isVisible: boolean;
   onToggle: () => void;
   isMapLoaded: boolean;
-  onLoadFakeData: () => void;
-  loadFakeDataStatus: LoadFakeDataStatus;
-  loadFakeDataMessage: string | null;
 }) {
   return (
     <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-10 min-w-[200px]">
@@ -58,29 +48,6 @@ function LayerControl({
         {isVisible ? <Eye size={16} /> : <EyeOff size={16} />}
         <span className="text-sm">Communes de France</span>
       </button>
-      <div className="mt-3 pt-3 border-t border-gray-200">
-        <Button
-          size="sm"
-          variant="outline"
-          className="w-full gap-2"
-          disabled={!isMapLoaded || loadFakeDataStatus === "loading"}
-          onClick={onLoadFakeData}
-        >
-          {loadFakeDataStatus === "loading" && (
-            <Loader2 size={14} className="animate-spin shrink-0" />
-          )}
-          <span className="text-sm">Charger fausses données</span>
-        </Button>
-        {loadFakeDataMessage ? (
-          <p
-            className={`mt-2 text-xs ${
-              loadFakeDataStatus === "error" ? "text-red-600" : "text-green-600"
-            }`}
-          >
-            {loadFakeDataMessage}
-          </p>
-        ) : null}
-      </div>
     </div>
   );
 }
@@ -207,35 +174,6 @@ export function MapDemo() {
   } | null>(null);
 
   const {
-    data: basicData,
-    loading: basicLoading,
-    error: basicError,
-    refetch: refetchBasic,
-  } = useBasicData({ enabled: false });
-  const [basicSuccessMessage, setBasicSuccessMessage] = useState(false);
-  useEffect(() => {
-    if (!basicData || basicLoading) return;
-    const showId = setTimeout(() => setBasicSuccessMessage(true), 0);
-    const hideId = setTimeout(() => setBasicSuccessMessage(false), 3000);
-    return () => {
-      clearTimeout(showId);
-      clearTimeout(hideId);
-    };
-  }, [basicData, basicLoading]);
-  const loadFakeDataStatus: LoadFakeDataStatus = basicLoading
-    ? "loading"
-    : basicError
-      ? "error"
-      : basicData
-        ? "success"
-        : "idle";
-  const loadFakeDataMessage: string | null = basicError
-    ? "Échec du chargement"
-    : basicSuccessMessage
-      ? "Données chargées"
-      : null;
-
-  const {
     data: cityData,
     loading: cityLoading,
     error: cityError,
@@ -277,10 +215,6 @@ export function MapDemo() {
   const handleMouseLeave = useCallback(() => {
     setHoverInfo(null);
   }, []);
-
-  const handleLoadFakeData = useCallback(() => {
-    refetchBasic();
-  }, [refetchBasic]);
 
   const handleMapClick = useCallback(
     (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
@@ -380,9 +314,6 @@ export function MapDemo() {
           isVisible={isCommunesLayerVisible}
           onToggle={toggleCommunesLayerVisibility}
           isMapLoaded={isMapLoaded}
-          onLoadFakeData={handleLoadFakeData}
-          loadFakeDataStatus={loadFakeDataStatus}
-          loadFakeDataMessage={loadFakeDataMessage}
         />
       </div>
     </div>
