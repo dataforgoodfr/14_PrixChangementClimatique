@@ -1,6 +1,5 @@
 /**
- * Type pour une ligne commune renvoyée par les API load-basic-data et duckdb-demo.
- * Aligné sur la table communes créée depuis le GeoJSON (load-basic-data).
+ * Type pour une ligne commune renvoyée par l’API duckdb-demo / table communes du DuckDB fourni par l’équipe data.
  */
 export type CommuneRow = {
   com_code?: string | null;
