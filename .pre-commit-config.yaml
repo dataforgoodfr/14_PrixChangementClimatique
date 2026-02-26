@@ -10,3 +10,25 @@ repos:
     hooks:
       - id: check-merge-conflict
       - id: mixed-line-ending
+      - id: trailing-whitespace
+      - id: debug-statements
+      - id: detect-private-key
+
+  # sqlfluff
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 4.0.4
+    hooks:
+      - id: sqlfluff-lint
+      - id: sqlfluff-fix
+
+  # yamllint
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: [
+            -s,
+            -d,
+            "{extends: relaxed, rules: {line-length: disable, new-line-at-end-of-file: disable, trailing-spaces: disable, new-lines: disable}}",
+          ]
+
