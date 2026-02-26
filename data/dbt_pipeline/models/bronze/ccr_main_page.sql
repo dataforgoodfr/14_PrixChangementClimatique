@@ -1,7 +1,7 @@
 -- ccr_main_page.sql
 -- Use alias to respect naming convention : snake_case
 
-SELECT 
+SELECT
   nomPeril AS nom_peril,
   dateArrete AS date_arrete,
   dateParutionJO AS date_parution_jo,

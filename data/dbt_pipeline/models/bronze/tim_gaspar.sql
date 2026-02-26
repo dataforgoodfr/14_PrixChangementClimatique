@@ -1,5 +1,5 @@
 
-SELECT 
+SELECT
     cod_commune as code_geo,
     lib_commune,
     dat_transmission_tim

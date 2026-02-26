@@ -41,7 +41,7 @@ seeds:
   dbt_pipeline:
     +enabled: true
     +delimiter: ";"
-    
+
 # Loading duckdb extension for geo data
 on-run-start:
   - "INSTALL spatial;"

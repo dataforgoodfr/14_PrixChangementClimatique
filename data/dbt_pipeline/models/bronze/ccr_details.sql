@@ -1,7 +1,7 @@
 -- ccr_details.sql
 -- Use alias to respect naming convention : snake_case
 
-SELECT 
+SELECT
     codeInsee as code_geo,
     nomCommune as nom_commune,
     dateDebutEvenement as date_debut_evenement,
@@ -12,5 +12,5 @@ SELECT
     franchise,
     libelleAvis as libelle_avis,
     code_arrete
-FROM 
+FROM
     'pipeline_inputs/ccr_details.csv'

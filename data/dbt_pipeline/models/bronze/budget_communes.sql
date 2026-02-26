@@ -1,4 +1,4 @@
-SELECT 
+SELECT
     "Exercice" as annee,
     "Code Insee 2024 Commune" as code_geo,
     "Siret Budget" as siret_budget,

@@ -1,6 +1,6 @@
 -- insee_commune.sql
 
-SELECT 
+SELECT
     TYPECOM AS type_com,
     COM AS com, -- code commune - appelé code_geo dans les données bronze du projet
     REG AS reg,
@@ -13,5 +13,5 @@ SELECT
     LIBELLE AS libelle,
     CAN AS can,
     COMPARENT AS com_parent
-FROM 
+FROM
     'pipeline_inputs/insee_commune_2025.csv'

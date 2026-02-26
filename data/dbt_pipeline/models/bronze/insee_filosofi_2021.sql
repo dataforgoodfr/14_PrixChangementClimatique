@@ -1,6 +1,6 @@
 -- insee_filosofi_2021.sql
 -- Use alias to respect naming convention : snake_case
-SELECT 
+SELECT
     GEO AS code_geo,
     GEO_OBJECT AS geo_object,
     FILOSOFI_MEASURE AS filosofi_measure,
@@ -10,5 +10,5 @@ SELECT
     OBS_STATUS AS obs_status,
     TIME_PERIOD AS time_period,
     OBS_VALUE AS obs_value
-FROM 
+FROM
     'pipeline_inputs/ds_filosofi_cc_2021_data.csv'

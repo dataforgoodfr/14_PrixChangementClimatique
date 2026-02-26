@@ -11,7 +11,7 @@ import duckdb
 def main():
 
     db_name = "dev.duckdb"
-   
+
     if not Path(db_name).exists():
         print("❌ Database not found: dev.duckdb")
         print("\nAvailable databases in current directory:")

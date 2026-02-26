@@ -1,5 +1,5 @@
 
-SELECT 
+SELECT
     "CODE MODELE" AS code_modele,
     "LIBELLE MODELE" AS libelle_modele,
     "CODE PROECEDURE" AS code_procedure,

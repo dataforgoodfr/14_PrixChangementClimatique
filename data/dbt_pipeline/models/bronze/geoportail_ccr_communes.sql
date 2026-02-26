@@ -5,7 +5,7 @@ SELECT
     INSEE_COM AS code_geo,
     INSEE_DEP AS code_departement,
     NOM AS nom_commune,
-    
+
     -- Coûts Cumulés
     cla_cout_tout AS cout_cumul_tout,
     cla_cout_tout_ino AS cout_cumul_tout_ino,
@@ -16,11 +16,11 @@ SELECT
     cla_cout_mvt AS cout_cumul_mvt,
     cla_cout_sei AS cout_cumul_sei,
     cla_cout_ava AS cout_cumul_ava,
-    cla_cout_vcy AS cout_cumul_vcy, 
-    cla_cout_aut AS cout_cumul_aut, 
+    cla_cout_vcy AS cout_cumul_vcy,
+    cla_cout_aut AS cout_cumul_aut,
 
     -- Coûts Moyen
-    cla_cout_moy_tout AS cout_moy_tout, 
+    cla_cout_moy_tout AS cout_moy_tout,
     cla_cout_moy_tout_ino AS cout_moy_tout_ino,
     cla_cout_moy_icb AS cout_moy_icb,
     cla_cout_moy_irn AS cout_moy_irn,
@@ -55,12 +55,12 @@ SELECT
     cla_prime_pro AS prime_pro,
     cla_prime_tot AS prime_tot,
 
-    -- Valeurs Assurées 
+    -- Valeurs Assurées
     cla_va_part AS va_part,
     cla_va_pro AS va_pro,
     cla_va_tot AS va_tot,
 
-    -- S/P 
+    -- S/P
     cla_sp_tout AS sp_tout,
     cla_sp_tout_ino AS sp_tout_ino,
     cla_sp_icb AS sp_icb,
@@ -72,5 +72,5 @@ SELECT
     cla_sp_ava AS sp_ava,
     cla_sp_vcy AS sp_vcy,
     cla_sp_aut AS sp_aut
-FROM 
+FROM
     'pipeline_inputs/geoportail_ccr_communes.csv'
