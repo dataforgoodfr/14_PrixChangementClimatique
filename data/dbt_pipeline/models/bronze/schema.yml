@@ -608,7 +608,7 @@ models:
     description: >
       Table des communes françaises avec géométries spatiales (polygones).
       Source : HuWise / Georef France Commune
-      URL : https://hub.huwise.com/api/explore/v2.1/catalog/datasets/georef-france-commune/exports/geojson
+      URL : https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/georef-france-commune/exports/geojson
       Cette table contient les données administratives et géographiques complètes
       de toutes les communes françaises avec leurs polygones géométriques.
       Source non officielle, alternatives envisageable: IGN ADMIN-EXPRESS 2026 France Entière
