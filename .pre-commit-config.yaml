@@ -19,16 +19,24 @@ repos:
     rev: 4.0.4
     hooks:
       - id: sqlfluff-lint
+        args: [--dialect, duckdb, --exclude-rules, RF05]
       - id: sqlfluff-fix
+        args: [--dialect, duckdb, --exclude-rules, RF05]
 
-  # yamllint
-  - repo: https://github.com/adrienverge/yamllint.git
+  # - repo: https://github.com/pre-commit/mirrors-prettier
+  #   rev: v3.0.0
+  #   hooks:
+  #     - id: prettier
+  #       args: ["--parser", "yaml", "--write"]
+  #       files: \.ya?ml$
+#yamllint
+  - repo: https://github.com/adrienverge/yamllint
     rev: v1.29.0
     hooks:
       - id: yamllint
-        args: [
+        args:
+          [
             -s,
             -d,
             "{extends: relaxed, rules: {line-length: disable, new-line-at-end-of-file: disable, trailing-spaces: disable, new-lines: disable}}",
           ]
-

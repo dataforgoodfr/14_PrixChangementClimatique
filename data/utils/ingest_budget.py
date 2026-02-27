@@ -23,13 +23,13 @@ download_file(
 csv_path = (download_file_dir / "ofgl-base-communes.csv").resolve()
 
 city_budget_df = duckdb.query(f"""
-    SELECT 
-        "Exercice", 
-        "Code Insee 2024 Commune", 
-        "Nom 2024 Commune", 
-        "Siret Budget", 
-        "Libellé Budget", 
-        "Type de budget", 
+    SELECT
+        "Exercice",
+        "Code Insee 2024 Commune",
+        "Nom 2024 Commune",
+        "Siret Budget",
+        "Libellé Budget",
+        "Type de budget",
         "Montant"
     FROM '{csv_path}'
 """).write_csv(f"{download_file_dir}/budget-communes.csv", sep=";")
