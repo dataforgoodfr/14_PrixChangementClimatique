@@ -32,6 +32,11 @@ jobs:
         run: |
           uv sync
       
+      - name: Validate dbt project structure
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt parse
+
       - name: Set all files on S3 to public read
         run: |
           uv run python data/utils/set_all_files_to_public_read.py
