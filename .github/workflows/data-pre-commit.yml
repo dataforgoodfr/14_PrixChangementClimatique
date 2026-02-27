@@ -32,6 +32,11 @@ jobs:
         run: |
           uv sync
       
+      - name: Install dbt dependencies
+        run : |
+          cd data/dbt_pipeline
+          uv run dbt deps
+
       - name: Validate dbt project structure
         run: |
           cd data/dbt_pipeline
@@ -44,11 +49,6 @@ jobs:
       - name: Download pipeline csv inputs from bucket
         run: |
           uv run python data/utils/download_pipeline_inputs.py
-
-      - name: Install dbt dependencies
-        run : |
-          cd data/dbt_pipeline
-          uv run dbt deps
 
       - name: Run dbt
         run: |
