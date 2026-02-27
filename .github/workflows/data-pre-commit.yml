@@ -32,14 +32,10 @@ jobs:
         run: |
           uv sync
       
-      - name: Install dbt dependencies
-        run : |
-          cd data/dbt_pipeline
-          uv run dbt deps
-
-      - name: Validate dbt project structure
+      - name: Install dbt dependencies and validate dbt project structure
         run: |
           cd data/dbt_pipeline
+          uv run dbt deps
           uv run dbt parse
 
       - name: Set all files on S3 to public read
