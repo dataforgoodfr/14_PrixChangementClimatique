@@ -440,7 +440,7 @@ models:
       description: "Problèmes rencontrés par les collectivités "
       type: STRING
 
-  - name : collectivities.sql
+  - name : collectivities_pdf
     description: >
     Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
     columns:
@@ -461,6 +461,9 @@ models:
       type: STRING
     - name: respondent_job
       description: "Fonction de la personne ayant répondu au questionnaire"
+      type: STRING
+    - name : code_geo
+      description: Code geo de la collectivites
       type: STRING
 
   - name: primes_assurances_communes
