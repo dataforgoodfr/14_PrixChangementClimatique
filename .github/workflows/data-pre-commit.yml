@@ -1,0 +1,56 @@
+name: data-pre-commit
+
+on:
+  pull_request:
+
+jobs:
+  run-pipeline:
+    name: Download S3-hosted csv files and test dbt pipeline
+    runs-on: ubuntu-latest
+
+    env:
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      S3_REGION: ${{ vars.S3_REGION }}
+      S3_ENDPOINT_URL: ${{ vars.S3_ENDPOINT_URL }}
+      S3_PCC_BUCKET: ${{ vars.S3_PCC_BUCKET }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: |
+          pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync
+      
+      - name: Set all files on S3 to public read
+        run: |
+          uv run python data/utils/set_all_files_to_public_read.py
+
+      - name: Download pipeline csv inputs from bucket
+        run: |
+          uv run python data/utils/download_pipeline_inputs.py
+
+      - name: Install dbt dependencies
+        run : |
+          cd data/dbt_pipeline
+          uv run dbt deps
+
+      - name: Run dbt
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt run
+
+      - name: Run dbt tests
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt test
