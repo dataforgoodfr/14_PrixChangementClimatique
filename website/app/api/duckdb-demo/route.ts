@@ -21,14 +21,9 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const connection = await getDuckDbConnection().catch((error) => {
-    const message =
-      error instanceof Error ? error.message : "Base non disponible";
-    return NextResponse.json({ error: message }, { status: 503 });
-  });
-  if (connection instanceof NextResponse) return connection;
-
+  let connection;
   try {
+    connection = await getDuckDbConnection();
     const prepared = await connection.prepare(
       "SELECT * FROM insee_commune WHERE com = $1",
     );
@@ -40,6 +35,6 @@ export async function GET(request: NextRequest) {
       error instanceof Error ? error.message : "Base non disponible";
     return NextResponse.json({ error: message }, { status: 503 });
   } finally {
-    connection.closeSync();
+    connection?.closeSync();
   }
 }
