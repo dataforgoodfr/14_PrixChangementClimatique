@@ -1,3 +1,4 @@
+import argparse
 import re
 from pathlib import Path
 
@@ -11,11 +12,12 @@ pdf_path = current_dir / "data" / "utils" / "downloaded_files" / "r23-474-annexe
 
 
 def run_extract_information_from_pdf(
-    pdf_path: Path = pdf_path, seeds_dir: Path = seeds_dir
+    insee_commune_csv_path: str, pdf_path: Path = pdf_path, seeds_dir: Path = seeds_dir
 ) -> pd.DataFrame:
     """Full ETL pipeline: extract data from PDF, transform it, and save to CSV.
 
     Args:
+        insee_commune_csv_path (str): Path to the INSEE commune CSV file.
         pdf_path (Path): Path to input PDF.
         seeds_dir (Path): Directory to save seed CSV files.
 
@@ -30,7 +32,7 @@ def run_extract_information_from_pdf(
     path_problems = seeds_dir / "problems_pdf.csv"
     extract_problems(df, path_problems)
     path_collectivities = seeds_dir / "collectivities_pdf.csv"
-    extract_collectivities(df, path_collectivities)
+    extract_collectivities(df, path_collectivities, insee_commune_csv_path)
     return df
 
 
@@ -238,7 +240,9 @@ def extract_problems(df: pd.DataFrame, csv_path: str) -> pd.DataFrame:
     return df_problems
 
 
-def extract_collectivities(df: pd.DataFrame, path_csv: Path) -> pd.DataFrame:
+def extract_collectivities(
+    df: pd.DataFrame, path_csv: Path, insee_commune_csv_path: str
+) -> pd.DataFrame:
     """Extract and clean collectivity information from the DataFrame.
 
     Args:
@@ -285,14 +289,86 @@ def extract_collectivities(df: pd.DataFrame, path_csv: Path) -> pd.DataFrame:
     # Job of the respondent
     df_collectivities["respondent_job"] = df["Fonction"]
 
-    df_collectivities.to_csv(path_csv)
+    # Merge with INSEE commune data to get code_geo
+    df_collectivities_pdf_with_code_geo = extract_code_geo(
+        df_collectivities, insee_commune_csv_path
+    )
 
-    return df_collectivities
+    # Keep only relevant columns
+    df_collectivities_pdf_with_code_geo = df_collectivities_pdf_with_code_geo[
+        [
+            "id_collectivity",
+            "department_code",
+            "department_name",
+            "collectivity",
+            "type_collectivity",
+            "respondent_job",
+            "COM",
+        ]
+    ]
+    # rename COM to code_geo
+    df_collectivities_pdf_with_code_geo = df_collectivities_pdf_with_code_geo.rename(
+        columns={"COM": "code_geo"}
+    )
+
+    df_collectivities_pdf_with_code_geo.to_csv(path_csv, index=False)
+
+    return df_collectivities_pdf_with_code_geo
 
 
+def extract_code_geo(
+    df_collectivities_pdf: pd.DataFrame, path_csv: Path
+) -> pd.DataFrame:
+    """Merge the collectivity DataFrame with INSEE commune data to get code_geo.
+
+    Args:
+        df_collectivities_pdf (pd.DataFrame): DataFrame with collectivity and department info.
+        path_csv (Path): Path to save the resulting CSV.
+
+    Returns:
+        pd.DataFrame: DataFrame with code_geo
+
+    """
+    insee_commune_2025 = pd.read_csv(path_csv)
+    df_collectivities_pdf["collectivity_lower"] = (
+        df_collectivities_pdf["collectivity"]
+        .str.lower()
+        .str.replace("’", "", regex=False)
+    )
+
+    insee_commune_2025["LIBELLE_lower"] = (
+        insee_commune_2025["LIBELLE"].str.lower().str.replace("'", "", regex=False)
+    )
+
+    # merge ensuite
+    df_collectivities_pdf_with_code_geo = pd.merge(
+        df_collectivities_pdf,
+        insee_commune_2025,
+        left_on=["collectivity_lower", "department_code"],
+        right_on=["LIBELLE_lower", "DEP"],
+        how="left",
+    )
+
+    return df_collectivities_pdf_with_code_geo
+
+
+# add arg for insee_commune_csv_path in main
 def main():
+    parser = argparse.ArgumentParser(
+        description="Extract information from PDF and save to CSV."
+    )
+    parser.add_argument(
+        "--insee_commune_csv_path",
+        "-p",
+        type=str,
+        required=True,
+        help="Path to the INSEE commune CSV file.",
+    )
+    args = parser.parse_args()
+    insee_commune_csv_path = args.insee_commune_csv_path
+
     print("Extracting information from PDF...")
-    run_extract_information_from_pdf()
+    run_extract_information_from_pdf(insee_commune_csv_path)
     print("Extraction completed!")
 
 
