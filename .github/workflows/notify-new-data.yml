@@ -1,0 +1,33 @@
+name: notify-new-data
+on:
+  push:
+    paths:
+      - 'data/dbt_pipeline/models/**'
+
+jobs:
+  run-pipeline:
+    name: Update DuckDB from S3-hosted csv files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: |
+          pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync
+      
+      - name: Notify new dbt models
+        run: |
+          uv run python data/utils/notify_new_dbt_models.py
