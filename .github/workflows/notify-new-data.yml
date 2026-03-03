@@ -4,13 +4,14 @@ on:
     paths:
       - 'data/dbt_pipeline/models/**' 
 
-    env:
-      MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
 
 jobs:
   notify-new-data:
     name: Notify new dbt models
     runs-on: ubuntu-latest
+
+    env:
+      MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
 
     steps:
       - name: Checkout repo
