@@ -1448,6 +1448,24 @@ models:
        dans le total des résidences principales, secondaires et logements occasionnels
       type: FLOAT
 
+  - name: test_mattermost
+    description: |-
+      Test Mattermost
+      Notification nouvelles données ingérées
+    columns:
+    - name: code_geo
+      description: Code géographique de la commune (code INSEE à 5 chiffres)
+      type: VARCHAR
+    - name: lib_geo
+      description: Nom de la commune
+      type: VARCHAR
+    - name: an
+      description: Année de référence de la donnée
+      type: INT 
+    - name: part_resid2
+      description: Part en % des résidences secondaires et logements occasionnels
+       dans le total des résidences principales, secondaires et logements occasionnels
+      type: FLOAT
 
 
   - name: res2_insee_copy

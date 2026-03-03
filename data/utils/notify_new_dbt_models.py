@@ -4,11 +4,11 @@ Detect newly added dbt models in a GitHub push and build a notification message.
 
 Requirements:
 - Git available in PATH
-- Optional: MATTERMOST_WEBHOOK_URL if webhook sending is enabled
 """
 
 import os
 import subprocess
+import requests
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional
 
@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 
 
 MODELS_DIR = Path("data/dbt_pipeline/models")
-
+MATTERMOST_WEBHOOK_URL = os.getenv("MATTERMOST_WEBHOOK_URL")
 
 # ---------------------------------------------------------------------------
 # Git utilities
@@ -120,7 +120,7 @@ def load_model_descriptions(
 
 
 # ---------------------------------------------------------------------------
-# Message builder
+# Message sender
 # ---------------------------------------------------------------------------
 
 def build_message(models: Set[str], descriptions: Dict[str, str]) -> str:
@@ -129,6 +129,8 @@ def build_message(models: Set[str], descriptions: Dict[str, str]) -> str:
         return ""
 
     lines = [
+        "Test notification Mattermost par workflow",
+        "",
         "## Nouveau(x) modèle(s) dbt ingéré(s) dans dev.duckdb",
         "",
     ]
@@ -141,6 +143,15 @@ def build_message(models: Set[str], descriptions: Dict[str, str]) -> str:
 
     return "\n".join(lines).strip()
 
+
+def send_mattermost(message: str):
+    """Send message to Mattermost."""
+    if not MATTERMOST_WEBHOOK_URL:
+        raise RuntimeError("MATTERMOST_WEBHOOK_URL is not set")
+    payload = { "text": message }
+    response = requests.post( MATTERMOST_WEBHOOK_URL, json=payload, timeout=10 )
+    response.raise_for_status()
+    print("Mattermost notification sent.")
 
 # ---------------------------------------------------------------------------
 # Main
@@ -166,7 +177,7 @@ def main() -> None:
     message = build_message(new_models, descriptions)
 
     if message:
-        print(message)
+        send_mattermost(message)
 
 
 if __name__ == "__main__":

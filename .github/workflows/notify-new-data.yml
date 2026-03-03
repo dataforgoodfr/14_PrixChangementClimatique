@@ -5,8 +5,8 @@ on:
       - 'data/dbt_pipeline/models/**'
 
 jobs:
-  run-pipeline:
-    name: Update DuckDB from S3-hosted csv files
+  notify-new-data:
+    name: Notify new dbt models
     runs-on: ubuntu-latest
 
     steps:
