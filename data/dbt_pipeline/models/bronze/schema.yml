@@ -1428,7 +1428,6 @@ models:
        dans le total des résidences principales, secondaires et logements occasionnels
       type: FLOAT
 
-
   - name: budget_communes
     description: |-
       Budget des communes - 
