@@ -157,8 +157,6 @@ def send_mattermost(message: str):
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    load_dotenv()
-
     added_files = get_added_files()
 
     if not added_files:
@@ -172,7 +170,6 @@ def main() -> None:
         return
 
     descriptions = load_model_descriptions(new_models)
-
     message = build_message(new_models, descriptions)
 
     if message:
