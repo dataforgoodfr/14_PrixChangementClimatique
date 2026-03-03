@@ -1,6 +1,5 @@
 -- insee_filosofi_2021.sql
 -- Use alias to respect naming convention : snake_case
-
 SELECT 
     GEO AS code_geo,
     GEO_OBJECT AS geo_object,

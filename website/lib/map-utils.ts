@@ -14,3 +14,11 @@ export function stringToColor(str: string): string {
 
   return color;
 }
+
+export function removeArrayBrackets(str: string): string {
+  return str.replace(/[\[\]]/g, "");
+}
+
+export function removeDoubleQuotes(str: string): string {
+  return str.replace(/"/g, "");
+}
