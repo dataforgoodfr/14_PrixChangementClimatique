@@ -6,7 +6,7 @@ models:
       Gold layer: Table des résultats website par commune avec KPI.
       Cette table contient toutes les données administratives et géographiques des communes françaises
       enrichies avec des indicateurs métier.
-      Source: Bronze layer (communes) avec transformation et ajout de KPI.
+      Source: Bronze layer (opendatasoft_communes) avec transformation et ajout de KPI.
     columns:
       - name: code_commune
         description: "Code INSEE de la commune (5 caractères)"

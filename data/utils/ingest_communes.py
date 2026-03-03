@@ -28,7 +28,7 @@ print(f"Download directory: {download_file_dir}")
 
 # Download the full GeoJSON export
 print(f"Downloading GeoJSON from: {communes_geojson_url}")
-geojson_path = download_file_dir / "communes.geojson"
+geojson_path = download_file_dir / "opendatasoft_communes.geojson"
 download_file(
     url=communes_geojson_url,
     destination=geojson_path
@@ -46,7 +46,7 @@ print("Querying and transforming communes data...")
 
 # Execute the query to transform communes data
 # Using ST_READ to read the downloaded GeoJSON file
-output_csv_path = download_file_dir / "communes.csv"
+output_csv_path = download_file_dir / "opendatasoft_communes.csv"
 conn.sql(f"""
     SELECT
         list_extract(com_code, 1) AS code_commune,
@@ -92,7 +92,7 @@ send_file_to_s3(
     s3_client=s3_client,
     bucket=os.getenv("QPPCC_BUCKET"),
     filepath=str(output_csv_path),
-    s3_filepath="pipeline_inputs/communes.csv"
+    s3_filepath="pipeline_inputs/opendatasoft_communes.csv"
 )
 
 # Debug log: Completed

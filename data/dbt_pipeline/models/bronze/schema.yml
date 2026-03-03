@@ -1082,7 +1082,7 @@ models:
         description: "Code postal"
         type: STRING
 
-  - name: communes
+  - name: opendatasoft_communes
     description: >
       Table des communes françaises avec géométries spatiales (polygones).
       Source : HuWise / Georef France Commune

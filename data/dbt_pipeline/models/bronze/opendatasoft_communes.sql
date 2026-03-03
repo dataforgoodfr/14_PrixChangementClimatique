@@ -1,4 +1,4 @@
--- communes.sql
+-- opendatasoft_communes.sql
 -- Table des communes françaises avec géométries spatiales (polygones) et données complémentaires
 -- Source: OpenDataSoft / Georef France Commune (processed via ingest_communes.py)
 
@@ -26,4 +26,4 @@ SELECT
     nom_bassin_vie_2022,
     geo_point_2d,
     geometry
-FROM 'pipeline_inputs/communes.csv'
+FROM 'pipeline_inputs/opendatasoft_communes.csv'

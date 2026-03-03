@@ -7,4 +7,4 @@ SELECT
     *,
     -- KPI temporaire: génère un nombre aléatoire entre 0 et 1
     RANDOM() AS valeur
-FROM {{ ref('communes') }}
+FROM {{ ref('opendatasoft_communes') }}
