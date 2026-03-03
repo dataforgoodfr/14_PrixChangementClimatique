@@ -1,6 +1,8 @@
 name: notify-new-data
 on:
   push:
+    branches:
+      - main
     paths:
       - 'data/dbt_pipeline/models/**' 
 

@@ -10,6 +10,7 @@ import os
 import subprocess
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional
+import requests
 
 import yaml
 from dotenv import load_dotenv
@@ -146,14 +147,12 @@ def build_message(models: Set[str], descriptions: Dict[str, str]) -> str:
 
 def send_mattermost(message: str):
     """Send message to Mattermost."""
-    print("Sending Mattermost notification...")
-    print(message)
-    '''    if not MATTERMOST_WEBHOOK_URL:
+    if not MATTERMOST_WEBHOOK_URL:
         raise RuntimeError("MATTERMOST_WEBHOOK_URL is not set")
     payload = { "text": message }
     response = requests.post( MATTERMOST_WEBHOOK_URL, json=payload, timeout=10 )
     response.raise_for_status()
-    print("Mattermost notification sent.")'''
+    print("Mattermost notification sent.")
 
 # ---------------------------------------------------------------------------
 # Main
