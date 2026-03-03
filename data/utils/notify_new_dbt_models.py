@@ -130,8 +130,6 @@ def build_message(models: Set[str], descriptions: Dict[str, str]) -> str:
         return ""
 
     lines = [
-        "Test notification Mattermost par workflow",
-        "",
         "Nouveau(x) modèle(s) dbt ingéré(s) dans dev.duckdb :",
         "",
     ]
