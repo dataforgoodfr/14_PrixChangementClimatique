@@ -2,8 +2,13 @@
 """Download DuckDB database files from S3."""
 
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
+
+# Mettre à jour cette date à chaque fois que odis.duckdb change côté S3.
+# Format ISO 8601 UTC. Tout téléchargement antérieur à cette date sera rejoué.
+ODIS_DB_UPDATED_AT = datetime(2026, 3, 4, 0, 0, 0, tzinfo=timezone.utc)
 
 
 def download_file(url: str, destination: Path) -> bool:
@@ -39,12 +44,50 @@ def download_file(url: str, destination: Path) -> bool:
 
         print(f"✅ Téléchargement réussi : {destination}")
         return True
+
     except Exception as e:
         print(f"❌ Échec du téléchargement pour {url}: {e}")
         # Clean up partial download
         if destination.exists():
             destination.unlink()
         return False
+
+
+def _read_marker(marker: Path, key: str) -> datetime | None:
+    """Lit la timestamp associée à key dans .downloaded, ou None si absente/invalide."""
+    try:
+        for line in marker.read_text().splitlines():
+            if line.startswith(f"{key}:"):
+                return datetime.fromisoformat(line[len(key) + 1:].strip())
+    except (ValueError, OSError):
+        pass
+    return None
+
+
+def _write_marker(marker: Path, key: str) -> None:
+    """Écrit ou met à jour la ligne key:<timestamp> dans .downloaded."""
+    now = datetime.now(tz=timezone.utc).isoformat()
+    lines = []
+    try:
+        lines = [line for line in marker.read_text().splitlines() if not line.startswith(f"{key}:")]
+    except OSError:
+        pass
+    lines.append(f"{key}:{now}")
+    marker.write_text("\n".join(lines) + "\n")
+
+
+def odis_already_downloaded(destination: Path) -> bool:
+    """Return True si odis.duckdb est présent et a été téléchargé après ODIS_DB_UPDATED_AT."""
+    if not destination.exists():
+        return False
+    marker = destination.parent / ".downloaded"
+    ts = _read_marker(marker, "ODIS")
+    return ts is not None and ts > ODIS_DB_UPDATED_AT
+
+
+def mark_odis_downloaded(destination: Path) -> None:
+    """Écrit la timestamp du téléchargement dans .downloaded."""
+    _write_marker(destination.parent / ".downloaded", "ODIS")
 
 
 def main():
@@ -65,11 +108,13 @@ def main():
     success_count = 0
     for url, filename in files:
         destination = exploration_dir / filename
-        if filename == "odis.duckdb" and destination.exists():
-            print(f"⏭️  {filename} déjà présent : téléchargement ignoré")
+        if filename == "odis.duckdb" and odis_already_downloaded(destination):
+            print(f"⏭️  {filename} déjà à jour : téléchargement ignoré")
             success_count += 1
             continue
         if download_file(url, destination):
+            if filename == "odis.duckdb":
+                mark_odis_downloaded(destination)
             success_count += 1
 
     print(f"\nTéléchargements terminés ! ({success_count}/{len(files)} réussi(s))")
