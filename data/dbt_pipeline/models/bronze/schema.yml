@@ -1093,7 +1093,7 @@ models:
       ("https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16.7z")
       ou données OpenStreeMap via Ouverture Maps ("https://docs.overturemaps.org/getting-data/duckdb/")
     columns:
-      - name: geo_code
+      - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
       - name: nom_commune
