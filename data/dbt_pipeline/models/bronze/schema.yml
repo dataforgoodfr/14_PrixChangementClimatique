@@ -1093,13 +1093,13 @@ models:
       ("https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16.7z")
       ou données OpenStreeMap via Ouverture Maps ("https://docs.overturemaps.org/getting-data/duckdb/")
     columns:
-      - name: code_commune
+      - name: geo_code
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
       - name: nom_commune
         description: "Nom officiel de la commune"
         type: STRING
-      - name: code_commune_actuel
+      - name: code_geo_actuel
         description: "Code INSEE actuel (en cas de fusion/changement)"
         type: STRING
       - name: nom_commune_majuscule

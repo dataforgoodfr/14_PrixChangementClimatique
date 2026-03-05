@@ -5,7 +5,7 @@
 SELECT
     code_commune,
     nom_commune,
-    code_commune_actuel,
+    code_geo_actuel,
     nom_commune_majuscule,
     nom_commune_minuscule,
     code_zone_superficie,

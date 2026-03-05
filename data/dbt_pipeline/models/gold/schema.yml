@@ -8,13 +8,13 @@ models:
       enrichies avec des indicateurs métier.
       Source: Bronze layer (opendatasoft_communes) avec transformation et ajout de KPI.
     columns:
-      - name: code_commune
+      - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
       - name: nom_commune
         description: "Nom officiel de la commune"
         type: STRING
-      - name: code_commune_actuel
+      - name: code_geo_actuel
         description: "Code INSEE actuel (en cas de fusion/changement de code)"
         type: STRING
       - name: nom_commune_majuscule
