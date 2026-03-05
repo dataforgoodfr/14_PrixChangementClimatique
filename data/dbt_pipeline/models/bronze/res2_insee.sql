@@ -1,5 +1,5 @@
 
-SELECT  
+SELECT
     codgeo as code_geo,
     libgeo as lib_geo,
     an,
