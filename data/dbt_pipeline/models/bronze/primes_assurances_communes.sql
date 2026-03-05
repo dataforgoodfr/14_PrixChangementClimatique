@@ -14,7 +14,7 @@ WITH transformed AS (SELECT
         ELSE LPAD(INSEE, 3, '0')
     END AS code_insee,
     IDENT AS siret,
-    SUBSTR(INSEE, 1, 9) AS siren,
+    SUBSTR(IDENT, 1, 9) AS siren,
     EXER AS annee,
     CREGI AS code_region,
     COMPTE AS compte,
