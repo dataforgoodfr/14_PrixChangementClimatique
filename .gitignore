@@ -187,3 +187,6 @@ data/dbt_pipeline/package-lock.yml
 .vscode
 
 # local data for development (dev.duckdb at repo root is already ignored above)
+
+# This file is used by the data/utils/download.py script to track which files have been downloaded, and should not be downloaded again.
+.downloaded
