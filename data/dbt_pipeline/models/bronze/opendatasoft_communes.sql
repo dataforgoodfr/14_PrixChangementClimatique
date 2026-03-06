@@ -3,9 +3,9 @@
 -- Source: OpenDataSoft / Georef France Commune (processed via ingest_communes.py)
 
 SELECT
-    code_geo,
+    code_commune AS code_geo,
     nom_commune,
-    code_geo_actuel,
+    code_commune_actuel AS code_geo_actuel,
     nom_commune_majuscule,
     nom_commune_minuscule,
     code_zone_superficie,
