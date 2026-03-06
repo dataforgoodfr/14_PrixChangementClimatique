@@ -22,20 +22,26 @@ repos:
       - id: sqlfluff-fix
         exclude: ^data/dbt_pipeline/seeds/|^data/dbt_pipeline/csv_inputs/
 
-  # - repo: https://github.com/pre-commit/mirrors-prettier
-  #   rev: v3.0.0
-  #   hooks:
-  #     - id: prettier
-  #       args: ["--parser", "yaml", "--write"]
-  #       files: \.ya?ml$
-#yamllint
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.29.0
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0
     hooks:
-      - id: yamllint
-        args:
-          [
-            -s,
-            -d,
-            "{extends: relaxed, rules: {line-length: disable, new-line-at-end-of-file: disable, trailing-spaces: disable, new-lines: disable}}",
-          ]
+      - id: prettier
+        args: ["--parser", "yaml", "--write"]
+        files: \.ya?ml$
+  # #yamllint
+  # - repo: https://github.com/adrienverge/yamllint
+  #   rev: v1.29.0
+  #   hooks:
+  #     - id: yamllint
+  #       args:
+  #         [
+  #           -s,
+  #           -d,
+  #           "{extends: relaxed, rules: {line-length: disable, new-line-at-end-of-file: disable, trailing-spaces: disable, new-lines: disable}}",
+  #         ]
+
+  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+    rev: v2.0.0
+    hooks:
+      - id: check-model-columns-have-desc
+        args: ["--manifest", "data/dbt_pipeline/target/manifest.json"]

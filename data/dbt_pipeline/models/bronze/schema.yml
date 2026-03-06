@@ -99,7 +99,8 @@ models:
       - name: surf_m2
         description: Surface du polygone en m^2
       - name: niveau
-        description: "Niveau d'exposition au phénomène de retrait-gonflement des argiles
+        description:
+          "Niveau d'exposition au phénomène de retrait-gonflement des argiles
           de 1(faible) à 3(fort)"
       - name: code_departement
         description: Numéro du département
@@ -113,37 +114,36 @@ models:
       Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
 
     columns:
-    - name: code_geo
-      description: Code Insee de la commune
-    - name: nom_geo
-      description: Nom de la commune
-    - name: code_departement
-      description: Numéro du département
-    - name: code_region
-      description: Code Insee de la région
-    - name: pop_2016
-      description: Population municipale 2016 - Recensement 2013
-    - name: pop_2017
-      description: Population municipale 2017 - Recensement 2014
-    - name: pop_2018
-      description: Population municipale 2018 - Recensement 2015
-    - name: pop_2019
-      description: Population municipale 2019 - Recensement 2016
-    - name: pop_2020
-      description: Population municipale 2020 - Recensement 2017
-    - name: pop_2021
-      description: Population municipale 2021 - Recensement 2018
-    - name: pop_2022
-      description: Population municipale 2022 - Recensement 2019
-    - name: pop_2023
-      description: Population municipale 2023 - Recensement 2020
-    - name: pop_2024
-      description: Population municipale 2024 - Recensement 2021
-    - name: pop_2025
-      description: Population municipale 2025 - Recensement 2022
-    - name: pop_2026
-      description: Population municipale 2026 - Recensement 2023
-
+      - name: code_geo
+        description: Code Insee de la commune
+      - name: nom_geo
+        description: Nom de la commune
+      - name: code_departement
+        description: Numéro du département
+      - name: code_region
+        description: Code Insee de la région
+      - name: pop_2016
+        description: Population municipale 2016 - Recensement 2013
+      - name: pop_2017
+        description: Population municipale 2017 - Recensement 2014
+      - name: pop_2018
+        description: Population municipale 2018 - Recensement 2015
+      - name: pop_2019
+        description: Population municipale 2019 - Recensement 2016
+      - name: pop_2020
+        description: Population municipale 2020 - Recensement 2017
+      - name: pop_2021
+        description: Population municipale 2021 - Recensement 2018
+      - name: pop_2022
+        description: Population municipale 2022 - Recensement 2019
+      - name: pop_2023
+        description: Population municipale 2023 - Recensement 2020
+      - name: pop_2024
+        description: Population municipale 2024 - Recensement 2021
+      - name: pop_2025
+        description: Population municipale 2025 - Recensement 2022
+      - name: pop_2026
+        description: Population municipale 2026 - Recensement 2023
 
   - name: ccr_main_page
     description: >
@@ -169,11 +169,11 @@ models:
 
   - name: ccr_details
     description: |-
-        Liste des arrêtés de catastrophe naturelle par commune
-        affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
-        et récupérés depuis l'API de la CCR -
-        https://www.ccr.fr/wp-admin/admin-ajax.php
-        /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
+      Liste des arrêtés de catastrophe naturelle par commune
+      affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
+      et récupérés depuis l'API de la CCR -
+      https://www.ccr.fr/wp-admin/admin-ajax.php
+      /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
     columns:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
@@ -205,7 +205,6 @@ models:
       - name: code_arrete
         description: Identifiant de l'arrêté de la CCR relatif à la déclaration de catastrophe naturelle
         type: INT
-
 
   - name: geoportail_ccr_communes
     description: >
@@ -419,15 +418,10 @@ models:
         description: "Ratio S/P pour les autres périls"
         type: STRING
 
-
-
-
-
-
   - name: primes_assurances_communes
-    description:  >
-         Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010.
-          Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
+    description: >
+      Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010.
+       Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     columns:
       - name: annee
         description: "Année de l'exercice"
@@ -487,8 +481,8 @@ models:
 
   - name: budget_per_compte_communes
     description: >
-     Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010.
-     Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
+      Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010.
+      Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     columns:
       - name: annee
         description: "Année de l'exercice"
@@ -548,7 +542,6 @@ models:
         tests:
           - not_null
         data_type: string
-
 
   - name: recensement_hors_com
     description: >
@@ -777,8 +770,6 @@ models:
       - name: d68_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1968 (en 1967 pour les DOM)
         type: INT
-
-
 
   - name: recensement_com
     description: >
@@ -1108,7 +1099,6 @@ models:
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
 
-
   - name: dicrim_gaspar
     description: |-
       1. Définition -
@@ -1134,8 +1124,6 @@ models:
       - name: dat_publi_dicrim
         description: Date de publication
         data_type: timestamp
-
-
 
   - name: pprn_gaspar
     description: |-
@@ -1174,7 +1162,6 @@ models:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
-
 
   - name: azi_gaspar
     description: 1. Définition -
@@ -1234,7 +1221,6 @@ models:
       - name: dat_maj
         data_type: timestamp
         description: Date de mise à jour de la fiche GASPAR
-
 
   - name: catnat_gaspar
     description: |-
@@ -1325,7 +1311,6 @@ models:
       - name: code_arrete
         data_type: bigint
 
-
   - name: risq_gaspar
     description: |-
       1. Définition -
@@ -1357,7 +1342,6 @@ models:
         description: Libellé du risque mentionné dans le DDRM
         type: VARCHAR
 
-
   - name: taux_chomage_communes
     description: |-
       Taux de chômage par commune -
@@ -1367,46 +1351,45 @@ models:
       https://www.insee.fr/fr/statistiques/2012804 -
       https://dares.travail-emploi.gouv.fr/donnees/les-inscrits-france-travail-donnees-communales
     columns:
-       - name: code_region
-         description: Code de la région
-         type: INT
-       - name: region
-         description: Nom de la région
-         type: VARCHAR
-       - name: code_departement
-         description: Code du département
-         type: VARCHAR
-       - name: departement
-         description: Nom du département
-         type: VARCHAR
-       - name: code_commune
-         description: Code de la commune
-         type: VARCHAR
-       - name: commune
-         description: Nom de la commune
-         type: VARCHAR
-       - name: code_geo
-         description: Code géographique de la commune (code INSEE à 5 chiffres)
-         type: VARCHAR
-       - name: nombre_de_demandeurs_d_emploi
-         description: Nombre de demandeurs d'emploi
-         type: INT
-       - name: p23_pop
-         description: Population de la commune en 2023
-         type: INT
-       - name: ratio_ABC_pop_commune
-         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
-         type: FLOAT
-       - name: ratio_ABC_pop_dep
-         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale du département
-         type: FLOAT
-       - name: T3_2025_departement
-         description: Taux de chômage au 3ème trimestre 2025 pour le département
-         type: FLOAT
-       - name: T3_2025_proxy_commune
-         description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
-         type: FLOAT
-
+      - name: code_region
+        description: Code de la région
+        type: INT
+      - name: region
+        description: Nom de la région
+        type: VARCHAR
+      - name: code_departement
+        description: Code du département
+        type: VARCHAR
+      - name: departement
+        description: Nom du département
+        type: VARCHAR
+      - name: code_commune
+        description: Code de la commune
+        type: VARCHAR
+      - name: commune
+        description: Nom de la commune
+        type: VARCHAR
+      - name: code_geo
+        description: Code géographique de la commune (code INSEE à 5 chiffres)
+        type: VARCHAR
+      - name: nombre_de_demandeurs_d_emploi
+        description: Nombre de demandeurs d'emploi
+        type: INT
+      - name: p23_pop
+        description: Population de la commune en 2023
+        type: INT
+      - name: ratio_ABC_pop_commune
+        description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
+        type: FLOAT
+      - name: ratio_ABC_pop_dep
+        description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale du département
+        type: FLOAT
+      - name: T3_2025_departement
+        description: Taux de chômage au 3ème trimestre 2025 pour le département
+        type: FLOAT
+      - name: T3_2025_proxy_commune
+        description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
+        type: FLOAT
 
   - name: res2_insee
     description: |-
@@ -1414,19 +1397,20 @@ models:
       Source INSEE, données au 1er janvier 2022 -
       https://www.observatoire-des-territoires.gouv.fr/part-des-residences-secondaires-et-logements-occasionnels
     columns:
-    - name: code_geo
-      description: Code géographique de la commune (code INSEE à 5 chiffres)
-      type: VARCHAR
-    - name: lib_geo
-      description: Nom de la commune
-      type: VARCHAR
-    - name: an
-      description: Année de référence de la donnée
-      type: INT
-    - name: part_resid2
-      description: Part en % des résidences secondaires et logements occasionnels
-       dans le total des résidences principales, secondaires et logements occasionnels
-      type: FLOAT
+      - name: code_geo
+        description: Code géographique de la commune (code INSEE à 5 chiffres)
+        type: VARCHAR
+      - name: lib_geo
+        description: Nom de la commune
+        type: VARCHAR
+      - name: an
+        description: Année de référence de la donnée
+        type: INT
+      - name: part_resid2
+        description:
+          Part en % des résidences secondaires et logements occasionnels
+          dans le total des résidences principales, secondaires et logements occasionnels
+        type: FLOAT
 
   - name: budget_communes
     description: |-
@@ -1451,4 +1435,3 @@ models:
       - name: montant
         description: Montant du budget en euros
         type: FLOAT
-
