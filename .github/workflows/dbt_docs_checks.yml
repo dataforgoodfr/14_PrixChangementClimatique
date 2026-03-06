@@ -43,7 +43,7 @@ jobs:
             check-model-has-all-columns 
             check-model-has-description 
             check-model-columns-have-desc  
-            --all-files
+            --all-files --hook-stage manual
         env:
           DBT_PROJECT_DIR: data/dbt_pipeline
           DBT_PROFILES_DIR: data/dbt_pipeline
