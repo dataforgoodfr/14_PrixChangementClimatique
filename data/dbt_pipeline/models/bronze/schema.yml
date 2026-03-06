@@ -421,7 +421,7 @@ models:
 
   - name: relation_with_assurance_pdf
     description: >
-    Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les relations entre les collectivités et les assureurs.
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les relations entre les collectivités et les assureurs.
     columns:
     - name: id_collectivity
       description: "Identifiant unique de la collectivité"
@@ -435,7 +435,7 @@ models:
 
   - name : problems_pdf
     description: >
-    Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les problèmes rencontrés par les collectivités .
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les problèmes rencontrés par les collectivités .
     columns:
     - name: id_collectivity
       description: "Identifiant unique de la collectivité"
@@ -446,7 +446,7 @@ models:
 
   - name : collectivities_pdf
     description: >
-    Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
     columns:
     - name: id_collectivity
       description: "Identifiant unique de la collectivité"
@@ -467,7 +467,7 @@ models:
       description: "Fonction de la personne ayant répondu au questionnaire"
       type: STRING
     - name : code_geo
-      description: Code geo de la collectivites
+      description: "Code geo de la collectivites"
       type: STRING
 
   - name: primes_assurances_communes
