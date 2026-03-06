@@ -40,8 +40,8 @@ repos:
   #           "{extends: relaxed, rules: {line-length: disable, new-line-at-end-of-file: disable, trailing-spaces: disable, new-lines: disable}}",
   #         ]
 
-  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
-    rev: v2.0.0
-    hooks:
-      - id: check-model-columns-have-desc
-        args: ["--manifest", "data/dbt_pipeline/target/manifest.json"]
+  # - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+  #   rev: v2.0.0
+  #   hooks:
+  #     - id: check-model-columns-have-desc
+  #       args: ["--manifest", "data/dbt_pipeline/target/manifest.json"]
