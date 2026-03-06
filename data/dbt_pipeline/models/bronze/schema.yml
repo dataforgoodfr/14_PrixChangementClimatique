@@ -7,7 +7,7 @@ models:
       le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
       couche bronze et ne contient aucune transformation métier.
     columns:
-      - name: departement 
+      - name: departement
         description: "Code du département de la commune"
       - name: direction
         description: "Code direction administrative"
@@ -15,7 +15,7 @@ models:
         description: "Code de la commune"
       - name: commune_recensee
         description: "Indique si la commune est recensée (R)"
-      - name: numero_national_de_groupement 
+      - name: numero_national_de_groupement
         description: "Lien entre les impots percus au niveau de la commune et les groupes de communes"
       - name: libelle_groupement
         description: "Nom du groupement intercommunal"
@@ -39,11 +39,11 @@ models:
         description: "Montant réel TAFNB pour la commune"
       - name: code_geo
         description: "Code INSEE de la commune"
-  
+
   - name: insee_filosofi_2021
     description: >
       Données INSEE
-      Principaux indicateurs sur la pauvreté en 2021 : 
+      Principaux indicateurs sur la pauvreté en 2021 :
       niveau de vie, taux de pauvreté, part des ménages imposés et décomposition du revenu disponible
       Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi)
       Identifiant du jeu de données : DS_FILOSOFI_CC
@@ -60,7 +60,7 @@ models:
         type: STRING
       - name: unit_measure
         description: >
-          Unité de mesure : 
+          Unité de mesure :
           PT pour pourcentage, EUR_YR pour Euros par an, _Z pour nombre et PS pour personnes
         type: STRING
       - name: unit_mult
@@ -79,10 +79,10 @@ models:
         description: "Valeur numérique"
         type: FLOAT
 
-  - name: rga 
+  - name: rga
     description: >
       (DONNEES GEOGRAPHIQUES) Exposition au phénomène de retrait-gonflement des argiles(RGA) par zone géographique
-      
+
 
       IMPORTANT LES DONNEES SONT EN PROJECTION LAMBERT93 (= EPSG:2154 https://epsg.io/2154)
 
@@ -106,9 +106,9 @@ models:
       - name: gid
         description: Index des polygones
 
-  - name: population_code_geo 
+  - name: population_code_geo
     description: >
-      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. 
+      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV.
       Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere
       Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
 
@@ -148,8 +148,8 @@ models:
   - name: ccr_main_page
     description: >
       Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
-      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982. 
-      La colonne code_arrete connecte cette table à la table ccr_details. 
+      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982.
+      La colonne code_arrete connecte cette table à la table ccr_details.
     columns:
       - name: nom_peril
         description: "Type de péril (Inondations, sécheresse, ect...)"
@@ -166,12 +166,12 @@ models:
       - name: code_arrete
         description: "Code d'indentification de l'arrête pour le site web (important pour le scrapping des données ccr_details)"
         type: INTEGER
-        
+
   - name: ccr_details
     description: |-
         Liste des arrêtés de catastrophe naturelle par commune
         affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
-        et récupérés depuis l'API de la CCR - 
+        et récupérés depuis l'API de la CCR -
         https://www.ccr.fr/wp-admin/admin-ajax.php
         /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
     columns:
@@ -206,13 +206,13 @@ models:
         description: Identifiant de l'arrêté de la CCR relatif à la déclaration de catastrophe naturelle
         type: INT
 
-        
+
   - name: geoportail_ccr_communes
     description: >
       Données extractes du Geoportail ArcGIS de la CCR: https://geoportail.ccr.fr/server/rest/services/CarteToutPublic
       Ces données figure sur la page Visualiser de la CCR: https://www.ccr.fr/portail-catastrophes-naturelles/visualiser/
       /!\ Les données sont sous forme de categories/classes et pas sous forme de valeur numérique /!\
-      
+
       -- DATA --
       cout_cumul: coûts cumulés des sinistres
       cout_moy: coûts moyen des sinistres
@@ -220,13 +220,13 @@ models:
       nb_risque: nombre de risques assurées
       prime: primes catnat
       va: valeurs assurées
-      sp: ratio sinistres et primes 
+      sp: ratio sinistres et primes
 
       -- PERIL --
       tout: tout type de péril
         tout_ino: tout type d'inondations
           icb: inondation et/ou coulée de boue
-          irn: inondation par remontées de nappes 
+          irn: inondation par remontées de nappes
           sub: inondation par submersion marine
         sec: sécheresse
         mvt: mouvement de terrain
@@ -234,7 +234,7 @@ models:
         ava: avalanche
         vcy: vent cyclonique
         aut: autres périls
-        
+
       -- DEMOGRAPHIE --
       part: particulier
       pro: professionel/entreprises
@@ -418,15 +418,15 @@ models:
       - name: sp_aut
         description: "Ratio S/P pour les autres périls"
         type: STRING
-   
-   
 
 
 
- 
+
+
+
   - name: primes_assurances_communes
     description:  >
-         Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010. 
+         Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010.
           Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     columns:
       - name: annee
@@ -487,7 +487,7 @@ models:
 
   - name: budget_per_compte_communes
     description: >
-     Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010. 
+     Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010.
      Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     columns:
       - name: annee
@@ -1010,8 +1010,8 @@ models:
   - name: insee_commune
     description: >
       Données INSEE
-      Code officiel géographique au 1er janvier 2025 
-      Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées 
+      Code officiel géographique au 1er janvier 2025
+      Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées
       au 1er janvier 2025, avec le code des niveaux supérieurs (canton ou pseudo-canton, département, région)
       URL : https://www.insee.fr/fr/information/8377162
     columns:
@@ -1068,7 +1068,7 @@ models:
       - name: cog
         description: "Code commune - appelé code_geo dans les données bronze du projet"
         type: STRING
-      - name: type 
+      - name: type
         description: "Type de commune"
         type: STRING
       - name: code_departement
@@ -1089,20 +1089,20 @@ models:
 
   - name: pprm_gaspar
     description: |-
-      1. Définition - 
-      Le plan de prévention des risques miniers est un document réalisé 
-      par l’État qui réglemente l'utilisation des sols en fonction des risques 
+      1. Définition -
+      Le plan de prévention des risques miniers est un document réalisé
+      par l’État qui réglemente l'utilisation des sols en fonction des risques
       miniers auxquels ils sont soumis. Cette réglementation va de l'interdiction
        de construire à la possibilité de construire sous certaines conditions.
 
       2. Structure
       Chaque procédure est décrite par une ligne par commune et par risque traité.
-      La table comprend les procédures en vigueur, les procédures en cours, les 
+      La table comprend les procédures en vigueur, les procédures en cours, les
       procédures annulées, abrogées et déprescrites, ainsi que les procédures
        révisées par une autre procédure.
 
-      3. Dictionnaire de données (erreur) -  
-      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf 
+      3. Dictionnaire de données (erreur) -
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
     columns:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
@@ -1113,14 +1113,14 @@ models:
     description: |-
       1. Définition -
       Le document d’information communal sur les risques majeurs (DICRIM) recense
-       les mesures de sauvegarde répondant aux risques naturels et technologiques majeurs 
+       les mesures de sauvegarde répondant aux risques naturels et technologiques majeurs
        sur le territoire de la commune, conformément au décret du 11 octobre 1990.
       http://www.georisques.gouv.fr/articles/le-document-dinformation-communal-sur-les-risquesmajeurs-dicrim
 
       2. Structure -
       Un DICRIM par commune (identification et suppression des doublons en cours).
 
-      3. Dictionnaire de données - 
+      3. Dictionnaire de données -
       https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
 
       4. Nota - données incomplètes par rapport au dictionnaire
@@ -1146,9 +1146,9 @@ models:
       conditions.
       http://www.georisques.gouv.fr/articles/les-plans-de-prevention-des-risques-naturels-pprn
 
-      2. Structure - 
+      2. Structure -
       Chaque procédure est décrite par une ligne par commune et par risque traité.
-      La table comprend les procédures en vigueur, les procédures en cours, les procédures annulées, 
+      La table comprend les procédures en vigueur, les procédures en cours, les procédures annulées,
       abrogées et déprescrites, ainsi que les procédures révisées par une autre procédure.
 
       3. Dictionnaire de données (erreur)- https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
@@ -1159,14 +1159,14 @@ models:
 
   - name: pprt_gaspar
     description: |-
-      8.1. Définition - 
-      Le plan de prévention des risques technologiques est un document réalisé par l’État qui 
+      8.1. Définition -
+      Le plan de prévention des risques technologiques est un document réalisé par l’État qui
       réglemente l'utilisation des sols en fonction des risques technologiques auxquels ils sont soumis.
       Cette réglementation va de l'interdiction de construire à la possibilité de construire sous certaines conditions.
       http://www.georisques.gouv.fr/articles/les-plans-de-prevention-des-risques-naturels-pprn
 
       2. Structure -
-      Chaque procédure est décrite par une ligne par commune et par risque traité. 
+      Chaque procédure est décrite par une ligne par commune et par risque traité.
       La table comprend les procédures en vigueur, les procédures en cours, les procédures annulées, abrogées et déprescrites, ainsi que les procédures révisées par une autre procédure.
 
       3. Dictionnaire de données (erreur) - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
@@ -1179,11 +1179,11 @@ models:
   - name: azi_gaspar
     description: 1. Définition -
       Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
-      
+
       2. Structure -
       Un atlas est décrit par une ligne par commune concernée. Une commune peut être décrite par plusieurs atlas.
-      
-      3. Dictionnaire des données - 
+
+      3. Dictionnaire des données -
       https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
     columns:
       - name: cod_nat_azi
@@ -1291,7 +1291,7 @@ models:
       Le dossier de transmission des informations au maire (TIM) a remplacé le dossier communal synthétique (DCS) et le porté à connaissance (PAC-risques). Il contient les informations nécessaires à la réalisation de l’information préventive sur leur territoire et notamment du DICRIM (Document d’Information Communal sur les Risques Majeurs).
       http://www.georisques.gouv.fr/articles/le-dossier-departemental-sur-les-risques-majeurs-ddrm
 
-      2. Structure - 
+      2. Structure -
       Chaque transmission est décrite par une ligne par risque y figurant. Une transmission es dans la plupart des cas monocommunale, à quelques rares exceptions près : transmissions spécifiques sur un risque à un ensemble de communes (sismique, canalisations de matières dangereuses…).
 
       3. Dictionnaire de données -
@@ -1338,7 +1338,7 @@ models:
         préventive des populations doit être réalisée.
         http://www.georisques.gouv.fr/articles/le-dossier-departemental-sur-les-risques-majeurs-ddrm
 
-      2. Structure - 
+      2. Structure -
         Chaque commune est décrite par une ligne par risque recensé
 
       3. Dictionnaire de données - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
@@ -1357,14 +1357,14 @@ models:
         description: Libellé du risque mentionné dans le DDRM
         type: VARCHAR
 
-  
+
   - name: taux_chomage_communes
     description: |-
-      Taux de chômage par commune - 
-      Source Pôle Emploi, données au 3ème trimestre 2025 - 
+      Taux de chômage par commune -
+      Source Pôle Emploi, données au 3ème trimestre 2025 -
 
-      https://www.insee.fr/fr/statistiques/1893230 - 
-      https://www.insee.fr/fr/statistiques/2012804 - 
+      https://www.insee.fr/fr/statistiques/1893230 -
+      https://www.insee.fr/fr/statistiques/2012804 -
       https://dares.travail-emploi.gouv.fr/donnees/les-inscrits-france-travail-donnees-communales
     columns:
        - name: code_region
@@ -1410,8 +1410,8 @@ models:
 
   - name: res2_insee
     description: |-
-      Part de résidences secondaires par commune - 
-      Source INSEE, données au 1er janvier 2022 - 
+      Part de résidences secondaires par commune -
+      Source INSEE, données au 1er janvier 2022 -
       https://www.observatoire-des-territoires.gouv.fr/part-des-residences-secondaires-et-logements-occasionnels
     columns:
     - name: code_geo
@@ -1422,7 +1422,7 @@ models:
       type: VARCHAR
     - name: an
       description: Année de référence de la donnée
-      type: INT 
+      type: INT
     - name: part_resid2
       description: Part en % des résidences secondaires et logements occasionnels
        dans le total des résidences principales, secondaires et logements occasionnels
@@ -1430,7 +1430,7 @@ models:
 
   - name: budget_communes
     description: |-
-      Budget des communes - 
+      Budget des communes -
       https://data.ofgl.fr/pages/acces-donnees-comptables-detaillees/
     columns:
       - name: annee
@@ -1452,4 +1452,3 @@ models:
         description: Montant du budget en euros
         type: FLOAT
 
-        

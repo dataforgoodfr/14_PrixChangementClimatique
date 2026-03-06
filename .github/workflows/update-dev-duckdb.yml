@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'data/dbt_pipeline/models/**' 
+      - 'data/dbt_pipeline/models/**'
   workflow_dispatch:
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync
-      
+
       - name: Set all files on S3 to public read
         run: |
           uv run python data/utils/set_all_files_to_public_read.py

@@ -37,7 +37,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Upload a specific CSV file to S3" \
         " and forces the file replacement on S3 if a file" \
-        " with the same name already exists." 
+        " with the same name already exists."
         f"\n\n The file must be located in:\n"
         f"{LOCAL_CSV_PATH}\n" ,
         formatter_class=argparse.RawTextHelpFormatter
