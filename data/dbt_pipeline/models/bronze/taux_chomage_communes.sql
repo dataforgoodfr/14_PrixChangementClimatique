@@ -6,7 +6,7 @@ SELECT
     departement,
     code_commune,
     commune,
-    codgeo as code_geo,
+    "codgeo" as code_geo,
     nombre_de_demandeurs_d_emploi,
     p23_pop,
     ratio_ABC_pop_commune,

@@ -1,25 +1,25 @@
 WITH transformed AS (SELECT
     -- Transformation du code département (transformer les Outre-mer de type 10X en 97)
     CASE
-        WHEN LENGTH(NDEPT) = 3
-             AND SUBSTR(NDEPT, 1, 2) = '10'
+        WHEN LENGTH("NDEPT") = 3
+             AND SUBSTR("NDEPT", 1, 2) = '10'
         THEN '97'
-        ELSE LPAD(NDEPT, 2, '0')
+        ELSE LPAD("NDEPT", 2, '0')
         END AS code_departement,
 
     -- Transformation du code INSEE (Pour les Outre-mer de type 97X mettre le premier chiffre comme premier chiffre du code INSEE)
     CASE
-        WHEN SUBSTR(NDEPT, 1, 2) = '97'
-        THEN SUBSTR(NDEPT, -1, 1) || LPAD(INSEE, 2, '0')
-        ELSE LPAD(INSEE, 3, '0')
+        WHEN SUBSTR("NDEPT", 1, 2) = '97'
+        THEN SUBSTR("NDEPT", -1, 1) || LPAD("INSEE", 2, '0')
+        ELSE LPAD("INSEE", 3, '0')
     END AS code_insee,
-    IDENT AS siret,
-    SUBSTR(IDENT, 1, 9) AS siren,
-    EXER AS annee,
-    CREGI AS code_region,
-    type_compte AS type_compte,
-    SD AS solde_debiteur,
-    SC AS solde_crediteur
+    "IDENT" AS siret,
+    SUBSTR("IDENT", 1, 9) AS siren,
+    "EXER" AS annee,
+    "CREGI" AS code_region,
+    "type_compte" AS type_compte,
+    "SD" AS solde_debiteur,
+    "SC" AS solde_crediteur
 FROM read_csv(
     'pipeline_inputs/budget_per_compte_communes_clean.csv',
     types = {'NDEPT': 'VARCHAR', 'INSEE': 'VARCHAR', 'IDENT': 'VARCHAR'}
