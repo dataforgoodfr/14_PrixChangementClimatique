@@ -419,6 +419,57 @@ models:
         description: "Ratio S/P pour les autres périls"
         type: STRING
 
+  - name: relation_with_assurance_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les relations entre les collectivités et les assureurs.
+    columns:
+    - name: id_collectivity
+      description: "Identifiant unique de la collectivité"
+      type: INTEGER
+    - name: solution
+      description: "Solutions proposées pour régler les problèmes d’assurance des collectivités"
+      type: STRING
+    - name: relation_score
+      description: "Qualité de la relation avec l’assureur (note sur 10)"
+      type: FLOAT
+
+  - name : problems_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les problèmes rencontrés par les collectivités .
+    columns:
+    - name: id_collectivity
+      description: "Identifiant unique de la collectivité"
+      type: INTEGER
+    - name: problem
+      description: "Problèmes rencontrés par les collectivités "
+      type: STRING
+
+  - name : collectivities_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
+    columns:
+    - name: id_collectivity
+      description: "Identifiant unique de la collectivité"
+      type: INTEGER
+    - name: department_code
+      description: "Code du département (ex : 95, 974, 2A)"
+      type: STRING
+    - name: department_name
+      description: "Nom du département"
+      type: STRING
+    - name: collectivity
+      description: "Nom de la collectivité"
+      type: STRING
+    - name: type_collectivity
+      description: "Type de collectivité"
+      type: STRING
+    - name: respondent_job
+      description: "Fonction de la personne ayant répondu au questionnaire"
+      type: STRING
+    - name : code_geo
+      description: "Code geo de la collectivites"
+      type: STRING
+
   - name: primes_assurances_communes
     description:  >
          Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010. 
@@ -1183,7 +1234,6 @@ models:
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
 
-
   - name: dicrim_gaspar
     description: |-
       1. Définition -
@@ -1209,8 +1259,6 @@ models:
       - name: dat_publi_dicrim
         description: Date de publication
         data_type: timestamp
-
-
 
   - name: pprn_gaspar
     description: |-
@@ -1249,6 +1297,44 @@ models:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
+
+  - name: ccr_details
+    description: |-
+        Liste des arrêtés de catastrophe naturelle par commune
+        affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
+        et récupérés depuis l'API de la CCR - 
+        https://www.ccr.fr/wp-admin/admin-ajax.php
+    columns:
+      - name: code_geo
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+      - name: date_arrete
+        description: Date de l'arrêté de catastrophe naturelle
+        type: DATE
+      - name: date_debut_evenement
+        description: Date de début de l'événement de catastrophe naturelle
+        type: DATE
+      - name: date_fin_evenement
+        description: Date de fin de l'événement de catastrophe naturelle
+        type: DATE
+      - name: nom_commune
+        description: Nom de la commune concernée par l'arrêté de catastrophe naturelle
+        type: VARCHAR
+      - name: nom_peril
+        description: Nom du risque concerné par l'arrêté de catastrophe naturelle
+        type: VARCHAR
+      - name: date_parution_jo
+        description: Date de publication de l'arrêté de catastrophe naturelle au journal officiel
+        type: DATE
+      - name: franchise
+        description: Type de franchise applicable à la commune
+        type: VARCHAR
+      - name: libelle_avis
+        description: Décision de reconnaissance de l'état de catastrophe naturelle
+        type: VARCHAR
+      - name: code_arrete
+        description: Identifiant de l'arrêté de la CCR relatif à la déclaration de catastrophe naturelle
+        type: INT
 
 
   - name: azi_gaspar
@@ -1309,7 +1395,6 @@ models:
       - name: dat_maj
         data_type: timestamp
         description: Date de mise à jour de la fiche GASPAR
-
 
   - name: catnat_gaspar
     description: |-
@@ -1400,7 +1485,6 @@ models:
       - name: code_arrete
         data_type: bigint
 
-
   - name: risq_gaspar
     description: |-
       1. Définition -
@@ -1432,7 +1516,6 @@ models:
         description: Libellé du risque mentionné dans le DDRM
         type: VARCHAR
 
-  
   - name: taux_chomage_communes
     description: |-
       Taux de chômage par commune - 
@@ -1481,7 +1564,6 @@ models:
        - name: T3_2025_proxy_commune
          description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
          type: FLOAT
-
 
   - name: res2_insee
     description: |-
