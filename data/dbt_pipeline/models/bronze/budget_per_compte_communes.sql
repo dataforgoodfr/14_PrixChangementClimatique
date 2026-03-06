@@ -3,8 +3,8 @@ WITH transformed AS (
         -- Transformation du code département (transformer les Outre-mer de type 10X en 97)
         "IDENT" AS siret,
 
-        -- Transformation du code INSEE 
-        -- (Pour les Outre-mer de type 97X mettre le premier chiffre 
+        -- Transformation du code INSEE
+        -- (Pour les Outre-mer de type 97X mettre le premier chiffre
         -- comme premier chiffre du code INSEE)
         "EXER" AS annee,
         "CREGI" AS code_region,
