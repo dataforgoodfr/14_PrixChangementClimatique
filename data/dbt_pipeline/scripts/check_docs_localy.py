@@ -4,7 +4,7 @@ import subprocess
 def run_pre_commit_hook(hook_id):
     """Runs a specific pre-commit hook via uv."""
     print(f"--- Running {hook_id} ---")
-    command = f"uv run pre-commit run {hook_id} --all-files --hook-stage manual"
+    command = f"uv run pre-commit run {hook_id} --hook-stage manual"
     result = subprocess.run(command, shell=True, text=True, capture_output=True)
 
     if result.returncode != 0:
