@@ -28,6 +28,7 @@ repos:
       - id: prettier
         args: ["--parser", "yaml", "--write"]
         files: \.ya?ml$
+        
   # #yamllint
   # - repo: https://github.com/adrienverge/yamllint
   #   rev: v1.29.0
