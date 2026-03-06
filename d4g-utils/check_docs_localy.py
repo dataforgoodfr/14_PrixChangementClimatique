@@ -18,13 +18,16 @@ def run_pre_commit_hook(hook_id):
 
 def main():
 
-    DBT_PROJECT_DIR = "data/dbt_pipeline"
+    if not os.path.isfile("dbt_project.yml"):
+        print(
+            "Il faut lancer le script 'uv run ..\..\d4g-utils\check_docs_localy.py' depuis : data/dbt_pipeline"
+        )
+        return False
 
     print("Mise à jour du manifest...")
     parse_res = subprocess.run(
         "uv run dbt parse",
         shell=False,
-        cwd=DBT_PROJECT_DIR,
         check=False,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -34,7 +37,6 @@ def main():
     docs_res = subprocess.run(
         "uv run dbt docs generate",
         shell=False,
-        cwd=DBT_PROJECT_DIR,
         check=False,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
