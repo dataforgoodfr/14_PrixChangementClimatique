@@ -36,15 +36,32 @@ jobs:
           uv run dbt parse
           uv run dbt docs generate 
 
-      - name: Run dbt-checkpoint
+      - name: Run dbt-checkpoint check-model-has-all-columns 
         uses: pre-commit/action@v3.0.1
         with:
-          # On liste uniquement les hooks dbt-checkpoint à exécuter
           extra_args: >
             check-model-has-all-columns 
+            --all-files --hook-stage manual
+        env:
+          DBT_PROJECT_DIR: data/dbt_pipeline
+          DBT_PROFILES_DIR: data/dbt_pipeline
+
+      - name: Run dbt-checkpoint check-model-has-description 
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: >
             check-model-has-description 
+            --all-files --hook-stage manual
+        env:
+          DBT_PROJECT_DIR: data/dbt_pipeline
+          DBT_PROFILES_DIR: data/dbt_pipeline
+
+      - name: Run dbt-checkpoint check-model-columns-have-desc 
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: >
             check-model-columns-have-desc  
-            --hook-stage manual
+            --all-files --hook-stage manual
         env:
           DBT_PROJECT_DIR: data/dbt_pipeline
           DBT_PROFILES_DIR: data/dbt_pipeline
