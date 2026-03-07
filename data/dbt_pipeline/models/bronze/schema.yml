@@ -419,6 +419,57 @@ models:
         description: "Ratio S/P pour les autres périls"
         type: STRING
 
+  - name: relation_with_assurance_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les relations entre les collectivités et les assureurs.
+    columns:
+    - name: id_collectivity
+      description: "Identifiant unique de la collectivité"
+      type: INTEGER
+    - name: solution
+      description: "Solutions proposées pour régler les problèmes d’assurance des collectivités"
+      type: STRING
+    - name: relation_score
+      description: "Qualité de la relation avec l’assureur (note sur 10)"
+      type: FLOAT
+
+  - name : problems_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les problèmes rencontrés par les collectivités .
+    columns:
+    - name: id_collectivite
+      description: "Identifiant unique de la collectivité"
+      type: INTEGER
+    - name: problem
+      description: "Problèmes rencontrés par les collectivités "
+      type: STRING
+
+  - name : collectivities_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
+    columns:
+    - name: id_collectivity
+      description: "Identifiant unique de la collectivité"
+      type: INTEGER
+    - name: department_code
+      description: "Code du département (ex : 95, 974, 2A)"
+      type: STRING
+    - name: department_name
+      description: "Nom du département"
+      type: STRING
+    - name: collectivity
+      description: "Nom de la collectivité"
+      type: STRING
+    - name: type_collectivity
+      description: "Type de collectivité"
+      type: STRING
+    - name: respondent_job
+      description: "Fonction de la personne ayant répondu au questionnaire"
+      type: STRING
+    - name : code_geo
+      description: "Code geo de la collectivites"
+      type: STRING
+
   - name: primes_assurances_communes
     description: >
       Table des balances pour les comptes commençant par 616 (primes assurances) depuis 2010.
@@ -438,9 +489,6 @@ models:
         data_type: string
       - name: code_region
         description: "Code de la région"
-        data_type: string
-      - name: type_compte
-        description: "Type de compte (depenses, produits, primes d’assurances, dettes financières)"
         data_type: string
       - name: solde_debiteur
         description: "Montant total débiteur (SD)"
@@ -700,33 +748,6 @@ models:
       - name: d_68_logvac
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p_22_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2022
-        type: INT
-      - name: p_16_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2016
-        type: INT
-      - name: p_11_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2011
-        type: INT
-      - name: p_06_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2006
-        type: INT
-      - name: d_99_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1999
-        type: INT
-      - name: d_90_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1990
-        type: INT
-      - name: d_82_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1982
-        type: INT
-      - name: d_75_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1975 (en 1974 pour les DOM)
-        type: INT
-      - name: d_68_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1968 (en 1967 pour les DOM)
-        type: INT
 
   - name: recensement_com
     description: >
@@ -918,33 +939,8 @@ models:
       - name: d_68_logvac
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p_22_pmen
-        description: Nombre de personnes des ménages en 2022
-        type: INT
-      - name: p_16_pmen
-        description: Nombre de personnes des ménages en 2016
-        type: INT
-      - name: p_11_pmen
-        description: Nombre de personnes des ménages en 2011
-        type: INT
-      - name: p_06_pmen
-        description: Nombre de personnes des ménages en 2006
-        type: INT
-      - name: d_99_pmen
-        description: Nombre de personnes des ménages en 1999
-        type: INT
-      - name: d_90_nperrp
-        description: Nombre de personnes des ménages en 1990
-        type: INT
-      - name: d_82_nperrp
-        description: Nombre de personnes des ménages en 1982
-        type: INT
-      - name: d_75_nperrp
-        description: Nombre de personnes des ménages en 1975 (en 1974 pour les DOM)
-        type: INT
-      - name: d_68_nperrp
-        description: Nombre de personnes des ménages en 1968 (en 1967 pour les DOM)
-        type: INT
+
+
 
   - name: insee_commune
     description: >
@@ -1258,7 +1254,7 @@ models:
       3. Dictionnaire de données - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
 
     columns:
-      - name: cod_commune
+      - name: code_geo
         description: Code de la commune concernée
         type: VARCHAR
       - name: lib_commune
