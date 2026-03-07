@@ -1,0 +1,25 @@
+name: check-uv
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  sync-uv:
+    name: Check uv with sync
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install and sync uv
+        run: |
+          pip install uv
+          uv sync
