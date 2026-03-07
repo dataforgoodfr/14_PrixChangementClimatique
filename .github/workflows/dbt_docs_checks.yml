@@ -32,6 +32,7 @@ jobs:
       - name: Run dbt docs generate
         run: |
           cd data/dbt_pipeline
+          uv run dbt deps
           uv run dbt parse
           uv run dbt docs generate 
 
