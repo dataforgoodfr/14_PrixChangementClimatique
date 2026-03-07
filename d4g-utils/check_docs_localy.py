@@ -5,11 +5,11 @@ import subprocess
 def run_pre_commit_hook(hook_id):
     """Runs a specific pre-commit hook via uv."""
     # print(f"--- Running {hook_id} ---")
-    command = f"uv run pre-commit run {hook_id} --hook-stage manual"
+    command = f"uv run pre-commit run {hook_id} --all-files --hook-stage manual"
     result = subprocess.run(command, shell=True, text=True, capture_output=True)
 
     if result.returncode != 0:
-        # print(result.stdout.strip())
+        print(result.stdout.strip())
         return False
 
     # print("✅ Passed")
@@ -20,7 +20,7 @@ def main():
 
     if not os.path.isfile("dbt_project.yml"):
         print(
-            "Il faut lancer le script 'uv run ..\..\d4g-utils\check_docs_localy.py' depuis : data/dbt_pipeline"
+            "Il faut lancer le script 'uv run ..\\..\\d4g-utils\\check_docs_localy.py' depuis : data\\dbt_pipeline"
         )
         return False
 

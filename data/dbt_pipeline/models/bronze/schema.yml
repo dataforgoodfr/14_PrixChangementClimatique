@@ -1230,34 +1230,15 @@ models:
 
       3. Dictionnaire de données -
     columns:
-      - name: codeInsee
+      - name: code_geo
+        description: Code de la commune concernée
         data_type: varchar
         quote: true
-      - name: nomCommune
-        data_type: varchar
-        quote: true
-      - name: dateDebutEvenement
-        data_type: date
-        quote: true
-      - name: dateFinEvenement
-        data_type: date
-        quote: true
-      - name: dateArrete
-        data_type: date
-        quote: true
-      - name: dateParutionJO
-        data_type: date
-        quote: true
-      - name: nomPeril
-        data_type: varchar
-        quote: true
-      - name: franchise
-        data_type: varchar
-      - name: libelleAvis
-        data_type: varchar
-        quote: true
-      - name: code_arrete
-        data_type: bigint
+      - name: lib_commune
+        description: Nom de la commune concernée
+        type: VARCHAR
+      - name: dat_transmission_tim
+        description: Date de transmission au maire
 
   - name: risq_gaspar
     description: |-
