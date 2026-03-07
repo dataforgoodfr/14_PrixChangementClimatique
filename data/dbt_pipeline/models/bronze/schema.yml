@@ -150,7 +150,7 @@ models:
       Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
       Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982.
       La colonne code_arrete connecte cette table à la table ccr_details.
-    
+
     columns:
       - name: nom_peril
         description: "Type de péril (Inondations, sécheresse, ect...)"
