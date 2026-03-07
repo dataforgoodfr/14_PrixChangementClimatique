@@ -150,6 +150,7 @@ models:
       Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
       Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982.
       La colonne code_arrete connecte cette table à la table ccr_details.
+    
     columns:
       - name: nom_peril
         description: "Type de péril (Inondations, sécheresse, ect...)"
@@ -557,217 +558,217 @@ models:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
         type: VARCHAR
-      - name: p22_pop
+      - name: p_22_pop
         description: Population en 2022
         type: INT
-      - name: p16_pop
+      - name: p_16_pop
         description: Population en 2016
         type: INT
-      - name: p11_pop
+      - name: p_11_pop
         description: Population en 2011
         type: INT
-      - name: p06_pop
+      - name: p_06_pop
         description: Population en 2006
         type: INT
-      - name: d99_pop
+      - name: d_99_pop
         description: Population en 1999
         type: INT
-      - name: d90_pop
+      - name: d_90_pop
         description: Population sans les doubles comptes en 1990
         type: INT
-      - name: d82_pop
+      - name: d_82_pop
         description: Population sans les doubles comptes en 1982
         type: INT
-      - name: d75_pop
+      - name: d_75_pop
         description: Population sans les doubles comptes en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_pop
+      - name: d_68_pop
         description: Population sans les doubles comptes en 1968 (en 1967 pour les DOM)
         type: INT
       - name: superf
         description: Superficie (en km²)
         type: FLOAT
-      - name: nais1621
+      - name: nais_1621
         description: Nombre de naissances entre le 01/01/2016 et le 31/12/2021
         type: INT
-      - name: nais1115
+      - name: nais_1115
         description: Nombre de naissances entre le 01/01/2011 et le 31/12/2015
         type: INT
-      - name: nais0610
+      - name: nais_0610
         description: Nombre de naissances entre le 01/01/2006 et le 31/12/2010
         type: INT
-      - name: nais9905
+      - name: nais_9905
         description: Nombre de naissances entre le RP1999 et le 31/12/2005
         type: INT
-      - name: nais9099
+      - name: nais_9099
         description: Nombre de naissances entre le RP1990 et le RP1999
         type: INT
-      - name: nais8290
+      - name: nais_8290
         description: Nombre de naissances entre le RP1982 et le RP1990
         type: INT
-      - name: nais7582
+      - name: nais_7582
         description: Nombre de naissances entre le RP1975 (en 1974 pour les DOM) et le RP1982
         type: INT
-      - name: nais6875
+      - name: nais_6875
         description: Nombre de naissances entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
         type: INT
-      - name: dece1621
+      - name: dece_1621
         description: Nombre de décès entre le 01/01/2016 et le 31/12/2021
         type: INT
-      - name: dece1115
+      - name: dece_1115
         description: Nombre de décès entre le 01/01/2011 et le 31/12/2015
         type: INT
-      - name: dece0610
+      - name: dece_0610
         description: Nombre de décès entre le 01/01/2006 et le 31/12/2010
         type: INT
-      - name: dece9905
+      - name: dece_9905
         description: Nombre de décès entre le RP1999 et le 31/12/2005
         type: INT
-      - name: dece9099
+      - name: dece_9099
         description: Nombre de décès entre le RP1990 et le RP1999
         type: INT
-      - name: dece8290
+      - name: dece_8290
         description: Nombre de décès entre le RP1982 et le RP1990
         type: INT
-      - name: dece7582
+      - name: dece_7582
         description: Nombre de décès entre le RP1975 (en 1974 pour les DOM) et le RP1982
         type: INT
-      - name: dece6875
+      - name: dece_6875
         description: Nombre de décès entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
         type: INT
-      - name: p22_log
+      - name: p_22_log
         description: Nombre de logements en 2022
         type: INT
-      - name: p16_log
+      - name: p_16_log
         description: Nombre de logements en 2016
         type: INT
       - name: p11_log
         description: Nombre de logements en 2011
         type: INT
-      - name: p06_log
+      - name: p_06_log
         description: Nombre de logements en 2006
         type: INT
-      - name: d99_log
+      - name: d_99_log
         description: Nombre de logements en 1999
         type: INT
-      - name: d90_log
+      - name: d_90_log
         description: Nombre de logements en 1990
         type: INT
-      - name: d82_log
+      - name: d_82_log
         description: Nombre de logements en 1982
         type: INT
-      - name: d75_log
+      - name: d_75_log
         description: Nombre de logements en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_log
+      - name: d_68_log
         description: Nombre de logements en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_rp
+      - name: p_22_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2022
         type: INT
-      - name: p16_rp
+      - name: p_16_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2016
         type: INT
-      - name: p11_rp
+      - name: p_11_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2011
         type: INT
-      - name: p06_rp
+      - name: p_06_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2006
         type: INT
-      - name: d99_rp
+      - name: d_99_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1999
         type: INT
-      - name: d90_rp
+      - name: d_90_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1990
         type: INT
-      - name: d82_rp
+      - name: d_82_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1982
         type: INT
-      - name: d75_rp
+      - name: d_75_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_rp
+      - name: d_68_rp
         description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_rseccc
+      - name: p_22_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2022
         type: INT
-      - name: p16_rseccc
+      - name: p_16_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2016
         type: INT
       - name: p11_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2011
         type: INT
-      - name: p06_rseccc
+      - name: p_06_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2006
         type: INT
-      - name: d99_rseccc
+      - name: d_99_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1999
         type: INT
-      - name: d90_rseccc
+      - name: d_90_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1990
         type: INT
-      - name: d82_rseccc
+      - name: d_82_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1982
         type: INT
-      - name: d75_rseccc
+      - name: d_75_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_rseccc
+      - name: d_68_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_logvac
+      - name: p_22_logvac
         description: Nombre de logements vacants en 2022
         type: INT
-      - name: p16_logvac
+      - name: p_16_logvac
         description: Nombre de logements vacants en 2016
         type: INT
-      - name: p11_logvac
+      - name: p_11_logvac
         description: Nombre de logements vacants en 2011
         type: INT
-      - name: p06_logvac
+      - name: p_06_logvac
         description: Nombre de logements vacants en 2006
         type: INT
-      - name: d99_logvac
+      - name: d_99_logvac
         description: Nombre de logements vacants en 1999
         type: INT
-      - name: d90_logvac
+      - name: d_90_logvac
         description: Nombre de logements vacants en 1990
         type: INT
-      - name: d82_logvac
+      - name: d_82_logvac
         description: Nombre de logements vacants en 1982
         type: INT
-      - name: d75_logvac
+      - name: d_75_logvac
         description: Nombre de logements vacants en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_logvac
+      - name: d_68_logvac
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_pmen
+      - name: p_22_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2022
         type: INT
-      - name: p16_pmen
+      - name: p_16_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2016
         type: INT
-      - name: p11_pmen
+      - name: p_11_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2011
         type: INT
-      - name: p06_pmen
+      - name: p_06_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2006
         type: INT
-      - name: d99_pmen
+      - name: d_99_pmen
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1999
         type: INT
-      - name: d90_nper_rp
+      - name: d_90_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1990
         type: INT
-      - name: d82_nper_rp
+      - name: d_82_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1982
         type: INT
-      - name: d75_nper_rp
+      - name: d_75_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_nper_rp
+      - name: d_68_nper_rp
         description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1968 (en 1967 pour les DOM)
         type: INT
 
@@ -784,218 +785,209 @@ models:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
         type: VARCHAR(5)
-      - name: p22_pop
-        description: Population en 2022
-        type: INT
-      - name: p16_pop
-        description: Population en 2016
-        type: INT
-      - name: p11_pop
-        description: Population en 2011
-        type: INT
-      - name: p06_pop
+      - name: p_06_pop
         description: Population en 2006
         type: INT
-      - name: d99_pop
+      - name: d_99_pop
         description: Population en 1999
         type: INT
-      - name: d90_pop
+      - name: d_90_pop
         description: Population sans les doubles comptes en 1990
         type: INT
-      - name: d82_pop
+      - name: d_82_pop
         description: Population sans les doubles comptes en 1982
         type: INT
-      - name: d75_pop
+      - name: d_75_pop
         description: Population sans les doubles comptes en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_pop
+      - name: d_68_pop
         description: Population sans les doubles comptes en 1968 (en 1967 pour les DOM)
         type: INT
       - name: superf
         description: Superficie (en km²)
         type: FLOAT
-      - name: nais1621
+      - name: nais_1621
         description: Nombre de naissances entre le 01/01/2016 et le 31/12/2021
         type: INT
-      - name: nais1115
+      - name: nais_1115
         description: Nombre de naissances entre le 01/01/2011 et le 31/12/2015
         type: INT
-      - name: nais0610
+      - name: nais_0610
         description: Nombre de naissances entre le 01/01/2006 et le 31/12/2010
         type: INT
-      - name: nais9905
+      - name: nais_9905
         description: Nombre de naissances entre le RP1999 et le 31/12/2005
         type: INT
-      - name: nais9099
+      - name: nais_9099
         description: Nombre de naissances entre le RP1990 et le RP1999
         type: INT
-      - name: nais8290
+      - name: nais_8290
         description: Nombre de naissances entre le RP1982 et le RP1990
         type: INT
-      - name: nais7582
+      - name: nais_7582
         description: Nombre de naissances entre le RP1975 (en 1974 pour les DOM) et le RP1982
         type: INT
-      - name: nais6875
+      - name: nais_6875
         description: Nombre de naissances entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
         type: INT
-      - name: dece1621
+      - name: dece_1621
         description: Nombre de décès entre le 01/01/2016 et le 31/12/2021
         type: INT
-      - name: dece1115
+      - name: dece_1115
         description: Nombre de décès entre le 01/01/2011 et le 31/12/2015
         type: INT
-      - name: dece0610
+      - name: dece_0610
         description: Nombre de décès entre le 01/01/2006 et le 31/12/2010
         type: INT
-      - name: dece9905
+      - name: dece_9905
         description: Nombre de décès entre le RP1999 et le 31/12/2005
         type: INT
-      - name: dece9099
+      - name: dece_9099
         description: Nombre de décès entre le RP1990 et le RP1999
         type: INT
-      - name: dece8290
+      - name: dece_8290
         description: Nombre de décès entre le RP1982 et le RP1990
         type: INT
-      - name: dece7582
+      - name: dece_7582
         description: Nombre de décès entre le RP1975 (en 1974 pour les DOM) et le RP1982
         type: INT
-      - name: dece6875
+      - name: dece_6875
         description: Nombre de décès entre le RP1968 et le RP1975 (en 1967 et 1974 pour les DOM)
         type: INT
-      - name: p22_log
+      - name: p_22_log
         description: Nombre de logements en 2022
         type: INT
-      - name: p16_log
+      - name: p_16_log
         description: Nombre de logements en 2016
         type: INT
-      - name: p11_log
+      - name: p_11_log
         description: Nombre de logements en 2011
         type: INT
-      - name: p06_log
+      - name: p_06_log
         description: Nombre de logements en 2006
         type: INT
-      - name: d99_log
+      - name: d_99_log
         description: Nombre de logements en 1999
         type: INT
-      - name: d90_log
+      - name: d_90_log
         description: Nombre de logements en 1990
         type: INT
-      - name: d82_log
+      - name: d_82_log
         description: Nombre de logements en 1982
         type: INT
-      - name: d75_log
+      - name: d_75_log
         description: Nombre de logements en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_log
+      - name: d_68_log
         description: Nombre de logements en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2022
+      - name: p_22_rp
+        description: Nombre de résidences principales ou de ménages en 2022
         type: INT
-      - name: p16_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2016
+      - name: p_16_rp
+        description: Nombre de résidences principales ou de ménages en 2016
         type: INT
-      - name: p11_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2011
+      - name: p_11_rp
+        description: Nombre de résidences principales ou de ménages en 2011
         type: INT
-      - name: p06_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 2006
+      - name: p_06_rp
+        description: Nombre de résidences principales ou de ménages en 2006
         type: INT
-      - name: d99_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1999
+      - name: d_99_rp
+        description: Nombre de résidences principales ou de ménages en 1999
         type: INT
-      - name: d90_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1990
+      - name: d_90_rp
+        description: Nombre de résidences principales ou de ménages en 1990
         type: INT
-      - name: d82_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1982
+      - name: d_82_rp
+        description: Nombre de résidences principales ou de ménages en 1982
         type: INT
-      - name: d75_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1975 (en 1974 pour les DOM)
+      - name: d_75_rp
+        description: Nombre de résidences principales ou de ménages en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_rp
-        description: Nombre de résidences principales ou de ménages (le nombre de ménages est égal au nombre de résidences principales) en 1968 (en 1967 pour les DOM)
+      - name: d_68_rp
+        description: Nombre de résidences principales ou de ménages en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_rseccc
+      - name: p_22_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2022
         type: INT
-      - name: p16_rseccc
+      - name: p_16_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2016
         type: INT
-      - name: p11_rseccc
+      - name: p_11_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2011
         type: INT
-      - name: p06_rseccc
+      - name: p_06_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2006
         type: INT
-      - name: d99_rseccc
+      - name: d_99_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1999
         type: INT
-      - name: d90_rseccc
+      - name: d_90_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1990
         type: INT
-      - name: d82_rseccc
+      - name: d_82_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1982
         type: INT
-      - name: d75_rseccc
+      - name: d_75_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_rseccc
+      - name: d_68_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_logvac
+      - name: p_22_logvac
         description: Nombre de logements vacants en 2022
         type: INT
-      - name: p16_logvac
+      - name: p_16_logvac
         description: Nombre de logements vacants en 2016
         type: INT
-      - name: p11_logvac
+      - name: p_11_logvac
         description: Nombre de logements vacants en 2011
         type: INT
-      - name: p06_logvac
+      - name: p_06_logvac
         description: Nombre de logements vacants en 2006
         type: INT
-      - name: d99_logvac
+      - name: d_99_logvac
         description: Nombre de logements vacants en 1999
         type: INT
-      - name: d90_logvac
+      - name: d_90_logvac
         description: Nombre de logements vacants en 1990
         type: INT
-      - name: d82_logvac
+      - name: d_82_logvac
         description: Nombre de logements vacants en 1982
         type: INT
-      - name: d75_logvac
+      - name: d_75_logvac
         description: Nombre de logements vacants en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_logvac
+      - name: d_68_logvac
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
         type: INT
-      - name: p22_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2022
+      - name: p_22_pmen
+        description: Nombre de personnes des ménages en 2022
         type: INT
-      - name: p16_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2016
+      - name: p_16_pmen
+        description: Nombre de personnes des ménages en 2016
         type: INT
-      - name: p11_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2011
+      - name: p_11_pmen
+        description: Nombre de personnes des ménages en 2011
         type: INT
-      - name: p06_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 2006
+      - name: p_06_pmen
+        description: Nombre de personnes des ménages en 2006
         type: INT
-      - name: d99_pmen
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1999
+      - name: d_99_pmen
+        description: Nombre de personnes des ménages en 1999
         type: INT
-      - name: d90_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1990
+      - name: d_90_nperrp
+        description: Nombre de personnes des ménages en 1990
         type: INT
-      - name: d82_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1982
+      - name: d_82_nperrp
+        description: Nombre de personnes des ménages en 1982
         type: INT
-      - name: d75_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1975 (en 1974 pour les DOM)
+      - name: d_75_nperrp
+        description: Nombre de personnes des ménages en 1975 (en 1974 pour les DOM)
         type: INT
-      - name: d68_nper_rp
-        description: Nombre de personnes des ménages ou nombre de personnes des résidences principales (le nombre de personnes des ménages est égal au nombre de personnes des résidences principales) en 1968 (en 1967 pour les DOM)
+      - name: d_68_nperrp
+        description: Nombre de personnes des ménages en 1968 (en 1967 pour les DOM)
         type: INT
 
   - name: insee_commune
@@ -1065,7 +1057,7 @@ models:
       - name: code_departement
         description: "Code departement"
         type: STRING
-      - name: code_departement_3digits
+      - name: code_departement_3_digits
         description: "Code departement sur 3 digit"
         type: STRING
       - name: code_region
@@ -1375,19 +1367,19 @@ models:
       - name: nombre_de_demandeurs_d_emploi
         description: Nombre de demandeurs d'emploi
         type: INT
-      - name: p23_pop
+      - name: p_23_pop
         description: Population de la commune en 2023
         type: INT
-      - name: ratio_ABC_pop_commune
+      - name: ratio_abc_pop_commune
         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
         type: FLOAT
-      - name: ratio_ABC_pop_dep
+      - name: ratio_abc_pop_dep
         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale du département
         type: FLOAT
-      - name: T3_2025_departement
+      - name: t3_2025_departement
         description: Taux de chômage au 3ème trimestre 2025 pour le département
         type: FLOAT
-      - name: T3_2025_proxy_commune
+      - name: t3_2025_proxy_commune
         description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
         type: FLOAT
 
@@ -1406,7 +1398,7 @@ models:
       - name: an
         description: Année de référence de la donnée
         type: INT
-      - name: part_resid2
+      - name: part_resid_2
         description:
           Part en % des résidences secondaires et logements occasionnels
           dans le total des résidences principales, secondaires et logements occasionnels
