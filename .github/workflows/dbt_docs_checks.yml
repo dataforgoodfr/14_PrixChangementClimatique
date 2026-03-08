@@ -29,38 +29,32 @@ jobs:
         run: |
           uv sync
 
-      - name: Run dbt docs generate
+      - name: Install dbt dependencies
         run: |
           cd data/dbt_pipeline
           uv run dbt deps
+
+      - name: Validate dbt project
+        run: |
+          cd data/dbt_pipeline
           uv run dbt parse
+          uv run dbt compile
+
+      - name: Run dbt pipeline and test
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt run
+          uv run dbt test
+
+      - name: Run dbt docs generate
+        run: |
+          cd data/dbt_pipeline
           uv run dbt docs generate 
 
-      - name: Run dbt-checkpoint check-model-has-all-columns 
+      - name: Run dbt-checkpoint 
         uses: pre-commit/action@v3.0.1
         with:
           extra_args: >
-            check-model-has-all-columns 
-            --all-files --hook-stage manual
-        env:
-          DBT_PROJECT_DIR: data/dbt_pipeline
-          DBT_PROFILES_DIR: data/dbt_pipeline
-
-      - name: Run dbt-checkpoint check-model-has-description 
-        uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: >
-            check-model-has-description 
-            --all-files --hook-stage manual
-        env:
-          DBT_PROJECT_DIR: data/dbt_pipeline
-          DBT_PROFILES_DIR: data/dbt_pipeline
-
-      - name: Run dbt-checkpoint check-model-columns-have-desc 
-        uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: >
-            check-model-columns-have-desc  
             --all-files --hook-stage manual
         env:
           DBT_PROJECT_DIR: data/dbt_pipeline
