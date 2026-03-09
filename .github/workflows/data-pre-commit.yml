@@ -54,3 +54,17 @@ jobs:
           cd data/dbt_pipeline
           uv run dbt run
           uv run dbt test
+
+      - name: Run dbt docs generate
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt docs generate 
+
+      - name: Run dbt-checkpoint 
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: >
+            --all-files --hook-stage manual
+        env:
+          DBT_PROJECT_DIR: data/dbt_pipeline
+          DBT_PROFILES_DIR: data/dbt_pipeline

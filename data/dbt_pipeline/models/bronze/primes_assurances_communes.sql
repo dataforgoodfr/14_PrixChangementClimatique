@@ -37,13 +37,13 @@ SELECT
     t.siren,
     t.annee,
     t.code_region,
-    t.compte,
+    --t.compte,
     s.insee AS code_geo_from_siren,
     s.nom_com,
     t.solde_debiteur,
     t.solde_crediteur,
     t.code_departement || t.code_insee AS code_geo,
-    t.solde_debiteur - t.solde_crediteur AS solde
+    --t.solde_debiteur - t.solde_crediteur AS solde
 FROM transformed AS t
 LEFT JOIN
     READ_CSV(

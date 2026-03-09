@@ -652,7 +652,7 @@ models:
       - name: p_16_log
         description: Nombre de logements en 2016
         type: INT
-      - name: p11_log
+      - name: p_11_log
         description: Nombre de logements en 2011
         type: INT
       - name: p_06_log
@@ -706,7 +706,7 @@ models:
       - name: p_16_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2016
         type: INT
-      - name: p11_rseccc
+      - name: p_11_rseccc
         description: Nombre de résidences secondaires et logements occasionnels en 2011
         type: INT
       - name: p_06_rseccc
@@ -768,6 +768,15 @@ models:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
         type: VARCHAR(5)
+      - name: p_22_pop
+        description: Population en 2022
+        type: INT
+      - name: p_16_pop
+        description: Population en 2016
+        type: INT
+      - name: p_11_pop
+        description: Population en 2011
+        type: INT
       - name: p_06_pop
         description: Population en 2006
         type: INT
@@ -1315,10 +1324,10 @@ models:
       - name: ratio_abc_pop_dep
         description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale du département
         type: FLOAT
-      - name: t3_2025_departement
+      - name: t_3_2025_departement
         description: Taux de chômage au 3ème trimestre 2025 pour le département
         type: FLOAT
-      - name: t3_2025_proxy_commune
+      - name: t_3_2025_proxy_commune
         description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
         type: FLOAT
 
