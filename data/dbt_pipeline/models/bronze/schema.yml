@@ -3,11 +3,9 @@ version: 2
 models:
   - name: bronze_rei
     description: >
-      Données brutes REI 2022 importées depuis le fichier CSV stocké dans
-      le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la
-      couche bronze et ne contient aucune transformation métier.
+      Données brutes REI 2022 importées depuis le fichier CSV stocké dans le bucket S3 du projet (pipeline_inputs). Ce modèle correspond à la couche bronze et ne contient aucune transformation métier.
     columns:
-      - name: code_departement 
+      - name: code_departement
         description: "Code du département de la commune"
       - name: direction
         description: "Code direction administrative"
@@ -42,12 +40,7 @@ models:
 
   - name: insee_filosofi_2021
     description: >
-      Données INSEE
-      Principaux indicateurs sur la pauvreté en 2021 :
-      niveau de vie, taux de pauvreté, part des ménages imposés et décomposition du revenu disponible
-      Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi)
-      Identifiant du jeu de données : DS_FILOSOFI_CC
-      URL : https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC
+      Données INSEE Principaux indicateurs sur la pauvreté en 2021 : niveau de vie, taux de pauvreté, part des ménages imposés et décomposition du revenu disponible Sous-titre : Revenus localisés sociaux et fiscaux (Filosofi) Identifiant du jeu de données : DS_FILOSOFI_CC URL : https://catalogue-donnees.insee.fr/fr/catalogue/recherche/DS_FILOSOFI_CC
     columns:
       - name: code_geo
         description: "Exemple : 001 pour Paris, 002 pour Lyon, 144 pour Louvier, 32462 pour Vic-Fezensac..."
@@ -60,8 +53,7 @@ models:
         type: STRING
       - name: unit_measure
         description: >
-          Unité de mesure :
-          PT pour pourcentage, EUR_YR pour Euros par an, _Z pour nombre et PS pour personnes
+          Unité de mesure : PT pour pourcentage, EUR_YR pour Euros par an, _Z pour nombre et PS pour personnes
         type: STRING
       - name: unit_mult
         description: "Quantité d'unités (en puissance de 10)"
@@ -99,9 +91,7 @@ models:
       - name: surf_m2
         description: Surface du polygone en m^2
       - name: niveau
-        description:
-          "Niveau d'exposition au phénomène de retrait-gonflement des argiles
-          de 1(faible) à 3(fort)"
+        description: "Niveau d'exposition au phénomène de retrait-gonflement des argiles de 1(faible) à 3(fort)"
       - name: code_departement
         description: Numéro du département
       - name: gid
@@ -109,9 +99,7 @@ models:
 
   - name: population_code_geo
     description: >
-      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV.
-      Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere
-      Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
+      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
 
     columns:
       - name: code_geo
@@ -147,9 +135,7 @@ models:
 
   - name: ccr_main_page
     description: >
-      Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
-      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982.
-      La colonne code_arrete connecte cette table à la table ccr_details.
+      Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/. Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982. La colonne code_arrete connecte cette table à la table ccr_details.
 
     columns:
       - name: nom_peril
@@ -209,21 +195,11 @@ models:
 
   - name: geoportail_ccr_communes
     description: >
-      Données extractes du Geoportail ArcGIS de la CCR: https://geoportail.ccr.fr/server/rest/services/CarteToutPublic
-      Ces données figure sur la page Visualiser de la CCR: https://www.ccr.fr/portail-catastrophes-naturelles/visualiser/
-      /!\ Les données sont sous forme de categories/classes et pas sous forme de valeur numérique /!\
+      Données extractes du Geoportail ArcGIS de la CCR: https://geoportail.ccr.fr/server/rest/services/CarteToutPublic Ces données figure sur la page Visualiser de la CCR: https://www.ccr.fr/portail-catastrophes-naturelles/visualiser/ /!\ Les données sont sous forme de categories/classes et pas sous forme de valeur numérique /!\
 
-      -- DATA --
-      cout_cumul: coûts cumulés des sinistres
-      cout_moy: coûts moyen des sinistres
-      freq: fréquence moyenne catnat
-      nb_risque: nombre de risques assurées
-      prime: primes catnat
-      va: valeurs assurées
-      sp: ratio sinistres et primes
+      -- DATA -- cout_cumul: coûts cumulés des sinistres cout_moy: coûts moyen des sinistres freq: fréquence moyenne catnat nb_risque: nombre de risques assurées prime: primes catnat va: valeurs assurées sp: ratio sinistres et primes
 
-      -- PERIL --
-      tout: tout type de péril
+      -- PERIL -- tout: tout type de péril
         tout_ino: tout type d'inondations
           icb: inondation et/ou coulée de boue
           irn: inondation par remontées de nappes
@@ -235,9 +211,7 @@ models:
         vcy: vent cyclonique
         aut: autres périls
 
-      -- DEMOGRAPHIE --
-      part: particulier
-      pro: professionel/entreprises
+      -- DEMOGRAPHIE -- part: particulier pro: professionel/entreprises
 
     columns:
       - name: code_geo
@@ -423,52 +397,52 @@ models:
     description: >
       Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les relations entre les collectivités et les assureurs.
     columns:
-    - name: id_collectivity
-      description: "Identifiant unique de la collectivité"
-      type: INTEGER
-    - name: solution
-      description: "Solutions proposées pour régler les problèmes d’assurance des collectivités"
-      type: STRING
-    - name: relation_score
-      description: "Qualité de la relation avec l’assureur (note sur 10)"
-      type: FLOAT
+      - name: id_collectivity
+        description: "Identifiant unique de la collectivité"
+        type: INTEGER
+      - name: solution
+        description: "Solutions proposées pour régler les problèmes d’assurance des collectivités"
+        type: STRING
+      - name: relation_score
+        description: "Qualité de la relation avec l’assureur (note sur 10)"
+        type: FLOAT
 
-  - name : problems_pdf
+  - name: problems_pdf
     description: >
       Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les problèmes rencontrés par les collectivités .
     columns:
-    - name: id_collectivite
-      description: "Identifiant unique de la collectivité"
-      type: INTEGER
-    - name: problem
-      description: "Problèmes rencontrés par les collectivités "
-      type: STRING
+      - name: id_collectivite
+        description: "Identifiant unique de la collectivité"
+        type: INTEGER
+      - name: problem
+        description: "Problèmes rencontrés par les collectivités "
+        type: STRING
 
-  - name : collectivities_pdf
+  - name: collectivities_pdf
     description: >
       Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
     columns:
-    - name: id_collectivity
-      description: "Identifiant unique de la collectivité"
-      type: INTEGER
-    - name: department_code
-      description: "Code du département (ex : 95, 974, 2A)"
-      type: STRING
-    - name: department_name
-      description: "Nom du département"
-      type: STRING
-    - name: collectivity
-      description: "Nom de la collectivité"
-      type: STRING
-    - name: type_collectivity
-      description: "Type de collectivité"
-      type: STRING
-    - name: respondent_job
-      description: "Fonction de la personne ayant répondu au questionnaire"
-      type: STRING
-    - name : code_geo
-      description: "Code geo de la collectivites"
-      type: STRING
+      - name: id_collectivity
+        description: "Identifiant unique de la collectivité"
+        type: INTEGER
+      - name: department_code
+        description: "Code du département (ex : 95, 974, 2A)"
+        type: STRING
+      - name: department_name
+        description: "Nom du département"
+        type: STRING
+      - name: collectivity
+        description: "Nom de la collectivité"
+        type: STRING
+      - name: type_collectivity
+        description: "Type de collectivité"
+        type: STRING
+      - name: respondent_job
+        description: "Fonction de la personne ayant répondu au questionnaire"
+        type: STRING
+      - name: code_geo
+        description: "Code geo de la collectivites"
+        type: STRING
 
   - name: primes_assurances_communes
     description: >
@@ -511,8 +485,7 @@ models:
 
   - name: budget_per_compte_communes
     description: >
-      Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010.
-      Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
+      Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010. Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
     columns:
       - name: annee
         description: "Année de l'exercice"
@@ -556,14 +529,7 @@ models:
 
   - name: recensement_hors_com
     description: >
-      Séries historiques en 2022 - Données hors collectivités d'outre-mer -
-      Recensement de la population - Base des principaux indicateurs -
-      Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales,
-      les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages.
-      Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025.
-      Niveau géographique : commune, arrondissement municipal.
-      Résultats : les indicateurs sont disponibles pour 1968, 1975, 1982, 1990, 1999, 2006, 2011, 2016 et 2022.
-      https://www.insee.fr/fr/statistiques/8582555
+      Séries historiques en 2022 - Données hors collectivités d'outre-mer - Recensement de la population - Base des principaux indicateurs - Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales, les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages. Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025. Niveau géographique : commune, arrondissement municipal. Résultats : les indicateurs sont disponibles pour 1968, 1975, 1982, 1990, 1999, 2006, 2011, 2016 et 2022. https://www.insee.fr/fr/statistiques/8582555
     columns:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
@@ -757,13 +723,7 @@ models:
 
   - name: recensement_com
     description: >
-      Séries historiques en 2022 -  Données collectivités d'outre-mer -
-      Recensement de la population - Base des principaux indicateurs -
-      Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales, les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages. -
-      Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025. -
-      Niveau géographique : commune, arrondissement municipal. -
-      Résultats : les indicateurs sont disponibles pour 1968, 1975, 1982, 1990, 1999, 2006, 2011, 2016 et 2022. -
-      https://www.insee.fr/fr/statistiques/8582555#documentation
+      Séries historiques en 2022 -  Données collectivités d'outre-mer - Recensement de la population - Base des principaux indicateurs - Les deux bases fournissent des résultats sur les naissances, les décès, la population, les résidences principales, les résidences secondaires et logements occasionnels, les caractéristiques des personnes des ménages. - Les données sont diffusées selon la géographie en vigueur au 1er janvier 2025. - Niveau géographique : commune, arrondissement municipal. - Résultats : les indicateurs sont disponibles pour 1968, 1975, 1982, 1990, 1999, 2006, 2011, 2016 et 2022. - https://www.insee.fr/fr/statistiques/8582555#documentation
     columns:
       - name: code_geo
         description: "Code du département suivi du numéro de commune ou du numéro d'arrondissement municipal"
@@ -955,15 +915,9 @@ models:
         description: Nombre de logements vacants en 1968 (en 1967 pour les DOM)
         type: INT
 
-
-
   - name: insee_commune
     description: >
-      Données INSEE
-      Code officiel géographique au 1er janvier 2025
-      Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées
-      au 1er janvier 2025, avec le code des niveaux supérieurs (canton ou pseudo-canton, département, région)
-      URL : https://www.insee.fr/fr/information/8377162
+      Données INSEE Code officiel géographique au 1er janvier 2025 Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées au 1er janvier 2025, avec le code des niveaux supérieurs (canton ou pseudo-canton, département, région) URL : https://www.insee.fr/fr/information/8377162
     columns:
       - name: type_com
         description: "Type de commune"
@@ -1004,10 +958,7 @@ models:
 
   - name: datactivist_commune
     description: >
-      Données datagouv de datactivist
-      Identifiants des collectivités territoriales et leurs établissements
-      Sous-titre : identifiants-communes-2024
-      URL : https://www.data.gouv.fr/datasets/identifiants-des-collectivites-territoriales-et-leurs-etablissements
+      Données datagouv de datactivist Identifiants des collectivités territoriales et leurs établissements Sous-titre : identifiants-communes-2024 URL : https://www.data.gouv.fr/datasets/identifiants-des-collectivites-territoriales-et-leurs-etablissements
     columns:
       - name: nom
         description: "Nom de la commune"
@@ -1057,6 +1008,100 @@ models:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
+        data_type: varchar
+      - name: code_modele
+        description: TO DO
+        data_type: varchar
+      - name: libelle_modele
+        description: TO DO
+        data_type: varchar
+      - name: code_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_organisme
+        description: TO DO
+        data_type: varchar
+      - name: bassin_risque
+        description: TO DO
+        data_type: varchar
+      - name: bassins_hydrographiques
+        description: TO DO
+        data_type: varchar
+      - name: cours_eau
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_1
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_2
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_3
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisante
+        description: TO DO
+        data_type: varchar
+      - name: codes_revises
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisee
+        description: TO DO
+        data_type: varchar
+      - name: codes_revisants
+        description: TO DO
+        data_type: varchar
+      - name: prescription
+        description: TO DO
+        data_type: date
+      - name: enquete_publ_debut
+        description: TO DO
+        data_type: date
+      - name: enquete_publ_fin
+        description: TO DO
+        data_type: date
+      - name: annex_plu
+        description: TO DO
+        data_type: date
+      - name: deprescription
+        description: TO DO
+        data_type: varchar
+      - name: approbation
+        description: TO DO
+        data_type: date
+      - name: annulation
+        description: TO DO
+        data_type: date
+      - name: abrogation
+        description: TO DO
+        data_type: date
+      - name: libelle_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_etat
+        description: TO DO
+        data_type: date
+      - name: libelle_sous_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_sous_etat
+        description: TO DO
+        data_type: date
+      - name: date_derniere_mise_a_jour
+        description: TO DO
+        data_type: date
 
   - name: dicrim_gaspar
     description: |-
@@ -1103,6 +1148,166 @@ models:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
+        data_type: varchar
+      - name: code_modele
+        description: TO DO
+        data_type: varchar
+      - name: libelle_modele
+        description: TO DO
+        data_type: varchar
+      - name: code_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_organisme
+        description: TO DO
+        data_type: varchar
+      - name: bassin_risque
+        description: TO DO
+        data_type: varchar
+      - name: bassins_hydrographiques
+        description: TO DO
+        data_type: varchar
+      - name: cours_eau
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_1
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_2
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_3
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisante
+        description: TO DO
+        data_type: varchar
+      - name: codes_revises
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisee
+        description: TO DO
+        data_type: varchar
+      - name: codes_revisants
+        description: TO DO
+        data_type: varchar
+      - name: programmation_debut
+        description: TO DO
+        data_type: date
+      - name: programmation_fin
+        description: TO DO
+        data_type: date
+      - name: montage_debut
+        description: TO DO
+        data_type: date
+      - name: montage_fin
+        description: TO DO
+        data_type: date
+      - name: prescription
+        description: TO DO
+        data_type: varchar
+      - name: etudes_hydr_debut
+        description: TO DO
+        data_type: date
+      - name: etudes_hydr_fin
+        description: TO DO
+        data_type: date
+      - name: carte_aleas_debut
+        description: TO DO
+        data_type: date
+      - name: carte_aleas_fin
+        description: TO DO
+        data_type: date
+      - name: carte_enjeux_debut
+        description: TO DO
+        data_type: date
+      - name: carte_enjeux_fin
+        description: TO DO
+        data_type: date
+      - name: zonage_regl_debut
+        description: TO DO
+        data_type: date
+      - name: zonage_regl_fin
+        description: TO DO
+        data_type: date
+      - name: reg_et_note_pres_debut
+        description: TO DO
+        data_type: varchar
+      - name: reg_et_note_pres_fin
+        description: TO DO
+        data_type: varchar
+      - name: concertation_debut
+        description: TO DO
+        data_type: date
+      - name: concertation_fin
+        description: TO DO
+        data_type: date
+      - name: consultation_debut
+        description: TO DO
+        data_type: timestamp
+      - name: consultation_fin
+        description: TO DO
+        data_type: timestamp
+      - name: consult_serv_debut
+        description: TO DO
+        data_type: date
+      - name: consult_serv_fin
+        description: TO DO
+        data_type: date
+      - name: enquete_publ_debut
+        description: TO DO
+        data_type: timestamp
+      - name: enquete_publ_fin
+        description: TO DO
+        data_type: timestamp
+      - name: annex_plu
+        description: TO DO
+        data_type: date
+      - name: prorogation
+        description: TO DO
+        data_type: varchar
+      - name: applic_antic
+        description: TO DO
+        data_type: date
+      - name: deprescription
+        description: TO DO
+        data_type: date
+      - name: approbation
+        description: TO DO
+        data_type: timestamp
+      - name: annulation
+        description: TO DO
+        data_type: date
+      - name: abrogation
+        description: TO DO
+        data_type: date
+      - name: libelle_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_etat
+        description: TO DO
+        data_type: date
+      - name: libelle_sous_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_sous_etat
+        description: TO DO
+        data_type: date
+      - name: date_derniere_mise_a_jour
+        description: TO DO
+        data_type: timestamp
 
   - name: pprt_gaspar
     description: |-
@@ -1121,16 +1326,107 @@ models:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
         type: VARCHAR
+        data_type: varchar
+      - name: code_modele
+        description: TO DO
+        data_type: varchar
+      - name: libelle_modele
+        description: TO DO
+        data_type: varchar
+      - name: code_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_organisme
+        description: TO DO
+        data_type: varchar
+      - name: bassin_risque
+        description: TO DO
+        data_type: varchar
+      - name: bassins_hydrographiques
+        description: TO DO
+        data_type: varchar
+      - name: cours_eau
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_1
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_2
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_3
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisante
+        description: TO DO
+        data_type: varchar
+      - name: codes_revises
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisee
+        description: TO DO
+        data_type: varchar
+      - name: codes_revisants
+        description: TO DO
+        data_type: varchar
+      - name: prescription
+        description: TO DO
+        data_type: timestamp
+      - name: enquete_publ_debut
+        description: TO DO
+        data_type: timestamp
+      - name: enquete_publ_fin
+        description: TO DO
+        data_type: timestamp
+      - name: annex_plu
+        description: TO DO
+        data_type: date
+      - name: deprescription
+        description: TO DO
+        data_type: date
+      - name: approbation
+        description: TO DO
+        data_type: timestamp
+      - name: annulation
+        description: TO DO
+        data_type: date
+      - name: abrogation
+        description: TO DO
+        data_type: date
+      - name: libelle_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_etat
+        description: TO DO
+        data_type: date
+      - name: libelle_sous_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_sous_etat
+        description: TO DO
+        data_type: date
+      - name: date_derniere_mise_a_jour
+        description: TO DO
+        data_type: timestamp
 
   - name: azi_gaspar
-    description: 1. Définition -
-      Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
+    description: 1. Définition - Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
 
-      2. Structure -
-      Un atlas est décrit par une ligne par commune concernée. Une commune peut être décrite par plusieurs atlas.
+      2. Structure - Un atlas est décrit par une ligne par commune concernée. Une commune peut être décrite par plusieurs atlas.
 
-      3. Dictionnaire des données -
-      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+      3. Dictionnaire des données - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
     columns:
       - name: cod_nat_azi
         description: Code unique identifiant l’atlas (code national généré par Gaspar)
@@ -1347,9 +1643,7 @@ models:
         description: Année de référence de la donnée
         type: INT
       - name: part_resid_2
-        description:
-          Part en % des résidences secondaires et logements occasionnels
-          dans le total des résidences principales, secondaires et logements occasionnels
+        description: Part en % des résidences secondaires et logements occasionnels dans le total des résidences principales, secondaires et logements occasionnels
         type: FLOAT
 
   - name: budget_communes
