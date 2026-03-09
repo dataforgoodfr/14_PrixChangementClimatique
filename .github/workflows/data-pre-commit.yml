@@ -3,7 +3,7 @@ name: data-pre-commit
 on:
   pull_request:
     paths:
-      - 'data/dbt_pipeline/**'
+      - "data/dbt_pipeline/**"
 
 jobs:
   validate-dbt:
