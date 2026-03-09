@@ -1,0 +1,49 @@
+name: dbt_docs_checks
+
+on:
+  pull_request:
+    paths:
+      - 'data/dbt_pipeline/**'
+
+jobs:
+  run-pipeline:
+    name: dbt docs and checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: |
+          pip install uv
+
+      - name: Install dependencies
+        run: |
+          uv sync
+
+      - name: Run dbt docs generate
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt parse
+          uv run dbt docs generate 
+
+      - name: Run dbt-checkpoint
+        uses: pre-commit/action@v3.0.1
+        with:
+          # On liste uniquement les hooks dbt-checkpoint à exécuter
+          extra_args: >
+            check-model-has-all-columns 
+            check-model-has-description 
+            check-model-columns-have-desc  
+            --all-files
+        env:
+          DBT_PROJECT_DIR: data/dbt_pipeline
+          DBT_PROFILES_DIR: data/dbt_pipeline
