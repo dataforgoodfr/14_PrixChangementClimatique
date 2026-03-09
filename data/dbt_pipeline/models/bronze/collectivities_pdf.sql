@@ -1,4 +1,4 @@
-SELECT 
+SELECT
     id_collectivity,
     department_code,
     department_name,
@@ -6,5 +6,5 @@ SELECT
     type_collectivity,
     respondent_job,
     code_geo
-FROM 
+FROM
     'pipeline_inputs/collectivities_pdf.csv'

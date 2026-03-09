@@ -1,5 +1,5 @@
-SELECT 
+SELECT
     id_collectivite,
     problem
- FROM 
+FROM
     'pipeline_inputs/problems_pdf.csv'
