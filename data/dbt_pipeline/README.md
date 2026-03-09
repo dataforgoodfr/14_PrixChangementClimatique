@@ -8,7 +8,7 @@
 
 Pour faire tourner le dbt de bout en bout, suivre les étapes suivantes :
 
-_(prérequis) Installer les dépendances du projet,_ en installant uv et en faisant 
+_(prérequis) Installer les dépendances du projet,_ en installant uv et en faisant
 ```bash
 uv sync
 ```
@@ -92,12 +92,12 @@ Dans cette procédure nous allons utiliser le s3 du projet, dans lequel un dossi
 
 Important : si vous n'avez pas encore les clés, demandez les sur un des canaux mattermost du projet.
 
-Pour uploader le fichier vous pouvez : 
+Pour uploader le fichier vous pouvez :
 
 1/ Le faire à la main, en utilisant l'outil de votre choix. Si vous n'avez jamais fait de telles opérations, nous conseillons l'outil cyberduck qui permet de la réaliser facilement, avec une interface. Il faudra créer une nouvelle connection en choisissant bien le format "(Amazon) s3".
 Uploader le fichier dans le bucket `qppcc-upload`, dans le dossier /pipeline_inputs de ce bucket.
 
-ou 
+ou
 
 2/ utiliser le script python `data/utils/csv_uploader.py` qui upload le fichier donné en argument dans le dossier `data/dbt_pipeline/pipeline_inputs` vers le s3, dans le dossier /pipeline_inputs du bucket.
 Attention : il remplace le fichier sur le s3 même s'il existe déjà.
@@ -110,7 +110,7 @@ uv run python data/utils/csv_uploader.py mon_fichier.csv
 Vous aurez besoin de créer les clés d'accès au s3 et de les ajouter dans un fichier .env à la racine du projet, avec les variables d'environnement suivantes :
 ```
 S3_ACCESS_KEY_ID = la clé projet récupérée
-3_SECRET_ACCESS_KEY = la clé secrète projet récupérée 
+3_SECRET_ACCESS_KEY = la clé secrète projet récupérée
 S3_ENDPOINT_URL = "https://s3.fr-par.scw.cloud"
 S3_REGION = "fr-par"
 S3_PCC_BUCKET = "qppcc-upload"
@@ -129,7 +129,7 @@ Le mieux est de suivre un exemple qui réalise exactement cette opération : htt
 Explication des opérations :
 On créé un fichier dans le dossier /models du dbt, cela créera un modèle dbt et donc une table dans notre base de donnée après l'avoir fait tourner. Par convention nous le créant dans le dossier /bronze pour indiquer qu'il s'agit d'une donnée brut.
 Ce modèle ne fait qu'un
-```sql 
+```sql
 select ... from 'pipeline_inputs/NOM_DE_VOTRE_CSV'
 ```
 il contiendra donc les données de votre CSV.
@@ -143,7 +143,7 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 - A ce moment là je merge.
 
-- vérifier que le worflow github actions "update-dev-duckdb" est bien passé, ce qui signifie que le fichier dev.duckdb a été mis à jour dans le s3 du projet en fonction des modifications apportées sur la PR et des nouveaux fichiers csv chargés. En cas de problème, je peux le faire manuellement : 
+- vérifier que le worflow github actions "update-dev-duckdb" est bien passé, ce qui signifie que le fichier dev.duckdb a été mis à jour dans le s3 du projet en fonction des modifications apportées sur la PR et des nouveaux fichiers csv chargés. En cas de problème, je peux le faire manuellement :
 
   - Je checkout main et je pull le nouveau main (localement).
 
@@ -224,7 +224,7 @@ uv run dbt deps
 
 - Exemple pour appeler toutes les colonnes en schéma variable dans un csv avec la macro 'star' (équivalent de select *, adapté à un appel de source par DBT)
 ```jinja-sql
-select 
+select
     {{ dbt_utils.star(from=source('bronze', 'ma_source')) }}
 from {{ source('bronze', 'ma_source') }}
 ```

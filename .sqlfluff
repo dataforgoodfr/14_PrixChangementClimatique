@@ -1,0 +1,14 @@
+[sqlfluff]
+dialect = duckdb
+exclude_rules = RF05, RF06, AM04
+max_line_length = 120
+#AM04 pour autoriser les *,
+# RF06 autoriser les "",
+# RF05 autoriser les "-" notamment dans le nom des csv
+# Mots-clés SQL (SELECT, FROM, AS)
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
+# Identifiants (colonnes / tables / alias)
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = snake

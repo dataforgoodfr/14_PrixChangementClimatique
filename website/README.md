@@ -29,7 +29,7 @@ Le site sera accessible à l'adresse [http://localhost:3000](http://localhost:30
 - `npm run start` : Lance le serveur de production (nécessite d'avoir exécuté `npm run build` au préalable)
 - `npm run lint` : Vérifie la qualité du code avec ESLint
 - `npm run init-dev-data`: Lance un script de récupération et de génération de donnnées pour le développement (voir [Script de récupération et de génération de données](#script-de-recuperation-et-de-generation-de donnees))
- 
+
 ## Script de récupération et de génération de données
 
 ### Objectif

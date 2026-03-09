@@ -1,6 +1,6 @@
-SELECT 
-  * EXCLUDE (COMMUNE, DEPARTEMENT),
-  COMMUNE AS code_geo,
-  DEPARTEMENT AS code_departement
-FROM 
-  'pipeline_inputs/impots_REI_2022.csv'
+SELECT
+    * EXCLUDE ("commune", "departement"),
+    "commune" AS code_geo,
+    "departement" AS code_departement
+FROM
+    'pipeline_inputs/impots_REI_2022.csv'
