@@ -481,6 +481,9 @@ models:
       - name: siret
         description: "SIRET de la commune ou entité"
         data_type: string
+      - name: siren
+        description: "Code SIREN"
+        data_type: string
       - name: code_departement
         description: "Code du département"
         data_type: string
@@ -516,6 +519,9 @@ models:
         data_type: integer
       - name: siret
         description: "SIRET de la commune ou entité"
+        data_type: string
+      - name: siren
+        description: "Code SIREN"
         data_type: string
       - name: code_departement
         description: "Code du département"
