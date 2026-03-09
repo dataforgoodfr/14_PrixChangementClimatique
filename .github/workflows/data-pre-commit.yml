@@ -1,0 +1,56 @@
+name: data-pre-commit
+
+on:
+  pull_request:
+    paths:
+      - 'data/dbt_pipeline/**'
+
+jobs:
+  validate-dbt:
+    name: Validate dbt project structure, download csv inputs and test dbt pipeline
+    runs-on: ubuntu-latest
+    env:
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      S3_REGION: ${{ vars.S3_REGION }}
+      S3_ENDPOINT_URL: ${{ vars.S3_ENDPOINT_URL }}
+      S3_PCC_BUCKET: ${{ vars.S3_PCC_BUCKET }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install and sync uv
+        run: |
+          pip install uv
+          uv sync
+
+      - name: Install dbt dependencies
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt deps
+
+      - name: Validate dbt project
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt parse
+          uv run dbt compile
+
+      - name: Set all files on S3 to public read
+        run: |
+          uv run python data/utils/set_all_files_to_public_read.py
+
+      - name: Download pipeline csv inputs from bucket
+        run: |
+          uv run python data/utils/download_pipeline_inputs.py
+
+      - name: Run dbt pipeline and test
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt run
+          uv run dbt test
