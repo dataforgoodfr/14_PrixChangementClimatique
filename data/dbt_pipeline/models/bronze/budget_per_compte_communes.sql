@@ -36,7 +36,7 @@ SELECT
     t.code_departement,
     t.code_insee,
     t.siret,
-    t.siren,
+    --t.siren,
     t.annee,
     t.code_region,
     t.type_compte,
