@@ -1422,7 +1422,8 @@ models:
         data_type: timestamp
 
   - name: azi_gaspar
-    description: 1. Définition - Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
+    description:
+      1. Définition - Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
 
       2. Structure - Un atlas est décrit par une ligne par commune concernée. Une commune peut être décrite par plusieurs atlas.
 

@@ -33,10 +33,13 @@ repos:
     hooks:
       - id: check-model-has-all-columns
         stages: [manual]
-        args: [
-          "--manifest", "data/dbt_pipeline/target/manifest.json",
-          "--catalog", "data/dbt_pipeline/target/catalog.json"
-        ]
+        args:
+          [
+            "--manifest",
+            "data/dbt_pipeline/target/manifest.json",
+            "--catalog",
+            "data/dbt_pipeline/target/catalog.json",
+          ]
       - id: check-model-has-description
         stages: [manual]
         args: ["--manifest", "data/dbt_pipeline/target/manifest.json"]
