@@ -922,7 +922,7 @@ models:
       - name: type_com
         description: "Type de commune"
         type: STRING
-      - name: com
+      - name: code_geo
         description: "Code commune - appelé code_geo dans les données bronze du projet"
         type: STRING
       - name: reg
@@ -966,7 +966,7 @@ models:
       - name: siren
         description: "Le numéro Siren - composé de 9 chiffres"
         type: STRING
-      - name: cog
+      - name: code_geo
         description: "Code commune - appelé code_geo dans les données bronze du projet"
         type: STRING
       - name: type

@@ -3,7 +3,7 @@
 SELECT
     nom,
     "SIREN" AS siren,
-    "COG" AS cog,
+    "COG" AS code_geo,
     type,
     code_departement,
     "code_departement_3digits" AS code_departement_3_digits,
