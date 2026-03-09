@@ -13,7 +13,7 @@
         | replace('è', 'e')
         | replace('ê', 'e')
         | replace('à', 'a')
-        | regex_replace(r'__+', '_')     # remplace les doubles underscores
-        | trim('_')                      # enlève _ au début/fin
+        | regex_replace(r'__+', '_') 
+        | trim('_')                     
     }}
 {% endmacro %}
