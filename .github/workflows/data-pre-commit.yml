@@ -64,7 +64,11 @@ jobs:
         uses: pre-commit/action@v3.0.1
         with:
           extra_args: >
-            --all-files --hook-stage manual
+            --all-files
+            --hook-stage manual
+            --hook check-model-has-all-columns
+            --hook check-model-has-description
+            --hook check-model-columns-have-desc
         env:
           DBT_PROJECT_DIR: data/dbt_pipeline
           DBT_PROFILES_DIR: data/dbt_pipeline
