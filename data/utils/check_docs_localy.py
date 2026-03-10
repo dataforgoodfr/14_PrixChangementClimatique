@@ -1,4 +1,11 @@
-import os
+"""
+Script utilitaire pour exécuter les hooks des pre-commit liés à la doc dbt.
+
+Le script :
+1. Met à jour les métadonnées dbt (manifest et catalogue).
+2. Lance les hooks de pre-commit en mode manuel sur l'ensemble des fichiers.
+"""
+
 import subprocess
 
 
@@ -18,15 +25,24 @@ def run_pre_commit_hook(hook_id):
 
 def main():
 
-    if not os.path.isfile("dbt_project.yml"):
-        print(
-            "Il faut lancer le script 'uv run ..\\..\\d4g-utils\\check_docs_localy.py' depuis : data\\dbt_pipeline"
-        )
+    from pathlib import Path
+
+    SCRIPT_DIR = Path(__file__).resolve().parent
+    PROJECT_ROOT = SCRIPT_DIR.parents[1]
+
+    DBT_FILE = PROJECT_ROOT / "data" / "dbt_pipeline" / "dbt_project.yml"
+    PROJECT_DIR = PROJECT_ROOT / "data" / "dbt_pipeline"
+
+    print(DBT_FILE)
+
+    if not DBT_FILE.is_file():
+        print("dbt_project.yml introuvable")
         return False
 
     print("Mise à jour du manifest...")
     parse_res = subprocess.run(
         "uv run dbt parse",
+        cwd=PROJECT_DIR,
         shell=False,
         check=False,
         stdout=subprocess.DEVNULL,
@@ -36,6 +52,7 @@ def main():
     print("Génération du catalogue...")
     docs_res = subprocess.run(
         "uv run dbt docs generate",
+        cwd=PROJECT_DIR,
         shell=False,
         check=False,
         stdout=subprocess.DEVNULL,
