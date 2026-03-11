@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: pipeline_inputs
+    schema: main
+    tables:
+      - name: impots_fusion_rei
+        description: "Données fusionnées REI"
+        external_location: "pipeline_inputs/impots_fusion_rei.csv"
+        config:
+          options:
+            all_varchar: true
+            sample_size: -1
