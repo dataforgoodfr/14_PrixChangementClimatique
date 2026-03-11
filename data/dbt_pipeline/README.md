@@ -143,11 +143,7 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 - Etape 1 : `dbt run` pour avoir les données dans la db à jour en local
 
-- Etape 2 : `dbt parse` pour mettre à jour le manifest
-
-- Etape 3 : `dbt doc generate` pour générer le catalog.json
-
-- Etape 4 : `uv run ..\..\utils\check_docs_localy.py` depuis : data\dbt_pipeline pour vérifier si les tests passent en local
+- Etape 2 : Excuter le script `python check_docs_localy.py`
 
 
 ### Ma PR github est validée, quelle est la suite ?
