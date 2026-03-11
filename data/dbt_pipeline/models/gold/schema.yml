@@ -43,7 +43,7 @@ models:
         type: STRING
       - name: code_region
         description: "Code de la région"
-        type: STRING  
+        type: STRING
       - name: nom_region
         description: "Nom de la région"
         type: STRING
@@ -71,7 +71,7 @@ models:
       - name: nom_bassin_vie_2022
         description: "Nom du bassin de vie 2022"
         type: STRING
-      - name: geo_point_2d
+      - name: geo_point_2_d
         description: "Point géographique central de la commune (coordonnées lat/lon en format JSON)"
         type: STRING
       - name: geometry

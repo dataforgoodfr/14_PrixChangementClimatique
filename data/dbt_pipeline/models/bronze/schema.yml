@@ -1099,7 +1099,7 @@ models:
       - name: nom_bassin_vie_2022
         description: "Nom du bassin de vie 2022"
         type: STRING
-      - name: geo_point_2d
+      - name: geo_point_2_d
         description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
         type: STRING
       - name: geometry
