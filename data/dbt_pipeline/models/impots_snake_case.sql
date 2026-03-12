@@ -6,9 +6,9 @@ WITH bronze_data AS (
 )
 
 -- On applique la macro de nettoyage sur chaque colonne dynamiquement
-SELECT 
+SELECT
     {%- set columns = adapter.get_columns_in_relation(ref('impots_fusion_rei')) %}
-    
+
     {%- for column in columns %}
         {{ column.name }} AS {{ clean_column_name(column.name) }}
         {%- if not loop.last %},{% endif %}
