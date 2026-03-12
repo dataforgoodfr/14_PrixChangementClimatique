@@ -42,7 +42,7 @@ SELECT
     s.nom_com,
     t.solde_debiteur,
     t.solde_crediteur,
-    t.code_departement || t.code_insee AS code_geo
+    t.code_departement || t.code_insee AS code_geo,
     t.solde_debiteur - t.solde_crediteur AS solde
 FROM transformed AS t
 LEFT JOIN
