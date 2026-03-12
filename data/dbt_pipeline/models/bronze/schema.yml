@@ -1385,9 +1385,9 @@ models:
         type: FLOAT
 
   - name: impots_fusion_rei
-    description: 
+    description:
       Table historique fusionnée des taxes foncières et taxe d'habitation
-      sur 30 ans avec les variable les plus importantes 
+      sur 30 ans avec les variable les plus importantes
     columns:
       - name: annee
         description: année de référence de l'impôt
@@ -1402,7 +1402,7 @@ models:
       - name: b11
         description: fnb commune base nette
       - name: b12
-        description: fnb commune taux net 
+        description: fnb commune taux net
       - name: b13
         description: fnb commune montant net
       - name: b14
@@ -1442,9 +1442,9 @@ models:
       - name: c14
         description: fnb chambre d' agriculture nombre d' articles
       - name: c32
-        description: fnb caaa droit fixe tarif 
+        description: fnb caaa droit fixe tarif
       - name: c33
-        description: fnb caaa droit fixe montant net 
+        description: fnb caaa droit fixe montant net
       - name: c34
         description: fnb caaa droit fixe nombre d' articles
       - name: c41
@@ -1533,6 +1533,3 @@ models:
         description: departement eligible à la dotation de fonctionnement minimum
       - name: idcom
         description: code de la commune
-
-
-        
