@@ -40,7 +40,7 @@ def send_file_to_s3(
             Bucket=bucket,
             Body=f,
             Key=s3_filepath,
-            ACL='public-read' 
+            ACL='public-read'
         )
 
 def send_large_file_to_s3(
@@ -95,7 +95,7 @@ def send_large_file_to_s3(
     print("Upload terminé ✅")
 
 
-    
+
 
 def get_s3_client():
     """Charge le .env et retourne un client S3 configuré pour Scaleway ou AWS."""

@@ -1,14 +1,14 @@
 -- datactivist_commune.sql
 
-SELECT 
+SELECT
     nom,
-    SIREN AS siren,
-    COG AS cog,
-    type, 
+    "SIREN" AS siren,
+    "COG" AS cog,
+    type,
     code_departement,
-    code_departement_3digits,
+    "code_departement_3digits" AS code_departement_3_digits,
     code_region,
     population,
     code_postal
-FROM 
+FROM
     'pipeline_inputs/identifiants-communes-2024.csv'
