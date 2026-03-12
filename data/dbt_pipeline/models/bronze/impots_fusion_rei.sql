@@ -9,9 +9,10 @@ WITH raw_data AS (
 )
 
 SELECT 
-    {%- for column_name in adapter.get_columns_in_relation(ref('impots_fusion_rei')) %}
-        -- On applique ta macro sur chaque nom de colonne
-        {{ column_name.name }} AS {{ clean_column_name(column_name.name) }}
+    {%- set columns = adapter.get_columns_in_relation(source('pipeline_inputs', 'impots_fusion_rei')) %}
+    
+    {%- for column in columns %}
+        {{ column.name }} AS {{ clean_column_name(column.name) }}
         {%- if not loop.last %},{% endif %}
     {%- endfor %}
 FROM raw_data
