@@ -1424,7 +1424,7 @@ models:
       - name: b42
         description: fnb département taux net
       - name: b43
-        description:  fnb département montant net
+        description: fnb département montant net
       - name: b51
         description: fnb tse base nette
       - name: b52
