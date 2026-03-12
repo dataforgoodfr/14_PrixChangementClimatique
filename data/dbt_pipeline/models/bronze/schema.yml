@@ -1385,8 +1385,9 @@ models:
         type: FLOAT
 
   - name: impots_fusion_rei
-    description: Table historique fusionnée des taxes foncières et taxe d'habitation
-                 sur 30 ans avec les variable les plus importantes 
+    description: 
+      Table historique fusionnée des taxes foncières et taxe d'habitation
+      sur 30 ans avec les variable les plus importantes 
     columns:
     - name: annee
       description: année de référence de l'impôt
