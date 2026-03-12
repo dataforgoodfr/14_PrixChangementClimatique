@@ -24,6 +24,6 @@ SELECT
     nom_zone_emploi_2020,
     code_bassin_vie_2022,
     nom_bassin_vie_2022,
-    geo_point_2d AS geo_point_2_d,
+    "geo_point_2d" AS geo_point_2_d,
     geometry
 FROM 'pipeline_inputs/opendatasoft_communes.csv'
