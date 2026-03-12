@@ -473,6 +473,12 @@ models:
       - name: solde_crediteur
         description: "Montant total créditeur (SC)"
         data_type: float
+      - name: solde
+        description: "Montant total débiteur (SD) - Montant total créditeur (SC) "
+        data_type: float
+      - name: compte
+        description: "Numero du compte"
+        data_type: float
       - name: code_geo
         description: "Concaténation du code département et du code INSEE pour identifier la commune"
         data_type: string
