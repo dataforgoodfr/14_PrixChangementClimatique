@@ -1,0 +1,202 @@
+version: 2
+
+models:
+  - name: geoportail_ccr_communes
+    description: >
+      Données extractes du Geoportail ArcGIS de la CCR: https://geoportail.ccr.fr/server/rest/services/CarteToutPublic Ces données figure sur la page Visualiser de la CCR: https://www.ccr.fr/portail-catastrophes-naturelles/visualiser/ /!\ Les données sont sous forme de categories/classes et pas sous forme de valeur numérique /!\
+
+      -- DATA -- cout_cumul: coûts cumulés des sinistres cout_moy: coûts moyen des sinistres freq: fréquence moyenne catnat nb_risque: nombre de risques assurées prime: primes catnat va: valeurs assurées sp: ratio sinistres et primes
+
+      -- PERIL -- tout: tout type de péril
+        tout_ino: tout type d'inondations
+          icb: inondation et/ou coulée de boue
+          irn: inondation par remontées de nappes
+          sub: inondation par submersion marine
+        sec: sécheresse
+        mvt: mouvement de terrain
+        sei: séisme
+        ava: avalanche
+        vcy: vent cyclonique
+        aut: autres périls
+
+      -- DEMOGRAPHIE -- part: particulier pro: professionel/entreprises
+
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune"
+        type: INTEGER
+      - name: code_departement
+        description: "Code du département"
+        type: INTEGER
+      - name: nom_commune
+        description: "Nom de la commune"
+        type: STRING
+
+      # COÛTS CUMULÉS (CUMUL DES DOMMAGES)
+      - name: cout_cumul_tout
+        description: "Coût cumulé total tous périls confondus"
+        type: FLOAT
+      - name: cout_cumul_tout_ino
+        description: "Coût cumulé total des inondations"
+        type: FLOAT
+      - name: cout_cumul_icb
+        description: "Coût cumulé : Inondations et Coulées de boue"
+        type: FLOAT
+      - name: cout_cumul_irn
+        description: "Coût cumulé : Inondations par Remontée de Nappe"
+        type: FLOAT
+      - name: cout_cumul_sub
+        description: "Coût cumulé : Submersion marine"
+        type: FLOAT
+      - name: cout_cumul_sec
+        description: "Coût cumulé : Sécheresse (Retrait-Gonflement des Argiles)"
+        type: FLOAT
+      - name: cout_cumul_mvt
+        description: "Coût cumulé : Mouvements de terrain"
+        type: FLOAT
+      - name: cout_cumul_sei
+        description: "Coût cumulé : Séismes"
+        type: FLOAT
+      - name: cout_cumul_ava
+        description: "Coût cumulé : Avalanches"
+        type: FLOAT
+      - name: cout_cumul_vcy
+        description: "Coût cumulé : Vents cycloniques"
+        type: FLOAT
+      - name: cout_cumul_aut
+        description: "Coût cumulé : Autres périls (Grêle, foudre, etc.)"
+        type: FLOAT
+
+      # COÛTS MOYENS
+      - name: cout_moy_tout
+        description: "Coût moyen par sinistre tous périls"
+        type: FLOAT
+      - name: cout_moy_tout_ino
+        description: "Coût moyen par sinistre : Inondations"
+        type: FLOAT
+      - name: cout_moy_icb
+        description: "Coût moyen : Inondations et Coulées de boue"
+        type: FLOAT
+      - name: cout_moy_irn
+        description: "Coût moyen : Inondations par Remontée de Nappe"
+        type: FLOAT
+      - name: cout_moy_sub
+        description: "Coût moyen : Submersion marine"
+        type: FLOAT
+      - name: cout_moy_sec
+        description: "Coût moyen : Sécheresse"
+        type: FLOAT
+      - name: cout_moy_mvt
+        description: "Coût moyen : Mouvements de terrain"
+        type: FLOAT
+      - name: cout_moy_sei
+        description: "Coût moyen : Séismes"
+        type: FLOAT
+      - name: cout_moy_ava
+        description: "Coût moyen : Avalanches"
+        type: FLOAT
+      - name: cout_moy_vcy
+        description: "Coût moyen : Vents cycloniques"
+        type: FLOAT
+      - name: cout_moy_aut
+        description: "Coût moyen : Autres périls"
+        type: FLOAT
+
+      # FRÉQUENCES (RÉCURRENCE)
+      - name: freq_tout
+        description: "Nombre moyen de sinistres par an (tous périls)"
+        type: STRING
+      - name: freq_tout_ino
+        description: "Fréquence moyenne des inondations"
+        type: STRING
+      - name: freq_icb
+        description: "Fréquence moyenne : Inondations et Coulées de boue"
+        type: STRING
+      - name: freq_irn
+        description: "Fréquence moyenne : Remontées de Nappe"
+        type: STRING
+      - name: freq_sub
+        description: "Fréquence moyenne : Submersion marine"
+        type: STRING
+      - name: freq_sec
+        description: "Fréquence moyenne : Sécheresse"
+        type: STRING
+      - name: freq_mvt
+        description: "Fréquence moyenne : Mouvements de terrain"
+        type: STRING
+      - name: freq_sei
+        description: "Fréquence moyenne : Séismes"
+        type: STRING
+      - name: freq_ava
+        description: "Fréquence moyenne : Avalanches"
+        type: STRING
+      - name: freq_vcy
+        description: "Fréquence moyenne : Vents cycloniques"
+        type: STRING
+      - name: freq_aut
+        description: "Fréquence moyenne : Autres périls"
+        type: STRING
+
+      # EXPOSITION (RISQUES ET PRIMES)
+      - name: nb_risque_part
+        description: "Nombre de contrats d'assurance Particuliers"
+        type: STRING
+      - name: nb_risque_pro
+        description: "Nombre de contrats d'assurance Professionnels / Entreprises"
+        type: STRING
+      - name: nb_risque_tot
+        description: "Nombre total de risques assurés"
+        type: STRING
+      - name: prime_part
+        description: "Primes CatNat encaissées (Particuliers)"
+        type: FSTRINGT
+      - name: prime_pro
+        description: "Primes CatNat encaissées (Professionnels)"
+        type: STRING
+      - name: prime_tot
+        description: "Primes CatNat totales"
+        type: STRING
+      - name: va_part
+        description: "Valeur Assurée : Particuliers"
+        type: STRING
+      - name: va_pro
+        description: "Valeur Assurée : Professionnels"
+        type: STRING
+      - name: va_tot
+        description: "Valeur Assurée Totale"
+        type: STRING
+
+      # RATIO S/P (RENTABILITÉ TECHNIQUE)
+      - name: sp_tout
+        description: "Ratio Sinistres / Primes Global"
+        type: STRING
+      - name: sp_tout_ino
+        description: "Ratio S/P pour les inondations"
+        type: STRING
+      - name: sp_icb
+        description: "Ratio S/P pour Inondations et Coulées de boue"
+        type: STRING
+      - name: sp_irn
+        description: "Ratio S/P pour Remontées de Nappe"
+        type: STRING
+      - name: sp_sub
+        description: "Ratio S/P pour Submersion marine"
+        type: STRING
+      - name: sp_sec
+        description: "Ratio S/P pour Sécheresse"
+        type: STRING
+      - name: sp_mvt
+        description: "Ratio S/P pour Mouvements de terrain"
+        type: STRING
+      - name: sp_sei
+        description: "Ratio S/P pour Séismes"
+        type: STRING
+      - name: sp_ava
+        description: "Ratio S/P pour Avalanches"
+        type: STRING
+      - name: sp_vcy
+        description: "Ratio S/P pour Vents cycloniques"
+        type: STRING
+      - name: sp_aut
+        description: "Ratio S/P pour les autres périls"
+        type: STRING

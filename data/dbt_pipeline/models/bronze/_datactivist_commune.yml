@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: datactivist_commune
+    description: >
+      Données datagouv de datactivist Identifiants des collectivités territoriales et leurs établissements Sous-titre : identifiants-communes-2024 URL : https://www.data.gouv.fr/datasets/identifiants-des-collectivites-territoriales-et-leurs-etablissements
+    columns:
+      - name: nom
+        description: "Nom de la commune"
+        type: STRING
+      - name: siren
+        description: "Le numéro Siren - composé de 9 chiffres"
+        type: STRING
+      - name: code_geo
+        description: "Code commune - appelé code_geo dans les données bronze du projet"
+        type: STRING
+      - name: type
+        description: "Type de commune"
+        type: STRING
+      - name: code_departement
+        description: "Code departement"
+        type: STRING
+      - name: code_departement_3_digits
+        description: "Code departement sur 3 digit"
+        type: STRING
+      - name: code_region
+        description: "Code region"
+        type: STRING
+      - name: population
+        description: "Population de la commune"
+        type: INT
+      - name: code_postal
+        description: "Code postal"
+        type: STRING

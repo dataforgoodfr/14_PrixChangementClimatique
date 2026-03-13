@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: tim_gaspar
+    description: |-
+      1. Définition -
+      Le dossier de transmission des informations au maire (TIM) a remplacé le dossier communal synthétique (DCS) et le porté à connaissance (PAC-risques). Il contient les informations nécessaires à la réalisation de l’information préventive sur leur territoire et notamment du DICRIM (Document d’Information Communal sur les Risques Majeurs).
+      http://www.georisques.gouv.fr/articles/le-dossier-departemental-sur-les-risques-majeurs-ddrm
+
+      2. Structure -
+      Chaque transmission est décrite par une ligne par risque y figurant. Une transmission es dans la plupart des cas monocommunale, à quelques rares exceptions près : transmissions spécifiques sur un risque à un ensemble de communes (sismique, canalisations de matières dangereuses…).
+
+      3. Dictionnaire de données -
+    columns:
+      - name: code_geo
+        description: Code de la commune concernée
+        data_type: varchar
+        quote: true
+      - name: lib_commune
+        description: Nom de la commune concernée
+        type: VARCHAR
+      - name: dat_transmission_tim
+        description: Date de transmission au maire

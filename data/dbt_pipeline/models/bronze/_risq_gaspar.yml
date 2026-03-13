@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: risq_gaspar
+    description: |-
+      1. Définition -
+        Le DDRM (le Dossier Départemental sur les Risques Majeurs) est un document où le préfet
+        (Conformément à l’article R125-11 du Code de l’Environnement) consigne toutes les
+        informations essentielles sur les risques naturels et technologiques majeurs au niveau de
+        son département, ainsi que sur les mesures de prévention et de sauvegarde prévues pour
+        limiter leurs effets. En précisant les notions d'aléa et de risque majeur, le DDRM doit
+        recenser toutes les communes à risques du département, dans lesquelles une information
+        préventive des populations doit être réalisée.
+        http://www.georisques.gouv.fr/articles/le-dossier-departemental-sur-les-risques-majeurs-ddrm
+
+      2. Structure -
+        Chaque commune est décrite par une ligne par risque recensé
+
+      3. Dictionnaire de données - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+
+    columns:
+      - name: code_geo
+        description: Code de la commune concernée
+        type: VARCHAR
+      - name: lib_commune
+        description: Nom de la commune concernée
+        type: VARCHAR
+      - name: num_risque
+        description: Numéro du risque mentionné dans le DDRM
+        type: INT
+      - name: lib_risque
+        description: Libellé du risque mentionné dans le DDRM
+        type: VARCHAR

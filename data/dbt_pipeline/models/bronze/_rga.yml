@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: rga
+    description: >
+      (DONNEES GEOGRAPHIQUES) Exposition au phénomène de retrait-gonflement des argiles(RGA) par zone géographique
+
+
+      IMPORTANT LES DONNEES SONT EN PROJECTION LAMBERT93 (= EPSG:2154 https://epsg.io/2154)
+
+
+      Source : https://www.georisques.gouv.fr/donnees/bases-de-donnees/retrait-gonflement-des-argiles-version-2026
+        Fichier original Shapefile converti en Geopackage sur le S3 pour la simplicité
+
+
+      Méthode de calcul et explications : https://www.georisques.gouv.fr/consulter-les-dossiers-thematiques/retrait-gonflement-des-argiles
+        (dans l'onglet 'Exposition du territoire et réglementation')
+    columns:
+      - name: geom
+        description: Géométrie du polygone
+      - name: surf_m2
+        description: Surface du polygone en m^2
+      - name: niveau
+        description: "Niveau d'exposition au phénomène de retrait-gonflement des argiles de 1(faible) à 3(fort)"
+      - name: code_departement
+        description: Numéro du département
+      - name: gid
+        description: Index des polygones

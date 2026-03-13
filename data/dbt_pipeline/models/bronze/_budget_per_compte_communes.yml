@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: budget_per_compte_communes
+    description: >
+      Table des balances pour les comptes commençant par 16 (dettes), 6 (dépenses), 7 (produits) et 616 (primes assurances) sommés par année et par communes, depuis 2010. Source: https://data.economie.gouv.fr/explore/dataset/balances-comptables-des-communes-en-XXXX/. (XXXX annéee entre 2010 et 2024)
+    columns:
+      - name: annee
+        description: "Année de l'exercice"
+        data_type: integer
+      - name: siret
+        description: "SIRET de la commune ou entité"
+        data_type: string
+      - name: siren
+        description: "Code SIREN"
+        data_type: string
+      - name: code_departement
+        description: "Code du département"
+        data_type: string
+      - name: code_insee
+        description: "Code INSEE de la commune"
+        data_type: string
+      - name: code_region
+        description: "Code de la région"
+        data_type: string
+      - name: type_compte
+        description: "Type de compte (depenses, produits, primes d’assurances, dettes financières)"
+        data_type: string
+      - name: solde_debiteur
+        description: "Montant total débiteur (SD)"
+        data_type: float
+      - name: solde_crediteur
+        description: "Montant total créditeur (SC)"
+        data_type: float
+      - name: solde
+        description: "Solde net = solde_debiteur - solde_crediteur"
+        data_type: float
+      - name: code_geo
+        description: "Concaténation du code département et du code INSEE pour identifier la commune"
+        data_type: string
+      - name: nom_com
+        description: "Nom de la commune venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes"
+        data_type: string
+      - name: code_geo_from_siren
+        description: "code geo venant du merge sur le siren avec le fichierhttps://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes"
+        data_type: string
