@@ -56,8 +56,8 @@ def main():
     if not csv_file.exists():
         raise FileNotFoundError(f"File not found: {csv_file}")
 
-    if csv_file.suffix.lower() != ".csv":
-        raise ValueError("Provided file must be a .csv file")
+    if csv_file.suffix.lower() not in [".csv", ".parquet"]:
+        raise ValueError("Provided file must be a .csv or .parquet file")
 
     s3_client = get_s3_client()
 

@@ -1,0 +1,113 @@
+models:
+  - name: rga_tri_communes
+    description: >
+      Nombre de maisons individuelles soumises aux risques RGA et TRI par commune.
+      Sources de données :
+      - **BDNB (CSTB)** 12/2025 : Base de Données Nationale des Bâtiments. Utilisée pour le parc de maisons et les années de construction. [lien](https://bdnb.io/)
+      - **TRI (DGPR)** 2020 : Territoires à Risque d'Inondation. Zones d'aléa inondation par scénario. [lien](https://www.data.gouv.fr/datasets/territoire-a-risque-dinondation-tri-du-sig-directive-inondation-france-metropolitaine-rapportage-2020-241)
+      - **Géorisques** 12/2025 : Données d'exposition aux risques naturels (Argile/RGA). Intégrées dans la base BDNB.
+      Agrégations disponibles :
+      - `rga_[periode]_[niveau]` : Nombre de maisons par période de construction et niveau d'aléa RGA.
+        - _Périodes_ : `pre1945`, `1945_1975`, `1976_2020`, `post2020`, `unk`.
+        - _Niveaux_ : `nul`, `faible`, `moyen`, `fort`.
+      - `tri_[type]_[scenario]` : Nombre de maisons par type d'inondation et scénario de risque.
+        - _Types_ : `t01` (Débordement de cours d'eau), `t02` (Submersion marine), `t03` (Ruissellement).
+        - _Scénarios_ : `nul`, `faible`, `moyen`, `fort` (correspondant aux fréquences d'occurrence).
+
+    columns:
+      - name: code_geo
+        description: "Code de la commune"
+        data_type: string
+      - name: total_maisons
+        description: "Nombre total de maisons individuelles dans la commune"
+        data_type: int
+      - name: rga_pre_1945_nul
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: rga_pre_1945_faible
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: rga_pre_1945_moyen
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: rga_pre_1945_fort
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: rga_1945_1975_nul
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: rga_1945_1975_faible
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: rga_1945_1975_moyen
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: rga_1945_1975_fort
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: rga_1976_2020_nul
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: rga_1976_2020_faible
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: rga_1976_2020_moyen
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: rga_1976_2020_fort
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: rga_post_2020_nul
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: rga_post_2020_faible
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: rga_post_2020_moyen
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: rga_post_2020_fort
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: rga_unk_nul
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA nul"
+        data_type: int
+      - name: rga_unk_faible
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA faible"
+        data_type: int
+      - name: rga_unk_moyen
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: rga_unk_fort
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA fort"
+        data_type: int
+      - name: tri_nul_nul
+        description: "Nombre de maisons sans risque d'inondation"
+        data_type: int
+      - name: tri_t_01_faible
+        description: "Nombre de maisons par type d'inondation 1 (Débordement de cours d'eau) et scénario de risque faible"
+        data_type: int
+      - name: tri_t_01_moyen
+        description: "Nombre de maisons par type d'inondation 1 (Débordement de cours d'eau) et scénario de risque moyen"
+        data_type: int
+      - name: tri_t_01_fort
+        description: "Nombre de maisons par type d'inondation 1 (Débordement de cours d'eau) et scénario de risque fort"
+        data_type: int
+      - name: tri_t_02_faible
+        description: "Nombre de maisons par type d'inondation 2 (Submersion marine) et scénario de risque faible"
+        data_type: int
+      - name: tri_t_02_moyen
+        description: "Nombre de maisons par type d'inondation 2 (Submersion marine) et scénario de risque moyen"
+        data_type: int
+      - name: tri_t_02_fort
+        description: "Nombre de maisons par type d'inondation 2 (Submersion marine) et scénario de risque fort"
+        data_type: int
+      - name: tri_t_03_faible
+        description: "Nombre de maisons par type d'inondation 3 (Ruissellement) et scénario de risque faible"
+        data_type: int
+      - name: tri_t_03_moyen
+        description: "Nombre de maisons par type d'inondation 3 (Ruissellement) et scénario de risque moyen"
+        data_type: int
+      - name: tri_t_03_fort
+        description: "Nombre de maisons par type d'inondation 3 (Ruissellement) et scénario de risque fort"
+        data_type: int
