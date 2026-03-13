@@ -4,7 +4,7 @@ import zipfile
 from pathlib import Path
 import polars as pl
 import requests
-from s3_connector import connect_to_s3, get_s3_client, send_large_file_to_s3
+from s3_connector import get_s3_client, send_large_file_to_s3
 from tqdm import tqdm
 
 # Lien du jeu de données INSEE des valeurs foncières, pas d'API pour le moment
@@ -75,13 +75,13 @@ def download_and_extract_zip_in_local(
             print(
                 f"✓ Fichier déjà existant: {existing_file.name} ({file_size_mb:.1f} MB)"
             )
-            print(f"  Téléchargement ignoré")
+            print("  Téléchargement ignoré")
             return str(existing_file)
         else:
             print(
                 f"⚠️  Fichier existant mais trop petit: {file_size_mb:.1f} MB < {min_file_size_mb} MB"
             )
-            print(f"   Suppression et re-téléchargement...")
+            print("   Suppression et re-téléchargement...")
             existing_file.unlink()  # Supprimer le fichier invalide
 
     # Télécharger le fichier .zip avec timeout et streaming
@@ -214,10 +214,10 @@ def scan_and_transform():
         maintain_order=False,  # Plus rapide si l'ordre n'est pas important
     )
 
-    print(f"✓ Fichier brut sauvegardé")
+    print("✓ Fichier brut sauvegardé")
 
     # Étape 2: Recharger et supprimer les colonnes inutiles
-    print(f"\nÉtape 2/2: Suppression des colonnes inutiles...")
+    print("\nÉtape 2/2: Suppression des colonnes inutiles...")
     df_lazy = pl.scan_parquet(output_file_raw)
 
     # Obtenir le schéma
@@ -250,7 +250,7 @@ def scan_and_transform():
         columns_to_keep = [
             col for col in all_columns if col not in existing_columns_to_drop
         ]
-        print(f"\nRéécriture du fichier sans les colonnes inutiles...")
+        print("\nRéécriture du fichier sans les colonnes inutiles...")
 
         df_lazy.select(columns_to_keep).sink_parquet(
             output_file_clean,
@@ -261,7 +261,7 @@ def scan_and_transform():
         print(f"\n✓ {len(existing_columns_to_drop)} colonnes supprimées")
         print(f"  Colonnes restantes: {len(columns_to_keep)}")
         os.remove(output_file_raw)
-        print(f"  Fichier brut supprimé")
+        print("  Fichier brut supprimé")
 
         final_file = output_file_clean
     else:
@@ -286,7 +286,7 @@ def scan_and_transform():
     print(f"Nombre d'années: {stats['nb_annees'][0]}")
 
     # Distribution par année
-    print(f"\nDistribution par année:")
+    print("\nDistribution par année:")
     distribution = (
         df_lazy.group_by("annee")
         .agg(pl.len().alias("total_lignes"))
@@ -317,4 +317,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
