@@ -4,7 +4,7 @@ Script utilitaire pour executer la pipeline DBT et mettre à jour les models.
 Le script :
 1. Mets à jour UV
 2. Télécharge tous les fichiers sources depuis le S3
-3. Lance les commande dbt : deps, seed et run
+3. Lance les commande dbt : deps, parse, run et generate docs
 """
 
 import subprocess
@@ -49,17 +49,6 @@ def main():
     print("dbt : Download dependencies...")
     subprocess.run(
         "uv run dbt deps",
-        cwd=PROJECT_DIR,
-        shell=False,
-        check=False,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-
-    print("###########################")
-    print("dbt : launch seed...")
-    subprocess.run(
-        "uv run dbt seed",
         cwd=PROJECT_DIR,
         shell=False,
         check=False,
