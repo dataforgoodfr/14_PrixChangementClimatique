@@ -4,29 +4,7 @@
 
 [DBT](https://docs.getdbt.com/) est un orchestrateur SQL, c'est à dire qu'il permet d'effectuer des requêtes SQL dans un order précis. Ces requêtes SQL peuvent dépendre des résultats des précédentes requêtes, ce qui permet in fine une longue transformation des données initiales, au fil des requêtes, pour obtenir des tables dans le format voulu et avec les croisements de données nécessaires.
 
-## Comment la faire tourner ?
-
-Pour faire tourner le dbt de bout en bout, suivre les étapes suivantes :
-
-_(prérequis) Installer les dépendances du projet,_ en installant uv et en faisant
-```bash
-uv sync
-```
-
-Installer l'extension duckdb pour les données géographiques:
-`uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"`
-
--> voir le README du projet pour plus de détails
-
-_(optionnel) Si vous aviez déjà fait tourner le projet, supprimer l'ancienne base de donnée :_
-```bash
-rm data/dbt_pipeline/dev.duckdb
-```
-
-_Télécharger tous les fichiers sources depuis le s3 :_
-```bash
-uv run python data/utils/download_pipeline_inputs.py
-```
+## Comment utiliser les commandes DBT ?
 
 _Se placer dans le dossier du projet dbt pour le faire tourner :_
 ```bash
@@ -72,11 +50,45 @@ uv run dbt run --select model mon_model.sql+
 uv run dbt run --select model +mon_model.sql+
 ```
 
-_Observer le résultat :_
+## Comment faire tourner la pipeline DBT complète ?
+
+_(prérequis) Installer les dépendances du projet,_ en installant uv et en faisant
+```bash
+uv sync
+```
+
+Je peux utiliser le script utilitaire suivant :
+```bash
+uv run python data/utils/run_pipeline_localy.py
+```
+
+Ou suivre les indications pour faire tourner le dbt de bout en bout, suivre les étapes suivantes :
+
+_(optionnel) Si vous aviez déjà fait tourner le projet, supprimer l'ancienne base de donnée :_
+```bash
+rm data/dbt_pipeline/dev.duckdb
+```
+
+_Télécharger tous les fichiers sources depuis le s3 :_
+```bash
+uv run python data/utils/download_pipeline_inputs.py
+```
+
+### Pour les données géographiques
+
+Installer l'extension duckdb pour les données géographiques:
+`uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"`
+
+-> voir le README du projet pour plus de détails
+
+
+###  Observer le résultat :
 
 ```bash
 duckdb --ui dev.duckdb`
 ```
+
+
 
 ## Comment ajouter des données ?
 
@@ -143,8 +155,10 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 - Etape 1 : `dbt run` pour avoir les données dans la db à jour en local
 
-- Etape 2 : Excuter le script `python check_docs_localy.py`
-
+- Etape 2 : Excuter le script python
+```bash
+uv run python data/utils/check_docs_localy.py`
+```
 
 ### Ma PR github est validée, quelle est la suite ?
 
