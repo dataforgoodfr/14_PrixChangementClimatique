@@ -1758,7 +1758,6 @@ models:
         description: Montant du budget en euros
         type: FLOAT
 
-
   - name: surface_foncier
     description:
       "Table recensant tous les actes de cession ou vete déclarées de terrains ou biens fonciers, depuis le second sesmestre 2020.
