@@ -169,7 +169,9 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 ### Documentation des models dans DBT
 
-- Renseigner à la main les schemas.yml (connaisseur)
+Pour chaque modèle mon_model.sql créer un fichier schema _mon_model.yml dans le dossier models
+
+- Renseigner à la main les schemas (connaisseur)
 ou
 - Utiliser le Documentation Editor de l'extension DBT Power User (pour ceux qui ne sont pas familiers avec le schema.yml)
     L'idée est que chacun qui construit un model fasse sa documentation de table et colonnes générées directement.
@@ -184,6 +186,12 @@ ou
     - Tu cliques sur Save>Existing file, l'UI va écrire tout ça dans le schema.yml au bon endroit.
 
 (il vaut mieux avoir les noms de tables et colonnes en snake_case avant de commencer la doc)
+
+Vérifier que la documentation est complète et cohérente  :
+- en générant le manifest.json ( ```uv run docs generate``` ) et en lançant le pre-commit ```uv run pre-commit run --hook-stage manual```
+- ou en lançant le script ```uv run python data/utils/checks_docs_localy.py```
+
+L'identifiant unique commune (code insee) est à renommer "code_geo" pour toutes les tables
 
 ### Persistance de la documentation et écriture dans les tables de duckdb
 
