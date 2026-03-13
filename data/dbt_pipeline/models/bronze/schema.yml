@@ -135,8 +135,9 @@ models:
 
   - name: ccr_main_page
     description: >
-      Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/. Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982. La colonne code_arrete connecte cette table à la table ccr_details.
-
+      Données scrappées de la page principale du site https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/.
+      Ces données contiennent le nombre d'arrêtés survenus sur le territoire français depuis 1982.
+      La colonne code_arrete connecte cette table à la table ccr_details.
     columns:
       - name: nom_peril
         description: "Type de péril (Inondations, sécheresse, ect...)"
@@ -994,6 +995,86 @@ models:
         description: "Code postal"
         type: STRING
 
+  - name: opendatasoft_communes
+    description: >
+      Table des communes françaises avec géométries spatiales (polygones).
+      Source : HuWise / Georef France Commune
+      URL : https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/georef-france-commune/exports/geojson
+      Cette table contient les données administratives et géographiques complètes
+      de toutes les communes françaises avec leurs polygones géométriques.
+      Source non officielle, alternatives envisageable: IGN ADMIN-EXPRESS 2026 France Entière
+      ("https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16.7z")
+      ou données OpenStreeMap via Ouverture Maps ("https://docs.overturemaps.org/getting-data/duckdb/")
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: nom_commune
+        description: "Nom officiel de la commune"
+        type: STRING
+      - name: code_geo_actuel
+        description: "Code INSEE actuel (en cas de fusion/changement)"
+        type: STRING
+      - name: nom_commune_majuscule
+        description: "Nom de la commune en majuscules"
+        type: STRING
+      - name: nom_commune_minuscule
+        description: "Nom de la commune en minuscules"
+        type: STRING
+      - name: code_zone_superficie
+        description: "Code de la zone de superficie"
+        type: STRING
+      - name: type_commune
+        description: "Type de commune (COM, ARM, COMD, etc.)"
+        type: STRING
+      - name: code_siren
+        description: "Code SIREN de la commune (9 chiffres)"
+        type: STRING
+      - name: zone_montagne
+        description: "Indicateur si la commune est en zone de montagne"
+        type: STRING
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: nom_departement
+        description: "Nom du département"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
+      - name: nom_region
+        description: "Nom de la région"
+        type: STRING
+      - name: code_arrondissement_departemental
+        description: "Code de l'arrondissement départemental"
+        type: STRING
+      - name: nom_arrondissement_departemental
+        description: "Nom de l'arrondissement départemental"
+        type: STRING
+      - name: code_epci
+        description: "Code de l'EPCI (Établissement Public de Coopération Intercommunale)"
+        type: STRING
+      - name: nom_epci
+        description: "Nom de l'EPCI"
+        type: STRING
+      - name: code_zone_emploi_2020
+        description: "Code de la zone d'emploi 2020"
+        type: STRING
+      - name: nom_zone_emploi_2020
+        description: "Nom de la zone d'emploi 2020"
+        type: STRING
+      - name: code_bassin_vie_2022
+        description: "Code du bassin de vie 2022"
+        type: STRING
+      - name: nom_bassin_vie_2022
+        description: "Nom du bassin de vie 2022"
+        type: STRING
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
+        type: GEOMETRY
   - name: pprm_gaspar
     description: |-
       1. Définition -
@@ -1676,3 +1757,177 @@ models:
       - name: montant
         description: Montant du budget en euros
         type: FLOAT
+
+  - name: surface_foncier
+    description:
+      "Table recensant tous les actes de cession ou vete déclarées de terrains ou biens fonciers, depuis le second sesmestre 2020.
+      Les informations mises à disposition sont issues du traitement informatisé « Demande de valeurs foncières » alimenté par la « Base nationale des données patrimoniales » (BNDP).
+      Les informations figurant dans chaque fichier sont issues du système d’information de la DGFiP, après publication des actes par le service de la publicité foncière, et complément des éléments cadastraux (référence cadastrale, nature des biens et descriptif des biens)."
+    columns:
+      - name: numero_disposition
+        description: "1 ou 2
+          une disposition constitue une unité d’analyse juridique. Un document peut en comporter plusieurs, mais seules celles concernant les mutations à titre onéreux sont restituées. Ainsi, une vente simple est représentée par une seule disposition rattachée à un prix (cf : valeur foncière) pour laquelle sont identifiés les rôles et les droits détenus pour chacune des parties sur chaque immeuble. Un document comportant une vente ainsi qu’une division de parcelle contribue à la création de deux dispositions, l’une concernant la division et l’autre la vente car il s’agit de 2 unités d’analyse juridique distinctes
+          Dans le cas des actes comprenant plusieurs mutations – appelées « dispositions » –, chacune d’entre elles est identifiée dans les fichiers par un numéro de disposition
+          Dans le cas d’un document comportant des mutations distinctes, il y aura un numéro de disposition pour chaque mutation
+          Seules les dispositions concernant les mutations à titre onéreux sont restituées dans le fichier."
+        type: bigint
+      - name: date_mutation
+        description: Date de signature de l’acte (au format JJ/MM/AAAA)
+        type: varchar
+      - name: nature_mutation
+        description:
+          "Mutation à titre onéreux : transfert de propriété moyennant une contrepartie
+          Mutation immobilière : transfert de la propriété d’un immeuble pouvant intervenir à titre onéreux (vente) ou gratuit (donation).
+          Vente, vente en l’état futur d’achèvement, vente de terrain à bâtir, adjudication, expropriation ou échange"
+        type: varchar
+      - name: valeur_fonciere
+        description:
+          "Valeur foncière déclarée : il s’agit du prix du ou des biens immobiliers déclarés dans le cadre d’une mutation à titre onéreux. À chaque  disposition correspond un prix.
+          Il s’agit du montant ou de l’évaluation déclaré(e) dans le cadre d’une mutation à titre onéreux. La valeur foncière :
+          inclut :
+          • les frais d’agence, s’ils sont à la charge du vendeur.
+          • l’éventuelle TVA.
+          exclut :
+          • les frais d’agence, s’ils sont à la charge de l’acquéreur.
+          • les frais de notaires.
+          • la valeur des biens meubles stipulée dans l’acte de mutation."
+        type: varchar
+      - name: numero_voie
+        description: Numéro dans la voie
+        type: bigint
+      - name: b_t_q
+        description: "Indice de répétition: Bis, Ter, Quat"
+        type: varchar
+      - name: type_de_voie
+        description: "Exemple : Rue, avenue, etc."
+        type: varchar
+      - name: code_voie
+        description: Code Rivoli (répertoire informatisé codifiant, par commune, les voies, les lieuxdits et les ensembles immobiliers)
+        type: varchar
+      - name: voie
+        description: Libellé de la voie
+        type: varchar
+      - name: code_postal
+        description: Code Postal à 5 chiffres
+        type: varchar
+      - name: commune
+        description: Libellé de la commune
+        type: varchar
+      - name: code_departement
+        description:
+          "code corrigé du département (format 2 ou 3 lettres/chiffres (DROMs))
+          Référence cadastrale de la parcelle"
+        type: varchar
+      - name: code_commune
+        description:
+          "code corrigé du département (format 3 ou 2 chiffres (DROMs))
+          Référence cadastrale de la parcelle"
+        type: varchar
+      - name: prefixe_de_section
+        description: Préfixe de section
+        type: varchar
+      - name: section
+        description: Section
+        type: varchar
+      - name: numero_plan
+        description: Numéro de plan
+        type: bigint
+      - name: numero_volume
+        description: Numéro de volume
+        type: varchar
+      - name: _1er_lot
+        description:
+          "Lot : un lot de copropriété est constitué d’une partie privative et d’une quotepart de parties communes
+          Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués."
+        type: bigint
+      - name: surface_carrez_du_1er_lot
+        description:
+          "Surface « Carrez » (ou surface privative d’un lot de co-propriété) (loi du 18/12/1996) : superficie des planchers des locaux clos et couverts après déduction des surfaces occupées par les murs, cloisons, marches et cages d’escalier, gaines, embrasures de portes et fenêtres, sans tenir compte des planchers des parties de locaux d’une hauteur inférieure à 1,80 m. Les lots et fractions de lots d’une superficie inférieure à 8 m² ne sont pas pris en compte non plus.
+          Surface Carrez évaluée du 1er lot"
+        type: varchar
+      - name: _2eme_lot
+        description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
+        type: bigint
+      - name: surface_carrez_du_2eme_lot
+        description: Surface Carrez évaluée du 2e lot
+        type: varchar
+      - name: _3eme_lot
+        description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
+        type: varchar
+      - name: surface_carrez_du_3eme_lot
+        description: Surface Carrez évaluée du 3e lot
+        type: varchar
+      - name: _4eme_lot
+        description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
+        type: varchar
+      - name: surface_carrez_du_4eme_lot
+        description: Surface Carrez évaluée du 4e lot
+        type: varchar
+      - name: _5eme_lot
+        description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
+        type: varchar
+      - name: surface_carrez_du_5eme_lot
+        description: Surface Carrez évaluée du 5e lot
+        type: varchar
+      - name: nombre_de_lots
+        description: Nombre total de lots par disposition
+        type: bigint
+      - name: code_type_local
+        description: "1 : maison ; 2 : appartement ; 3 : dépendance (isolée) ; 4 : local industriel et commercial ou assimilés"
+        type: bigint
+      - name: type_local
+        description: "1 : maison ; 2 : appartement ; 3 : dépendance (isolée) ; 4 : local industriel et commercial ou assimilés"
+        type: varchar
+      - name: identifiant_local
+        description: Donnée non restituée en application du décret n° 2018-1350 du 28 décembre 2018
+        type: varchar
+      - name: surface_reelle_bati
+        description: La surface réelle est la surface mesurée au sol entre les murs ou séparations et arrondie au mètre carré inférieur. Doivent être comptabilisés les alcôves, les surfaces occupées par les appareils sanitaires, les cheminées, les éléments de décor, à l’exception des surfaces consacrées aux emmarchements et aux trémies d’escalier. Les surfaces des dépendances ne sont pas prises en compte
+        type: bigint
+      - name: nombre_pieces_principales
+        description: "Pièce (nombre de pièces principales) : espace partiellement ou entièrement cloisonné, destiné à être normalement utilisé pour y séjourner, y dormir ou prendre des repas. Ainsi, le type d’appartement (studio, T1, T2, etc.) est déterminé à partir du nombre de chambres et de salles à manger. Les cuisines, salles d’eau et dépendances ne sont pas prises en compte."
+        type: bigint
+      - name: nature_culture
+        description: |-
+          Code nature de culture/Libellé nature de culture
+          AB terrains à bâtir
+          AG terrains d’agrément
+          B bois
+          BF futaies feuillues
+          BM futaies mixtes
+          BO oseraies
+          BP peupleraies
+          BR futaies résineuses
+          BS taillis sous futaie
+          BT taillis simples
+          CA carrières
+          CH chemin de fer
+          E eaux
+          J jardins
+          L landes
+          LB landes boisées
+          P prés
+          PA pâtures
+          PC pacages
+          PE prés d’embouche
+          PH herbages
+          PP prés plantes
+          S sols
+          T terres
+          TP terres plantées
+          VE vergers
+          VI vignes
+        type: varchar
+      - name: nature_culture_speciale
+        description: "la table est longue, se référer au document suivant : https://www.data.gouv.fr/api/1/datasets/r/d573456c-76eb-4276-b91c-e6b9c89d6656"
+        type: varchar
+      - name: surface_terrain
+        description: "Surface terrain : surface cadastrale du terrain.
+          Contenance du terrain"
+        type: bigint
+      - name: annee_enregistrement
+        description: Année du fichier source de la donnée
+        type: varchar
+      - name: code_geo
+        description: Code INSEE construit à partir des codes Département et Commune
+        type: varchar
