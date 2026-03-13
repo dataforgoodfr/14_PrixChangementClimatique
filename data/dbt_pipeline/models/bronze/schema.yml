@@ -1835,38 +1835,38 @@ models:
       - name: numero_volume
         description: Numéro de volume
         type: varchar
-      - name: _1er_lot
+      - name: _1_er_lot
         description:
           "Lot : un lot de copropriété est constitué d’une partie privative et d’une quotepart de parties communes
           Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués."
         type: bigint
-      - name: surface_carrez_du_1er_lot
+      - name: surface_carrez_du_1_er_lot
         description:
           "Surface « Carrez » (ou surface privative d’un lot de co-propriété) (loi du 18/12/1996) : superficie des planchers des locaux clos et couverts après déduction des surfaces occupées par les murs, cloisons, marches et cages d’escalier, gaines, embrasures de portes et fenêtres, sans tenir compte des planchers des parties de locaux d’une hauteur inférieure à 1,80 m. Les lots et fractions de lots d’une superficie inférieure à 8 m² ne sont pas pris en compte non plus.
           Surface Carrez évaluée du 1er lot"
         type: varchar
-      - name: _2eme_lot
+      - name: _2_eme_lot
         description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
         type: bigint
-      - name: surface_carrez_du_2eme_lot
+      - name: surface_carrez_du_2_eme_lot
         description: Surface Carrez évaluée du 2e lot
         type: varchar
-      - name: _3eme_lot
+      - name: _3_eme_lot
         description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
         type: varchar
-      - name: surface_carrez_du_3eme_lot
+      - name: surface_carrez_du_3_eme_lot
         description: Surface Carrez évaluée du 3e lot
         type: varchar
-      - name: _4eme_lot
+      - name: _4_eme_lot
         description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
         type: varchar
-      - name: surface_carrez_du_4eme_lot
+      - name: surface_carrez_du_4_eme_lot
         description: Surface Carrez évaluée du 4e lot
         type: varchar
-      - name: _5eme_lot
+      - name: _5_eme_lot
         description: Un lot de copropriété est constitué d’une partie privative (appartement, cave, etc.) et d’une quote-part de partie commune (tantièmes). Seuls les 5 premiers lots sont mentionnés. Si le nombre de lots est supérieur à 5, ils ne sont pas restitués.
         type: varchar
-      - name: surface_carrez_du_5eme_lot
+      - name: surface_carrez_du_5_eme_lot
         description: Surface Carrez évaluée du 5e lot
         type: varchar
       - name: nombre_de_lots
