@@ -1,0 +1,245 @@
+version: 2
+models:
+  - name: impots_fusion_rei
+    description:
+      Table historique fusionnée des taxes foncières et taxe d'habitation
+      sur 30 ans avec les variable les plus importantes
+    columns:
+      - name: annee
+        description: année de référence de l'impôt
+      - name: dep
+        description: département
+      - name: dir
+        description: direction
+      - name: com
+        description: code de la commune
+      - name: libcom
+        description: libellé de la commune
+      - name: b11
+        description: fnb commune base nette
+      - name: b12
+        description: fnb commune taux net
+      - name: b13
+        description: fnb commune montant net
+      - name: b14
+        description: fnb commune nombre d' articles
+      - name: b21
+        description: fnb syndicats base nette
+      - name: b22
+        description: fnb syndicats taux net
+      - name: b23
+        description: fnb syndica et organisations montant net
+      - name: b31
+        description: intercommunalité base nette
+      - name: b32
+        description: intercommunalité taux net
+      - name: b33
+        description: intercommunalité montant net
+      - name: b41
+        description: fnb département base nette
+      - name: b42
+        description: fnb département taux net
+      - name: b43
+        description: fnb département montant net
+      - name: b51
+        description: fnb tse base nette
+      - name: b52
+        description: fnb tse taux net
+      - name: b53
+        description: fnb tse montant net
+      - name: b54
+        description: fnb tse nombre d' articles
+      - name: c11
+        description: fnb chambre d' agriculture base nette
+      - name: c12
+        description: fnb chambre d' agriculture taux net
+      - name: c13
+        description: fnb chambre d' agriculture montant net
+      - name: c14
+        description: fnb chambre d' agriculture nombre d' articles
+      - name: c32
+        description: fnb caaa droit fixe tarif
+      - name: c33
+        description: fnb caaa droit fixe montant net
+      - name: c34
+        description: fnb caaa droit fixe nombre d' articles
+      - name: c41
+        description: fnb caaa droit proportionnel base imposable
+      - name: c42
+        description: fnb caaa droit proportionnel taux net
+      - name: c43
+        description: fnb caaa droit proportionnel montant net
+      - name: c44
+        description: fnb caaa droit proportionnel nombre d' articles
+      - name: e11
+        description: fb commune base nette
+      - name: e12
+        description: fb commune taux net
+      - name: e13
+        description: fb commune montant net
+      - name: e14
+        description: fb commune nombre d' articles
+      - name: e21
+        description: fb syndicats base nette
+      - name: e22
+        description: fb syndicats taux net
+      - name: e23
+        description: fb syndicats montant net
+      - name: e31
+        description: fb intercommunalité base nette
+      - name: e32
+        description: fb intercommunalité taux net
+      - name: e33
+        description: fb intercommunalité montant net
+      - name: e41
+        description: fb département base nette
+      - name: e42
+        description: fb département taux net
+      - name: e43
+        description: fb département montant net
+      - name: e51
+        description: fb tse base nette
+      - name: e52
+        description: fb tse taux net
+      - name: e53
+        description: fb tse montant net
+      - name: e54
+        description: fb tse nombre d' articles
+      - name: h11
+        description: th commune base nette
+      - name: h12
+        description: th commune taux net
+      - name: h13
+        description: th commune montant net
+      - name: h14
+        description: th commune nombre d' articles
+      - name: h21
+        description: th syndicats base nette
+      - name: h22
+        description: th syndicats taux net
+      - name: h23
+        description: th syndicats montant net
+      - name: h31
+        description: th intercommunalité base nette
+      - name: h32
+        description: th intercommunalité taux net
+      - name: h33
+        description: th intercommunalité montant net
+      - name: h34
+        description: th intercommunalité nombre d' articles
+      - name: h41
+        description: th département base nette
+      - name: h42
+        description: th département taux net
+      - name: h43
+        description: th département montant net
+      - name: h44
+        description: th département nombre d' articles
+      - name: h51
+        description: th tse base nette
+      - name: h52
+        description: th tse taux net
+      - name: h53
+        description: th tse montant net
+      - name: h54
+        description: th tse nombre d' articles
+      - name: tb1
+        description: nb artcle comportant base brute
+      - name: tb2
+        description: nb article comportant abattement degressif
+      - name: tb3
+        description: nb article reduction pour embauche
+      - name: tb5
+        description: nb article reduction artisant
+      - name: tc1
+        description: tp base brute
+      - name: tc2
+        description: tp nb article avec ecretement effectif
+      - name: tc3
+        description: tp nb article base avant application base
+      - name: tc4
+        description: tp nb article base apres applicatiion base
+      - name: te1
+        description: tp entrprise nouvelle base communale exo
+      - name: te2
+        description: tp entrprise nouvelle base syndicale exo
+      - name: te3
+        description: tp entrprise nouvelle base intercommunale exo
+      - name: te4
+        description: tp entrprise nouvelle base departementale exo
+      - name: te5
+        description: tp entrprise nouvelle base régionale exo
+      - name: ub1
+        description: exo loueur nb articles base communale exo
+      - name: ub3
+        description: exo loueur nb articles base intercommunalité exo
+      - name: ub4
+        description: exo loueur nb article base departementale exo
+      - name: ub5
+        description: exo loueur nb articles base régionale exo
+      - name: uc1
+        description: "exo taxe d' habitation nombre d' articles base communale exo"
+      - name: uc3
+        description: exo taxe d' habitation nombre d' articles base intercommunalité exo
+      - name: uc4
+        description: exo taxe d' habitation nombre d' articles base departementale exo
+      - name: uc5
+        description: exo taxe d' habitation nombre d' articles base régionale exo
+      - name: ue1
+        description: exo zrr nb articles base communale exo
+      - name: ue3
+        description: exo zrr nb articles base intercommunalité exo
+      - name: ue4
+        description: exo zrr nb article base departementale exo
+      - name: ue5
+        description: exo stockage de la base régionale exo
+      - name: uh1
+        description: exo zrr nb articles base communale exo
+      - name: uh3
+        description: exo zrr nb articles base intercommunalité exo
+      - name: uh4
+        description: exo zrr nb article base departementale exo
+      - name: uh5
+        description: exo zrr nb articles base régionale
+      - name: xh1
+        description: "exo zrr nb articles base communale exo"
+      - name: xh3
+        description: "exo zrr nb articles base intercommunalité exo"
+      - name: xh4
+        description: exo zrr nb article base departementale exo
+      - name: xh5
+        description: exo zrr nb articles base régionale exo
+      - name: xb1
+        description: "exo zru nb articles base communale exo"
+      - name: xb3
+        description: "exo zru nb articles base intercommunalité exo"
+      - name: xb4
+        description: exo zru nb article base departementale exo
+      - name: xb5
+        description: exo zru nb articles base région exo
+      - name: xc1
+        description: "exo zfu nb articles base communale exo"
+      - name: xc3
+        description: "exo zfu nb articles base intercommunalité exo"
+      - name: xc4
+        description: exo zfu nb article base departementale exo
+      - name: xc5
+        description: exo zfu nb articles base régionale exo
+      - name: xe1
+        description: "exo zfu nb articles base communale"
+      - name: xe3
+        description: exo zfu nb articles base intercommunalité
+      - name: xe4
+        description: exo zfu nb article base departementale
+      - name: xe5
+        description: exo zfu nb articles
+      - name: comzae
+        description: lien de la commune à une zone d' activité économique
+      - name: depdfm
+        description: departement eligible à la dotation de fonctionnement minimum
+      - name: depdir
+        description: direction départementale
+      - name: iddircom
+        description: identifiant direction communale
+      - name: idcom
+        description: code de la commune
