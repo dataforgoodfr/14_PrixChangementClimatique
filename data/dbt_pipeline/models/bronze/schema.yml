@@ -1901,106 +1901,104 @@ models:
         description: th tse montant net
       - name: h54
         description: th tse nombre d' articles
-      - name: h54
-        description: ""
       - name: tb1
-        description: ""
+        description: nb artcle comportant base brute
       - name: tb2
-        description: ""
+        description: nb article comportant abattement degressif
       - name: tb3
-        description: ""
+        description: nb article reduction pour embauche
       - name: tb5
-        description: ""
+        description: nb article reduction artisant
       - name: tc1
-        description: ""
+        description: tp base brute
       - name: tc2
-        description: ""
+        description: tp nb article avec ecretement effectif
       - name: tc3
-        description: ""
+        description: tp nb article base avant application base
       - name: tc4
-        description: ""
+        description: tp nb article base apres applicatiion base
       - name: te1
-        description: ""
+        description: tp entrprise nouvelle base communale exo
       - name: te2
-        description: ""
+        description: tp entrprise nouvelle base syndicale exo
       - name: te3
-        description: ""
+        description: tp entrprise nouvelle base intercommunale exo
       - name: te4
-        description: ""
+        description: tp entrprise nouvelle base departementale exo
       - name: te5
-        description: ""
+        description: tp entrprise nouvelle base régionale exo
       - name: ub1
-        description: ""
+        description: exo loueur nb articles base communale exo
       - name: ub3
-        description: ""
+        description: exo loueur nb articles base intercommunalité exo
       - name: ub4
-        description: ""
+        description: exo loueur nb article base departementale exo
       - name: ub5
-        description: ""
+        description: exo loueur nb articles base régionale exo
       - name: uc1
-        description: ""
+        description: "exo taxe d' habitation nombre d' articles base communale exo"
       - name: uc3
-        description: ""
+        description: exo taxe d' habitation nombre d' articles base intercommunalité exo
       - name: uc4
-        description: ""
+        description: exo taxe d' habitation nombre d' articles base departementale exo
       - name: uc5
-        description: ""
+        description: exo taxe d' habitation nombre d' articles base régionale exo
       - name: ue1
-        description: ""
+        description: exo zrr nb articles base communale exo
       - name: ue3
-        description: ""
+        description: exo zrr nb articles base intercommunalité exo
       - name: ue4
-        description: ""
+        description: exo zrr nb article base departementale exo
       - name: ue5
-        description: ""
+        description: exo stockage de la base régionale exo
       - name: uh1
-        description: ""
+        description: exo zrr nb articles base communale exo
       - name: uh3
-        description: ""
+        description: exo zrr nb articles base intercommunalité exo
       - name: uh4
-        description: ""
+        description: exo zrr nb article base departementale exo
       - name: uh5
-        description: ""
+        description: exo zrr nb articles base régionale
       - name: xh1
-        description: ""
+        description: "exo zrr nb articles base communale exo"
       - name: xh3
-        description: ""
+        description: "exo zrr nb articles base intercommunalité exo"
       - name: xh4
-        description: ""
+        description: exo zrr nb article base departementale exo
       - name: xh5
-        description: ""
+        description: exo zrr nb articles base régionale exo
       - name: xb1
-        description: ""
+        description: "exo zru nb articles base communale exo"
       - name: xb3
-        description: ""
+        description: "exo zru nb articles base intercommunalité exo"
       - name: xb4
-        description: ""
+        description: exo zru nb article base departementale exo
       - name: xb5
-        description: ""
+        description: exo zru nb articles base région exo
       - name: xc1
-        description: ""
+        description: "exo zfu nb articles base communale exo"
       - name: xc3
-        description: ""
+        description: "exo zfu nb articles base intercommunalité exo"
       - name: xc4
-        description: ""
+        description: exo zfu nb article base departementale exo
       - name: xc5
-        description: ""
+        description: exo zfu nb articles base régionale exo
       - name: xe1
-        description: ""
+        description: "exo zfu nb articles base communale"
       - name: xe3
-        description: ""
+        description: exo zfu nb articles base intercommunalité
       - name: xe4
-        description: ""
+        description: exo zfu nb article base departementale
       - name: xe5
-        description: ""
+        description: exo zfu nb articles
       - name: comzae
         description: lien de la commune à une zone d' activité économique
       - name: depdfm
         description: departement eligible à la dotation de fonctionnement minimum
       - name: depdir
-        description: ""
+        description: direction départementale
       - name: iddircom
-        description: ""
+        description: identifiant direction communale
       - name: idcom
         description: code de la commune
 
