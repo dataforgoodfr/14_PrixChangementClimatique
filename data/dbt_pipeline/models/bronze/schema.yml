@@ -1901,12 +1901,109 @@ models:
         description: th tse montant net
       - name: h54
         description: th tse nombre d' articles
+      - name: h54
+        description: ''
+      - name: tb1
+        description: ''
+      - name: tb2
+        description: ''
+      - name: tb3
+        description: ''
+      - name: tb5
+        description: ''
+      - name: tc1
+        description: ''
+      - name: tc2
+        description: ''
+      - name: tc3
+        description: ''
+      - name: tc4
+        description: ''
+      - name: te1
+        description: ''
+      - name: te2
+        description: ''
+      - name: te3
+        description: ''
+      - name: te4
+        description: ''
+      - name: te5
+        description: ''
+      - name: ub1
+        description: ''
+      - name: ub3
+        description: ''
+      - name: ub4
+        description: ''
+      - name: ub5
+        description: ''
+      - name: uc1
+        description: ''
+      - name: uc3
+        description: ''
+      - name: uc4
+        description: ''
+      - name: uc5
+        description: ''
+      - name: ue1
+        description: ''
+      - name: ue3
+        description: ''
+      - name: ue4
+        description: ''
+      - name: ue5
+        description: ''
+      - name: uh1
+        description: ''
+      - name: uh3
+        description: ''
+      - name: uh4
+        description: ''
+      - name: uh5
+        description: ''
+      - name: xh1
+        description: ''
+      - name: xh3
+        description: ''
+      - name: xh4
+        description: ''
+      - name: xh5
+        description: ''
+      - name: xb1
+        description: ''
+      - name: xb3
+        description: ''
+      - name: xb4
+        description: ''
+      - name: xb5
+        description: ''
+      - name: xc1
+        description: ''
+      - name: xc3
+        description: ''
+      - name: xc4
+        description: ''
+      - name: xc5
+        description: ''
+      - name: xe1
+        description: ''
+      - name: xe3
+        description: ''
+      - name: xe4
+        description: ''
+      - name: xe5
+        description: ''
       - name: comzae
         description: lien de la commune à une zone d' activité économique
       - name: depdfm
         description: departement eligible à la dotation de fonctionnement minimum
+      - name: depdir
+        description: ''
+      - name: iddircom
+        description: ''
       - name: idcom
         description: code de la commune
+
   - name: surface_foncier
     description:
       "Table recensant tous les actes de cession ou vete déclarées de terrains ou biens fonciers, depuis le second sesmestre 2020.
