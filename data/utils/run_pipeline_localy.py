@@ -77,6 +77,29 @@ def main():
         stderr=subprocess.DEVNULL,
     )
 
+    print("###########################")
+    print("Mise à jour du manifest...")
+    subprocess.run(
+        "uv run dbt parse",
+        cwd=PROJECT_DIR,
+        shell=False,
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+    print("###########################")
+    print("Génération du catalogue...")
+    subprocess.run(
+        "uv run dbt docs generate",
+        cwd=PROJECT_DIR,
+        shell=False,
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    print("Run : uv run dbt docs serve to the documenation website")
+
 
 if __name__ == "__main__":
     main()
