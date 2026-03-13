@@ -169,7 +169,7 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 ### Documentation des models dans DBT
 
-Pour chaque modèle mon_model.sql créer un fichier schema _mon_model.yml dans le dossier models
+Pour chaque modèle mon_model.sql créer un fichier schema mon_model.yml dans le dossier models
 
 - Renseigner à la main les schemas (connaisseur)
 ou
