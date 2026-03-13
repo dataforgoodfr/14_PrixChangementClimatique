@@ -7,8 +7,7 @@ SELECT
     "BASSIN RISQUE" AS bassin_risque,
     "BASSINS HYDROGRAPHIQUES" AS bassins_hydrographiques,
     "COURS EAU" AS cours_eau,
-    -- code commune - appelé code_geo dans les données bronze du projet
-    "CODE INSEE COMMUNE" AS code_geo,
+    "CODE INSEE COMMUNE" AS code_geo,     -- code commune - appelé code_geo dans les données bronze du projet
     "CODE RISQUE 1" AS code_risque_1,
     "LIBELLE RISQUE 1" AS libelle_risque_1,
     "CODE RISQUE 2" AS code_risque_2,

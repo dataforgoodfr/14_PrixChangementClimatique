@@ -2,7 +2,7 @@
 
 ## Qu'est ce que c'est ?
 
-[DBT](https://docs.getdbt.com/) est un orchestrateur SQL, c'est à dire qu'il permet d'éffectuer des requêtes SQL dans un order précis. Ces requêtes SQL peuvent dépendre des résultats des précédentes requêtes, ce qui permet in fine une longue transformation des données initiales, au fil des requêtes, pour obtenir des tables dans le format voulu et avec les croisement de données nécessaires.
+[DBT](https://docs.getdbt.com/) est un orchestrateur SQL, c'est à dire qu'il permet d'effectuer des requêtes SQL dans un order précis. Ces requêtes SQL peuvent dépendre des résultats des précédentes requêtes, ce qui permet in fine une longue transformation des données initiales, au fil des requêtes, pour obtenir des tables dans le format voulu et avec les croisements de données nécessaires.
 
 ## Comment la faire tourner ?
 
@@ -138,6 +138,13 @@ Enfin on ajoute dans le schema.yml du dossier, qui décrit tous les modèles de 
 - Etape 4 : enfin on fait tourner le dbt.
 
 En suivant toutes les étapes énnoncées plus haut dans la section "Comment le faire tourner ?"
+
+### Avant de faire ma PR github, je veux vérifier en local que je passe les tests de CI
+
+- Etape 1 : `dbt run` pour avoir les données dans la db à jour en local
+
+- Etape 2 : Excuter le script `python check_docs_localy.py`
+
 
 ### Ma PR github est validée, quelle est la suite ?
 

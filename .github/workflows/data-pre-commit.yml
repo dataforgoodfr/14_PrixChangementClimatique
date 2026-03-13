@@ -54,3 +54,32 @@ jobs:
           cd data/dbt_pipeline
           uv run dbt run
           uv run dbt test
+
+      - name: Run dbt docs generate
+        run: |
+          cd data/dbt_pipeline
+          uv run dbt docs generate
+
+      - name: Run dbt-checkpoint all columns
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: >
+            check-model-has-all-columns
+            --all-files
+            --hook-stage manual
+
+      - name: Run dbt-checkpoint descriptions
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: >
+            check-model-has-description
+            --all-files
+            --hook-stage manual
+
+      - name: Run dbt-checkpoint column descriptions
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: >
+            check-model-columns-have-desc
+            --all-files
+            --hook-stage manual

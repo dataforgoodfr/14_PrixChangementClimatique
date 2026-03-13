@@ -7,5 +7,19 @@
     }
   },
   "notebook.formatOnSave.enabled": true,
-  "python.terminal.useEnvFile": true
+  "python.terminal.useEnvFile": true,
+    "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.parquet": "duckdb.dataFileViewer",
+    "*.csv": "duckdb.dataFileViewer",
+    "*.tsv": "duckdb.dataFileViewer"
+  },
+  "files.associations": {
+    "*.yml": "jinja-yaml",
+    "*.sql": "jinja-sql"
+  },
+  "dbt.enableNewLineagePanel": true,
+  "dbt.lineage.defaultExpansion": 4,
+  "dbt.perspectiveTheme": "Vintage",
+  "dbt.queryLimit": 50000,
 }

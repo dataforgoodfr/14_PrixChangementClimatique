@@ -6,7 +6,7 @@ repos:
       - id: ruff
         args: [--fix]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: mixed-line-ending
@@ -28,3 +28,21 @@ repos:
       - id: prettier
         args: ["--parser", "yaml", "--write"]
         files: \.ya?ml$
+  - repo: https://github.com/dbt-checkpoint/dbt-checkpoint
+    rev: v1.0.0
+    hooks:
+      - id: check-model-has-all-columns
+        stages: [manual]
+        args:
+          [
+            "--manifest",
+            "data/dbt_pipeline/target/manifest.json",
+            "--catalog",
+            "data/dbt_pipeline/target/catalog.json",
+          ]
+      - id: check-model-has-description
+        stages: [manual]
+        args: ["--manifest", "data/dbt_pipeline/target/manifest.json"]
+      - id: check-model-columns-have-desc
+        stages: [manual]
+        args: ["--manifest", "data/dbt_pipeline/target/manifest.json"]
