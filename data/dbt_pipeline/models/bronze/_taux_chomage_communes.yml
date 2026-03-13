@@ -49,4 +49,3 @@ models:
       - name: t_3_2025_proxy_commune
         description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
         type: FLOAT
-

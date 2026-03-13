@@ -37,4 +37,3 @@ models:
         description: "Montant réel TAFNB pour la commune"
       - name: code_geo
         description: "Code INSEE de la commune"
-
