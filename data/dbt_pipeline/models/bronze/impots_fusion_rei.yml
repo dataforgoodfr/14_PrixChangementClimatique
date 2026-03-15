@@ -4,6 +4,8 @@ models:
     description:
       Table historique fusionnée des taxes foncières et taxe d'habitation
       sur 30 ans avec les variable les plus importantes
+      Note pour les data analystes = la clonne IDCOM désignée comme 'code commmune' dans la notice REI
+      correspond au code INSEE officiel sur 5 caractère (DEP + COM)
     columns:
       - name: annee
         description: année de référence de l'impôt
