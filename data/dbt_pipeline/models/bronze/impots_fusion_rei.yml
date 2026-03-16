@@ -243,5 +243,5 @@ models:
         description: direction départementale
       - name: iddircom
         description: identifiant direction communale
-      - name: idcom
-        description: code de la commune
+      - name: code_geo
+        description: code de la commune (code INSEE officiel sur 5 caractères)
