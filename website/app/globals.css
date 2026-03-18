@@ -5,6 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Brand colors */
+  --color-rf-green-dark: #043F2D;
+  --color-rf-lime: #C8F069;
+  --color-rf-gray: #4E4E5C;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
