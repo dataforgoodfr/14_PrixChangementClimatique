@@ -40,6 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Temporary local data for development
-/public/geojson/*.geojson
+# PMTiles files generated from data/utils/build_pmtiles.py
 /public/pmtiles/*.pmtiles
