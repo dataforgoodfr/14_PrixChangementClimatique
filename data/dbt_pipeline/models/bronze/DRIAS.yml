@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: drias
+    description: > 
+      DRIAS Les futurs du climat
+      Catalogue de données de simulations climatiques
+      URL : https://www.drias-climat.fr/drias_prod/accueil/okapiWebDrias/index.jsp?iddrias=climat
+
+    columns:
+      - name: pts
+        description: "Numéro du point"
+        type: INTEGER
+      - name: latitude
+        description: "latitude"
+        type: FLOAT
+      - name: longitude
+        description: "longitude"
+        type: FLOAT
+      - name: nortx_35_d_yr
+        description: "Nombre de jours avec Tx >= 35°C (jour(s))"
+        type: FLOAT
+      - name:  norrrq_99_ref_d_yr
+        type: FLOAT
+        description: "Ecart de fréquence des précipitations quotidienne remarquables (jour(s))"
+      - name: aswi_04_yr
+        description:  "Ecart de indicateur feux météo nombre de jours supérieurs à 40 (jour(s))"
+        type: INTEGER
+      - name: nortr_yr
+        description: "Nombre de nuits tropicales (jour(s))"
+        type: FLOAT
+      - name: norrr_yr
+        description: "Cumul de précipitations annuelles (mm)"
+        type: FLOAT
