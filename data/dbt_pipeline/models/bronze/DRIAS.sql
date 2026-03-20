@@ -4,7 +4,7 @@ SELECT
     "Longitude" AS longitude,
     "NORTX35D_yr" AS nortx_35_d_yr,
     "NORRRq99refD_yr" AS norrrq_99_ref_d_yr,
-    "NORSWI04_yr " AS norswi_04_yr,
+    "NORSWI04_yr" AS norswi_04_yr,
     "NORTR_yr" AS nortr_yr,
     "NORRR_yr" AS norrr_yr
 FROM
