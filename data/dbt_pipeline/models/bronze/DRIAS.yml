@@ -23,8 +23,8 @@ models:
       - name: norrrq_99_ref_d_yr
         type: FLOAT
         description: "Ecart de fréquence des précipitations quotidienne remarquables (jour(s))"
-      - name: aswi_04_yr
-        description: "Ecart de indicateur feux météo nombre de jours supérieurs à 40 (jour(s))"
+      - name: norswi_04_yr
+        description: "Nombre de jours avec SWI < 0.4 (jour(s))"
         type: INTEGER
       - name: nortr_yr
         description: "Nombre de nuits tropicales (jour(s))"
