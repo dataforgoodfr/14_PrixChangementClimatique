@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: drias
+  - name: DRIAS
     description: >
       DRIAS Les futurs du climat
       Catalogue de données de simulations climatiques
