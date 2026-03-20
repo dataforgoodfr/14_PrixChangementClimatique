@@ -7,14 +7,11 @@ import {
   Popup,
   Layer,
   Source,
-  useMap,
 } from "@vis.gl/react-maplibre";
 import { Protocol } from "pmtiles";
 import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Eye, EyeOff, Layers } from "lucide-react";
-import { stringToColor } from "@/lib/map-utils";
-import { useCityData } from "@/hooks/use-city-data";
+import { Eye, EyeOff, Layers, X } from "lucide-react";
 
 const COMMUNES_PMTILES_URL = "/pmtiles/communes.pmtiles";
 const COMMUNES_LAYER_ID = "communes-fill";
@@ -52,49 +49,6 @@ function LayerControl({
   );
 }
 
-function CommunesColorUpdater() {
-  const { current: map } = useMap();
-
-  useEffect(() => {
-    if (!map) return;
-
-    const updateFeatureColors = () => {
-      const source = map.getSource(COMMUNES_SOURCE_ID);
-      if (!source) return;
-
-      const features = map.querySourceFeatures(COMMUNES_SOURCE_ID, {
-        sourceLayer: "communes",
-      });
-
-      const seenIds = new Set<string>();
-      for (const feature of features) {
-        const id = feature.id;
-        if (id === undefined || seenIds.has(String(id))) continue;
-        seenIds.add(String(id));
-
-        const comName = feature.properties?.com_name || "";
-        const color = stringToColor(comName);
-
-        map.setFeatureState(
-          { source: COMMUNES_SOURCE_ID, sourceLayer: "communes", id },
-          { color },
-        );
-      }
-    };
-
-    map.on("sourcedata", updateFeatureColors);
-    map.on("moveend", updateFeatureColors);
-    updateFeatureColors();
-
-    return () => {
-      map.off("sourcedata", updateFeatureColors);
-      map.off("moveend", updateFeatureColors);
-    };
-  }, [map]);
-
-  return null;
-}
-
 function CommunesLayer({ isVisible }: { isVisible: boolean }) {
   const visibility = isVisible ? "visible" : "none";
 
@@ -103,7 +57,7 @@ function CommunesLayer({ isVisible }: { isVisible: boolean }) {
       id={COMMUNES_SOURCE_ID}
       type="vector"
       url={`pmtiles://${COMMUNES_PMTILES_URL}`}
-      promoteId="com_code"
+      promoteId="code_geo"
     >
       <Layer
         id={COMMUNES_LAYER_ID}
@@ -111,8 +65,17 @@ function CommunesLayer({ isVisible }: { isVisible: boolean }) {
         source-layer="communes"
         layout={{ visibility }}
         paint={{
-          "fill-color": ["coalesce", ["feature-state", "color"], "#F5DEB3"],
-          "fill-opacity": 0.6,
+          "fill-color": [
+            "interpolate",
+            ["linear"],
+            ["coalesce", ["get", "valeur"], 0],
+            0, "#ffffcc",
+            0.25, "#fed976",
+            0.5, "#fd8d3c",
+            0.75, "#e31a1c",
+            1, "#800026",
+          ],
+          "fill-opacity": 0.7,
         }}
       />
       <Layer
@@ -131,29 +94,63 @@ function CommunesLayer({ isVisible }: { isVisible: boolean }) {
 }
 
 function CursorHandler() {
-  const { current: map } = useMap();
+  const [map] = useState(() => null);
+  void map;
 
   useEffect(() => {
-    if (!map) return;
-
-    const handleMouseEnter = () => {
-      map.getCanvas().style.cursor = "pointer";
-    };
-
-    const handleMouseLeave = () => {
-      map.getCanvas().style.cursor = "";
-    };
-
-    map.on("mouseenter", COMMUNES_LAYER_ID, handleMouseEnter);
-    map.on("mouseleave", COMMUNES_LAYER_ID, handleMouseLeave);
-
-    return () => {
-      map.off("mouseenter", COMMUNES_LAYER_ID, handleMouseEnter);
-      map.off("mouseleave", COMMUNES_LAYER_ID, handleMouseLeave);
-    };
-  }, [map]);
+    return;
+  }, []);
 
   return null;
+}
+
+function FeaturePanel({
+  properties,
+  onClose,
+}: {
+  properties: Record<string, unknown>;
+  onClose: () => void;
+}) {
+  return (
+    <div className="absolute top-0 right-0 h-full w-80 bg-white shadow-2xl z-10 flex flex-col">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+        <div>
+          <div className="font-bold text-gray-900 text-base">
+            {String(properties.nom_commune ?? "—")}
+          </div>
+          <div className="text-xs text-gray-500">
+            Code INSEE: {String(properties.code_geo ?? "—")}
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-1 rounded hover:bg-gray-200 transition-colors"
+        >
+          <X size={18} className="text-gray-600" />
+        </button>
+      </div>
+      <div className="overflow-y-auto flex-1 p-4">
+        <table className="w-full text-sm">
+          <tbody>
+            {Object.entries(properties).map(([key, value]) => (
+              <tr key={key} className="border-b border-gray-100 last:border-0">
+                <td className="py-1.5 pr-3 text-xs text-gray-500 font-medium align-top w-1/2 break-all">
+                  {key}
+                </td>
+                <td className="py-1.5 text-gray-800 align-top break-all">
+                  {value === null || value === undefined
+                    ? <span className="text-gray-300">—</span>
+                    : typeof value === "object"
+                    ? <pre className="text-xs whitespace-pre-wrap">{JSON.stringify(value, null, 2)}</pre>
+                    : String(value)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export function MapDemo() {
@@ -163,28 +160,15 @@ export function MapDemo() {
     longitude: number;
     latitude: number;
     name: string;
-    code: string;
   } | null>(null);
-
-  const [clickedDemo, setClickedDemo] = useState<{
-    longitude: number;
-    latitude: number;
-    code: string;
-    name: string;
-  } | null>(null);
-
-  const {
-    data: cityData,
-    loading: cityLoading,
-    error: cityError,
-  } = useCityData({
-    code: clickedDemo?.code ?? null,
-  });
+  const [selectedProperties, setSelectedProperties] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
 
   useEffect(() => {
     const protocol = new Protocol();
     maplibregl.addProtocol("pmtiles", protocol.tile);
-
     return () => {
       maplibregl.removeProtocol("pmtiles");
     };
@@ -198,12 +182,10 @@ export function MapDemo() {
     (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const feature = event.features?.[0];
       if (feature) {
-        const properties = feature.properties;
         setHoverInfo({
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
-          name: properties.com_name || "Sans nom",
-          code: properties.com_code || "",
+          name: String(feature.properties?.nom_commune ?? "Sans nom"),
         });
       } else {
         setHoverInfo(null);
@@ -220,16 +202,24 @@ export function MapDemo() {
     (event: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const feature = event.features?.[0];
       if (!feature) {
-        setClickedDemo(null);
+        setSelectedProperties(null);
         return;
       }
-      const properties = feature.properties;
-      setClickedDemo({
-        longitude: event.lngLat.lng,
-        latitude: event.lngLat.lat,
-        code: properties.com_code || "",
-        name: properties.com_name || "",
-      });
+      setSelectedProperties(feature.properties as Record<string, unknown>);
+    },
+    [],
+  );
+
+  const handleCursorEnter = useCallback(
+    (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
+      (e.target as maplibregl.Map).getCanvas().style.cursor = "pointer";
+    },
+    [],
+  );
+
+  const handleCursorLeave = useCallback(
+    (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
+      (e.target as maplibregl.Map).getCanvas().style.cursor = "";
     },
     [],
   );
@@ -237,8 +227,6 @@ export function MapDemo() {
   const toggleCommunesLayerVisibility = useCallback(() => {
     setIsCommunesLayerVisible((prev) => !prev);
   }, []);
-
-  const popupInfo = clickedDemo ?? hoverInfo;
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
@@ -251,8 +239,8 @@ export function MapDemo() {
         <Map
           initialViewState={{
             longitude: 2.3522,
-            latitude: 48.8566,
-            zoom: 12,
+            latitude: 46.5,
+            zoom: 5,
           }}
           style={{ width: "100%", height: "100%" }}
           mapStyle="https://api.protomaps.com/styles/v5/light/fr.json?key=72196f954acb1cae"
@@ -261,51 +249,22 @@ export function MapDemo() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onClick={handleMapClick}
+          onMouseEnter={handleCursorEnter}
         >
           <NavigationControl position="top-right" />
           <CommunesLayer isVisible={isCommunesLayerVisible} />
-          <CommunesColorUpdater />
-          <CursorHandler />
 
-          {popupInfo && (
+          {hoverInfo && !selectedProperties && (
             <Popup
-              longitude={popupInfo.longitude}
-              latitude={popupInfo.latitude}
-              closeButton={!!clickedDemo}
+              longitude={hoverInfo.longitude}
+              latitude={hoverInfo.latitude}
+              closeButton={false}
               closeOnClick={false}
-              onClose={clickedDemo ? () => setClickedDemo(null) : undefined}
-              className="commune-popup"
+              offset={10}
             >
-              <div className="font-semibold text-gray-900">
-                {popupInfo.name}
+              <div className="text-sm font-medium text-gray-900 px-1">
+                {hoverInfo.name}
               </div>
-              {popupInfo.code && (
-                <div className="text-sm text-gray-600">
-                  Code INSEE: {popupInfo.code}
-                </div>
-              )}
-              {clickedDemo && popupInfo.code === clickedDemo.code && (
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <div className="text-xs font-medium text-gray-500">
-                    Données démo pour {cityData?.com_name}
-                  </div>
-                  {cityLoading && (
-                    <div className="text-sm text-gray-500 mt-1">
-                      Chargement…
-                    </div>
-                  )}
-                  {cityError && (
-                    <div className="text-sm text-red-600 mt-1">
-                      {cityError.message}
-                    </div>
-                  )}
-                  {cityData && !cityLoading && (
-                    <pre className="text-xs mt-1 bg-gray-100 p-2 rounded overflow-auto max-h-24">
-                      {JSON.stringify(cityData, null, 2)}
-                    </pre>
-                  )}
-                </div>
-              )}
             </Popup>
           )}
         </Map>
@@ -315,6 +274,13 @@ export function MapDemo() {
           onToggle={toggleCommunesLayerVisibility}
           isMapLoaded={isMapLoaded}
         />
+
+        {selectedProperties && (
+          <FeaturePanel
+            properties={selectedProperties}
+            onClose={() => setSelectedProperties(null)}
+          />
+        )}
       </div>
     </div>
   );
