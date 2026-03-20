@@ -28,31 +28,23 @@ Le site sera accessible à l'adresse [http://localhost:3000](http://localhost:30
 - `npm run build` : Génère une version optimisée pour la production
 - `npm run start` : Lance le serveur de production (nécessite d'avoir exécuté `npm run build` au préalable)
 - `npm run lint` : Vérifie la qualité du code avec ESLint
-- `npm run init-dev-data`: Lance un script de récupération et de génération de donnnées pour le développement (voir [Script de récupération et de génération de données](#script-de-recuperation-et-de-generation-de donnees))
 
-## Script de récupération et de génération de données
+## Générer les données PMTiles
 
-### Objectif
-
-Ce script permet de faciliter la récupération d'un fichier GeoJSON des communes de France à partir du [portail public Huwise (ex-Opendatasoft)](https://public.opendatasoft.com/explore/assets/georef-france-commune/) et de générer une base de données de tuiles vectorielles au format PMTiles.
+Les tuiles vectorielles sont générées à partir de la table `resultats_website_par_commune` dans la base DuckDB du projet.
 
 ### Prérequis
 
-- `curl`
-- `tippecanoe` version v2.79.0 (voir les [instructions d'installation](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation))
+- `uv` (voir les [instructions d'installation](https://docs.astral.sh/uv/getting-started/installation/))
+- `tippecanoe` (voir les [instructions d'installation](https://github.com/felt/tippecanoe?tab=readme-ov-file#installation)) **ou** Docker
+- Le fichier `data/exploration/dev.duckdb` présent localement (voir `data/utils/download.py`)
 
-### Étapes à suivre avant de lancer la commande
+### Lancer la génération
 
-- Rendre le fichier de script exécutable
+Depuis la racine du projet, exécutez la commande suivante :
 
 ```bash
-chmod +x ./scripts/init-dev-data.sh
+uv run data/utils/build_pmtiles.py
 ```
-- Vérifier que `tippecanoe` est bien disponible sur votre système
-```bash
-tippecanoe --version
-```
-- Lancer la commande `npm`
-```bash
-npm run init-dev-data
-```
+
+Le fichier `website/public/pmtiles/communes.pmtiles` est généré à partir des données de DuckDB et peut être utilisé pour alimenter la carte interactive du site.
