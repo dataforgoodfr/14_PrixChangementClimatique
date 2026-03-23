@@ -40,3 +40,21 @@ uv run data/example_script.py
 ## Utiliser Tox pour tester votre code
 
     tox -vv
+
+## Déploiement Docker
+
+Le site web peut être construit et lancé via Docker.
+
+Build (depuis la racine du projet) :
+
+```bash
+docker build -t pcc-website .
+```
+
+Lancer le container :
+
+```bash
+docker run -p 3000:3000 pcc-website
+```
+
+Puis ouvrir http://localhost:3000.
