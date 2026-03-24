@@ -72,9 +72,8 @@ import pandas as pd
 
 
 def load_data(con):
-
     # ------------
-    # GEOSPATIAL
+    # GEOSPATIAL DATA
     # ------------
     communes_geojson_url = "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/communes-avec-outre-mer.geojson"
     communes_geo = gpd.read_file(communes_geojson_url).to_crs("EPSG:4326")
@@ -96,7 +95,7 @@ def load_data(con):
     rga_geo = gpd.GeoDataFrame(rga_geo, geometry="geom", crs="EPSG:2154")
     rga_geo[rga_geo["niveau"].isin([2, 3])]
 
-    communes_geo_crs = communes_geo.to_crs("EPSG:4326")
+    communes_geo_crs = communes_geo.to_crs("EPSG:2154")
     communes_geo_crs["total_area_m2"] = communes_geo_crs.geometry.area
     rga_high_risk = rga_geo[rga_geo["niveau"].isin([2, 3])]
     intersection = gpd.overlay(communes_geo_crs, rga_high_risk, how="intersection")
@@ -110,9 +109,7 @@ def load_data(con):
     rga_area["pct_rga_moyen_fort"] = (
         rga_area["intersect_area_m2"] / rga_area["total_area_m2"]
     ) * 100
-    rga_area = rga_area[rga_area["code_geo", "pct_rga_moyen_fort"]].drop(
-        columns="geometry"
-    )
+    rga_area = rga_area[["code_geo", "pct_rga_moyen_fort"]]
 
     # ------------
     # TABULAR DATA
@@ -317,8 +314,6 @@ def clean_comptes(comptes, pop):
         index=[
             "code_geo_from_siren",
             "nom_com",
-            "code_departement",
-            "region_name",
             "annee",
         ],
         columns="type_compte",
@@ -424,14 +419,27 @@ def features_eng(dfs):
     rga_tri_communes["nb_bat_tri_moyen_fort"] = rga_tri_communes[tri_high_risk].sum(
         axis=1
     )
-    rga_tri_communes["pct_bat_tri_age_risk"] = (
+    rga_tri_communes["pct_bat_tri_moyen_fort"] = (
         rga_tri_communes["nb_bat_tri_moyen_fort"] / rga_tri_communes["total_maisons"]
     )
+    rga_tri_communes = rga_tri_communes.set_index("code_geo")
 
     rga_area = dataset["rga_area"]
     rga_area = rga_area.set_index("code_geo")
 
-    kpi_df = kpi_df.join(rga_tri_communes)
+    kpi_df = kpi_df.join(
+        rga_tri_communes[
+            [
+                "nb_bat_rga_moyen_fort",
+                "pct_bat_rga_moyen_fort",
+                "nb_bat_rga_age_risk",
+                "pct_bat_rga_age_risk",
+                "nb_bat_tri_moyen_fort",
+                "pct_bat_tri_moyen_fort",
+            ]
+        ]
+    )
+    kpi_df = kpi_df.join(rga_area)
     print("Exposition aux risques RGA & Inondations:", kpi_df.shape)
 
     # ============================
@@ -499,20 +507,20 @@ def features_eng(dfs):
     # ============================
     # Exposition aux risques en 2050
     # ============================
-    communes_geo = dataset["commune_geo"]
+    communes_geo = dataset["communes_geo"]
     diras = dataset["diras"]
     variables_extremes = ["NORSWI04_yr", "NORRR_yr", "NORRRq99_yr", "NORTX35D_yr"]
     gdf_communes = gpd.GeoDataFrame(
         communes_geo,
         geometry=gpd.points_from_xy(communes_geo["lon"], communes_geo["lat"]),
         crs="EPSG:4326",
-    )
+    ).to_crs("EPSG:2154")
 
     gdf_stations = gpd.GeoDataFrame(
         diras,
         geometry=gpd.points_from_xy(diras["Longitude"], diras["Latitude"]),
         crs="EPSG:4326",
-    )
+    ).to_crs("EPSG:2154")
 
     climate_extremes = gpd.sjoin_nearest(
         gdf_communes,
@@ -536,10 +544,10 @@ def features_eng(dfs):
         columns=["code_modele"],
         prefix="",
     )
-    pprn_dummies = pprn_dummies.set_index("code_geo")
-    pprn_dummies.columns = [c.lstrip("_") for c in pprn_dummies.columns]
+    pprn_flat = pprn_dummies.groupby("code_geo").max()
+    pprn_flat.columns = [c.lstrip("_") for c in pprn_flat.columns]
 
-    kpi_df = kpi_df.join(pprn_dummies)
+    kpi_df = kpi_df.join(pprn_flat)
     kpi_df = kpi_df.astype(int, errors="ignore")
     print("PPRN:", kpi_df.shape)
 
@@ -562,6 +570,7 @@ def features_eng(dfs):
     ]
     comptes_kpi["evo_primes_20_24"] = get_base_100_trends(comptes, base_year=2020)
     comptes_kpi = comptes_kpi.rename(columns={"code_geo_from_siren": "code_geo"})
+    comptes_kpi = comptes_kpi.set_index("code_geo")
 
     # Missing values
     # depenses_per_capita 24
@@ -589,8 +598,9 @@ def features_eng(dfs):
     ccr_franchises = ccr_franchises.sort_values(
         by="date_parution_jo", ascending=False
     ).drop_duplicates(subset=["code_geo", "nom_peril"])
-    ccr_franchises = ccr_franchises.set_index("code_geo")
-    ccr_franchises = ccr_franchises.filter(like="last")
+    target_cols = [c for c in ccr_franchises.columns if "last" in c or c == "code_geo"]
+    ccr_franchises = ccr_franchises[target_cols]
+    ccr_franchises = ccr_franchises.groupby("code_geo").max()
 
     kpi_df = kpi_df.join(ccr_franchises)
     print("Franchises:", kpi_df.shape)
@@ -615,8 +625,6 @@ def features_eng(dfs):
     kpi_df = kpi_df.join(geoportail_ccr[cols])
     print("Geoportail CCR:", kpi_df.shape)
 
-    kpi_df.to_csv("indicateurs_reclaim.csv", index=True)
-
     return kpi_df
 
 
@@ -629,5 +637,4 @@ if __name__ == "__main__":
     con.execute("LOAD spatial;")
     dataset = load_data(con)
     kpi_df = features_eng(dataset)
-
-    # Push to S3
+    # kpi_df.to_csv("indicateurs_reclaim.csv", index=True)
