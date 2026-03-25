@@ -64,7 +64,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DUCKDB_PATH=/data/dev.duckdb
 # Required for Next.js standalone to listen on all interfaces (not just localhost)
 ENV HOSTNAME=0.0.0.0
-ENV PORT=3000docker build -t pcc-website .
+ENV PORT=3000
 # DuckDB node client writes extension cache under $HOME/.duckdb
 ENV HOME=/app
 
