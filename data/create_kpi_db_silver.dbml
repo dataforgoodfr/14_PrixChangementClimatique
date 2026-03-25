@@ -1,0 +1,60 @@
+Table rga_area {
+  code_geo varchar [primary key]
+  pct_rga_moyen_fort float [note: 'Pourcentage de la surface de la commune à risque RGA moyen ou fort']
+}
+
+Table batiment_risk {
+  code_geo varchar [primary key]
+  nb_bat_rga_moyen_fort integer [note: 'Nombre de batiments à risque RGA moyen ou fort']
+  pct_bat_rga_moyen_fort float [note: 'Pourcentage de batiments à risque RGA moyen ou fort']
+  nb_bat_rga_age_risk integer [note: 'Nombre de batiments à risque RGA moyen ou fort et avec fondations à risque']
+  pct_bat_rga_age_risk float [note: 'Pourcentage de batiments à risque RGA moyen ou fort et avec fondations à risque']
+  nb_bat_tri_moyen_fort integer [note: "Nombre de batiments à risque d'inondations moyen ou fort"]
+  pct_bat_tri_moyen_fort float [note: "Pourcentage de batiments à risque d'inondations moyen ou fort"]
+}              
+
+Table pprn_clean {
+  code_geo varchar [primary key]
+  pprn_rga integer [note: 'Couverture RGA']
+  pprn_i integer [note: 'Couverture inondations']
+  pprn_l integer [note: 'Couverture littoral']
+  pprn_mvt integer [note: 'Couverture mouvement de terrain']
+  pprn_tem integer [note: 'Couverture mouvement de tempete']
+}
+
+Table compte_stats {
+  code_geo varchar [primary key]
+  depenses_per_capita integer [note: 'Budget de la commune par hab']
+  ratio_dettes_depenses float [note: 'Taux d’endettement (dette de la commune par rapport au budget)']
+  evo_primes_20_24 float [note: 'Évolution de la prime entre 2020 et 2024 (%)']
+  ratio_primes_depenses float [note: 'Part de la prime dans le budget (2024)']
+}
+
+Table ccr_stats {
+  code_geo varchar [primary key]
+  nb_arrete integer [note: 'Total arretés']
+  nb_arrete_rec integer [note: 'Total arretés reconnues']
+  nb_arrete_ref integer [note: 'Total arretés non-reconnues']
+  nb_arrete_ino integer [note: 'Total arretés inondation']
+  nb_arrete_sec integer [note: 'Total arretés secheresse']
+  nb_arrete_mvt integer [note: 'Total arretés mouvement de terrain']
+  nb_arrete_tem integer [note: 'Total arretés tempete']
+  nb_arrete_vag integer [note: 'Total arretés vagues']
+  nb_arrete_autre integer [note: 'Total arretés type autre']
+  nb_arrete_pre_2010 integer [note: 'Total arretés avant 2010']
+  nb_arrete_post_2010 integer [note: 'Total arretés après 2010']
+  last_franchise_is_ino integer [note: 'Dernier statut de la franchise pour catnat inondations']
+  last_franchise_is_sec integer
+  last_franchise_is_mvt integer
+  last_franchise_is_tem integer
+  last_franchise_is_vag integer
+  last_franchise_is_autre integer
+}
+
+Table scenario_2050 {
+  code_geo varchar [primary key]
+  norswi04_yr float [note: 'Nombres de jours avec sol sec']
+  norrr_yr float [note: 'Cumul de précipitations annuelles (mm)']
+  norrrq_yr float [note: 'Cumul de précipitations quotidiennes remarquables (percentile 99 du cumul quotidien) (mm)']
+  nortx35d_yr float [note: 'Nombre de jours avec la température maximale dépassant les 35°C']
+}
