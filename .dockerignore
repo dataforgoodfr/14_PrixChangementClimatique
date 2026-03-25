@@ -1,0 +1,28 @@
+# Version control
+.git/
+
+# Python artifacts
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+.venv/
+.uv/
+
+# Node artifacts
+website/node_modules/
+website/.next/
+
+# Re-created during build
+**/*.geojsonl
+**/*.geojson
+**/*.pmtiles
+
+# Secrets
+.env
+.env.*
+
+# Not needed for the Docker build
+.cache/
+data/exploration/
+data/dbt_pipeline/
+**/*.ipynb
