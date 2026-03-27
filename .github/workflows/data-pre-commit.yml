@@ -28,6 +28,7 @@ jobs:
       - name: Install and sync uv
         run: |
           pip install uv
+          pip install sqlfluff-templater-dbt
           uv sync
 
       - name: Install dbt dependencies
