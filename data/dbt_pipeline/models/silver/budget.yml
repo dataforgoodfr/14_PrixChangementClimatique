@@ -61,4 +61,3 @@ models:
       - name: solde_annuel_per_pop
         description: (produits - depenses)  par population municipale
         data_type: double
-    description: hg
