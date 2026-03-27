@@ -5,13 +5,13 @@ bugdet AS (
         nom_com,
         annee,
         SUM(CASE WHEN type_compte = 'dettes financieres' THEN solde ELSE 0 END) AS dettes,
-        SUM(CASE WHEN type_compte = 'primes d assurances' THEN solde ELSE 0 END) AS primes,
+        SUM(CASE WHEN type_compte = 'primes d ASsurances' THEN solde ELSE 0 END) AS primes,
         SUM(CASE WHEN type_compte = 'depenses' THEN solde ELSE 0 END) AS depenses,
         SUM(CASE WHEN type_compte = 'produits' THEN solde ELSE 0 END) AS produits
     FROM
         {{ ref('budget_per_compte_communes') }}
     WHERE
-        type_compte IN ('dettes financieres', 'primes d assurances', 'depenses', 'produits')
+        type_compte IN ('dettes financieres', 'primes d ASsurances', 'depenses', 'produits')
     GROUP BY
         code_geo_from_siren,
         nom_com,
@@ -19,25 +19,81 @@ bugdet AS (
 ),
 
 pop_unpivoted AS (
-    {{ dbt_utils.unpivot(
-        relation=ref('population_code_geo'),
-        cast_to='integer',
-        exclude=['code_geo', 'nom_geo', 'code_departement', 'code_region'],
-        field_name='annee_raw',
-        value_name='population'
-    ) }}
-),
-
-pop AS (
     SELECT
         code_geo,
-        CAST(REPLACE(annee_raw, 'pop_', '') AS INTEGER) AS annee,
-        SUM(population) AS population
-    FROM
-        pop_unpivoted
-    GROUP BY
+        2016 AS annee,
+        pop_2016 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
         code_geo,
-        annee_raw
+        2017 AS annee,
+        pop_2017 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2018 AS annee,
+        pop_2018 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2019 AS annee,
+        pop_2019 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2020 AS annee,
+        pop_2020 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2021 AS annee,
+        pop_2021 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2022 AS annee,
+        pop_2022 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2023 AS annee,
+        pop_2023 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2024 AS annee,
+        pop_2024 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2025 AS annee,
+        pop_2025 AS population
+    FROM {{ ref('population_code_geo') }}
+
+    UNION ALL
+    SELECT
+        code_geo,
+        2026 AS annee,
+        pop_2026 AS population
+    FROM {{ ref('population_code_geo') }}
 )
 
 SELECT
@@ -55,7 +111,7 @@ SELECT
 FROM
     bugdet
 LEFT JOIN
-    pop
+    pop_unpivoted AS pop
     ON
         bugdet.code_geo_from_siren = pop.code_geo
         AND bugdet.annee = pop.annee
