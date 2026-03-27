@@ -7,7 +7,7 @@ models:
     columns:
       - name: code_geo
         description: Code de la commune concernée
-        data_type: varchargit st
+        data_type: varchar
         quote: true
       - name: nortx_35_d_yr
         description: "Nombre de jours avec Tx >= 35°C (jour(s))"
