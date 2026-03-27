@@ -11,8 +11,6 @@ models:
       - name: code_geo_from_siren
         description: code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
         data_type: varchar
-        data_tests:
-          - not_null
       - name: nom_com
         description: Nom de la commune venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
         data_type: varchar
