@@ -18,12 +18,8 @@ repos:
     rev: 4.0.4
     hooks:
       - id: sqlfluff-lint
-        additional_dependencies: 
-          - sqlfluff-templater-dbt
         exclude: ^data/dbt_pipeline/seeds/|^data/dbt_pipeline/csv_inputs/
       - id: sqlfluff-fix
-        additional_dependencies: 
-          - sqlfluff-templater-dbt
         exclude: ^data/dbt_pipeline/seeds/|^data/dbt_pipeline/csv_inputs/
 
   - repo: https://github.com/pre-commit/mirrors-prettier
