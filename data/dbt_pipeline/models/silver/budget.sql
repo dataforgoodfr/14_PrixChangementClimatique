@@ -1,5 +1,5 @@
 WITH
- split_per_type AS (
+ bugdet AS (
     SELECT 
         code_geo_from_siren,
         nom_com,
@@ -16,17 +16,6 @@ WITH
         code_geo_from_siren,
         nom_com,
         annee
-),
-
-bugdet AS (
-    SELECT
-        *,
-        produits - depenses AS solde_annuel,
-        dettes/produits AS ratio_dettes_produits,
-        dettes/depenses AS ratio_dettes_depenses,
-        primes/depenses AS ratio_primes_depenses,
-    FROM 
-        split_per_type
 ),
 
 pop_unpivoted AS (
@@ -55,11 +44,15 @@ pop AS (
 SELECT
     bugdet.*,
     pop.population,
+    bugdet.produits - bugdet.depenses AS solde_annuel,
+    bugdet.dettes/bugdet.produits AS ratio_dettes_produits,
+    bugdet.dettes/bugdet.depenses AS ratio_dettes_depenses,
+    bugdet.primes/bugdet.depenses AS ratio_primes_depenses,
     bugdet.dettes/pop.population AS dettes_per_pop,
     bugdet.primes/pop.population AS primes_per_pop ,
     bugdet.depenses/pop.population AS depenses_per_pop ,
     bugdet.produits/pop.population AS produits_per_pop ,
-    bugdet.solde_annuel/pop.population AS solde_annuel_per_pop
+    (bugdet.produits - bugdet.depenses)/pop.population AS solde_annuel_per_pop
 FROM 
     bugdet
 LEFT JOIN
