@@ -43,7 +43,7 @@ pop AS (
     SELECT 
         code_geo,
         CAST(REPLACE(annee_raw, 'pop_', '') as integer) as annee,
-        SUM(population)
+        SUM(population) AS population
     FROM
         pop_unpivoted
     GROUP BY 
