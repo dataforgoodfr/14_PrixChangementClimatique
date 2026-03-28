@@ -6,16 +6,18 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - code_geo_from_siren
+            - code_geo
             - annee
 
     columns:
-      - name: code_geo_from_siren
-        description: code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
-        data_type: varchar
-      - name: nom_com
-        description: Nom de la commune venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
-        data_type: varchar
+      - name: code_geo
+        description: >
+          code_geo qui utilise en priorité
+          - le champ code_geo_from_siren : le code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
+          - sinon : code_geo qui est la concaténation du code département et du code INSEE
+          - sinon (bis) : code_insee le code INSEE dans la base originale
+        data_tests:
+          - not_null
       - name: annee
         description: Année de l'exercice
         data_type: bigint
@@ -23,9 +25,6 @@ models:
           - not_null
       - name: dettes
         description: Solde net pour le type de compte "dettes financières"
-        data_type: double
-      - name: primes
-        description: Solde net pour le type de compte "primes d’assurances"
         data_type: double
       - name: depenses
         description: Solde net pour le type de compte "depenses"
@@ -42,17 +41,14 @@ models:
       - name: ratio_dettes_depenses
         description: dettes/depenses
         data_type: double
-      - name: ratio_primes_depenses
-        description: primes/depenses
+      - name: ratio_produits_depenses
+        description: produits/depenses
         data_type: double
       - name: population
         description: Population municipale
         data_type: integer
       - name: dettes_per_pop
         description: Solde net pour le type de compte "dettes financières" par population municipale
-        data_type: double
-      - name: primes_per_pop
-        description: Solde net pour le type de compte "primes d’assurances" par population municipale
         data_type: double
       - name: depenses_per_pop
         description: Solde net pour le type de compte "depenses" par population municipale
