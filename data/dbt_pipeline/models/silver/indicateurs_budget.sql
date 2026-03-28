@@ -13,9 +13,9 @@ SELECT
     budget.produits / pop.population AS produits_per_pop,
     (budget.produits - budget.depenses) / pop.population AS solde_annuel_per_pop
 FROM
-   {{ ref('budget_par_com_annee') }} AS  budget
+    {{ ref('budget_par_com_annee') }} AS budget
 LEFT JOIN
     {{ ref('population_par_com_annee') }} AS pop
-ON
-    budget.code_geo_from_siren = pop.code_geo
-    AND budget.annee = pop.annee
+    ON
+        budget.code_geo_from_siren = pop.code_geo
+        AND budget.annee = pop.annee

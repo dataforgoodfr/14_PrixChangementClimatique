@@ -10,6 +10,9 @@ models:
     columns:
       - name: code_geo
         description: Code Insee de la commune
+        data_type: varchar
+        data_tests:
+          - not_null
       - name: annee
         description: Année de l'exercice
         data_type: bigint

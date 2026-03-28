@@ -1,7 +1,7 @@
 models:
-  - name: budget
+  - name: indicateurs_budget
     description: >
-      Indicateur budget par année et par communes, depuis 2010 
+      Indicateur budget par année et par communes, depuis 2010
       (Attention : les données de population sont disponibles à partir de 2016)
     tests:
       - dbt_utils.unique_combination_of_columns:
