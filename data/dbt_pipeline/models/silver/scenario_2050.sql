@@ -30,7 +30,7 @@ LEFT JOIN
             s.norswi_04_yr,
             s.nortr_yr,
             s.norrr_yr
-        FROM {{ ref('drias') }} AS s
+        FROM {{ ref('DRIAS') }} AS s
         WHERE
             s.longitude BETWEEN (c.lon - 1) AND (c.lon + 1)
             AND s.latitude BETWEEN (c.lat - 1) AND (c.lat + 1)
