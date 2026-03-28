@@ -24,7 +24,7 @@ models:
         data_tests:
           - not_null
       - name: dettes
-        description: Solde net pour le type de compte "dettes financières"
+        description: Solde net pour le type de compte "dettes"
         data_type: double
       - name: depenses
         description: Solde net pour le type de compte "depenses"
@@ -48,7 +48,7 @@ models:
         description: Population municipale
         data_type: integer
       - name: dettes_per_pop
-        description: Solde net pour le type de compte "dettes financières" par population municipale
+        description: Solde net pour le type de compte "dettes" par population municipale
         data_type: double
       - name: depenses_per_pop
         description: Solde net pour le type de compte "depenses" par population municipale
