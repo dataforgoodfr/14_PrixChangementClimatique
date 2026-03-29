@@ -11,5 +11,5 @@ FROM
 WHERE
     type_compte IN ('dettes', 'depenses', 'produits')
 GROUP BY
-    1,
-    2
+    annee,
+    COALESCE(code_geo_from_siren, code_geo, code_insee)
