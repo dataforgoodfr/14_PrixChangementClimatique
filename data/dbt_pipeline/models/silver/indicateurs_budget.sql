@@ -17,4 +17,4 @@ LEFT JOIN
     {{ ref('population_par_com_annee') }} AS pop
     ON
         budget.code_geo = pop.code_geo
-        AND budget.annee = pop.annee
+        AND budget.annee = pop.annee_recensement
