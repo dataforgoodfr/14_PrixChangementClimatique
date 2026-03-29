@@ -29,5 +29,5 @@ SELECT
     c.arr,
     c.can,
     c.type_com
-FROM primes p
-LEFT JOIN communes c USING (code_geo)
+FROM primes AS p
+LEFT JOIN communes AS c ON p.code_geo = c.code_geo
