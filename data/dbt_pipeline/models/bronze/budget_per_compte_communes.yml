@@ -24,8 +24,9 @@ models:
         description: "Code de la région"
         data_type: string
       - name: type_compte
-        description: "Type de compte (depenses, produits, primes d’assurances, dettes, amortissements, dépréciations, immo corporelle,
-       immo en cours, immo financière, immo incorporelle,autres immo)"
+        description: >
+          Type de compte (depenses, produits, primes d’assurances, dettes, amortissements, dépréciations, immo corporelle,
+          immo en cours, immo financière, immo incorporelle,autres immo)
         data_type: string
       - name: solde_debiteur
         description: "Montant total débiteur (SD)"
