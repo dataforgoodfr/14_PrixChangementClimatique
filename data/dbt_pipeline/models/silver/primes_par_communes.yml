@@ -3,7 +3,7 @@ version: 2
 models:
   - name: primes_par_communes
     description: >
-      Table des primes d'assurances par communes issue du modèle bronze "insee_commune" et de "primes_assurances_communes" après un merge sur le code_geo.
+      Table des primes d'assurances agrégées par année et parcommunes.
     columns:
       - name: annee
         description: "Année de l'exercice"
@@ -12,22 +12,5 @@ models:
         description: "Code commune - appelé code_geo dans les données bronze du projet"
         type: STRING
       - name: prime_assurance
-        description: somme des primes d'assurances
+        description: somme des primes d'assurances pour les comptes 616, 6161, 6162 et 6168
         data_type: float
-      - name: libelle
-        description: "Nom en clair (typographie riche) avec article"
-        type: STRING
-      - name: dep
-        description: "Code departement - appelé code_departement dans les données bronze du projet"
-        type: STRING
-      - name: reg
-        description: "Code region"
-        type: STRING
-      - name: arr
-        description: "Code arrondissement"
-        type: STRING
-      - name: can
-        description: "Code canton. Pour les communes « multi-cantonales », code décliné de 99 à 90 (pseudo-canton) ou de 89 à 80 (communes nouvelles)"
-      - name: type_com
-        description: "Type de commune"
-        type: STRING
