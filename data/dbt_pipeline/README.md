@@ -157,7 +157,7 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 - Etape 2 : Excuter le script python
 ```bash
-uv run python data/utils/check_docs_localy.py`
+uv run python ../utils/check_docs_localy.py
 ```
 
 ### Ma PR github est validée, quelle est la suite ?
