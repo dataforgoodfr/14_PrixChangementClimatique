@@ -1,9 +1,10 @@
 -- PREMIERE ETAPE : il s'agit de transformer les catégories de certaines colonnes (nom_peril et franchise)
 -- et récupérer uniquement l'annee pour la date de l'évènement (date_debut_evenement)
+
 WITH mapping_columns_crr_details AS (
     SELECT
-        code_geo,
         SUBSTR(date_debut_evenement,7) AS annee,
+        code_geo,
         CASE 
             WHEN nom_peril in ("Inondations et/ou Coulées de Boue", "Inondations Remontée Nappe", "Coulée de Boue", "Lave Torrentielle")
             THEN "inondation"
@@ -23,12 +24,14 @@ WITH mapping_columns_crr_details AS (
     FROM
         {{ ref('ccr_details') }}
 )
+
 -- DEUXIEME ETAPE : il s'agit de créer/ajouter des colonnes 'numérisées' à partir de la table précédente
 -- pour permettre les opérations de calcul de l'étape suivante
+
 add_columns_ccr_details AS (
     SELECT
+        CAST(annee AS INTEGER) AS annee,
         code_geo,
-        annee,
         CASE
             WHEN franchise = 'Simple' THEN 1
             WHEN franchise = 'Doublée' THEN 2
@@ -46,10 +49,12 @@ add_columns_ccr_details AS (
         IF(nom_peril == 'autre', 1, 0) AS is_autre,
     FROM mapping_columns_crr_details
 )
+
 -- TROISIEME ETAPE : l'aggrégation finale par code_geo et annee
+
 SELECT
-    code_geo,
     annee,
+    code_geo,
     COUNT(*) AS nb_arrete,
     SUM(is_recon) AS nb_arrete_recon,
     SUM(is_refus) AS nb_arrete_refus,
@@ -62,4 +67,4 @@ SELECT
     SUM(is_autre) AS nb_arrete_autre,
     AVG(franchise) AS avg_franchise,
 FROM add_columns_ccr_details
-GROUP BY code_geo, annee
+GROUP BY annee, code_geo

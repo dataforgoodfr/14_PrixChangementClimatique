@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: ccr_stats
+    description: >
+      Table aggrégée des catnats reconnus/non reconnus, selon aussi le type de catnats (inondation, sécheresse, mouvements de terrain, meteo, marin, sismique et autre) et de la moyenne des franchises par année et code_geo (commune).
+    columns:
+      - name: annee
+        description: Année des évènements catnat (arrêtés)
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: code_geo
+        description: Code commune - appelé code_geo dans les données bronze du projet
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: nb_arrete
+        description: Nombre d'arrêtés enregistrés par commune et par an
+        data_type: int
+      - name: nb_arrete_recon
+        description: Nombre d'arrêtés reconnus enregistrés par commune et par an
+        data_type: int
+      - name: nb_arrete_refus
+        description: Nombre d'arrêtés non reconnus enregistrés par commune et par an
+        data_type: int
+      - name: nb_arrete_ino
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "inondation" par commune et par an
+        data_type: int
+      - name: nb_arrete_sec
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sécheresse" par commune et par an
+        data_type: int
+      - name: nb_arrete_mvt
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "mouvement de terrain" par commune et par an
+        data_type: int
+      - name: nb_arrete_meteo
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "meteo" par commune et par an
+        data_type: int
+      - name: nb_arrete_marin
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "marin" par commune et par an
+        data_type: int
+      - name: nb_arrete_sism
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sismique" par commune et par an
+        data_type: int
+      - name: nb_arrete_autre
+        description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "autre" par commune et par an
+        data_type: int
+      - name: avg_franchise
+        description: Moyenne par commune et par année de la franchise
+        data_type: float
