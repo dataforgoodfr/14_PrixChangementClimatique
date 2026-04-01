@@ -1,10 +1,10 @@
--- PREMIERE ETAPE : il s'agit de transformer les catégories de certaines colonnes (nom_peril et franchise)
+-- PREMIERE ETAPE : il s'agit de transformer les catégories de certaines colonnes (nom_peril, franchise, correction sur libelle_avis)
 -- et récupérer uniquement l'annee pour la date de l'évènement (date_debut_evenement)
 
 WITH mapping_columns_crr_details AS (
     SELECT
         code_geo,
-        libelle_avis,
+        IF(libelle_avis = 'Reconnue(sans impact sur la modulation)', 'Reconnue', libelle_avis) AS libelle_avis,
         YEAR(date_debut_evenement) AS annee,
         CASE
             WHEN
