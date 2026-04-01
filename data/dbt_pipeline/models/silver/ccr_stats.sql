@@ -3,24 +3,38 @@
 
 WITH mapping_columns_crr_details AS (
     SELECT
-        YEAR(date_debut_evenement) AS annee,
         code_geo,
+        libelle_avis,
+        YEAR(date_debut_evenement) AS annee,
         CASE 
-            WHEN nom_peril in ('Inondations et/ou Coulées de Boue', 'Inondations Remontée Nappe', 'Coulée de Boue', 'Lave Torrentielle')
-            THEN 'inondation'
-            WHEN nom_peril in ('Mouvement de Terrain', 'Glissement de Terrain', 'Effondrement et/ou Affaisement', 'Eboulement et/ou Chute de Blocs', 'Glissement et Effondrement de Terrain', 'Glissement et Eboulement Rocheux')
-            THEN 'mouvement_terrain'
+            WHEN
+                nom_peril in (
+                    'Inondations et/ou Coulées de Boue',
+                    'Inondations Remontée Nappe',
+                    'Coulée de Boue',
+                    'Lave Torrentielle'
+                )
+                THEN 'inondation'
+            WHEN 
+                nom_peril in (
+                    'Mouvement de Terrain',
+                    'Glissement de Terrain',
+                    'Effondrement et/ou Affaisement',
+                    'Eboulement et/ou Chute de Blocs',
+                    'Glissement et Effondrement de Terrain',
+                    'Glissement et Eboulement Rocheux'
+                )
+                THEN 'mouvement_terrain'
             WHEN nom_peril in ('Tempête', 'Grêle', 'Poids de la Neige', 'Vents Cycloniques')
-            THEN 'meteo'
+                THEN 'meteo'
             WHEN nom_peril in ('Chocs Mécaniques liés à l''action des Vagues','Raz de Marée')
-            THEN 'marin'
+                THEN 'marin'
             WHEN nom_peril in ('Secousse Sismique', 'Eruption Volcanique')
-            THEN 'sismique'
+                THEN 'sismique'
             WHEN nom_peril = 'Sécheresse' THEN 'secheresse_rga'
             ELSE 'autre'
         END AS nom_peril,
-        IF(franchise = '-', 'Simple', franchise) AS franchise,
-        libelle_avis
+        IF(franchise = '-', 'Simple', franchise) AS franchise
     FROM
         {{ ref('ccr_details') }}
 ),
@@ -46,7 +60,7 @@ add_columns_ccr_details AS (
         IF(nom_peril == 'meteo', 1, 0) AS is_meteo,
         IF(nom_peril == 'marin', 1, 0) AS is_marin,
         IF(nom_peril == 'sismique', 1, 0) AS is_sism,
-        IF(nom_peril == 'autre', 1, 0) AS is_autre,
+        IF(nom_peril == 'autre', 1, 0) AS is_autre
     FROM mapping_columns_crr_details
 )
 
@@ -65,6 +79,6 @@ SELECT
     SUM(is_marin) AS nb_arrete_marin,
     SUM(is_sism) AS nb_arrete_sism,
     SUM(is_autre) AS nb_arrete_autre,
-    AVG(franchise) AS avg_franchise,
+    AVG(franchise) AS avg_franchise
 FROM add_columns_ccr_details
 GROUP BY annee, code_geo
