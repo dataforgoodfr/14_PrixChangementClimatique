@@ -6,7 +6,7 @@ WITH mapping_columns_crr_details AS (
         code_geo,
         libelle_avis,
         YEAR(date_debut_evenement) AS annee,
-        CASE 
+        CASE
             WHEN
                 nom_peril IN (
                     'Inondations et/ou Coulées de Boue',
@@ -15,7 +15,7 @@ WITH mapping_columns_crr_details AS (
                     'Lave Torrentielle'
                 )
                 THEN 'inondation'
-            WHEN 
+            WHEN
                 nom_peril IN (
                     'Mouvement de Terrain',
                     'Glissement de Terrain',
@@ -27,7 +27,7 @@ WITH mapping_columns_crr_details AS (
                 THEN 'mouvement_terrain'
             WHEN nom_peril IN ('Tempête', 'Grêle', 'Poids de la Neige', 'Vents Cycloniques')
                 THEN 'meteo'
-            WHEN nom_peril IN ('Chocs Mécaniques liés à l''action des Vagues','Raz de Marée')
+            WHEN nom_peril IN ('Chocs Mécaniques liés à l''action des Vagues', 'Raz de Marée')
                 THEN 'marin'
             WHEN nom_peril IN ('Secousse Sismique', 'Eruption Volcanique')
                 THEN 'sismique'
