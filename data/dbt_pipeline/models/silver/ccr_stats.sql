@@ -1,5 +1,5 @@
--- PREMIERE ETAPE : il s'agit de transformer les catégories de certaines colonnes (nom_peril, franchise, correction sur libelle_avis)
--- et récupérer uniquement l'annee pour la date de l'évènement (date_debut_evenement)
+-- PREMIERE ETAPE : il s'agit de transformer les catégories de certaines colonnes (nom_peril, franchise,
+--  correction sur libelle_avis) et récupérer uniquement l'annee pour la date de l'évènement (date_debut_evenement)
 
 WITH mapping_columns_crr_details AS (
     SELECT
