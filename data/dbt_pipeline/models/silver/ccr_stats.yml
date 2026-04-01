@@ -4,6 +4,11 @@ models:
   - name: ccr_stats
     description: >
       Table aggrégée des catnats reconnus/non reconnus, selon aussi le type de catnats (inondation, sécheresse, mouvements de terrain, meteo, marin, sismique et autre) et de la moyenne des franchises par année et code_geo (commune).
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - annee
     columns:
       - name: annee
         description: Année des évènements catnat (arrêtés)
