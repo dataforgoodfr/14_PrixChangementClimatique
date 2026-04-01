@@ -4,7 +4,7 @@ WITH
 add_weighted AS (
     SELECT
         *,
-       /* 0 AS weighted_rga_pre_1945_nul,
+        /* 0 AS weighted_rga_pre_1945_nul,
         0 AS weighted_rga_pre_1945_faible,
         0 AS weighted_rga_pre_1945_moyen,
         0 AS weighted_rga_pre_1945_fort,
@@ -36,5 +36,5 @@ SELECT
         + tri_t_02_faible + 3 * tri_t_02_moyen + 5 * tri_t_02_fort
         + tri_t_03_faible + 3 * tri_t_03_moyen + 5 * tri_t_03_fort
     ) / total_maisons AS tri_score
-FROM 
+FROM
     add_weighted
