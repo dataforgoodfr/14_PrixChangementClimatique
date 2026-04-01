@@ -6,6 +6,7 @@ WITH primes AS (
     FROM {{ ref('primes_assurances_communes') }}
     -- Filtre sur les comptes d'assurances spécifiés par la revue
     WHERE compte IN ('616', '6161', '6162', '6168')
+      AND code_geo_from_siren IS NOT NULL
     GROUP BY annee, code_geo_from_siren
 )
 
