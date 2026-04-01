@@ -8,7 +8,7 @@ WITH mapping_columns_crr_details AS (
         YEAR(date_debut_evenement) AS annee,
         CASE 
             WHEN
-                nom_peril in (
+                nom_peril IN (
                     'Inondations et/ou Coulées de Boue',
                     'Inondations Remontée Nappe',
                     'Coulée de Boue',
@@ -16,7 +16,7 @@ WITH mapping_columns_crr_details AS (
                 )
                 THEN 'inondation'
             WHEN 
-                nom_peril in (
+                nom_peril IN (
                     'Mouvement de Terrain',
                     'Glissement de Terrain',
                     'Effondrement et/ou Affaisement',
@@ -25,11 +25,11 @@ WITH mapping_columns_crr_details AS (
                     'Glissement et Eboulement Rocheux'
                 )
                 THEN 'mouvement_terrain'
-            WHEN nom_peril in ('Tempête', 'Grêle', 'Poids de la Neige', 'Vents Cycloniques')
+            WHEN nom_peril IN ('Tempête', 'Grêle', 'Poids de la Neige', 'Vents Cycloniques')
                 THEN 'meteo'
-            WHEN nom_peril in ('Chocs Mécaniques liés à l''action des Vagues','Raz de Marée')
+            WHEN nom_peril IN ('Chocs Mécaniques liés à l''action des Vagues','Raz de Marée')
                 THEN 'marin'
-            WHEN nom_peril in ('Secousse Sismique', 'Eruption Volcanique')
+            WHEN nom_peril IN ('Secousse Sismique', 'Eruption Volcanique')
                 THEN 'sismique'
             WHEN nom_peril = 'Sécheresse' THEN 'secheresse_rga'
             ELSE 'autre'
