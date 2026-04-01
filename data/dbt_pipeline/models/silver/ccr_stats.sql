@@ -3,34 +3,34 @@
 
 WITH mapping_columns_crr_details AS (
     SELECT
-        SUBSTR(date_debut_evenement,7) AS annee,
+        YEAR(date_debut_evenement) AS annee,
         code_geo,
         CASE 
-            WHEN nom_peril in ("Inondations et/ou Coulées de Boue", "Inondations Remontée Nappe", "Coulée de Boue", "Lave Torrentielle")
-            THEN "inondation"
-            WHEN nom_peril in ("Mouvement de Terrain", "Glissement de Terrain", "Effondrement et/ou Affaisement", "Eboulement et/ou Chute de Blocs", "Glissement et Effondrement de Terrain", "Glissement et Eboulement Rocheux")
-            THEN "mouvement_terrain"
-            WHEN nom_peril in ("Tempête", "Grêle", "Poids de la Neige", "Vents Cycloniques")
-            THEN "meteo"
-            WHEN nom_peril in ("Chocs Mécaniques liés à l'action des Vagues","Raz de Marée")
-            THEN "marin"
-            WHEN nom_peril in ("Secousse Sismique", "Eruption Volcanique")
-            THEN "sismique"
-            WHEN nom_peril = "Sécheresse" THEN "secheresse_rga"
-            ELSE "autre"
+            WHEN nom_peril in ('Inondations et/ou Coulées de Boue', 'Inondations Remontée Nappe', 'Coulée de Boue', 'Lave Torrentielle')
+            THEN 'inondation'
+            WHEN nom_peril in ('Mouvement de Terrain', 'Glissement de Terrain', 'Effondrement et/ou Affaisement', 'Eboulement et/ou Chute de Blocs', 'Glissement et Effondrement de Terrain', 'Glissement et Eboulement Rocheux')
+            THEN 'mouvement_terrain'
+            WHEN nom_peril in ('Tempête', 'Grêle', 'Poids de la Neige', 'Vents Cycloniques')
+            THEN 'meteo'
+            WHEN nom_peril in ('Chocs Mécaniques liés à l''action des Vagues','Raz de Marée')
+            THEN 'marin'
+            WHEN nom_peril in ('Secousse Sismique', 'Eruption Volcanique')
+            THEN 'sismique'
+            WHEN nom_peril = 'Sécheresse' THEN 'secheresse_rga'
+            ELSE 'autre'
         END AS nom_peril,
-        IF(franchise = '-', "Simple", franchise) AS franchise,
+        IF(franchise = '-', 'Simple', franchise) AS franchise,
         libelle_avis
     FROM
         {{ ref('ccr_details') }}
-)
+),
 
 -- DEUXIEME ETAPE : il s'agit de créer/ajouter des colonnes 'numérisées' à partir de la table précédente
--- pour permettre les opérations de calcul de l'étape suivante
+-- pour permettre les opérations de calculs de l'étape suivante
 
 add_columns_ccr_details AS (
     SELECT
-        CAST(annee AS INTEGER) AS annee,
+        annee,
         code_geo,
         CASE
             WHEN franchise = 'Simple' THEN 1
