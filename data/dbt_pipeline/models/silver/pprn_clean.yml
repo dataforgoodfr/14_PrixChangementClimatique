@@ -23,4 +23,4 @@ models:
         data_type: varchar
       - name: date_approbation
         description: Date d'approbation du PPRN
-        data_type: timestamp
+        data_type: datetime

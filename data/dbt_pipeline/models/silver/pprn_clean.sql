@@ -20,8 +20,8 @@ last_update AS (
 SELECT 
     code_geo,
     REPLACE(code_modele, 'PPRN-', '') AS pprn,
-    libelle_risque_2 as pprn_libelle,
-    libelle_risque_3 as pprn_desc,
-    approbation as date_approbation,
+    libelle_risque_2 AS pprn_libelle,
+    libelle_risque_3 AS pprn_desc,
+    approbation AS date_approbation
 FROM last_update
 WHERE rn = 1;
