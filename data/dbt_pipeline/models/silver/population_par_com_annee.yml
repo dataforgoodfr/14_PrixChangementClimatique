@@ -1,0 +1,31 @@
+models:
+  - name: population_par_com_annee
+    description: >
+      Population par année et par communes, depuis 2016
+
+      Populations légales 2013 : https://www.insee.fr/fr/statistiques/2119504
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - annee
+
+    columns:
+      - name: code_geo
+        description: Code Insee de la commune
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: annee
+        description: Année d'entrée en vigueur
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: annee_recensement
+        description: Année du recensement
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: population
+        description: Population municipale
+        data_type: integer
