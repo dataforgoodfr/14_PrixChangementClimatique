@@ -1,32 +1,39 @@
 -- pprn_clean.sql
 
--- Filtrer PPRN actifs
-WITH active_pprn AS (
+-- Approbation plus recentes
+WITH last_update AS (
     SELECT 
         code_geo,
         code_modele,
         libelle_risque_2,
         libelle_risque_3,
-        approbation,
-    FROM {{ ref('pprn_gaspar') }}
+        CAST(approbation AS TIMESTAMP) AS date_approbation
+    FROM pprn_gaspar
     WHERE libelle_etat = 'Opposable'
 ),
 
--- Approbation plus recentes
-last_update AS (
-    SELECT *,
-        ROW_NUMBER() OVER(
-            PARTITION BY code_geo, code_modele
-            ORDER BY CAST(approbation AS TIMESTAMP) DESC
-        ) AS rn
-    FROM active_pprn
+-- Le PPRN-Multi peut couvrir plusieurs risques, on modifie donc les libellés pour que tous les risques figurent
+aggregated_risks AS (
+    SELECT 
+        code_geo,
+        code_modele,
+        STRING_AGG(DISTINCT libelle_risque_2, ' / ') AS agg_libelle,
+        STRING_AGG(DISTINCT libelle_risque_3, ' / ') AS agg_desc,
+        MAX(date_approbation) AS max_approbation
+    FROM last_update
+    GROUP BY code_geo, code_modele
 )
 
 SELECT 
     code_geo,
     REPLACE(code_modele, 'PPRN-', '') AS pprn,
-    libelle_risque_2 AS pprn_libelle,
-    libelle_risque_3 AS pprn_desc,
-    approbation AS date_approbation,
-FROM last_update
-WHERE rn = 1;
+    CASE 
+        WHEN code_modele = 'PPRN-Multi' THEN agg_libelle 
+        ELSE agg_libelle 
+    END AS pprn_libelle,
+    CASE 
+        WHEN code_modele = 'PPRN-Multi' THEN agg_desc 
+        ELSE agg_desc 
+    END AS pprn_desc,
+    max_approbation AS date_approbation
+FROM aggregated_risks;
