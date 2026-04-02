@@ -2,7 +2,12 @@
 
 -- Filtrer PPRN actifs
 WITH active_pprn AS (
-    SELECT *
+    SELECT 
+        code_geo,
+        code_modele,
+        libelle_risque_2,
+        libelle_risque_3,
+        approbation,
     FROM {{ ref('pprn_gaspar') }}
     WHERE libelle_etat = 'Opposable'
 ),
@@ -11,7 +16,7 @@ WITH active_pprn AS (
 last_update AS (
     SELECT *,
         ROW_NUMBER() OVER(
-            PARTITION BY code_modele, code_geo
+            PARTITION BY code_geo, code_modele
             ORDER BY CAST(approbation AS TIMESTAMP) DESC
         ) AS rn
     FROM active_pprn
@@ -22,6 +27,6 @@ SELECT
     REPLACE(code_modele, 'PPRN-', '') AS pprn,
     libelle_risque_2 AS pprn_libelle,
     libelle_risque_3 AS pprn_desc,
-    approbation AS date_approbation
+    approbation AS date_approbation,
 FROM last_update
 WHERE rn = 1;
