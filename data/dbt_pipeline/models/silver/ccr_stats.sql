@@ -51,7 +51,7 @@ add_columns_ccr_details AS (
             WHEN franchise = 'Doublée' THEN 2
             WHEN franchise = 'Triplée' THEN 3
             WHEN franchise = 'Quadruplée' THEN 4
-        END AS franchise,
+        END AS multiple_franchise,
         IF(libelle_avis == 'Reconnue', 1, 0) AS is_recon,
         IF(libelle_avis == 'Non reconnue', 1, 0) AS is_refus,
         IF(nom_peril == 'inondation', 1, 0) AS is_ino,
@@ -79,6 +79,6 @@ SELECT
     SUM(is_marin) AS nb_arrete_marin,
     SUM(is_sism) AS nb_arrete_sism,
     SUM(is_autre) AS nb_arrete_autre,
-    AVG(franchise) AS avg_franchise
+    AVG(multiple_franchise) AS avg_multiple_franchise
 FROM add_columns_ccr_details
 GROUP BY annee, code_geo

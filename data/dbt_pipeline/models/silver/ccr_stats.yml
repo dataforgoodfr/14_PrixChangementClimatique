@@ -51,5 +51,5 @@ models:
         description: Nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "autre" par commune et par an
         data_type: int
       - name: avg_franchise
-        description: Moyenne par commune et par année de la franchise
+        description: Moyenne par commune et par année du multiplicateur de la franchise
         data_type: float
