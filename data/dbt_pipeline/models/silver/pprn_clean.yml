@@ -1,0 +1,26 @@
+models:
+  - name: pprn_clean
+    description: Dernier PPRN en vigueur
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+
+    columns:
+      - name: code_geo
+        description: Code INSEE
+        data_tests:
+          - not_null
+        data_type: varchar
+      - name: pprn
+        description: Type de PPRN (I, RGA, L, ect...)
+        data_type: varchar
+      - name: pprn_libelle
+        description: Type de PPRN (plain text)
+        data_type: varchar
+      - name: pprn_desc
+        description: Courte description du PPRN
+        data_type: varchar
+      - name: date_approbation
+        description: Date d'approbation du PPRN
+        data_type: timestamp
