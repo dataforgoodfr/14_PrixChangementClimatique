@@ -1,6 +1,6 @@
 -- ccr_details.sql
 
-WITH ranked_data AS (
+WITH drop_duplicates AS (
     SELECT 
         "codeInsee" AS code_geo,
         "nomCommune" AS nom_commune,
@@ -30,5 +30,5 @@ SELECT
     franchise,
     libelle_avis,
     code_arrete
-FROM ranked_data
+FROM drop_duplicates
 WHERE rn = 1;
