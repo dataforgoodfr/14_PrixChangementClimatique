@@ -11,11 +11,7 @@ models:
 
     columns:
       - name: code_geo
-        description: >
-          code_geo qui utilise en priorité
-          - le champ code_geo_from_siren : le code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
-          - sinon : code_geo qui est la concaténation du code département et du code INSEE
-          - sinon (bis) : code_insee le code INSEE dans la base originale
+        description: le code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
         data_tests:
           - not_null
       - name: annee
