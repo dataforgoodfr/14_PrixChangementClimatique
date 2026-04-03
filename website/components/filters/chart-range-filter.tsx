@@ -10,7 +10,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 // Normal-distribution histogram data for demo purposes
 const HISTOGRAM_DATA: { bin: string; count: number }[] = [
