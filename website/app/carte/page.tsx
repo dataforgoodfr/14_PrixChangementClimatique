@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MainMapLayout from "@/components/main-map";
+import MainMapLayout from "@/components/map/main-map";
 
 export const metadata: Metadata = {
   title: "Carte | Reclaim Finance",
