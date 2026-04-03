@@ -2,7 +2,7 @@
 
 import { SlidersHorizontal } from "lucide-react";
 import { Panel } from "@/components/core/panel";
-import { SkeletonFilter } from "@/components/core/skeleton";
+import { ChartRangeFilter } from "@/components/filters/chart-range-filter";
 
 interface FiltersPanelProps {
   isOpen: boolean;
@@ -22,9 +22,11 @@ export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
       </Panel.Header>
 
       <Panel.Content>
-        <SkeletonFilter />
-        <SkeletonFilter />
-        <SkeletonFilter />
+        <ChartRangeFilter
+          title="Exposition au risque"
+          filterMin={0}
+          filterMax={100}
+        />
       </Panel.Content>
 
       <Panel.Footer>
