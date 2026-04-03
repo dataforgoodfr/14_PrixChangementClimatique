@@ -7,12 +7,15 @@ import {
   Popup,
   Layer,
   Source,
+  type ViewStateChangeEvent,
+  type MapRef,
 } from "@vis.gl/react-maplibre";
 import { Protocol } from "pmtiles";
 import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { FiltersPanel } from "@/components/map/filters-panel";
 import { FeatureDetailPanel } from "@/components/map/feature-detail-panel";
+import { MapProvider, useMapContext } from "@/contexts/map-context";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -70,13 +73,9 @@ function CommunesLayer() {
 
 // ─── Map Canvas: Here is the main map canvas component that renders the map and handles interactions.  ──────────────
 
-function MapCanvas({
-  onFeatureSelect,
-  isFiltersPanelOpen,
-}: {
-  onFeatureSelect: (properties: Record<string, unknown>) => void;
-  isFiltersPanelOpen: boolean;
-}) {
+function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
+  const { mapRef, viewState, setViewState, selectFeature } = useMapContext();
+
   const [hoverInfo, setHoverInfo] = useState<{
     longitude: number;
     latitude: number;
@@ -88,6 +87,11 @@ function MapCanvas({
     maplibregl.addProtocol("pmtiles", protocol.tile);
     return () => maplibregl.removeProtocol("pmtiles");
   }, []);
+
+  const handleMove = useCallback(
+    (e: ViewStateChangeEvent) => setViewState(e.viewState),
+    [setViewState],
+  );
 
   const handleMouseMove = useCallback(
     (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
@@ -108,23 +112,20 @@ function MapCanvas({
   const handleClick = useCallback(
     (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const f = e.features?.[0];
-      if (f) onFeatureSelect(f.properties as Record<string, unknown>);
+      if (f) selectFeature(f.properties as Record<string, unknown>);
     },
-    [onFeatureSelect],
+    [selectFeature],
   );
 
   const handleCursorEnter = useCallback((e: MapMouseEvent) => {
     (e.target as maplibregl.Map).getCanvas().style.cursor = "pointer";
   }, []);
 
-  // NOTE: Not used now, but could usefull later on
-  // const handleCursorLeave = useCallback((e: MapMouseEvent) => {
-  //   (e.target as maplibregl.Map).getCanvas().style.cursor = "";
-  // }, []);
-
   return (
     <Map
-      initialViewState={{ longitude: 2.3522, latitude: 46.5, zoom: 5 }}
+      ref={mapRef as React.RefObject<MapRef>}
+      {...viewState}
+      onMove={handleMove}
       style={{ width: "100%", height: "100%" }}
       mapStyle="https://api.protomaps.com/styles/v5/light/fr.json?key=72196f954acb1cae"
       interactiveLayerIds={[COMMUNES_LAYER_ID]}
@@ -155,45 +156,33 @@ function MapCanvas({
   );
 }
 
-export default function MainMapLayout() {
+function MainMap() {
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const [selectedFeature, setSelectedFeature] = useState<Record<
-    string,
-    unknown
-  > | null>(null);
-
-  const handleFeatureSelect = useCallback(
-    (properties: Record<string, unknown>) => {
-      setSelectedFeature(properties);
-      setDetailsOpen(true);
-    },
-    [],
-  );
 
   return (
     <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
-      {/* Map wrapper and canvas thats fills the full area; could be refactored followin React slot patterns (same as Panel) */}
+      {/* Map wrapper and canvas that fills the full area */}
       <div className="absolute inset-0">
-        <MapCanvas
-          onFeatureSelect={handleFeatureSelect}
-          isFiltersPanelOpen={filtersOpen}
-        />
+        <MapCanvas isFiltersPanelOpen={filtersOpen} />
       </div>
 
-      {/* Left: commune detail panel (panel width can be directly controlled via props; see component implementation) */}
-      <FeatureDetailPanel
-        isOpen={detailsOpen}
-        onClose={() => setDetailsOpen(false)}
-        properties={selectedFeature}
-      />
+      {/* Left: commune detail panel – reads selectedFeature from context */}
+      <FeatureDetailPanel />
 
-      {/* Right: filter panel – toggle button rendered via Panel.Controls | TODO: move MapLibre navigation control inside Panel.Controls */}
+      {/* Right: filter panel – toggle button rendered via Panel.Controls */}
       <FiltersPanel
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
         onToggle={() => setFiltersOpen((v) => !v)}
       />
     </div>
+  );
+}
+
+export default function MainMapLayout() {
+  return (
+    <MapProvider>
+      <MainMap />
+    </MapProvider>
   );
 }

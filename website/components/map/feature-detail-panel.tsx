@@ -1,41 +1,36 @@
 "use client";
 
 import { Panel } from "@/components/core/panel";
+import { useMapContext } from "@/contexts/map-context";
 
-export function FeatureDetailPanel({
-  isOpen,
-  onClose,
-  properties,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  properties: Record<string, unknown> | null;
-}) {
+export function FeatureDetailPanel() {
+  const { selectedFeature, clearSelectedFeature } = useMapContext();
+
   return (
     <Panel
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={selectedFeature !== null}
+      onClose={clearSelectedFeature}
       dir="ltr"
       width={460}
       zIndex="z-30"
     >
       <Panel.Header>
         <Panel.Title>
-          {String(properties?.nom_commune ?? "Commune")}
+          {String(selectedFeature?.nom_commune ?? "Commune")}
         </Panel.Title>
-        {!!properties?.code_geo && (
+        {!!selectedFeature?.code_geo && (
           <Panel.Subtitle>
-            Code INSEE : {String(properties.code_geo)}
+            Code INSEE : {String(selectedFeature.code_geo)}
           </Panel.Subtitle>
         )}
       </Panel.Header>
 
       <Panel.Content>
         <div className="p-4">
-          {properties ? (
+          {selectedFeature ? (
             <table className="w-full">
               <tbody>
-                {Object.entries(properties).map(([key, value]) => (
+                {Object.entries(selectedFeature).map(([key, value]) => (
                   <tr
                     key={key}
                     className="border-b border-gray-100 last:border-0"
