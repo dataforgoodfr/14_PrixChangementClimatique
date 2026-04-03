@@ -12,7 +12,13 @@ export function FeatureDetailPanel({
   properties: Record<string, unknown> | null;
 }) {
   return (
-    <Panel isOpen={isOpen} onClose={onClose} dir="ltr" width={460}>
+    <Panel
+      isOpen={isOpen}
+      onClose={onClose}
+      dir="ltr"
+      width={460}
+      zIndex="z-30"
+    >
       <Panel.Header>
         <Panel.Title>
           {String(properties?.nom_commune ?? "Commune")}
