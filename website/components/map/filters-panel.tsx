@@ -3,6 +3,7 @@
 import { SlidersHorizontal } from "lucide-react";
 import { Panel } from "@/components/core/panel";
 import { ChartRangeFilter } from "@/components/filters/chart-range-filter";
+import { Button } from "../ui/button";
 
 interface FiltersPanelProps {
   isOpen: boolean;
@@ -31,26 +32,24 @@ export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
 
       <Panel.Footer>
         <Panel.Actions>
-          <button
-            onClick={clearAll}
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
+          <Button onClick={clearAll} variant="ghost" size="lg">
             Tout effacer
-          </button>
-          <button className="bg-green-700 text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-green-800 transition-colors">
+          </Button>
+          <Button size="lg" disabled>
             Afficher 1000 communes
-          </button>
+          </Button>
         </Panel.Actions>
       </Panel.Footer>
 
       <Panel.Controls>
-        <button
+        <Button
           onClick={onToggle}
           title={isOpen ? "Fermer les filtres" : "Ouvrir les filtres"}
-          className="bg-rf-green-dark hover:bg-rf-green-dark/90 text-white p-2.5 rounded-md shadow-md"
+          size="icon-lg"
+          // className="bg-rf-green-dark hover:bg-rf-green-dark/90 text-white p-2.5 rounded-md shadow-md"
         >
           <SlidersHorizontal size={18} />
-        </button>
+        </Button>
       </Panel.Controls>
     </Panel>
   );

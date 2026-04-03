@@ -10,6 +10,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Slider } from "@/components/ui/slider";
+import { Button } from "../ui/button";
 
 // Normal-distribution histogram data for demo purposes
 const HISTOGRAM_DATA: { bin: string; count: number }[] = [
@@ -57,17 +58,21 @@ export function ChartRangeFilter({
 
   return (
     <div className="border-b border-gray-200">
-      <button
+      <Button
         onClick={() => setFilterExpanded((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-4"
+        className="w-full flex items-center justify-between px-4 py-4 my-2"
+        size="lg"
+        variant="ghost"
       >
-        <span className="font-semibold text-gray-900">{title}</span>
+        <span className="font-semibold gap-1.5 text-sm text-gray-900">
+          {title}
+        </span>
         {filterExpanded ? (
           <ChevronUp size={16} className="text-gray-500" />
         ) : (
           <ChevronDown size={16} className="text-gray-500" />
         )}
-      </button>
+      </Button>
 
       {filterExpanded && (
         <div className="px-4 pb-5">
