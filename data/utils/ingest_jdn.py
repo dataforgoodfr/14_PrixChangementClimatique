@@ -1,21 +1,10 @@
 import re
-import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-
-"""
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.firefox import GeckoDriverManager
-"""
 
 
 def get_last_page_number(soup):
@@ -40,9 +29,9 @@ def scrape_jdn_impots(base_url):
     headers = {"User-Agent": "Mozilla/5.0"}
 
     response = requests.get(base_url, headers=headers)
-    soup = BeautifulSoup(response.content, "html.parser")
+    soup = BeautifulSoup(response.content, "html.parser")  # HTML of target page
 
-    last_page = get_last_page_number(soup)
+    last_page = get_last_page_number(soup)  # Get last pagination
 
     extracted_records = []
     for page in range(1, last_page + 1):
@@ -55,6 +44,7 @@ def scrape_jdn_impots(base_url):
             print(f"Connection error on page {page}: {e}")
             break
 
+        # Find table in webpage
         soup = BeautifulSoup(response.content, "html.parser")
         table = soup.find("table")
 
@@ -78,7 +68,9 @@ def scrape_jdn_impots(base_url):
 
                 if link and "href" in link.attrs:
                     href_url = link["href"]
-                    insee_match = re.search(r"/ville-([^/]+)", href_url)
+                    insee_match = re.search(
+                        r"/ville-([^/]+)", href_url
+                    )  # Code Insee de la Commune
                     if insee_match:
                         code_insee = insee_match.group(1)
 
@@ -92,8 +84,6 @@ def scrape_jdn_impots(base_url):
                         / 100,
                     }
                 )
-
-        # time.sleep(1)
 
     df = pd.DataFrame(extracted_records)
     return df
@@ -110,20 +100,21 @@ def main():
     all_dfs = []
 
     tax_metadata = []
-    for name, url in tax_sources.items():
-        tax_metadata.append((name, 2024, url))
-        tax_metadata.append((name, 2020, f"{url}/2020"))
-
+    for year in range(2010, 2025):
+        for name, url in tax_sources.items():
+            if year != 2024:
+                url = url + f"/{year}"
+            tax_metadata.append((name, year, url))
     all_dfs = []
 
-    with ThreadPoolExecutor(max_workers=len(tax_metadata)) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {
             executor.submit(scrape_jdn_impots, url): (tax_type, year)
             for tax_type, year, url in tax_metadata
         }
 
         for future in tqdm(
-            as_completed(futures), total=len(futures), desc="Tax Extraction Completed"
+            as_completed(futures), total=len(futures), desc="Tax Extraction"
         ):
             tax_type, year = futures[future]
             try:
