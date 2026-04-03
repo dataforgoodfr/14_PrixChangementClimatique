@@ -21,7 +21,7 @@ models:
           - not_null
 
       - name: prime_assurance
-        description: "Somme des primes d'assurances pour les comptes 616, 6161, 6162 et 6168."
+        description: "Somme des primes d'assurances pour le compte 6161."
         data_type: float
         tests:
           - not_null
