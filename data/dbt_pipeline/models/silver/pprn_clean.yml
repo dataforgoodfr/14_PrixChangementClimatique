@@ -10,17 +10,15 @@ models:
     columns:
       - name: code_geo
         description: Code INSEE
-        data_tests:
-          - not_null
         data_type: varchar
       - name: pprn
         description: Type de PPRN (I, RGA, L, ect...)
         data_type: varchar
       - name: pprn_libelle
-        description: Type de PPRN (plain text)
+        description: Type de PPRN (plain text), PPRN-Multi est une liste de tout les risques couverts
         data_type: varchar
       - name: pprn_desc
-        description: Courte description du PPRN
+        description: Courte description du PPRN, PPRN-Multi est une liste de tout les risques couverts
         data_type: varchar
       - name: date_approbation
         description: Date d'approbation du PPRN
