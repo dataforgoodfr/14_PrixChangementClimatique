@@ -1,7 +1,7 @@
 -- ccr_details.sql
 
 WITH drop_duplicates AS (
-    SELECT 
+    SELECT
         "codeInsee" AS code_geo,
         "nomCommune" AS nom_commune,
         "dateDebutEvenement" AS date_debut_evenement,
@@ -12,14 +12,14 @@ WITH drop_duplicates AS (
         franchise,
         "libelleAvis" AS libelle_avis,
         code_arrete,
-        ROW_NUMBER() OVER(
+        ROW_NUMBER() OVER (
             PARTITION BY code_geo, code_arrete, nom_peril
             ORDER BY date_arrete DESC
         ) AS rn
     FROM 'pipeline_inputs/ccr_details.csv'
 )
 
-SELECT 
+SELECT
     code_geo,
     nom_commune,
     date_debut_evenement,
@@ -31,4 +31,4 @@ SELECT
     libelle_avis,
     code_arrete
 FROM drop_duplicates
-WHERE rn = 1;
+WHERE rn = 1
