@@ -1,62 +1,78 @@
+import random
 import re
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
 from tqdm import tqdm
+from urllib3.util.retry import Retry
+
+
+def get_session():
+    session = requests.Session()
+    retry_strategy = Retry(
+        total=3,  # Nombre total de tentatives
+        backoff_factor=2,  # Attente (2s, 4s, 8s...)
+        status_forcelist=[429, 500, 502, 503, 504],  # Retenter sur ces codes d'erreur
+        allowed_methods=["GET"],
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    return session
 
 
 def get_last_page_number(soup):
     pagination_links = soup.select("ul.p-pagination a")
-
     if not pagination_links:
         pagination_links = soup.find_all("a", href=re.compile(r"\?page=\d+"))
-
     pages = []
     for link in pagination_links:
         text = link.text.strip()
         if text.isdigit():
             pages.append(int(text))
-
     return max(pages) if pages else 1
 
 
 def scrape_jdn_impots(base_url):
     extracted_records = []
-    page = 1
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    session = get_session()
 
-    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        response = session.get(base_url, headers=headers, timeout=20)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content, "html.parser")
+        last_page = get_last_page_number(soup)
+    except Exception as e:
+        print(f"Impossible d'accéder à l'URL de base {base_url}: {e}")
+        return pd.DataFrame()
 
-    response = requests.get(base_url, headers=headers)
-    soup = BeautifulSoup(response.content, "html.parser")  # HTML of target page
-
-    last_page = get_last_page_number(soup)  # Get last pagination
-
-    extracted_records = []
     for page in range(1, last_page + 1):
         current_url = base_url if page == 1 else f"{base_url}?page={page}"
 
+        time.sleep(random.uniform(1.0, 2.5))
+
         try:
-            response = requests.get(current_url, headers=headers, timeout=10)
+            response = session.get(current_url, headers=headers, timeout=20)
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            print(f"Connection error on page {page}: {e}")
-            break
+            print(f"Erreur persistante sur page {page} ({current_url}): {e}")
+            continue
 
-        # Find table in webpage
         soup = BeautifulSoup(response.content, "html.parser")
         table = soup.find("table")
-
         if not table:
-            print(f"No table found on page {page}")
-            break
+            continue
 
         rows = table.find_all("tr")
-
         for row in rows:
             cells = row.find_all("td")
-
             if len(cells) >= 3:
                 ville_cell = cells[1]
                 pourcentage_cell = cells[2]
@@ -68,45 +84,49 @@ def scrape_jdn_impots(base_url):
 
                 if link and "href" in link.attrs:
                     href_url = link["href"]
-                    insee_match = re.search(
-                        r"/ville-([^/]+)", href_url
-                    )  # Code Insee de la Commune
+                    insee_match = re.search(r"/ville-([^/]+)", href_url)
                     if insee_match:
                         code_insee = insee_match.group(1)
 
-                extracted_records.append(
-                    {
-                        "code_geo": code_insee,
-                        "commune": ville,
-                        "pourcentage": float(
-                            raw_pourcentage.replace(" %", "").replace(",", ".")
+                try:
+                    if "impots-locaux" not in base_url:
+                        valeur = (
+                            float(raw_pourcentage.replace(" %", "").replace(",", "."))
+                            / 100
                         )
-                        / 100,
-                    }
-                )
+                    else:
+                        valeur = raw_pourcentage
 
-    df = pd.DataFrame(extracted_records)
-    return df
+                    extracted_records.append(
+                        {
+                            "code_geo": code_insee,
+                            "commune": ville,
+                            "pourcentage": valeur,
+                        }
+                    )
+                except ValueError:
+                    continue
+
+    return pd.DataFrame(extracted_records)
 
 
 def main():
-
     tax_sources = {
         "habitation": "https://www.journaldunet.com/economie/impots/classement/villes/taxe-habitation",
         "fonciere_bati": "https://www.journaldunet.com/economie/impots/classement/villes/taxe-fonciere-bati",
         "fonciere_non_bati": "https://www.journaldunet.com/economie/impots/classement/villes/taxe-fonciere-non-bati",
         "ordures_menageres": "https://www.journaldunet.com/economie/impots/classement/villes/taxe-ordures-menageres",
+        "impots_locaux": "https://www.journaldunet.com/business/budget-ville/classement/villes/impots-locaux",
     }
-    all_dfs = []
 
     tax_metadata = []
+    # Test sur 2020 (modifiable selon besoin)
     for year in range(2010, 2025):
         for name, url in tax_sources.items():
-            if year != 2024:
-                url = url + f"/{year}"
-            tax_metadata.append((name, year, url))
-    all_dfs = []
+            final_url = url if year == 2024 else f"{url}/{year}"
+            tax_metadata.append((name, year, final_url))
 
+    all_dfs = []
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {
             executor.submit(scrape_jdn_impots, url): (tax_type, year)
@@ -114,7 +134,7 @@ def main():
         }
 
         for future in tqdm(
-            as_completed(futures), total=len(futures), desc="Tax Extraction"
+            as_completed(futures), total=len(futures), desc="Extraction Impôts JDN"
         ):
             tax_type, year = futures[future]
             try:
@@ -124,10 +144,14 @@ def main():
                     result_df["annee"] = year
                     all_dfs.append(result_df)
             except Exception as e:
-                print(f"Error scraping {tax_type} {year}: {e}")
+                print(f"Échec critique sur {tax_type} {year}: {e}")
 
-    df_final = pd.concat(all_dfs, ignore_index=True)
-    df_final.to_csv("impots_jdn.csv", index=False)
+    if all_dfs:
+        df_final = pd.concat(all_dfs, ignore_index=True)
+        df_final.to_csv("impots_jdn_clean.csv", index=False, encoding="utf-8-sig")
+        print(f"\n Extraction terminée : {len(df_final)} lignes enregistrées")
+    else:
+        print("\n Aucune donnée n'a pu être extraite")
 
 
 if __name__ == "__main__":
