@@ -31,12 +31,23 @@ A l'usage, utilisez la commande `uv run ...` (au lieu de `python ...`) pour lanc
 uv run data/example_script.py
 ```
 
+## Données - Extraction BD TOPO
+
+Pour extraire les bâtiments de la BD TOPO IGN (incluant les DROMs) et générer un fichier Parquet avec centroids et codes communes :
+
+1.  Assurez-vous d'avoir `7zz` installé (ex: `brew install sevenzip`).
+2.  Placez les archives `.7z` (ou `.7z.001`) dans `data/csv_large/BDTOPO/`.
+3.  Lancez le script d'extraction :
+
+```bash
+# Pour un test sur Mayotte (PoC)
+uv run scripts/extract_bdtopo_buildings.py --territory MYT
+
+# Pour le traitement complet national
+uv run scripts/extract_bdtopo_buildings.py
+```
+
+Le fichier final sera généré dans `data/csv_large/france_all_bats_clean.parquet`.
+
 ## Lancer les precommit-hook localement
-
-[Installer les precommit](https://pre-commit.com/)
-
-    pre-commit run --all-files
-
-## Utiliser Tox pour tester votre code
-
-    tox -vv
+...
