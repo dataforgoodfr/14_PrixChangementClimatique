@@ -1,7 +1,7 @@
 models:
   - name: batiments_risk_RGA
     description: Score de vulnérabilité au Retrait-Gonflement des Argiles (RGA) par commune
-      
+
     columns:
       - name: code_geo
         description: "Code INSEE de la commune"
@@ -18,4 +18,3 @@ models:
           Poids périodes : 1976-2020 (1.0), 1945-1975 & post-2020 (0.5), pré-1945 (0.0).
           Poids sévérité : faible (1.0), moyen (5.0), fort (10.0).
         data_type: float
-
