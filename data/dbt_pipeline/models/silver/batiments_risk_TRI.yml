@@ -1,0 +1,18 @@
+models:
+  - name: batiments_risk_TRI
+    description: Score d'exposition aux inondations (TRI) par communes.
+
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune"
+        data_type: string
+        data_test:
+          - unique
+          - not_null
+
+      - name: tri_score
+        description: >
+          Score d'exposition aux inondations (TRI).
+          Somme pondérée des indicateurs de risque : faible (coefficient 1), moyen (coefficient 3)
+          et fort (coefficient 5).
+        data_type: float
