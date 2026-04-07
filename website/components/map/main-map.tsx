@@ -16,15 +16,16 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { FiltersPanel } from "@/components/map/filters-panel";
 import { FeatureDetailPanel } from "@/components/map/feature-detail-panel";
 import { MapProvider, useMapContext } from "@/contexts/map-context";
+import type { CommuneProperties } from "@/lib/types/communes";
 
-// ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
+// ─── Map constants ────────────────────────────────────────────────────────────
 
 const COMMUNES_PMTILES_URL = "/pmtiles/communes.pmtiles";
 const COMMUNES_LAYER_ID = "communes-fill";
 const COMMUNES_BORDER_LAYER_ID = "communes-border";
 const COMMUNES_SOURCE_ID = "communes-source";
 
-// ─── Map Layers: Communes ──────────────
+// ─── Map Layers: Communes ─────────────────────────────────────────────────────
 
 function CommunesLayer() {
   return (
@@ -71,10 +72,10 @@ function CommunesLayer() {
   );
 }
 
-// ─── Map Canvas: Here is the main map canvas component that renders the map and handles interactions.  ──────────────
+// ─── Map Canvas ───────────────────────────────────────────────────────────────
 
 function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
-  const { mapRef, viewState, setViewState, selectFeature } = useMapContext();
+  const { mapRef, viewState, setViewState, selectCommune } = useMapContext();
 
   const [hoverInfo, setHoverInfo] = useState<{
     longitude: number;
@@ -112,9 +113,9 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
   const handleClick = useCallback(
     (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const f = e.features?.[0];
-      if (f) selectFeature(f.properties as Record<string, unknown>);
+      if (f) selectCommune(f.properties as CommuneProperties);
     },
-    [selectFeature],
+    [selectCommune],
   );
 
   const handleCursorEnter = useCallback((e: MapMouseEvent) => {
@@ -156,20 +157,19 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
   );
 }
 
+// ─── Layout ───────────────────────────────────────────────────────────────────
+
 function MainMap() {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
     <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
-      {/* Map wrapper and canvas that fills the full area */}
       <div className="absolute inset-0">
         <MapCanvas isFiltersPanelOpen={filtersOpen} />
       </div>
 
-      {/* Left: commune detail panel – reads selectedFeature from context */}
       <FeatureDetailPanel />
 
-      {/* Right: filter panel – toggle button rendered via Panel.Controls */}
       <FiltersPanel
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
