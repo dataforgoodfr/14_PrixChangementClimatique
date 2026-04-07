@@ -3,7 +3,8 @@
 WITH
 add_weighted AS (
     SELECT
-        *,
+        code_geo,
+        total_maisons,
         0.5 * 1 * rga_1945_1975_faible AS weighted_rga_1945_1975_faible,
         0.5 * 5 * rga_1945_1975_moyen AS weighted_rga_1945_1975_moyen,
         0.5 * 10 * rga_1945_1975_fort AS weighted_rga_1945_1975_fort,
