@@ -50,4 +50,5 @@ uv run scripts/extract_bdtopo_buildings.py
 Le fichier final sera généré dans `data/csv_large/france_all_bats_clean.parquet`.
 
 ## Lancer les precommit-hook localement
+
 ...
