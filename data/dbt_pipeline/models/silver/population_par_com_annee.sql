@@ -88,17 +88,19 @@ WITH table_pivot_population AS (
     FROM {{ ref('population_code_geo') }}
 )
 
--- DEUXIEME ETAPE: On filtre les données de population nulles
-SELECT 
-*
-FROM table_pivot_population
-WHERE population IS NOT NULL
+-- DEUXIEME ETAPE: On filtre les données de population null
+CREATE TABLE mayotte_population
+(
+    code_geo VARHCAR(5) PRIMARY KEY NOT NULL,
+    annee_recensement INT,
+    annee INT,
+    population NOT NULL
+)
 
 
 -- TROISIEME ETAPE : Ajout dans la table population finale les données de population (2017) de Mayotte
 -- Lien de la source : https://www.insee.fr/fr/statistiques/5392668?sommaire=2120838
-
-INSERT INTO table_pivot_population_not_null (code_geo, annee_recensement, annee, population)
+INSERT INTO mayotte_population (code_geo, annee_recensement, annee, population)
 VALUES
 ('97601', 2017, 2020, 5384),
 ('97602', 2017, 2020, 14211),
@@ -117,3 +119,12 @@ VALUES
 ('97615', 2017, 2020, 11802),
 ('97616', 2017, 2020, 11619),
 ('97617', 2017, 2020, 14235);
+
+
+SELECT 
+*
+FROM table_pivot_population
+WHERE population IS NOT NULL
+
+UNION ALL
+mayotte_population
