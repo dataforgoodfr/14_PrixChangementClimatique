@@ -79,6 +79,6 @@ SELECT
     SUM(is_marin) AS nb_arrete_marin,
     SUM(is_sism) AS nb_arrete_sism,
     SUM(is_autre) AS nb_arrete_autre,
-    AVG(multiple_franchise) AS avg_multiple_franchise
+    MAX(multiple_franchise) AS multiple_franchise
 FROM add_columns_ccr_details
 GROUP BY annee, code_geo
