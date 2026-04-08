@@ -60,4 +60,4 @@ print(f"Dataset consolidé : {df_flat.shape[0]} communes.")
 print(f"Colonnes générées : {sorted([c for c in df_flat.columns if '_' in c])}")
 
 # Save the flat file
-df_flat.write_parquet('../csv/france_all_bats_flat.parquet')
+df_flat.write_parquet('../csv/tri_all_bats_flat.parquet')
