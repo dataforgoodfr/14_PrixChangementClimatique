@@ -89,12 +89,11 @@ WITH table_pivot_population AS (
 )
 
 -- DEUXIEME ETAPE: On filtre les données de population nulles
-table_pivot_population_not_null AS (
-    SELECT 
-    *
-    FROM table_pivot_population
-    WHERE population IS NOT NULL
-)
+SELECT 
+*
+FROM table_pivot_population
+WHERE population IS NOT NULL
+
 
 -- TROISIEME ETAPE : Ajout dans la table population finale les données de population (2017) de Mayotte
 -- Lien de la source : https://www.insee.fr/fr/statistiques/5392668?sommaire=2120838
