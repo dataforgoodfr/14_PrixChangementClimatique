@@ -11,6 +11,12 @@ models:
       - Vrais doublons : ligne identique
       - Doublons avec le même code_arrete mais une variation du nom_peril (qu'on conserve)
       - Doublons avec une variation de la date_debut_arrete mais appartenant au même code_arrete (qu'on ne conserve pas)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - code_arrete
+            - nom_peril
     columns:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
