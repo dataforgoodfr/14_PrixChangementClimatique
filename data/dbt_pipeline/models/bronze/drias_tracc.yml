@@ -16,7 +16,7 @@ models:
         type: FLOAT
 
       - name: rx1d_abs
-        description: "Maximum de précipitations en 1 jour (valeur absolue)"
+        description: "Nombre de jours de pluie par an"
         type: FLOAT
 
       - name: rr20d_abs
