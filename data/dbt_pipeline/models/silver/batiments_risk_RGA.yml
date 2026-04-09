@@ -1,7 +1,8 @@
 models:
   - name: batiments_risk_RGA
-    description: Score de vulnérabilité au Retrait-Gonflement des Argiles (RGA) par commune
-
+    description: >
+      Score de vulnérabilité au Retrait-Gonflement des Argiles (RGA) par commune
+      France Métro uniquement (il n'y a pas les DROMs)
     columns:
       - name: code_geo
         description: "Code INSEE de la commune"

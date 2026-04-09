@@ -15,4 +15,7 @@ models:
           Score d'exposition aux inondations (TRI).
           Somme pondérée des indicateurs de risque : faible (coefficient 1), moyen (coefficient 3)
           et fort (coefficient 5).
+
+          - bâtiments de d'environ 50m de hauteur
+          - (France Métro + DROMs)
         data_type: float
