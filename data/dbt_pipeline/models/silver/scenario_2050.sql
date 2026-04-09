@@ -12,11 +12,12 @@ geo_com AS (
 )
 SELECT
     c.code_geo,
-    s.nortx_35_d_yr,
-    s.norrrq_99_ref_d_yr,
-    s.norswi_04_yr,
-    s.nortr_yr,
-    s.norrr_yr
+    s.rx_1_d_abs,
+    s.pxcdd_abs,
+    s.rr_50_d_abs,
+    s.pxcwd_abs,
+    s.tx_35_d_abs,
+    s.swi_04_d_abs
 FROM
     geo_com AS c
 LEFT JOIN
@@ -25,12 +26,13 @@ LEFT JOIN
         SELECT
             s.longitude,
             s.latitude,
-            s.nortx_35_d_yr,
-            s.norrrq_99_ref_d_yr,
-            s.norswi_04_yr,
-            s.nortr_yr,
-            s.norrr_yr
-        FROM {{ ref('DRIAS') }} AS s
+            s.rx_1_d_abs,
+            s.pxcdd_abs,
+            s.rr_50_d_abs,
+            s.pxcwd_abs,
+            s.tx_35_d_abs,
+            s.swi_04_d_abs
+        FROM {{ ref('drias_tracc') }} AS s
         WHERE
             s.longitude BETWEEN (c.lon - 1) AND (c.lon + 1)
             AND s.latitude BETWEEN (c.lat - 1) AND (c.lat + 1)
