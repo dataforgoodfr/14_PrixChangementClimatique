@@ -22,6 +22,7 @@ SELECT
     "RR50D_ecart" AS rr_50_d_ecart,
     "RR100D_ecart" AS rr_100_d_ecart,
     "TX35D_ecart" AS tx_35_d_ecart,
-    "Rx1D_ecart" AS rx_1_d_ecart
+    "Rx1D_ecart" AS rx_1_d_ecart,
+    "SWI04D_abs" AS  swi_04d_abs
 FROM
     'pipeline_inputs/drias_TRACC.csv'

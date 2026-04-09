@@ -102,3 +102,6 @@ models:
       - name: rx1d_ecart
         description: "Écart du nombre de jours de pluie par an"
         type: FLOAT
+      - name: swi_04d_abs
+        description: "Nombre de jours où SWI < 0.4"
+        type: FLOAT
