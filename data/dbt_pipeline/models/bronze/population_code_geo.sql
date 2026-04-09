@@ -39,11 +39,9 @@ population_mayotte AS (
 )
 
 -- On réunit les deux tables
-SELECT
-*
+SELECT *
 FROM population_without_mayotte
 
 UNION ALL
-SELECT
-*
+SELECT *
 FROM population_mayotte
