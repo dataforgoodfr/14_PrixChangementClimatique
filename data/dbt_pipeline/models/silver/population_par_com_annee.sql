@@ -88,8 +88,12 @@ WITH table_pivot_population AS (
     FROM {{ ref('population_code_geo') }}
 )
 
--- DEUXIEME ETAPE: On filtre les données de population nulles
 SELECT 
 *
 FROM table_pivot_population
 WHERE population IS NOT NULL
+
+UNION ALL
+SELECT
+*
+FROM mayotte_population
