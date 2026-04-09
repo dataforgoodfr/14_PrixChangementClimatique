@@ -3,7 +3,7 @@ version: 2
 models:
   - name: drias_tracc
     description: >
-      Données issues du fichier DRIAS (Indicateurs-Annuel_Ecart_Centiles-XXXX_SocleOM_Moyenne-20ans_RWL20_Netcdf pour les drom et Indicateurs-Ecart_Centiles-Explore2-Climat_Moyenne-20ans_RWL27_Netcdf pour la métropole) contenant des indicateurs climatiques
+      Données issues du fichier DRIAS https://www.drias-climat.fr/ il faut un compte puis Acces simplifié (domaine complet) les données sont pour GWL 2° (ce qui correspond à 2.7 pour la metropole, 1.9 guadeloupe, 1.9 martinique, 2.3 guyane, 2.7 mayotte, 2.0 la réunion). Indicateurs annuels TRACC en produits multi-modèles, indicateurs absolue et indicateurs en écart par rapport à la référence (Indicateurs-Annuel_Ecart_Centiles-XXXX_SocleOM_Moyenne-20ans_RWL20_Netcdf pour les drom et Indicateurs-Ecart_Centiles-Explore2-Climat_Moyenne-20ans_RWL27_Netcdf pour la métropole) contenant des indicateurs climatiques
       (températures, précipitations, extrêmes) en valeurs absolues et écarts. Les valeurs sont prises avec le modèle max "ENSmax", TIMEavg_ANOMd sauf pour Rx1D TIMEavg_ANOMrd.
 
     columns:
