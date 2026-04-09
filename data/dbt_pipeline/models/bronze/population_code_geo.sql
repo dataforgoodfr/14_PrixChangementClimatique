@@ -16,7 +16,7 @@ WITH population_without_mayotte AS (
         "p23_pop" AS pop_2026,
         CAST("reg" AS VARCHAR) AS code_region
     FROM 'pipeline_inputs/population_communes_france_raw.csv'
-)
+),
 
 population_mayotte AS (
     SELECT
@@ -34,7 +34,7 @@ population_mayotte AS (
         "pop_2024" AS pop_2024,
         "pop_2025" AS pop_2025,
         "pop_2026" AS pop_2026,
-        CAST("reg" AS VARCHAR) AS code_region
+        CAST("code_region" AS VARCHAR) AS code_region
     FROM 'pipeline_inputs/population_mayotte_2017.csv'
 )
 

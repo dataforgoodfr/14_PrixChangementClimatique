@@ -88,7 +88,7 @@ WITH table_pivot_population AS (
     FROM {{ ref('population_code_geo') }}
 )
 
--- DEUWIEME ETAPE : on filtre les lignes où les populations sont "null"
+-- DEUXIEME ETAPE : on filtre les lignes où les populations sont "null"
 SELECT 
 *
 FROM table_pivot_population
