@@ -1,7 +1,9 @@
 models:
   - name: batiments_risk_TRI
-    description: Score d'exposition aux inondations (TRI) par communes.
-
+    description: >
+      Score d'exposition aux inondations (TRI) par communes.
+      - bâtiments de d'environ 50m de hauteur
+      - (France Métro + DROMs)
     columns:
       - name: code_geo
         description: "Code INSEE de la commune"
@@ -15,7 +17,4 @@ models:
           Score d'exposition aux inondations (TRI).
           Somme pondérée des indicateurs de risque : faible (coefficient 1), moyen (coefficient 3)
           et fort (coefficient 5).
-
-          - bâtiments de d'environ 50m de hauteur
-          - (France Métro + DROMs)
         data_type: float
