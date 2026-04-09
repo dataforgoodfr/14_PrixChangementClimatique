@@ -1,0 +1,27 @@
+SELECT
+    lat,
+    lon,
+    Rx1D_abs AS rx1d_abs,
+    RR20D_abs AS rr20d_abs,
+    PXCDD_abs AS pxcdd_abs,
+    TMm_abs AS tmm_abs,
+    TX40D_abs AS tx40d_abs,
+    TR_abs AS tr_abs,
+    PXCWD_abs AS pxcwd_abs,
+    TX35D_abs AS tx35d_abs,
+    RR50D_abs AS rr50d_abs,
+    RR100D_abs AS rr100d_abs,
+    RR10D_abs AS rr10d_abs,
+    TMm_ecart AS tmm_ecart,
+    PXCWD_ecart AS pxcwd_ecart,
+    TX40D_ecart AS tx40d_ecart,
+    RR10D_ecart AS rr10d_ecart,
+    RR20D_ecart AS rr20d_ecart,
+    PXCDD_ecart AS pxcdd_ecart,
+    TR_ecart AS tr_ecart,
+    RR50D_ecart AS rr50d_ecart,
+    RR100D_ecart AS rr100d_ecart,
+    TX35D_ecart AS tx35d_ecart,
+    Rx1D_ecart AS rx1d_ecart
+FROM
+    'pipeline_inputs/drias_TRACC.csv'
