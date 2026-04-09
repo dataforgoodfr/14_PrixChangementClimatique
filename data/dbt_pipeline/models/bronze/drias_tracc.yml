@@ -15,11 +15,11 @@ models:
         description: "Longitude"
         type: FLOAT
 
-      - name: rx1d_abs
+      - name: rx_1_d_abs
         description: "Nombre de jours de pluie par an"
         type: FLOAT
 
-      - name: rr20d_abs
+      - name: rr_20_d_abs
         description: "Nombre de jours de pluie ≥ 20 mm par an"
         type: FLOAT
 
@@ -31,7 +31,7 @@ models:
         description: "Température moyenne annuelle"
         type: FLOAT
 
-      - name: tx40d_abs
+      - name: tx_40_d_abs
         description: "Nombre de jours avec une température maximale ≥ 40 °C "
         type: FLOAT
 
@@ -43,19 +43,19 @@ models:
         description: "Nombre max de jours de pluie consécutifs (> 1mm)"
         type: FLOAT
 
-      - name: tx35d_abs
+      - name: tx_35_d_abs
         description: "Nombre de jours avec une température maximale ≥ 35 °C"
         type: FLOAT
 
-      - name: rr50d_abs
+      - name: rr_50_d_abs
         description: "Nombre de jours de pluie ≥ 50 mm par an"
         type: FLOAT
 
-      - name: rr100d_abs
+      - name: rr_100_d_abs
         description: "Nombre de jours de pluie ≥ 100 mm par an"
         type: FLOAT
 
-      - name: rr10d_abs
+      - name: rr_10_d_abs
         description: "Nombre de jours de pluie ≥ 10 mm par an"
         type: FLOAT
 
@@ -67,15 +67,15 @@ models:
         description: "Écart du nombre max de jours de pluie consécutifs (> 1mm)"
         type: FLOAT
 
-      - name: tx40d_ecart
+      - name: tx_40_d_ecart
         description: "Écart du nombre de jours avec une température maximale ≥ 40°C"
         type: FLOAT
 
-      - name: rr10d_ecart
+      - name: rr_10_d_ecart
         description: "Écart du nombre de jours avec précipitations > 10 mm"
         type: FLOAT
 
-      - name: rr20d_ecart
+      - name: rr_20_d_ecart
         description: "Écart du nombre de jours avec précipitations > 20 mm"
         type: FLOAT
 
@@ -87,21 +87,21 @@ models:
         description: "Écart du nombre de nuits tropicales"
         type: FLOAT
 
-      - name: rr50d_ecart
+      - name: rr_50_d_ecart
         description: "Écart du nombre de jours avec précipitations > 50 mm"
         type: FLOAT
 
-      - name: rr100d_ecart
+      - name: rr_100_d_ecart
         description: "Écart du nombre de jours avec précipitations > 100 mm"
         type: FLOAT
 
-      - name: tx35d_ecart
+      - name: tx_35_d_ecart
         description: "Écart du nombre de jours > 35°C"
         type: FLOAT
 
-      - name: rx1d_ecart
+      - name: rx_1_d_ecart
         description: "Écart du nombre de jours de pluie par an"
         type: FLOAT
-      - name: swi_04d_abs
+      - name: swi_04_d_abs
         description: "Nombre de jours où SWI < 0.4"
         type: FLOAT
