@@ -89,7 +89,6 @@ WITH table_pivot_population AS (
 )
 
 -- DEUXIEME ETAPE : on filtre les lignes où les populations sont "null"
-SELECT 
-*
+SELECT *
 FROM table_pivot_population
 WHERE population IS NOT NULL
