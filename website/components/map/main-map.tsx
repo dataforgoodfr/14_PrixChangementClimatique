@@ -63,8 +63,19 @@ function CommunesLayer() {
         source-layer="communes"
         paint={{
           "line-color": "#191970",
-          "line-width": 1,
-          "line-opacity": 0.8,
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0,
+            6,
+            0,
+            8,
+            0.5,
+            11,
+            1,
+          ],
         }}
       />
     </Source>
