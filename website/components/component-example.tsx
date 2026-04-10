@@ -67,6 +67,8 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { PlusIcon, BluetoothIcon, MoreVerticalIcon, FileIcon, FolderIcon, FolderOpenIcon, FileCodeIcon, MoreHorizontalIcon, FolderSearchIcon, SaveIcon, DownloadIcon, EyeIcon, LayoutIcon, PaletteIcon, SunIcon, MoonIcon, MonitorIcon, UserIcon, CreditCardIcon, SettingsIcon, KeyboardIcon, LanguagesIcon, BellIcon, MailIcon, ShieldIcon, HelpCircleIcon, FileTextIcon, LogOutIcon } from "lucide-react"
 import { FranceMap } from "@/components/france-map"
+import CommuneSearchBox, { SearchCommuneResult } from '@/components/core/rf-commune-searchbox';
+import { useState } from 'react';
 
 export function ComponentExample() {
   return (
@@ -74,6 +76,7 @@ export function ComponentExample() {
       <CardExample />
       <FormExample />
       <MapExample />
+      <CommuneSearchBoxExample />
     </ExampleWrapper>
   )
 }
@@ -500,6 +503,18 @@ function MapExample() {
   return (
     <Example title="Map of France" className="items-center justify-center" containerClassName="md:col-span-2">
       <FranceMap />
+    </Example>
+  )
+}
+
+function CommuneSearchBoxExample() {
+  const [selectedCommune, setSelectedCommune] = useState<SearchCommuneResult>();
+  return (
+    <Example title="Recherche d'une commune" className="items-center justify-center gap-4">
+      <CommuneSearchBox onAddressFilter={setSelectedCommune} />
+      <div>
+        Commune sélectionnée : {selectedCommune ? <span>{selectedCommune.nom} - {selectedCommune.code}</span> : 'Aucune'}
+      </div>
     </Example>
   )
 }
