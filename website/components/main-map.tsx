@@ -1,0 +1,1 @@
+@/components/map/panel
