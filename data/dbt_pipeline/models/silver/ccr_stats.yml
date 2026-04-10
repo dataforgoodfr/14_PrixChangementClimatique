@@ -52,4 +52,4 @@ models:
         data_type: int
       - name: multiple_franchise
         description: multiplicateur de la franchise par commune et par année (le maximum a été pris à chaque fois)
-        data_type: float
+        data_type: int
