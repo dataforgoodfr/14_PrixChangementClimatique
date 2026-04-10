@@ -31,8 +31,16 @@ TIPPECANOE_ARGS = [
     "-zg",
     "-l",
     "communes",
-    "--coalesce-densest-as-needed",
+    "--drop-densest-as-needed",
     "--extend-zooms-if-still-dropping",
+    "-B",
+    "5",  # show all features at zoom 5 and above
+    "--simplification",
+    "12",  # default is 10
+    "--no-tiny-polygon-reduction",  # keeps tiny communes (e.g. Paris arrondissements)
+    "--no-simplification-of-shared-nodes",  # aligns borders, visual nicety
+    "--no-feature-limit",  # removes 200k features/tile cap
+    "--no-tile-size-limit",  # removes 500KB/tile cap
     "--force",
 ]
 
