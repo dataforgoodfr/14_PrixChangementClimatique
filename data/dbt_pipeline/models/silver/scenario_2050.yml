@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: scenario_2050
+    description: |-
+      Provient de DRIAS, attribue à une commune le point le plus proche de la latitude et longitude du centre de la commune-
+    columns:
+      - name: code_geo
+        description: Code de la commune concernée
+        data_type: varchar
+        quote: true
+
+      - name: rx_1_d_abs
+        description: "Nombre de jours de pluie par an"
+        type: FLOAT
+
+      - name: pxcdd_abs
+        description: "Nombre max de jours consécutifs sans pluie"
+        type: FLOAT
+
+      - name: pxcwd_abs
+        description: "Nombre max de jours de pluie consécutifs (> 1mm)"
+        type: FLOAT
+
+      - name: tx_35_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 35 °C"
+        type: FLOAT
+
+      - name: rr_50_d_abs
+        description: "Nombre de jours de pluie ≥ 50 mm par an"
+        type: FLOAT
+
+      - name: swi_04_d_abs
+        description: "Nombre de jours où SWI < 0.4"
+        type: FLOAT
