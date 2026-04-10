@@ -155,9 +155,14 @@ En suivant toutes les étapes énnoncées plus haut dans la section "Comment le 
 
 - Etape 1 : `dbt run` pour avoir les données dans la db à jour en local
 
-- Etape 2 : Excuter le script python
+- Etape 2 : Excuter le script python pour les tests CI dbt
 ```bash
 uv run python data/utils/check_docs_localy.py`
+```
+
+- Tester tout les tests CI de precommit
+```bash
+uv run pre-commit run --all-files --hook-stage manual
 ```
 
 ### Ma PR github est validée, quelle est la suite ?

@@ -1,0 +1,25 @@
+models:
+  - name: pprn_clean
+    description: Dernier PPRN en vigueur
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - pprn
+
+    columns:
+      - name: code_geo
+        description: Code INSEE
+        data_type: varchar
+      - name: pprn
+        description: Type de PPRN (I, RGA, L, ect...)
+        data_type: varchar
+      - name: pprn_libelle
+        description: Type de PPRN (plain text), PPRN-Multi est une liste de tout les risques couverts
+        data_type: varchar
+      - name: pprn_desc
+        description: Courte description du PPRN, PPRN-Multi est une liste de tout les risques couverts
+        data_type: varchar
+      - name: date_approbation
+        description: Date d'approbation du PPRN
+        data_type: datetime

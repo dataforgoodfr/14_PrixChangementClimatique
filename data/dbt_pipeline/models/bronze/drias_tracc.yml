@@ -1,0 +1,107 @@
+version: 2
+
+models:
+  - name: drias_tracc
+    description: >
+      Données issues du fichier DRIAS https://www.drias-climat.fr/ il faut un compte puis Acces simplifié (domaine complet) les données sont pour GWL 2° (ce qui correspond à 2.7 pour la metropole, 1.9 guadeloupe, 1.9 martinique, 2.3 guyane, 2.7 mayotte, 2.0 la réunion). Indicateurs annuels TRACC en produits multi-modèles, indicateurs absolue et indicateurs en écart par rapport à la référence (Indicateurs-Annuel_Ecart_Centiles-XXXX_SocleOM_Moyenne-20ans_RWL20_Netcdf pour les drom et Indicateurs-Ecart_Centiles-Explore2-Climat_Moyenne-20ans_RWL27_Netcdf pour la métropole) contenant des indicateurs climatiques
+      (températures, précipitations, extrêmes) en valeurs absolues et écarts. Les valeurs sont prises avec le modèle max "ENSmax", TIMEavg_ANOMd sauf pour Rx1D TIMEavg_ANOMrd.
+
+    columns:
+      - name: lat
+        description: "Latitude"
+        type: FLOAT
+
+      - name: lon
+        description: "Longitude"
+        type: FLOAT
+
+      - name: rx_1_d_abs
+        description: "Nombre de jours de pluie par an"
+        type: FLOAT
+
+      - name: rr_20_d_abs
+        description: "Nombre de jours de pluie ≥ 20 mm par an"
+        type: FLOAT
+
+      - name: pxcdd_abs
+        description: "Nombre max de jours consécutifs sans pluie"
+        type: FLOAT
+
+      - name: tmm_abs
+        description: "Température moyenne annuelle"
+        type: FLOAT
+
+      - name: tx_40_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 40 °C "
+        type: FLOAT
+
+      - name: tr_abs
+        description: "Nombre de nuits tropicales (température minimale > 20°C) "
+        type: FLOAT
+
+      - name: pxcwd_abs
+        description: "Nombre max de jours de pluie consécutifs (> 1mm)"
+        type: FLOAT
+
+      - name: tx_35_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 35 °C"
+        type: FLOAT
+
+      - name: rr_50_d_abs
+        description: "Nombre de jours de pluie ≥ 50 mm par an"
+        type: FLOAT
+
+      - name: rr_100_d_abs
+        description: "Nombre de jours de pluie ≥ 100 mm par an"
+        type: FLOAT
+
+      - name: rr_10_d_abs
+        description: "Nombre de jours de pluie ≥ 10 mm par an"
+        type: FLOAT
+
+      - name: tmm_ecart
+        description: "Écart des température moyenne annuelle"
+        type: FLOAT
+
+      - name: pxcwd_ecart
+        description: "Écart du nombre max de jours de pluie consécutifs (> 1mm)"
+        type: FLOAT
+
+      - name: tx_40_d_ecart
+        description: "Écart du nombre de jours avec une température maximale ≥ 40°C"
+        type: FLOAT
+
+      - name: rr_10_d_ecart
+        description: "Écart du nombre de jours avec précipitations > 10 mm"
+        type: FLOAT
+
+      - name: rr_20_d_ecart
+        description: "Écart du nombre de jours avec précipitations > 20 mm"
+        type: FLOAT
+
+      - name: pxcdd_ecart
+        description: "Écart du nombre max de jours consécutifs sans pluie"
+        type: FLOAT
+
+      - name: tr_ecart
+        description: "Écart du nombre de nuits tropicales"
+        type: FLOAT
+
+      - name: rr_50_d_ecart
+        description: "Écart du nombre de jours avec précipitations > 50 mm"
+        type: FLOAT
+
+      - name: rr_100_d_ecart
+        description: "Écart du nombre de jours avec précipitations > 100 mm"
+        type: FLOAT
+
+      - name: tx_35_d_ecart
+        description: "Écart du nombre de jours > 35°C"
+        type: FLOAT
+
+      - name: rx_1_d_ecart
+        description: "Écart du nombre de jours de pluie par an"
+        type: FLOAT
+      - name: swi_04_d_abs
+        description: "Nombre de jours où SWI < 0.4"
+        type: FLOAT
