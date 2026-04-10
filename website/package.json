@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
@@ -33,6 +34,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
+    "prettier": "^3.8.2",
     "shadcn": "^4.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
