@@ -80,6 +80,8 @@ PanelControls.displayName = "Panel.Controls";
 
 // ─── Main Panel component ─────────────────────────────────────────────────────
 
+// Full Tailwind class strings must be statically present — no dynamic construction.
+type PanelZIndex = "z-10" | "z-20" | "z-30" | "z-40" | "z-50";
 
 interface PanelProps {
   isOpen: boolean;
@@ -88,6 +90,8 @@ interface PanelProps {
   dir?: "ltr" | "rtl";
   /** Panel width in px on sm+ screens. Full-width on mobile. Default: 360. */
   width?: number;
+  /** Tailwind z-index class for the panel. Controls sit one step above. Default: "z-20". */
+  zIndex?: PanelZIndex;
   /** Show an X close button in the header. Default: true. */
   showCloseButton?: boolean;
   children: ReactNode;
@@ -98,6 +102,7 @@ function Panel({
   onClose,
   dir = "ltr",
   width = 360,
+  zIndex = "z-20",
   showCloseButton = true,
   children,
 }: PanelProps) {
@@ -122,14 +127,16 @@ function Panel({
     (child) =>
       !(
         isValidElement(child) &&
-        (child.type as { displayName?: string }).displayName === "Panel.Controls"
+        (child.type as { displayName?: string }).displayName ===
+          "Panel.Controls"
       ),
   );
 
   const isLtr = dir === "ltr";
 
   const panelClasses = cn(
-    "absolute top-0 h-full w-full bg-white shadow-xl z-20 flex flex-col",
+    zIndex,
+    "absolute top-0 h-full w-full bg-white shadow-xl flex flex-col",
     "sm:w-[var(--panel-w)]",
     "transition-transform duration-300 ease-in-out",
     isLtr ? "left-0" : "right-0",
@@ -137,17 +144,27 @@ function Panel({
   );
 
   const controlsClassName = cn(
-    "absolute top-4 z-30 duration-300 ease-in-out",
+    "absolute top-4 duration-300 ease-in-out",
+    zIndex,
     isLtr
-      ? ["transition-[left]", isOpen ? "left-[calc(var(--panel-w)_+_1rem)]" : "left-4"]
-      : ["transition-[right]", isOpen ? "right-[calc(var(--panel-w)_+_1rem)]" : "right-4"],
+      ? [
+          "transition-[left]",
+          isOpen ? "left-[calc(var(--panel-w)_+_1rem)]" : "left-4",
+        ]
+      : [
+          "transition-[right]",
+          isOpen ? "right-[calc(var(--panel-w)_+_1rem)]" : "right-4",
+        ],
     isOpen && "hidden sm:block",
   );
 
   return (
     <PanelContext.Provider value={{ onClose, showCloseButton }}>
       {/* display:contents makes this wrapper invisible to layout while cascading --panel-w */}
-      <div style={{ "--panel-w": `${width}px` } as React.CSSProperties} className="contents">
+      <div
+        style={{ "--panel-w": `${width}px` } as React.CSSProperties}
+        className="contents"
+      >
         <div className={panelClasses}>{body}</div>
         {controls.length > 0 && (
           <div className={controlsClassName}>{controls}</div>
