@@ -9,18 +9,27 @@ models:
         description: Code de la commune concernée
         data_type: varchar
         quote: true
-      - name: nortx_35_d_yr
-        description: "Nombre de jours avec Tx >= 35°C (jour(s))"
+
+      - name: rx_1_d_abs
+        description: "Nombre de jours de pluie par an"
         type: FLOAT
-      - name: norrrq_99_ref_d_yr
+
+      - name: pxcdd_abs
+        description: "Nombre max de jours consécutifs sans pluie"
         type: FLOAT
-        description: "Ecart de fréquence des précipitations quotidienne remarquables (jour(s))"
-      - name: norswi_04_yr
-        description: "Nombre de jours avec SWI < 0.4 (jour(s))"
-        type: INTEGER
-      - name: nortr_yr
-        description: "Nombre de nuits tropicales (jour(s))"
+
+      - name: pxcwd_abs
+        description: "Nombre max de jours de pluie consécutifs (> 1mm)"
         type: FLOAT
-      - name: norrr_yr
-        description: "Cumul de précipitations annuelles (mm)"
+
+      - name: tx_35_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 35 °C"
+        type: FLOAT
+
+      - name: rr_50_d_abs
+        description: "Nombre de jours de pluie ≥ 50 mm par an"
+        type: FLOAT
+
+      - name: swi_04_d_abs
+        description: "Nombre de jours où SWI < 0.4"
         type: FLOAT

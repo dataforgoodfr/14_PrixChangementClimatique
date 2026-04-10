@@ -24,8 +24,8 @@ LEFT JOIN
     LATERAL
     (
         SELECT
-            s.longitude,
-            s.latitude,
+            s.lon,
+            s.lat,
             s.rx_1_d_abs,
             s.pxcdd_abs,
             s.rr_50_d_abs,
@@ -34,9 +34,9 @@ LEFT JOIN
             s.swi_04_d_abs
         FROM {{ ref('drias_tracc') }} AS s
         WHERE
-            s.longitude BETWEEN (c.lon - 1) AND (c.lon + 1)
-            AND s.latitude BETWEEN (c.lat - 1) AND (c.lat + 1)
-ORDER BY c.geom_array <-> ARRAY[s.latitude, s.longitude]  -- noqa
+            s.lon BETWEEN (c.lon - 1) AND (c.lon + 1)
+            AND s.lat BETWEEN (c.lat - 1) AND (c.lat + 1)
+ORDER BY c.geom_array <-> ARRAY[s.lat, s.lon]  -- noqa
     LIMIT 1
     ) AS s
     ON TRUE
