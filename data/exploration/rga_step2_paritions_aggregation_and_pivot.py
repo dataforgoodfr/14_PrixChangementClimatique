@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Paths (Relative to data/exploration)
 PARTITIONS_DIR = Path("../csv_large/bdnb_partitions")
-OUTPUT_FILE_AGG = Path("../csv/rga_houses_flat.parquet")
+OUTPUT_FILE_AGG = Path("../csv/rga_houses_flat.csv")
 
 def aggregate_national():
     """Scans all partitions and aggregates counts by commune, period and RGA level."""
@@ -46,15 +46,14 @@ def flatten_commune_data(df: pl.DataFrame) -> pl.DataFrame:
     # Period mappings
     p_map = {
         'Avant 1945': 'pre1945',
-        '1945-1975': '1945_1975', 
-        '1976-2020': '1976_2020',
+        '1945-1975': '1945-1975', 
+        '1976-2020': '1976-2020',
         'Après 2020': 'post2020',
         'Inconnue': 'unk'
     }
     # RGA Level mappings
     level_map = {
-        'Nul': 'nul', 'Faible': 'faible', 'Moyen': 'moyen', 'Fort': 'fort',
-        '01For': 'fort', '02Moy': 'moyen', '04Fai': 'faible', 'Aucun': 'nul'
+        'Nul': 'nul', 'Faible': 'faible', 'Moyen': 'moyen', 'Fort': 'fort'
     }
     
     # 2. Map values using Polars replace
@@ -66,14 +65,14 @@ def flatten_commune_data(df: pl.DataFrame) -> pl.DataFrame:
     # 3. Compute total houses per commune
     df_totals = (
         df.group_by("code_commune_insee")
-        .agg(pl.sum("nb_maisons").alias("total_maisons"))
+        .agg(pl.sum("nb_maisons").alias("nb_maisons_total"))
     )
     
     # 4. Pivot for RGA counts: rga_[period]_[level]
     # We first create a combined column name to pivot on
     df_pivot = (
         df.with_columns(
-            (pl.lit("rga_") + pl.col("p") + pl.lit("_") + pl.col("rga")).alias("pivot_col")
+            (pl.col("p") + pl.lit("_") + pl.col("rga")).alias("pivot_col")
         )
         .pivot(
             values="nb_maisons",
@@ -97,8 +96,8 @@ def flatten_commune_data(df: pl.DataFrame) -> pl.DataFrame:
     df_final = df_final.with_columns([
         pl.sum_horizontal(risk_cols).alias("nb_maisons_exposition_rga")
     ]).with_columns([
-        pl.when(pl.col("total_maisons") > 0)
-        .then(pl.col("nb_maisons_exposition_rga") / pl.col("total_maisons"))
+        pl.when(pl.col("nb_maisons_total") > 0)
+        .then(pl.col("nb_maisons_exposition_rga") / pl.col("nb_maisons_total"))
         .otherwise(0.0)
         .alias("pct_exposition_rga")
     ])
@@ -119,7 +118,7 @@ if __name__ == "__main__":
         OUTPUT_FILE_AGG.parent.mkdir(parents=True, exist_ok=True)
         
         print(f"Saving to {OUTPUT_FILE_AGG}...")
-        df_flat.write_parquet(OUTPUT_FILE_AGG)
+        df_flat.write_csv(OUTPUT_FILE_AGG)
         
         print("\nPreview of final data:")
         print(df_flat.head(10))
