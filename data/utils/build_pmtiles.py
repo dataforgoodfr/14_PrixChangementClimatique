@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent
+DOCKERFILE_PATH = SCRIPT_DIR / "tippecanoe.Dockerfile"
+DOCKER_IMAGE = "tippecanoe-local"
 REPO_ROOT = SCRIPT_DIR.parent.parent
 WEBSITE_DIR = REPO_ROOT / "website"
 
@@ -27,14 +29,11 @@ PMTILES_PATH = WEBSITE_DIR / "public/pmtiles/communes.pmtiles"
 
 TIPPECANOE_ARGS = [
     "-zg",
-    "-o",
-    str(PMTILES_PATH),
     "-l",
     "communes",
     "--coalesce-densest-as-needed",
     "--extend-zooms-if-still-dropping",
     "--force",
-    str(GEOJSON_PATH),
 ]
 
 
@@ -69,10 +68,39 @@ def export_geojson():
 
 
 def run_tippecanoe(cmd: list[str]):
+    print(f"  $ {' '.join(cmd)}")
     result = subprocess.run(cmd)
     if result.returncode != 0:
         print(f"Error: command exited with code {result.returncode}", file=sys.stderr)
         sys.exit(result.returncode)
+
+
+def ensure_docker_image():
+    result = subprocess.run(
+        ["docker", "image", "inspect", DOCKER_IMAGE],
+        capture_output=True,
+    )
+    if result.returncode != 0:
+        print(
+            f"  Building Docker image '{DOCKER_IMAGE}' from {DOCKERFILE_PATH.name}..."
+        )
+        build = subprocess.run(
+            [
+                "docker",
+                "build",
+                "-f",
+                str(DOCKERFILE_PATH),
+                "-t",
+                DOCKER_IMAGE,
+                str(SCRIPT_DIR),
+            ]
+        )
+        if build.returncode != 0:
+            print(
+                f"Error: docker build failed with code {build.returncode}",
+                file=sys.stderr,
+            )
+            sys.exit(build.returncode)
 
 
 def generate_pmtiles():
@@ -80,31 +108,31 @@ def generate_pmtiles():
     PMTILES_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     if shutil.which("tippecanoe"):
-        run_tippecanoe(["tippecanoe"] + TIPPECANOE_ARGS)
-    elif shutil.which("docker"):
-        print(
-            "  tippecanoe not found locally, using Docker (ghcr.io/felt/tippecanoe)..."
+        run_tippecanoe(
+            ["tippecanoe"]
+            + TIPPECANOE_ARGS
+            + ["-o", str(PMTILES_PATH), str(GEOJSON_PATH)]
         )
+    elif shutil.which("docker"):
+        print("  tippecanoe not found locally, using Docker...")
+        ensure_docker_image()
         run_tippecanoe(
             [
                 "docker",
                 "run",
                 "--rm",
                 "-v",
-                f"{GEOJSON_PATH.parent}:/geojson",
+                f"{GEOJSON_PATH.parent}:/data/geojson",
                 "-v",
-                f"{PMTILES_PATH.parent}:/pmtiles",
-                "ghcr.io/felt/tippecanoe",
+                f"{PMTILES_PATH.parent}:/data/pmtiles",
+                DOCKER_IMAGE,
                 "tippecanoe",
-                "-zg",
+            ]
+            + TIPPECANOE_ARGS
+            + [
                 "-o",
-                "/pmtiles/communes.pmtiles",
-                "-l",
-                "communes",
-                "--coalesce-densest-as-needed",
-                "--extend-zooms-if-still-dropping",
-                "--force",
-                "/geojson/communes.geojson",
+                f"/data/pmtiles/{PMTILES_PATH.name}",
+                f"/data/geojson/{GEOJSON_PATH.name}",
             ]
         )
     else:
