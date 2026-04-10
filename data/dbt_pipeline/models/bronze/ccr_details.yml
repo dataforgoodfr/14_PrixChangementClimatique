@@ -7,7 +7,16 @@ models:
       affichés sur https://www.ccr.fr/portail-catastrophes-naturelles/liste-arretes/
       et récupérés depuis l'API de la CCR -
       https://www.ccr.fr/wp-admin/admin-ajax.php
-      /!\ Les données brutes contiennent 516 doublons, ceci est une erreur du site CCR /!\
+      Les données brutes contiennent des doublons:
+      - Vrais doublons : ligne identique
+      - Doublons avec le même code_arrete mais une variation du nom_peril (qu'on conserve)
+      - Doublons avec une variation de la date_debut_arrete mais appartenant au même code_arrete (qu'on ne conserve pas)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - code_arrete
+            - nom_peril
     columns:
       - name: code_geo
         description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
