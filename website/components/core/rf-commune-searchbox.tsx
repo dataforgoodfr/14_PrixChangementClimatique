@@ -3,11 +3,8 @@
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { MapPin } from "lucide-react";
-
-import { CommandEmpty } from "cmdk";
-import { X } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { MapPin, X } from "lucide-react";
 
 type QueryResult = {
   nom: string;
@@ -146,7 +143,7 @@ export default function CommuneSearchBox({
                   <CommandItem
                     className="flex items-center py-2"
                     key={commune.code}
-                    value={commune.nom}
+                    value={commune.code}
                     onSelect={() => handleAddressSelect(commune)}
                   >
                     <div className="flex items-center justify-between w-full">
