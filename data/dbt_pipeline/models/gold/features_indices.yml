@@ -1,0 +1,39 @@
+models:
+  - name: features_indices
+    description: Features pour calculer les scores de vulnérabilité
+
+
+    columns:
+      - name: code_geo
+        description: Code INSEE
+        data_type: varchar
+      - name: pprn_rga
+        description: True ou False si il y a un pprn rga
+        data_type: varchar
+      - name: pprn_ino
+        description: True ou False si il y a un pprn inondation
+        data_type: varchar
+      - name: ratio_dettes_depenses
+        description: dettes/depenses de la derniere année 2024
+        data_type: double
+      - name: depenses_per_pop
+        description: Solde net pour le type de compte "depenses" par population municipale de 2024 
+        data_type: double
+      - name: pxcwd_abs
+        description: "Nombre max de jours de pluie consécutifs (> 1mm)"
+        type: FLOAT
+      - name: tx_35_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 35 °C"
+        type: FLOAT
+      - name: rr_50_d_abs
+        description: "Nombre de jours de pluie ≥ 50 mm par an"
+        type: FLOAT
+      - name: swi_04_d_abs
+        description: "Nombre de jours où SWI < 0.4"
+        type: FLOAT
+      - name: prime_assurance_2024
+        description: Somme des primes d'assurances pour le compte 6161 en 2024
+        data_type: float
+      - name: evolution_prime_assurance
+        description: Evolution des primes entre 2020 et 2024
+        data_type: float
