@@ -1,9 +1,19 @@
 "use client";
 
-import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { MapPin, X } from "lucide-react";
 
 type QueryResult = {
@@ -12,8 +22,8 @@ type QueryResult = {
   departement: {
     code: string;
     nom: string;
-  }
-}
+  };
+};
 
 type QueryResponse = QueryResult[];
 
@@ -35,7 +45,9 @@ export default function CommuneSearchBox({
   const [delayHandler, setDelayHandler] = useState<NodeJS.Timeout | null>(null);
 
   async function performSearch(filterString: string) {
-    const fetchUrl = new URL("https://geo.api.gouv.fr/communes?boost=population&fields=departement&limit=20");
+    const fetchUrl = new URL(
+      "https://geo.api.gouv.fr/communes?boost=population&fields=departement&limit=20",
+    );
     fetchUrl.searchParams.set("nom", filterString);
 
     try {
@@ -148,7 +160,9 @@ export default function CommuneSearchBox({
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="grow text-sm">{commune.nom}</div>
-                      <div className="text-xs">{commune.departement.nom} ({commune.departement.code})</div>
+                      <div className="text-xs">
+                        {commune.departement.nom} ({commune.departement.code})
+                      </div>
                     </div>
                   </CommandItem>
                 );
