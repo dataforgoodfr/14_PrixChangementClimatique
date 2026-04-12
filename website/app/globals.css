@@ -6,9 +6,9 @@
 
 @theme inline {
   /* Brand colors */
-  --color-rf-green-dark: #043F2D;
-  --color-rf-lime: #C8F069;
-  --color-rf-gray: #4E4E5C;
+  --color-rf-green-dark: #043f2d;
+  --color-rf-lime: #c8f069;
+  --color-rf-gray: #4e4e5c;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);

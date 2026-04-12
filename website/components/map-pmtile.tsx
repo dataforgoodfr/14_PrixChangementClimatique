@@ -69,11 +69,16 @@ function CommunesLayer({ isVisible }: { isVisible: boolean }) {
             "interpolate",
             ["linear"],
             ["coalesce", ["get", "valeur"], 0],
-            0, "#ffffcc",
-            0.25, "#fed976",
-            0.5, "#fd8d3c",
-            0.75, "#e31a1c",
-            1, "#800026",
+            0,
+            "#ffffcc",
+            0.25,
+            "#fed976",
+            0.5,
+            "#fd8d3c",
+            0.75,
+            "#e31a1c",
+            1,
+            "#800026",
           ],
           "fill-opacity": 0.7,
         }}
@@ -138,11 +143,15 @@ function FeaturePanel({
                   {key}
                 </td>
                 <td className="py-1.5 text-gray-800 align-top break-all">
-                  {value === null || value === undefined
-                    ? <span className="text-gray-300">—</span>
-                    : typeof value === "object"
-                    ? <pre className="text-xs whitespace-pre-wrap">{JSON.stringify(value, null, 2)}</pre>
-                    : String(value)}
+                  {value === null || value === undefined ? (
+                    <span className="text-gray-300">—</span>
+                  ) : typeof value === "object" ? (
+                    <pre className="text-xs whitespace-pre-wrap">
+                      {JSON.stringify(value, null, 2)}
+                    </pre>
+                  ) : (
+                    String(value)
+                  )}
                 </td>
               </tr>
             ))}
