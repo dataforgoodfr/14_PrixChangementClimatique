@@ -1,0 +1,27 @@
+SELECT
+    CAST("code_commune_insee" AS VARHCAR) AS code_geo,
+    "agri_nul" AS nb_bats_agri_risque_nul,
+    "agri_faible" AS nb_bats_agri_risque_faible,
+    "agri_moyen" AS nb_bats_agri_risque_moyen,
+    "agri_fort" AS nb_bats_agri_risque_fort,
+    "resid_nul" AS nb_bats_resid_risque_nul,
+    "resid_faible" AS nb_bats_resid_risque_faible,
+    "resid_moyen" AS nb_bats_resid_risque_moyen,
+    "resid_fort" AS nb_bats_resid_risque_fort,
+    "rervice_nul" AS nb_bats_service_risque_nul,
+    "rervice_faible" AS nb_bats_service_risque_faible,
+    "rervice_moyen" AS nb_bats_service_risque_moyen,
+    "rervice_fort" AS nb_bats_service_risque_fort,
+    "indus_nul" AS nb_bats_indus_risque_nul,
+    "indus_faible" AS nb_bats_indus_risque_faible,
+    "indus_moyen" AS nb_bats_indus_risque_moyen,
+    "indus_fort" AS nb_bats_indus_risque_fort,
+    "autres_nul" AS nb_bats_autres_risque_nul,
+    "autres_faible" AS nb_bats_autres_risque_faible,
+    "autres_moyen" AS nb_bats_autres_risque_moyen,
+    "autres_fort" AS nb_bats_autres_risque_fort,
+    "nb_bats_total" AS nb_bats_total,
+    "nb_bats_exposition_tri" AS nb_bats_exposition_tri,
+    "pct_exposition_tri" AS percent_bats_exposition_tri
+    
+FROM 'pipeline_inputs/taux_chomage_communes.csv'
