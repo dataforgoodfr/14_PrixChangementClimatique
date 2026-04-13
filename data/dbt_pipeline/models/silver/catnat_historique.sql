@@ -1,5 +1,5 @@
 WITH table_catnat_preparation AS (
-  SELECT
+    SELECT
         code_geo,
         date_debut_evenement AS date_debut,
         date_fin_evenement AS date_fin,
@@ -33,8 +33,8 @@ WITH table_catnat_preparation AS (
             ELSE 'Autre'
         END AS type_catnat,
         IF(libelle_avis = 'Reconnue(sans impact sur la modulation)', 'Reconnue', libelle_avis) AS libelle_avis,
-  FROM
-      {{ ref('ccr_details') }}
+    FROM
+        {{ ref('ccr_details') }}
 )
 
 SELECT
