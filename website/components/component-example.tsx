@@ -97,6 +97,7 @@ import CommuneSearchBox, {
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
+import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 
 export function ComponentExample() {
   return (
@@ -105,6 +106,7 @@ export function ComponentExample() {
       <FormExample />
       <MapExample />
       <CommuneSearchBoxExample />
+      <VulnerabilityIndexExample />
     </ExampleWrapper>
   );
 }
@@ -526,6 +528,17 @@ function CommuneSearchBoxExample() {
           "Aucune"
         )}
       </div>
+    </Example>
+  );
+}
+
+function VulnerabilityIndexExample() {
+  return (
+    <Example
+      title="Indice de vulnérabilité"
+      className="items-center justify-center gap-4"
+    >
+      <RfVulnerabilityIndex value={3} />
     </Example>
   );
 }
