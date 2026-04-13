@@ -1,5 +1,5 @@
 SELECT
-    CAST("code_commune_insee" AS VARHCAR) AS code_geo,
+    CAST("code_commune_insee" AS VARCHAR) AS code_geo,
     "pre1945_nul" AS nb_maisons_pre1945_risque_nul,
     "pre1945_faible" AS nb_maisons_pre1945_risque_faible,
     "pre1945_moyen" AS nb_maisons_pre1945_risque_moyen,
