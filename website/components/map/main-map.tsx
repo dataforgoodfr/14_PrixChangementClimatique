@@ -135,6 +135,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
             center: [lon, lat],
             zoom: 12,
             offset: [400, 0],
+            duration: 1000,
           });
         }
         selectFeature(f.properties as MapFeature);
@@ -189,17 +190,27 @@ function MainMap() {
 
   const selectCommune = useCallback(
     (result: SearchCommuneResult | undefined) => {
+      const map = mapRef.current?.getMap();
       if (!result) {
         clearSelectedFeature();
         return;
       }
-      const map = mapRef.current?.getMap();
       if (!map) return;
 
       const [lng, lat] = result.centre.coordinates;
 
+      selectFeature({
+        code_geo: result.code,
+        nom_commune: result.nom,
+      });
+
       // 1. Fly vers la commune pour charger les tuiles
-      map.flyTo({ center: [lng, lat], zoom: 12, offset: [400, 0] });
+      map.flyTo({
+        center: [lng, lat],
+        zoom: 12,
+        offset: [400, 0],
+        duration: 1000,
+      });
 
       // 2. Une fois les tuiles chargées, query par code_geo
       const onIdle = () => {

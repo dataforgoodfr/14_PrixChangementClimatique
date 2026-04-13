@@ -16,27 +16,27 @@ import type { MapRef, ViewState } from "@vis.gl/react-maplibre";
 export interface MapFeature {
   code_geo: string;
   nom_commune: string;
-  code_geo_actuel: string;
-  nom_commune_majuscule: string;
-  nom_commune_minuscule: string;
-  code_zone_superficie: string;
-  type_commune: "commune";
-  code_siren: number;
-  zone_montagne: "Oui" | "Non";
-  code_departement: string;
-  nom_departement: string;
-  code_region: string;
-  nom_region: string;
-  code_arrondissement_departemental: string;
-  nom_arrondissement_departemental: string;
-  code_epci: number;
-  nom_epci: string;
-  code_zone_emploi_2020: string;
-  nom_zone_emploi_2020: string;
-  code_bassin_vie_2022: string;
-  nom_bassin_vie_2022: string;
-  geo_point_2_d: string; // "{\"lon\":-1.3812061983026563,\"lat\":47.400889786974449}",
-  valeur: number;
+  code_geo_actuel?: string;
+  nom_commune_majuscule?: string;
+  nom_commune_minuscule?: string;
+  code_zone_superficie?: string;
+  type_commune?: "commune";
+  code_siren?: number;
+  zone_montagne?: "Oui" | "Non";
+  code_departement?: string;
+  nom_departement?: string;
+  code_region?: string;
+  nom_region?: string;
+  code_arrondissement_departemental?: string;
+  nom_arrondissement_departemental?: string;
+  code_epci?: number;
+  nom_epci?: string;
+  code_zone_emploi_2020?: string;
+  nom_zone_emploi_2020?: string;
+  code_bassin_vie_2022?: string;
+  nom_bassin_vie_2022?: string;
+  geo_point_2_d?: string; // "{\"lon\":-1.3812061983026563,\"lat\":47.400889786974449}",
+  valeur?: number;
 }
 
 export interface MapContextValue {
