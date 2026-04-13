@@ -14,9 +14,12 @@ models:
         data_type: bigint
         data_tests:
           - not_null
-      - name: periode
-        description: Intervalle de date présentant le début et la fin de l'évènement catnat (concaténation de deux dates)
-        data_type: varchar
+      - name: date_debut
+        description: date du début de l'évènement catnat
+        data_type: date
+      - name: date_fin
+        description: date du fin de l'évènement catnat
+        data_type: date
       - name: type_catnat
         description: Le type de l'évènement catnat (selon un mapping spécifique plus simple)
         data_type: varchar

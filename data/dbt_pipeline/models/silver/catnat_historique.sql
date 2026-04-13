@@ -2,10 +2,8 @@ WITH table_catnat_preparation AS (
   SELECT
     code_geo,
     YEAR(date_debut_evenement) AS annee,
-    CASE
-      WHEN date_debut_evenement == date_fin_evenement THEN CAST(date_debut_evenement AS string)
-      ELSE CONCAT(CAST(date_debut_evenement AS string)," - ", CAST(date_fin_evenement AS string))
-    END AS periode,
+    date_debut_evenement AS date_debut,
+    date_fin_evenement AS date_fin,
     CASE
       WHEN
           nom_peril IN (
@@ -42,7 +40,8 @@ WITH table_catnat_preparation AS (
 SELECT
   code_geo,
   annee,
-  periode,
+  date_debut,
+  date_fin,
   type_catnat,
   IF(libelle_avis == 'Reconnue', True, False) AS is_reconnue,
 FROM table_catnat_preparation
