@@ -538,7 +538,9 @@ function VulnerabilityIndexExample() {
       title="Indice de vulnérabilité"
       className="items-center justify-center gap-4"
     >
-      <RfVulnerabilityIndex value={3} />
+      <div className="w-70">
+        <RfVulnerabilityIndex value={2.5} />
+      </div>
     </Example>
   );
 }
