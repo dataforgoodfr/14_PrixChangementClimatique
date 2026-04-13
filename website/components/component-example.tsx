@@ -93,7 +93,8 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import { FranceMap } from "@/components/france-map";
-import CommuneSearchBox, {
+import {
+  RFCommuneSearchBox,
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
@@ -515,7 +516,7 @@ function CommuneSearchBoxExample() {
       title="Recherche d'une commune"
       className="items-center justify-center gap-4"
     >
-      <CommuneSearchBox onAddressFilter={setSelectedCommune} />
+      <RFCommuneSearchBox onAddressFilter={setSelectedCommune} />
       <div>
         Commune sélectionnée :{" "}
         {selectedCommune ? (
