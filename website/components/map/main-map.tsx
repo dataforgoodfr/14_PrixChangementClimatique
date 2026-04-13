@@ -235,11 +235,11 @@ function MainMap() {
         <MapCanvas isFiltersPanelOpen={filtersOpen} />
       </div>
 
-      <div className="absolute top-8 left-8">
+      <div className="absolute top-8 left-4">
         <RFCommuneSearchBox
           filterValue={selectedFeature?.nom_commune}
           onAddressFilter={selectCommune}
-          className="w-100 z-50"
+          className="w-100 z-50 max-w-[calc(100dvw-5rem)]"
         />
       </div>
 
