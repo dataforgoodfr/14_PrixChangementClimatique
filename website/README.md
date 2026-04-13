@@ -28,6 +28,7 @@ Le site sera accessible à l'adresse [http://localhost:3000](http://localhost:30
 - `npm run build` : Génère une version optimisée pour la production
 - `npm run start` : Lance le serveur de production (nécessite d'avoir exécuté `npm run build` au préalable)
 - `npm run lint` : Vérifie la qualité du code avec ESLint
+- `npm run format` : Formate le code avec Prettier
 
 ## Générer les données PMTiles
 

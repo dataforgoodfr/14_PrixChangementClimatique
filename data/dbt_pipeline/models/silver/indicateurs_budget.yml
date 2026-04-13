@@ -1,0 +1,57 @@
+models:
+  - name: indicateurs_budget
+    description: >
+      Indicateur budget par année et par communes, depuis 2010
+      (Attention : les données de population sont disponibles à partir de 2016)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - annee
+
+    columns:
+      - name: code_geo
+        description: le code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
+        data_tests:
+          - not_null
+      - name: annee
+        description: Année de l'exercice
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: dettes
+        description: Solde net pour le type de compte "dettes"
+        data_type: double
+      - name: depenses
+        description: Solde net pour le type de compte "depenses"
+        data_type: double
+      - name: produits
+        description: Solde net pour le type de compte "produits"
+        data_type: double
+      - name: solde_annuel
+        description: produits - depenses
+        data_type: double
+      - name: ratio_dettes_produits
+        description: dettes/produits
+        data_type: double
+      - name: ratio_dettes_depenses
+        description: dettes/depenses
+        data_type: double
+      - name: ratio_produits_depenses
+        description: produits/depenses
+        data_type: double
+      - name: population
+        description: Population municipale
+        data_type: integer
+      - name: dettes_per_pop
+        description: Solde net pour le type de compte "dettes" par population municipale
+        data_type: double
+      - name: depenses_per_pop
+        description: Solde net pour le type de compte "depenses" par population municipale
+        data_type: double
+      - name: produits_per_pop
+        description: Solde net pour le type de compte "produits" par population municipale
+        data_type: double
+      - name: solde_annuel_per_pop
+        description: (produits - depenses)  par population municipale
+        data_type: double

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MapDemo } from "@/components/map-pmtile";
+import MainMapLayout from "@/components/map/main-map";
 
 export const metadata: Metadata = {
   title: "Carte | Reclaim Finance",
@@ -8,10 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function CartePage() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-rf-gray">Carte</h1>
-      <MapDemo />
-    </div>
-  );
+  return <MainMapLayout />;
 }

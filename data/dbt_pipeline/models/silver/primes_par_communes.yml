@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: primes_par_communes
+    description: "Table des primes d'assurances agrégées par année et par commune."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - annee
+    columns:
+      - name: annee
+        description: "Année de l'exercice"
+        data_type: integer
+        tests:
+          - not_null
+
+      - name: code_geo
+        description: "Code commune - issu de la colonne code_geo_from_siren"
+        tests:
+          - not_null
+
+      - name: prime_assurance
+        description: "Somme des primes d'assurances pour le compte 6161."
+        data_type: float
+        tests:
+          - not_null
