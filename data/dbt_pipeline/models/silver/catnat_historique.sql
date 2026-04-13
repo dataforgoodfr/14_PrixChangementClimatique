@@ -32,7 +32,7 @@ WITH table_catnat_preparation AS (
             WHEN nom_peril = 'Sécheresse' THEN 'Sécheresse'
             ELSE 'Autre'
         END AS type_catnat,
-        IF(libelle_avis = 'Reconnue(sans impact sur la modulation)', 'Reconnue', libelle_avis) AS libelle_avis,
+        IF(libelle_avis = 'Reconnue(sans impact sur la modulation)', 'Reconnue', libelle_avis) AS libelle_avis
     FROM
         {{ ref('ccr_details') }}
 )
