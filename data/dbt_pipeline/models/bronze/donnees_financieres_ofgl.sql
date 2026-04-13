@@ -6,4 +6,4 @@ SELECT
     montant,
     ptot AS population_totale,
     euros_par_habitant
-FROM read_csv_auto('pipeline_inputs/donnees_financieres_ofgl.csv', delim=',')
+FROM read_csv_auto('pipeline_inputs/donnees_financieres_ofgl.csv', delim = ',')
