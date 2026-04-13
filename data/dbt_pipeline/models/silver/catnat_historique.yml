@@ -1,0 +1,25 @@
+version: 2
+models:
+  - name: catnat_historique
+    description: >
+      Table présentant l'historique des catnats enregistrés (reconnues ou pas reconnues) liées à la commune (code_geo), l'année d'enregistrement (basée sur la date de début d'évènement), la période des catnats et leur type.
+    columns:
+      - name: code_geo
+        description: Code commune - appelé code_geo dans les données bronze du projet
+        data_type: varchar
+        data_tests:
+          - not_null
+      - name: annee
+        description: Année de l'évènement catnat
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: periode
+        description: Intervalle de date présentant le début et la fin de l'évènement catnat (concaténation de deux dates)
+        data_type: varchar
+      - name: type_catnat
+        description: Le type de l'évènement catnat (selon un mapping spécifique plus simple)
+        data_type: varchar
+      - name: is_reconnue
+        description: L'évènement catnat est-il reconnu ou non ?
+        data_type: boolean
