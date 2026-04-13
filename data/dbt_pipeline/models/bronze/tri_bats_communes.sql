@@ -24,4 +24,4 @@ SELECT
     "nb_bats_exposition_tri" AS nb_bats_exposition_tri,
     "pct_exposition_tri" AS percent_bats_exposition_tri
     
-FROM 'pipeline_inputs/taux_chomage_communes.csv'
+FROM 'pipeline_inputs/tri_all_bats_flat.csv'
