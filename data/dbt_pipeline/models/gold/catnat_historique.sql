@@ -3,7 +3,7 @@ WITH table_catnat_preparation AS (
         code_geo,
         date_debut_evenement AS date_debut,
         date_fin_evenement AS date_fin,
-        YEAR(date_debut_evenement) AS annee,
+        YEAR(date_debut_evenement) AS annee_debut,
         CASE
             WHEN
                 nom_peril IN (
@@ -39,7 +39,7 @@ WITH table_catnat_preparation AS (
 
 SELECT
     code_geo,
-    annee,
+    annee_debut,
     date_debut,
     date_fin,
     type_catnat,
