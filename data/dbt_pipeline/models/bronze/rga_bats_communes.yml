@@ -86,4 +86,3 @@ models:
       - name: percent_maisons_exposition_rga
         description: "Proportion (%) de maisons individuelles exposées à un risque rga (faible,moyen,fort) dans la commune"
         data_type: float
-

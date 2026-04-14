@@ -22,6 +22,5 @@ SELECT
     "nb_maisons_total" AS nb_maisons_total,
     "nb_maisons_exposition_rga" AS nb_maisons_exposition_rga,
     "pct_exposition_rga" AS percent_maisons_exposition_rga,
-    CAST("code_commune_insee" AS VARCHAR) AS code_geo
-    
+    CAST("code_commune_insee" AS VARCHAR) AS code_geo    
 FROM 'pipeline_inputs/rga_houses_flat.csv'
