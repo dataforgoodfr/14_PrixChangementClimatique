@@ -98,3 +98,6 @@ models:
       - name: multiple_franchise
         description: multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)
         data_type: int
+      - name: population
+        description: Population municipale dernière année recensée
+        data_type: integer
