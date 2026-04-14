@@ -65,7 +65,7 @@ pprn AS (
 
         COALESCE(pprn_libelle ILIKE '%Inondation%', FALSE) AS pprn_ino
     FROM {{ ref('pprn_clean') }}
-),
+)
 
 SELECT
     o.code_geo,
