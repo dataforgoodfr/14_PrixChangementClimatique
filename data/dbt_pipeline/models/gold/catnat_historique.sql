@@ -38,10 +38,10 @@ WITH table_catnat_preparation AS (
 )
 
 SELECT
-    code_geo,
+    code_geo AS code_insee,
     annee_debut,
     date_debut,
     date_fin,
-    type_catnat,
+    type_catnat AS type,
     IF(libelle_avis == 'Reconnue', True, False) AS is_reconnue
 FROM table_catnat_preparation
