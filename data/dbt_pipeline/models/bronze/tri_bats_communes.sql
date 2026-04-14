@@ -1,5 +1,4 @@
 SELECT
-    CAST("code_commune_insee" AS VARCHAR) AS code_geo,
     "agri_nul" AS nb_bats_agri_risque_nul,
     "agri_faible" AS nb_bats_agri_risque_faible,
     "agri_moyen" AS nb_bats_agri_risque_moyen,
@@ -22,6 +21,7 @@ SELECT
     "autres_fort" AS nb_bats_autres_risque_fort,
     "nb_bats_total" AS nb_bats_total,
     "nb_bats_exposition_tri" AS nb_bats_exposition_tri,
-    "pct_exposition_tri" AS percent_bats_exposition_tri
+    "pct_exposition_tri" AS percent_bats_exposition_tri,
+    CAST("code_commune_insee" AS VARCHAR) AS code_geo,
     
 FROM 'pipeline_inputs/tri_all_bats_flat.csv'

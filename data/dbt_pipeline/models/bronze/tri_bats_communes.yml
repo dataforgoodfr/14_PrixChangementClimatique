@@ -85,4 +85,4 @@ models:
         data_type: int
       - name: percent_bats_exposition_tri
         description: "Proportion (%) de bâtiments exposés à un risque tri (faible,moyen,fort) dans la commune"
-        data_type: int
+        data_type: float

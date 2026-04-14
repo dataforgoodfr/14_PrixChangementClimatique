@@ -1,5 +1,4 @@
 SELECT
-    CAST("code_commune_insee" AS VARCHAR) AS code_geo,
     "pre1945_nul" AS nb_maisons_pre1945_risque_nul,
     "pre1945_faible" AS nb_maisons_pre1945_risque_faible,
     "pre1945_moyen" AS nb_maisons_pre1945_risque_moyen,
@@ -22,6 +21,7 @@ SELECT
     "unk_fort" AS nb_maisons_inconnu_risque_fort,
     "nb_maisons_total" AS nb_maisons_total,
     "nb_maisons_exposition_rga" AS nb_maisons_exposition_rga,
-    "pct_exposition_rga" AS percent_maisons_exposition_rga
+    "pct_exposition_rga" AS percent_maisons_exposition_rga,
+    CAST("code_commune_insee" AS VARCHAR) AS code_geo,
     
 FROM 'pipeline_inputs/rga_houses_flat.csv'
