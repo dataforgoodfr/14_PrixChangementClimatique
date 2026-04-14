@@ -83,3 +83,18 @@ models:
       - name: geometry
         description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
         type: GEOMETRY
+      - name: nb_arrete
+        description: Cumulé du nombre  d'arrêtés enregistrés par commune
+        data_type: int
+      - name: nb_arrete_recon
+        description: Cumulé du nombre  d'arrêtés reconnus enregistrés par commune
+        data_type: int
+      - name: nb_arrete_ino
+        description: Cumulé du nombre  d'arrêtés enregistrés impliquant spécifiquement une catnat "inondation" par commune
+        data_type: int
+      - name: nb_arrete_sec
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sécheresse" par commune
+        data_type: int
+      - name: multiple_franchise
+        description: multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)
+        data_type: int
