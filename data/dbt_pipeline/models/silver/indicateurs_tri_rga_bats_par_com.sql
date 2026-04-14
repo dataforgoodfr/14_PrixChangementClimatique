@@ -22,6 +22,7 @@ table_rga AS (
         0.5 * (nb_maisons_1945_1975_risque_faible + nb_maisons_1945_1975_risque_moyen * 5 + nb_maisons_1945_1975_risque_fort * 10)
         + (nb_maisons_1976_2020_risque_faible + nb_maisons_1976_2020_risque_moyen * 5 + nb_maisons_1976_2020_risque_fort * 10)
         + 0.5 * (nb_maisons_post2020_risque_faible + nb_maisons_post2020_risque_moyen * 5 + nb_maisons_post2020_risque_fort * 10)
+        + 0.5 * (nb_maisons_inconnu_risque_faible + nb_maisons_inconnu_risque_moyen * 5 + nb_maisons_inconnu_risque_fort * 10)
       ) / (nb_maisons_total * 10) AS indicateur_rga
       
   FROM {{ ref('rga_bats_communes') }}

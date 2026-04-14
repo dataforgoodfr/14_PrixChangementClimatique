@@ -18,9 +18,7 @@ models:
       - name: code_geo
         description: "Code de la commune"
         data_type: string
-      - name: total_maisons
-        description: "Nombre total de maisons individuelles dans la commune"
-        data_type: int
+     
       - name: rga_pre_1945_nul
         description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA nul"
         data_type: int
@@ -110,4 +108,7 @@ models:
         data_type: int
       - name: tri_t_03_fort
         description: "Nombre de maisons par type d'inondation 3 (Ruissellement) et scénario de risque fort"
+        data_type: int
+      - name: nb_total_maisons
+        description: "Nombre total de maisons individuelles dans la commune"
         data_type: int

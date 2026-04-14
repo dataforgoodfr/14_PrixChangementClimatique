@@ -1,0 +1,88 @@
+models:
+  - name: tri_bats_communes
+    description: >
+      Agrégation par commune de l'exposition au risque d'inondation (Zonage TRI).
+
+      Périmètre : France entière, DROMs inclus (FXX, REU, GLP, GUF, MYT, MTQ, MAF, BLM, SPM).
+      Contenu : Tous types de bâtiments (tous usages).
+      Colonnes principales :
+          code_commune_insee : Code INSEE de la commune.
+          nb_bats_total : Nombre total de bâtiments.
+          nb_bats_exposition_tri : Nombre de bâtiments en zone de risque (Faible, Moyen, Fort).
+          pct_exposition_tri : Ratio de batiments exposées (hors pondération).
+          [usage]_[scenario] : Détail par usage (resid, service, agri, indus, autres) et scénario (nul, faible, moyen, fort).
+      Sources : BDTOPO (v3) pour le bâti, croisé avec le Zonage TRI (DGPR - Directive Inondation).
+
+    columns:
+      - name: code_geo
+        description: "Code de la commune"
+        data_type: string
+      - name: nb_bats_agri_risque_nul
+        description: "Nombre de bâtiments agricoles avec un niveau d'aléa TRI nul"
+        data_type: int
+      - name: nb_bats_agri_risque_faible
+        description: "Nombre de bâtiments agricoles avec un niveau d'aléa TRI faible"
+        data_type: int
+      - name: nb_bats_agri_risque_moyen
+        description: "Nombre de bâtiments agricoles avec un niveau d'aléa TRI moyen"
+        data_type: int
+      - name: nb_bats_agri_risque_fort
+        description: "Nombre de bâtiments agricoles avec un niveau d'aléa TRI fort"
+        data_type: int
+      - name: nb_bats_resid_risque_nul
+        description: "Nombre de bâtiments résidentiels avec un niveau d'aléa TRI nul"
+        data_type: int
+      - name: nb_bats_resid_risque_faible
+        description: "Nombre de bâtiments résidentiels avec un niveau d'aléa TRI faible"
+        data_type: int
+      - name: nb_bats_resid_risque_moyen
+        description: "Nombre de bâtiments résidentiels avec un niveau d'aléa TRI moyen"
+        data_type: int
+      - name: nb_bats_resid_risque_fort
+        description: "Nombre de bâtiments résidentiels avec un niveau d'aléa TRI fort"
+        data_type: int
+      - name: nb_bats_service_risque_nul
+        description: "Nombre de bâtiments de services avec un niveau d'aléa TRI nul"
+        data_type: int
+      - name: nb_bats_service_risque_faible
+        description: "Nombre de bâtiments de services avec un niveau d'aléa TRI faible"
+        data_type: int
+      - name: nb_bats_service_risque_moyen
+        description: "Nombre de bâtiments de services avec un niveau d'aléa TRI moyen"
+        data_type: int
+      - name: nb_bats_service_risque_fort
+        description: "Nombre de bâtiments de services avec un niveau d'aléa TRI fort"
+        data_type: int
+      - name: nb_bats_indus_risque_nul
+        description: "Nombre de bâtiments industriels avec un niveau d'aléa TRI nul"
+        data_type: int
+      - name: nb_bats_indus_risque_faible
+        description: "Nombre de bâtiments industriels avec un niveau d'aléa TRI faible"
+        data_type: int
+      - name: nb_bats_indus_risque_moyen
+        description: "Nombre de bâtiments industriels avec un niveau d'aléa TRI moyen"
+        data_type: int
+      - name: nb_bats_indus_risque_fort
+        description: "Nombre de bâtiments industriels avec un niveau d'aléa TRI fort"
+        data_type: int
+      - name: nb_bats_autres_risque_nul
+        description: "Nombre de bâtiments autres que le reste avec un niveau d'aléa TRI nul"
+        data_type: int
+      - name: nb_bats_autres_risque_faible
+        description: "Nombre de bâtiments autres que le reste avec un niveau d'aléa TRI faible"
+        data_type: int
+      - name: nb_bats_autres_risque_moyen
+        description: "Nombre de bâtiments autres que le reste avec un niveau d'aléa TRI moyen"
+        data_type: int
+      - name: nb_bats_autres_risque_fort
+        description: "Nombre de bâtiments autres que le reste avec un niveau d'aléa TRI fort"
+        data_type: int
+      - name: nb_bats_total
+        description: "Nombre total de bâtiments dans la commune"
+        data_type: int
+      - name: nb_bats_exposition_tri
+        description: "Nombre total de bâtiments exposés à un risque tri (faible,moyen,fort) dans la commune"
+        data_type: int
+      - name: percent_bats_exposition_tri
+        description: "Proportion (%) de bâtiments exposés à un risque tri (faible,moyen,fort) dans la commune"
+        data_type: int

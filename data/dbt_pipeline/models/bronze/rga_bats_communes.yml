@@ -1,0 +1,88 @@
+models:
+  - name: rga_bats_communes
+    description: >
+      Agrégation par commune de l'exposition au Retrait-Gonflement des Argiles (RGA).
+
+      Périmètre : France métropolitaine uniquement (01-95, incluant 2A/2B).
+      Contenu : Uniquement les maisons individuelles (usage BDNB "Résidentiel individuel").
+      Colonnes principales :
+          code_commune_insee : Code INSEE de la commune.
+          nb_maisons_total : Nombre total de maisons individuelles.
+          nb_maisons_exposition_rga : Nombre cumulé de maisons en zones d'aléa (Faible, Moyen, Fort).
+          pct_exposition_rga : Ratio de maisons exposées (hors pondération).
+          [p]_[rga] : Détail par période (pre1945, 1945-1975, 1976-2020, post2020, unk) et niveau d'aléa (nul, faible, moyen, fort).
+      Sources : BDNB (CSTB).
+
+    columns:
+      - name: code_geo
+        description: "Code de la commune"
+        data_type: string
+      - name: nb_maisons_pre1945_risque_nul
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: nb_maisons_pre1945_risque_faible
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: nb_maisons_pre1945_risque_moyen
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: nb_maisons_pre1945_risque_fort
+        description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: nb_maisons_1945_1975_risque_nul
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: nb_maisons_1945_1975_risque_faible
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: nb_maisons_1945_1975_risque_moyen
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: nb_maisons_1945_1975_risque_fort
+        description: "Nombre de maisons construites entre 1945 et 1975 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: nb_maisons_1976_2020_risque_nul
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: nb_maisons_1976_2020_risque_faible
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: nb_maisons_1976_2020_risque_moyen
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: nb_maisons_1976_2020_risque_fort
+        description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: nb_maisons_post2020_risque_nul
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA nul"
+        data_type: int
+      - name: nb_maisons_post2020_risque_faible
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA faible"
+        data_type: int
+      - name: nb_maisons_post2020_risque_moyen
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: nb_maisons_post2020_risque_fort
+        description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA fort"
+        data_type: int
+      - name: nb_maisons_inconnu_risque_nul
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA nul"
+        data_type: int
+      - name: nb_maisons_inconnu_risque_faible
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA faible"
+        data_type: int
+      - name: nb_maisons_inconnu_risque_moyen
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA moyen"
+        data_type: int
+      - name: nb_maisons_inconnu_risque_fort
+        description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA fort"
+        data_type: int
+      - name: nb_total_maisons
+        description: "Nombre total de maisons individuelles dans la commune"
+        data_type: int
+      - name: nb_maisons_exposition_rga
+        description: "Nombre total de maisons individuelles exposées à un risque rga (faible,moyen,fort) dans la commune"
+        data_type: int
+      - name: percent_maisons_exposition_rga
+        description: "Proportion (%) de maisons individuelles exposées à un risque rga (faible,moyen,fort) dans la commune"
+        data_type: int
