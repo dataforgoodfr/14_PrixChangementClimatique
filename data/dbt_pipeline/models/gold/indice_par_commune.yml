@@ -1,0 +1,26 @@
+version: 1
+
+models:
+  - name: indice_par_commune
+    description: >
+      Gold layer: Table des scores et indices par commune avec valeurs randoms temporaires.
+      Source: Bronze layer (opendatasoft_communes) + valeurs randoms.
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: score_economique
+        description: "Score économique de la commune"
+        type: DECIMAL (2, 8)
+      - name: score_georisque
+        description: "Score géorisque de la commune"
+        type: DECIMAL (2, 8)
+      - name: score_assurance
+        description: "Score assurance de la commune"
+        type: DECIMAL (2, 8)
+      - name: indice_vulnerabilite
+        description: "Indice de vulnérabilité de la commune"
+        type: DECIMAL (2, 8)
+      - name: indice_vulnerabilite_niveau
+        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
+        type: INT
