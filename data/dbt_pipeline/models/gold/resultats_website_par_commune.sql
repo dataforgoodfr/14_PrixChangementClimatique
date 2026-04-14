@@ -53,7 +53,9 @@ budget_last AS (
             *,
             ROW_NUMBER() OVER (
                 PARTITION BY code_geo
-                ORDER BY annee DESC
+                ORDER BY
+                    CASE WHEN depenses_per_pop IS NOT NULL THEN 0 ELSE 1 END,
+                    annee DESC
             ) AS rn
         FROM {{ ref('indicateurs_budget') }}
     )
