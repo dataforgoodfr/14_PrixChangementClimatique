@@ -8,7 +8,7 @@ models:
       enrichies avec des indicateurs métier.
       Source: Bronze layer (opendatasoft_communes) avec transformation et ajout de KPI.
     columns:
-      - name: code_insee
+      - name: code_geo
         description: "Code INSEE de la commune (5 caractères) appelé code_geo en bronze"
         type: CHAR(5)
       - name: departement
@@ -17,6 +17,12 @@ models:
       - name: region
         description: "Nom de la region"
         type: VARCHAR(100)
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
       - name: geo_point_2_d
         description: "Point géographique central de la commune (coordonnées lat/lon en format JSON)"
         type: STRING
@@ -38,3 +44,42 @@ models:
       - name: indice_vulnerabilite_niveau
         description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
         type: INT
+      - name: pprn_rga
+        description: True ou False si il y a un pprn rga
+        data_type: varchar
+      - name: pprn_ino
+        description: True ou False si il y a un pprn inondation
+        data_type: varchar
+      - name: ratio_dettes_depenses
+        description: dettes/depenses de la derniere année 2024
+        data_type: double
+      - name: depenses_per_pop
+        description: Solde net pour le type de compte "depenses" par population municipale de 2024
+        data_type: double
+      - name: pxcwd_abs
+        description: "Nombre max de jours de pluie consécutifs (> 1mm)"
+        type: FLOAT
+      - name: tx_35_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 35 °C"
+        type: FLOAT
+      - name: rr_50_d_abs
+        description: "Nombre de jours de pluie ≥ 50 mm par an"
+        type: FLOAT
+      - name: swi_04_d_abs
+        description: "Nombre de jours où SWI < 0.4"
+        type: FLOAT
+      - name: prime_assurance_2024
+        description: Somme des primes d'assurances pour le compte 6161 en 2024
+        data_type: float
+      - name: evolution_prime_assurance
+        description: Evolution des primes entre 2020 et 2024
+        data_type: float
+      - name: part_prime_budget
+        description: Primes sur dépense 2024
+        data_type: float
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
+        type: GEOMETRY
