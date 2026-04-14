@@ -32,9 +32,9 @@ table_rga AS (
             )
             + 0.5
             * (
-                nb_maisons_post2020_risque_faible
-                + nb_maisons_post2020_risque_moyen * 5
-                + nb_maisons_post2020_risque_fort * 10
+                nb_maisons_post_2020_risque_faible
+                + nb_maisons_post_2020_risque_moyen * 5
+                + nb_maisons_post_2020_risque_fort * 10
             )
             + 0.5
             * (
@@ -53,4 +53,4 @@ table_rga AS (
 SELECT *
 FROM table_tri
 LEFT JOIN table_rga
-ON table_tri.code_geo = table_rga.code_geo
+    ON table_tri.code_geo = table_rga.code_geo
