@@ -6,7 +6,7 @@ import shapely
 from typing import List
 
 """
-Script: step4_aggregate_with_tri.py
+
 Description: Aggregates buildings by commune, nature, usage_1, and TRI risk level.
 Approach: Processes data department-by-department for memory efficiency.
 """

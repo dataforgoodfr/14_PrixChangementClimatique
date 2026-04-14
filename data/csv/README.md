@@ -4,6 +4,45 @@ Ce dossier contient les fichiers de données consolidés et agrégés pour l'ana
 
 ## Fichiers principaux
 
+### `rga_houses_flat.csv`
+
+Agrégation par commune de l'exposition au Retrait-Gonflement des Argiles (RGA).
+
+- **Périmètre** : France métropolitaine uniquement (01-95, incluant 2A/2B).
+- **Contenu** : Uniquement les maisons individuelles (usage BDNB "Résidentiel individuel").
+- **Colonnes principales** :
+  - `code_commune_insee` : Code INSEE de la commune.
+  - `nb_maisons_total` : Nombre total de maisons individuelles.
+  - `nb_maisons_exposition_rga` : Nombre cumulé de maisons en zones d'aléa (Faible, Moyen, Fort).
+  - `pct_exposition_rga` : Ratio de maisons exposées (hors pondération).
+  - `[p]_[rga]` : Détail par période (`pre1945`, `1945-1975`, `1976-2020`, `post2020`, `unk`) et niveau d'aléa (`nul`, `faible`, `moyen`, `fort`).
+- **Sources** : BDNB (CSTB).
+
+### `tri_all_bats_flat.csv`
+
+Agrégation par commune de l'exposition au risque d'inondation (Zonage TRI).
+
+- **Périmètre** : France entière, DROMs inclus (FXX, REU, GLP, GUF, MYT, MTQ, MAF, BLM, SPM).
+- **Contenu** : Tous types de bâtiments (tous usages).
+- **Colonnes principales** :
+  - `code_commune_insee` : Code INSEE de la commune.
+  - `nb_bats_total` : Nombre total de bâtiments.
+  - `nb_bats_exposition_tri` : Nombre de bâtiments en zone de risque (Faible, Moyen, Fort).
+  - `pct_exposition_tri` : Ratio de batiments exposées (hors pondération).
+  - `[usage]_[scenario]` : Détail par usage (`resid`, `service`, `agri`, `indus`, `autres`) et scénario (`nul`, `faible`, `moyen`, `fort`).
+- **Sources** : BDTOPO (v3) pour le bâti, croisé avec le Zonage TRI (DGPR - Directive Inondation).
+
+## Suggestions d'indices d'exposition aux GeoRisques
+
+- `indice_expo_rga` : Score pondéré de vulnérabilité.
+  - **Pondération par période** : 1945-1975 (0.5), 1976-2020 (1.0), Après 2020 (0.5), Avant 1945 (0.0).
+  - **Pondération par sévérité** : Faible (1), Moyen (5), Fort (10).
+  - **Formule** : `Σ(p_weight * s_weight * count) / nb_maisons_total`.
+
+- `indice_expo_tri` : Score pondéré de vulnérabilité aux inondations (tous usages confondus).
+  - **Pondération par sévérité** : Faible (1), Moyen (3), Fort (5).
+  - **Formule** : `Σ(s_weight * count) / nb_bats_total`.
+
 ### `risques_catnat_communes_flat.parquet`
 
 Version enrichie de la table "flat" incluant les statistiques de catastrophes naturelles.
@@ -39,8 +78,9 @@ Historique des arrêtés de Catastrophe Naturelle (CatNat) issus de la base GASP
 
 ## Sources de données
 
-- **BDNB (CSTB)** : Base de Données Nationale des Bâtiments. Utilisée pour le parc de maisons et les années de construction. [lien](https://bdnb.io/)
-- **TRI (DGPR)** : Territoires à Risque d'Inondation. Zones d'aléa inondation par scénario. [lien](https://www.data.gouv.fr/datasets/territoire-a-risque-dinondation-tri-du-sig-directive-inondation-france-metropolitaine-rapportage-2020-241)
+- **BDNB (CSTB)** : Base de Données Nationale des Bâtiments. Source principale pour le parc de maisons, les périodes de construction et l'aléa RGA. [lien](https://bdnb.io/)
+- **BDTOPO (IGN)** : Base de données vectorielle 3D du territoire. Utilisée pour l'inventaire exhaustif des bâtiments et leurs usages (TRI).
+- **TRI (DGPR)** : Territoires à Risque d'Inondation. Zonages d'aléa inondation par scénario (Directive Inondation). [lien](https://www.data.gouv.fr/datasets/territoire-a-risque-dinondation-tri-du-sig-directive-inondation-france-metropolitaine-rapportage-2020-241)
 - **GASPAR / CatNat (Ministère de la Transition Écologique)** : Base de gestion des procédures administratives relatives aux risques naturels et technologiques.
 - **Géorisques** : Données d'exposition aux risques naturels (Argile/RGA). Intégrées dans la base BDNB.
 

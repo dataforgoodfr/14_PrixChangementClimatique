@@ -8,7 +8,7 @@ df_agg = pl.read_parquet("../csv_large/france_all_bats_agg.parquet")
 # - Regroupement de (Annexe, Sportif, Religieux, Indifférencié) en 'Autres'
 usage_map = {
     "Résidentiel": "resid",
-    "Commercial et services": "rervice",
+    "Commercial et services": "service",
     "Agricole": "agri",
     "Industriel": "indus",
     "Annexe": "autres",
