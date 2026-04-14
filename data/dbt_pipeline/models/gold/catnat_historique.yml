@@ -9,8 +9,8 @@ models:
         data_type: varchar
         data_tests:
           - not_null
-      - name: annee
-        description: Année de l'évènement catnat
+      - name: annee_debut
+        description: Année de l'évènement catnat (basée sur la date de début)
         data_type: bigint
         data_tests:
           - not_null
