@@ -63,9 +63,8 @@ budget_last AS (
 pprn AS (
     SELECT
         code_geo,
-        COALESCE(pprn_desc ILIKE '%tassements différentiels%', FALSE) AS pprn_rga,
-
-        COALESCE(pprn_libelle ILIKE '%Inondation%', FALSE) AS pprn_ino
+        (pprn_desc ILIKE '%tassements différentiels%') AS pprn_rga,
+        (pprn_libelle ILIKE '%Inondation%') AS pprn_ino
     FROM {{ ref('pprn_clean') }}
 )
 
@@ -107,7 +106,7 @@ SELECT
     pr.pprn_rga,
     pr.pprn_ino,
 
-    pop.pop_2026,
+    pop.population,
     p.prime_assurance_2024 / b.depenses AS part_prime_budget,
 
     (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
@@ -118,7 +117,9 @@ LEFT JOIN {{ ref('scenario_2050') }} AS r
     ON o.code_geo = r.code_geo
 
 LEFT JOIN {{ ref('population_par_com_annee') }} AS pop
-    ON o.code_geo = pop.code_geo
+    ON
+        o.code_geo = pop.code_geo
+        AND pop.annee = 2026
 
 LEFT JOIN budget_last AS b
     ON o.code_geo = b.code_geo
