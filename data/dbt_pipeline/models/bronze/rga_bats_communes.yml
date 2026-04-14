@@ -17,16 +17,16 @@ models:
       - name: code_geo
         description: "Code de la commune"
         data_type: string
-      - name: nb_maisons_pre1945_risque_nul
+      - name: nb_maisons_pre_1945_risque_nul
         description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA nul"
         data_type: int
-      - name: nb_maisons_pre1945_risque_faible
+      - name: nb_maisons_pre_1945_risque_faible
         description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA faible"
         data_type: int
-      - name: nb_maisons_pre1945_risque_moyen
+      - name: nb_maisons_pre_1945_risque_moyen
         description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA moyen"
         data_type: int
-      - name: nb_maisons_pre1945_risque_fort
+      - name: nb_maisons_pre_1945_risque_fort
         description: "Nombre de maisons construites avant 1945 et niveau d'aléa RGA fort"
         data_type: int
       - name: nb_maisons_1945_1975_risque_nul
@@ -53,16 +53,16 @@ models:
       - name: nb_maisons_1976_2020_risque_fort
         description: "Nombre de maisons construites entre 1976 et 2020 et niveau d'aléa RGA fort"
         data_type: int
-      - name: nb_maisons_post2020_risque_nul
+      - name: nb_maisons_post_2020_risque_nul
         description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA nul"
         data_type: int
-      - name: nb_maisons_post2020_risque_faible
+      - name: nb_maisons_post_2020_risque_faible
         description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA faible"
         data_type: int
-      - name: nb_maisons_post2020_risque_moyen
+      - name: nb_maisons_post_2020_risque_moyen
         description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA moyen"
         data_type: int
-      - name: nb_maisons_post2020_risque_fort
+      - name: nb_maisons_post_2020_risque_fort
         description: "Nombre de maisons construites apres 2020 et niveau d'aléa RGA fort"
         data_type: int
       - name: nb_maisons_inconnu_risque_nul
