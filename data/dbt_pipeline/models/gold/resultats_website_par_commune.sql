@@ -100,7 +100,7 @@ SELECT
 
 FROM {{ ref('opendatasoft_communes') }} AS o
 
-LEFT JOIN {{ ref('resultat_2050') }} AS r
+LEFT JOIN {{ ref('scenario_2050') }} AS r
     ON o.code_geo = r.code_geo
 
 LEFT JOIN {{ ref('population_par_com_annee') }} AS pop
