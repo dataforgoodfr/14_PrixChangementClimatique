@@ -81,8 +81,8 @@ models:
         description: "Nombre total de bâtiments dans la commune"
         data_type: int
       - name: nb_bats_exposition_tri
-        description: "Nombre total de bâtiments exposés à un risque tri (faible,moyen,fort) dans la commune"
+        description: "Nombre total de bâtiments exposés à un risque TRI (faible,moyen,fort) dans la commune"
         data_type: int
       - name: percent_bats_exposition_tri
-        description: "Proportion (%) de bâtiments exposés à un risque tri (faible,moyen,fort) dans la commune"
+        description: "Proportion (%) de bâtiments exposés à un risque TRI (faible,moyen,fort) dans la commune"
         data_type: float

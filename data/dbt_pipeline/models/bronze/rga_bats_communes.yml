@@ -81,8 +81,8 @@ models:
         description: "Nombre total de maisons individuelles dans la commune"
         data_type: int
       - name: nb_maisons_exposition_rga
-        description: "Nombre total de maisons individuelles exposées à un risque rga (faible,moyen,fort) dans la commune"
+        description: "Nombre total de maisons individuelles exposées à un risque RGA (faible,moyen,fort) dans la commune"
         data_type: int
       - name: percent_maisons_exposition_rga
-        description: "Proportion (%) de maisons individuelles exposées à un risque rga (faible,moyen,fort) dans la commune"
+        description: "Proportion (%) de maisons individuelles exposées à un risque RGA (faible,moyen,fort) dans la commune"
         data_type: float

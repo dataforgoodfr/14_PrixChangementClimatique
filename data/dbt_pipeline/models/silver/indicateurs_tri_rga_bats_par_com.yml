@@ -19,7 +19,7 @@ models:
         data_type: float
       - name: indicateur_rga
         description: >
-          indicateur de vulnérabilité au RGA.
+          indicateur de vulnérabilité au Retrait-Gonflement des Argiles (RGA).
           Somme pondérée par la valeur du risque et la période de construction
           Poids périodes : 1976-2020 (1.0), 1945-1975 & post-2020 (0.5), pré-1945 (0.0), inconnu (0.5).
           Poids sévérité : faible (1.0), moyen (5.0), fort (10.0).
