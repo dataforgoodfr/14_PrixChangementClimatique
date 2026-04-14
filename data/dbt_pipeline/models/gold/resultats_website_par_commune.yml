@@ -1,12 +1,22 @@
+version: 2
+
 models:
-  - name: features_indices
-    description: Features pour calculer les scores de vulnérabilité
-
-
+  - name: resultats_website_par_commune
+    description: >
+      Gold layer: Table des résultats website par commune avec KPI.
+      Cette table contient toutes les données administratives et géographiques des communes françaises
+      enrichies avec des indicateurs métier.
+      Source: Bronze layer (opendatasoft_communes) avec transformation et ajout de KPI.
     columns:
       - name: code_geo
         description: Code INSEE
         data_type: varchar
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
       - name: pprn_rga
         description: True ou False si il y a un pprn rga
         data_type: varchar
@@ -17,7 +27,7 @@ models:
         description: dettes/depenses de la derniere année 2024
         data_type: double
       - name: depenses_per_pop
-        description: Solde net pour le type de compte "depenses" par population municipale de 2024 
+        description: Solde net pour le type de compte "depenses" par population municipale de 2024
         data_type: double
       - name: pxcwd_abs
         description: "Nombre max de jours de pluie consécutifs (> 1mm)"
@@ -37,3 +47,12 @@ models:
       - name: evolution_prime_assurance
         description: Evolution des primes entre 2020 et 2024
         data_type: float
+      - name: part_prime_budget
+        description: Primes sur dépense 2024
+        data_type: float
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
+        type: GEOMETRY
