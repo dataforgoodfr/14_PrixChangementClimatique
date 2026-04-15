@@ -12,7 +12,6 @@ WITH prime AS (
         CASE WHEN annee = 2020 THEN prime_assurance END AS prime_assurance_2020
     FROM {{ ref('primes_par_communes') }}
     WHERE annee IN (2020, 2024)
-    GROUP BY code_geo
 ),
 
 ccr_totals AS (
