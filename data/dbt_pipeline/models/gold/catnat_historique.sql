@@ -42,6 +42,6 @@ SELECT
     annee_debut,
     date_debut,
     date_fin,
-    type_catnat AS type,
+    type_catnat,
     IF(libelle_avis == 'Reconnue', True, False) AS is_reconnue
 FROM table_catnat_preparation

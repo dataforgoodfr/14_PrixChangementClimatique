@@ -20,7 +20,7 @@ models:
       - name: date_fin
         description: date du fin de l'évènement catnat
         data_type: date
-      - name: type
+      - name: type_catnat
         description: Le type de l'évènement catnat (selon un mapping spécifique plus simple)
         data_type: varchar
       - name: is_reconnue
