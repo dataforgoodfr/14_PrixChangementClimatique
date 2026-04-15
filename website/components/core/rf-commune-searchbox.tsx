@@ -6,7 +6,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -39,16 +39,19 @@ export type SearchCommuneResult = {
 
 interface CommuneSearchBoxProps {
   onAddressFilter: (result: SearchCommuneResult | undefined) => void;
+  filterValue?: string;
   className?: string;
 }
 
 export function RFCommuneSearchBox({
   onAddressFilter,
+  filterValue,
   className,
 }: CommuneSearchBoxProps) {
   const [filterString, setFilterString] = useState("");
   const [debouncedFilter, setDebouncedFilter] = useState("");
   const [dropDownIsOpened, setDropDownOpen] = useState(false);
+  const isExternalUpdate = useRef(false);
 
   const apiUrl = debouncedFilter
     ? `https://geo.api.gouv.fr/communes?boost=population&fields=code,nom,departement,centre&limit=20&nom=${encodeURIComponent(
@@ -62,8 +65,26 @@ export function RFCommuneSearchBox({
     isLoading,
   } = useSWR<QueryResponse>(apiUrl);
 
+  // Handle commune selection from click on the map
+  useEffect(() => {
+    if (filterValue && filterValue !== filterString) {
+      isExternalUpdate.current = true;
+      setFilterString(filterValue);
+      setDebouncedFilter(filterValue);
+    }
+    // We only want this hook to execute when filterValue change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValue]);
+
+  // Handle commune selection from searchbox with debounce
   useEffect(() => {
     const timeoutId = setTimeout(() => {
+      // Skip dropdown opening and research if this is an external update (from map click)
+      if (isExternalUpdate.current) {
+        isExternalUpdate.current = false;
+        return;
+      }
+
       if (filterString.length >= 3) {
         setDebouncedFilter(filterString);
         setDropDownOpen(true);
