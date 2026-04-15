@@ -77,7 +77,7 @@ models:
       - name: nb_maisons_inconnu_risque_fort
         description: "Nombre de maisons de date de construction inconnue et niveau d'aléa RGA fort"
         data_type: int
-      - name: nb_total_maisons
+      - name: nb_maisons_total
         description: "Nombre total de maisons individuelles dans la commune"
         data_type: int
       - name: nb_maisons_exposition_rga
