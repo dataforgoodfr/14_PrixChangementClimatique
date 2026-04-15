@@ -15,7 +15,11 @@ import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { FiltersPanel } from "@/components/map/filters-panel";
 import { FeatureDetailPanel } from "@/components/map/feature-detail-panel";
-import { MapProvider, useMapContext } from "@/contexts/map-context";
+import { MapFeature, MapProvider, useMapContext } from "@/contexts/map-context";
+import {
+  RFCommuneSearchBox,
+  SearchCommuneResult,
+} from "@/components/core/rf-commune-searchbox";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -123,9 +127,21 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
   const handleClick = useCallback(
     (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const f = e.features?.[0];
-      if (f) selectFeature(f.properties as Record<string, unknown>);
+      if (f) {
+        const map = mapRef.current?.getMap();
+        const { lon, lat } = JSON.parse(f.properties.geo_point_2_d);
+        if (map) {
+          map.flyTo({
+            center: [lon, lat],
+            zoom: 12,
+            offset: [400, 0],
+            duration: 1000,
+          });
+        }
+        selectFeature(f.properties as MapFeature);
+      }
     },
-    [selectFeature],
+    [selectFeature, mapRef],
   );
 
   const handleCursorEnter = useCallback((e: MapMouseEvent) => {
@@ -169,12 +185,64 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
 
 function MainMap() {
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const { mapRef, selectFeature, clearSelectedFeature, selectedFeature } =
+    useMapContext();
+
+  const selectCommune = useCallback(
+    (result: SearchCommuneResult | undefined) => {
+      const map = mapRef.current?.getMap();
+      if (!result) {
+        clearSelectedFeature();
+        return;
+      }
+      if (!map) return;
+
+      const [lng, lat] = result.centre.coordinates;
+
+      selectFeature({
+        code_geo: result.code,
+        nom_commune: result.nom,
+      });
+
+      // 1. Fly vers la commune pour charger les tuiles
+      map.flyTo({
+        center: [lng, lat],
+        zoom: 12,
+        offset: [400, 0],
+        duration: 1000,
+      });
+
+      // 2. Une fois les tuiles chargées, query par code_geo
+      const onIdle = () => {
+        map.off("idle", onIdle);
+
+        const features = map.querySourceFeatures("communes-source", {
+          sourceLayer: "communes",
+          filter: ["==", ["get", "code_geo"], result.code],
+        });
+
+        if (features.length > 0) {
+          selectFeature(features[0].properties as MapFeature);
+        }
+      };
+      map.on("idle", onIdle);
+    },
+    [mapRef, selectFeature, clearSelectedFeature],
+  );
 
   return (
     <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
       {/* Map wrapper and canvas that fills the full area */}
       <div className="absolute inset-0">
         <MapCanvas isFiltersPanelOpen={filtersOpen} />
+      </div>
+
+      <div className="absolute top-8 left-8">
+        <RFCommuneSearchBox
+          filterValue={selectedFeature?.nom_commune}
+          onAddressFilter={selectCommune}
+          className="w-100 z-50"
+        />
       </div>
 
       {/* Left: commune detail panel – reads selectedFeature from context */}

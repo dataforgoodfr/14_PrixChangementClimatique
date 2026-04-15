@@ -13,6 +13,32 @@ import type { MapRef, ViewState } from "@vis.gl/react-maplibre";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export interface MapFeature {
+  code_geo: string;
+  nom_commune: string;
+  code_geo_actuel?: string;
+  nom_commune_majuscule?: string;
+  nom_commune_minuscule?: string;
+  code_zone_superficie?: string;
+  type_commune?: "commune";
+  code_siren?: number;
+  zone_montagne?: "Oui" | "Non";
+  code_departement?: string;
+  nom_departement?: string;
+  code_region?: string;
+  nom_region?: string;
+  code_arrondissement_departemental?: string;
+  nom_arrondissement_departemental?: string;
+  code_epci?: number;
+  nom_epci?: string;
+  code_zone_emploi_2020?: string;
+  nom_zone_emploi_2020?: string;
+  code_bassin_vie_2022?: string;
+  nom_bassin_vie_2022?: string;
+  geo_point_2_d?: string; // "{\"lon\":-1.3812061983026563,\"lat\":47.400889786974449}",
+  valeur?: number;
+}
+
 export interface MapContextValue {
   /** Ref to maplibre instance (will be usefull for accessing map methods) */
   mapRef: RefObject<MapRef | null>;
@@ -21,9 +47,9 @@ export interface MapContextValue {
   /** Setter for the map instance view state  */
   setViewState: (vs: ViewState) => void;
   /** Getter: The city feature the user last clicked on, or null if none. */
-  selectedFeature: Record<string, unknown> | null;
+  selectedFeature: MapFeature | null;
   /** Setters for the map instance selected feature */
-  selectFeature: (properties: Record<string, unknown>) => void;
+  selectFeature: (properties: MapFeature) => void;
   clearSelectedFeature: () => void;
 }
 
@@ -56,13 +82,12 @@ export const INITIAL_VIEW_STATE: ViewState = {
 export function MapProvider({ children }: { children: ReactNode }) {
   const mapRef = useRef<MapRef>(null);
   const [viewState, setViewState] = useState<ViewState>(INITIAL_VIEW_STATE);
-  const [selectedFeature, setSelectedFeature] = useState<Record<
-    string,
-    unknown
-  > | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
+    null,
+  );
 
   const selectFeature = useCallback(
-    (properties: Record<string, unknown>) => setSelectedFeature(properties),
+    (properties: MapFeature) => setSelectedFeature(properties),
     [],
   );
 

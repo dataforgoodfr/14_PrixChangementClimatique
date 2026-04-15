@@ -6,7 +6,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -14,7 +14,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { MapPin, X } from "lucide-react";
+import { Search, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type QueryResult = {
   nom: string;
@@ -23,6 +24,7 @@ type QueryResult = {
     code: string;
     nom: string;
   };
+  centre: { type: string; coordinates: [number, number] };
 };
 
 type QueryResponse = QueryResult[];
@@ -30,23 +32,28 @@ type QueryResponse = QueryResult[];
 export type SearchCommuneResult = {
   code: string;
   nom: string;
+  centre: { coordinates: [number, number] };
 };
 
 interface CommuneSearchBoxProps {
   onAddressFilter: (result: SearchCommuneResult | undefined) => void;
+  filterValue?: string;
+  className?: string;
 }
 
-export default function CommuneSearchBox({
+export function RFCommuneSearchBox({
   onAddressFilter,
+  filterValue,
+  className,
 }: CommuneSearchBoxProps) {
   const [filterString, setFilterString] = useState("");
   const [dropDownIsOpened, setDropDownOpen] = useState(false);
   const [communesList, setCommunesList] = useState<QueryResult[]>([]);
   const [delayHandler, setDelayHandler] = useState<NodeJS.Timeout | null>(null);
 
-  async function performSearch(filterString: string) {
+  async function performSearch(filterString: string, openDropDown = true) {
     const fetchUrl = new URL(
-      "https://geo.api.gouv.fr/communes?boost=population&fields=departement&limit=20",
+      "https://geo.api.gouv.fr/communes?boost=population&fields=code,nom,departement,centre&limit=20",
     );
     fetchUrl.searchParams.set("nom", filterString);
 
@@ -56,7 +63,7 @@ export default function CommuneSearchBox({
 
       if (data) {
         setCommunesList(data);
-        setDropDownOpen(true);
+        setDropDownOpen(openDropDown);
       } else {
         setCommunesList([]);
         setDropDownOpen(false);
@@ -105,14 +112,20 @@ export default function CommuneSearchBox({
     onAddressFilter(undefined);
   }
 
+  useEffect(() => {
+    setFilterString(filterValue ?? "");
+    if (!communesList.find((commune) => commune.nom === filterValue)) {
+      performSearch(filterValue ?? "", false);
+    }
+    // We only want this hook to execute when filterValue change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValue]);
+
   return (
     <Popover open={dropDownIsOpened} onOpenChange={setDropDownOpen}>
       <PopoverAnchor asChild>
-        <div className="flex items-center relative">
-          <MapPin
-            size={16}
-            className="absolute left-3 text-muted-foreground pointer-events-none"
-          />
+        <div className={cn("flex items-center relative", className)}>
+          <Search size={16} className="absolute left-3 pointer-events-none" />
           <Input
             className="pl-8"
             value={filterString}
@@ -153,7 +166,7 @@ export default function CommuneSearchBox({
               {communesList.map((commune) => {
                 return (
                   <CommandItem
-                    className="flex items-center py-2"
+                    className="flex items-center py-2 cursor-pointer"
                     key={commune.code}
                     value={commune.code}
                     onSelect={() => handleAddressSelect(commune)}
