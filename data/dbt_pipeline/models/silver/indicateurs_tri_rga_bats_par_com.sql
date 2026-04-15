@@ -16,8 +16,9 @@ WITH table_tri AS (
 ),
 
 -- DEUXIEME ETAPE : faire les calculs pour l'indicateur RGA
--- Ici il s'agit à chaque fois de diviser les nombres de diverses maisons (pondérées au risque et à sa période de construction)
--- de la commune par le pire scenario RGA (toutes les maisons de la commune ont un risque élevé et
+-- Ici il s'agit à chaque fois de diviser les nombres de diverses maisons
+-- (pondérées au risque et à sa période de construction) de la commune
+-- par le pire scenario RGA (toutes les maisons de la commune ont un risque élevé et
 -- ont été construites sur la période 1976-2020)
 table_rga AS (
     SELECT
@@ -53,7 +54,9 @@ table_rga AS (
 
 -- TROISIEME ETAPE : joindre les deux tables pour avoir la table finale
 -- (étant donné qu'il n'y a pas les DROMs pour le RGA, la valeur d'indicateur rga sera null pour ces communes)
-SELECT *
+SELECT
+    table_tri.*,
+    table_rga.indicateur_rga
 FROM table_tri
 LEFT JOIN table_rga
     ON table_tri.code_geo = table_rga.code_geo
