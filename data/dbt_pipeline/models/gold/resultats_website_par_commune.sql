@@ -56,6 +56,7 @@ SELECT
     c.code_departement,
     c.code_region,
     c.geometry,
+    c.nom_commune,
 
     -- KPI randoms récupérés depuis la table indices
     i.score_economique,

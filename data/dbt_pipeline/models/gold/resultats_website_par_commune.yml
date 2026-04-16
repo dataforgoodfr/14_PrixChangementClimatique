@@ -11,6 +11,9 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères) appelé code_geo en bronze"
         type: CHAR(5)
+      - name: nom_commune
+        description: "Nom officiel de la commune"
+        type: STRING
       - name: departement
         description: "Nom du département"
         type: VARCHAR(100)
