@@ -36,7 +36,7 @@ budget_last AS (
         MAX(depenses) FILTER (WHERE annee = 2024) AS depenses,
         MAX_BY(depenses_per_pop, annee) AS depenses_per_pop
     FROM {{ ref('indicateurs_budget') }}
-    WHERE annee IN (2022,2023, 2024)
+    WHERE annee IN (2022, 2023, 2024)
     GROUP BY code_geo
 ),
 
