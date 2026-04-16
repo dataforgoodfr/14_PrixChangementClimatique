@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { RFButton as Button } from "@/components/core/rf-button";
+import { RFButton } from "@/components/core/rf-button";
 import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
   { href: "/", label: "Accueil" },
@@ -56,12 +57,13 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block shrink-0">
-          <Button title="Nous contacter" path="/" />
+          <RFButton title="Nous contacter" path="/" />
         </div>
-        <button
+        <Button
           type="button"
+          variant="outline"
           aria-labelledby="Menu Toggle Button"
-          className="block md:hidden z-50 shadow p-1"
+          className="size-8"
           onClick={toggleMenu}
         >
           {isMenuOpen ? (
@@ -69,7 +71,7 @@ export function Header() {
           ) : (
             <MenuIcon className="size-6" />
           )}
-        </button>
+        </Button>
       </div>
       <ul
         className={cn(
@@ -97,7 +99,7 @@ export function Header() {
           );
         })}
         <li>
-          <Button title="Nous contacter" onClick={toggleMenu} path="/" />
+          <RFButton title="Nous contacter" onClick={toggleMenu} path="/" />
         </li>
       </ul>
     </header>
