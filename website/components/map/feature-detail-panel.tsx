@@ -11,7 +11,7 @@ export function FeatureDetailPanel() {
       isOpen={selectedFeature !== null}
       onClose={clearSelectedFeature}
       dir="ltr"
-      width={460}
+      width={800}
       zIndex="z-30"
     >
       <Panel.Header>

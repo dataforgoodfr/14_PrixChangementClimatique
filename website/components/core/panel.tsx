@@ -29,7 +29,9 @@ function usePanelContext() {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function PanelTitle({ children }: { children: ReactNode }) {
-  return <p className="font-semibold text-gray-900">{children}</p>;
+  return (
+    <p className="pt-30 text-3xl font-semibold text-gray-900">{children}</p>
+  );
 }
 
 function PanelSubtitle({ children }: { children: ReactNode }) {
@@ -39,7 +41,7 @@ function PanelSubtitle({ children }: { children: ReactNode }) {
 function PanelHeader({ children }: { children: ReactNode }) {
   const { onClose, showCloseButton } = usePanelContext();
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
+    <div className="flex items-start justify-between px-4 py-3 border-b border-gray-200 shrink-0">
       <div className="flex flex-col gap-0.5 min-w-0">{children}</div>
       {showCloseButton && (
         <button

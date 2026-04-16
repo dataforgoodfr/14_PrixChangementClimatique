@@ -93,10 +93,12 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import { FranceMap } from "@/components/france-map";
-import CommuneSearchBox, {
+import {
+  RFCommuneSearchBox,
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
+import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 
 export function ComponentExample() {
   return (
@@ -105,6 +107,7 @@ export function ComponentExample() {
       <FormExample />
       <MapExample />
       <CommuneSearchBoxExample />
+      <VulnerabilityIndexExample />
     </ExampleWrapper>
   );
 }
@@ -515,7 +518,7 @@ function CommuneSearchBoxExample() {
       title="Recherche d'une commune"
       className="items-center justify-center gap-4"
     >
-      <CommuneSearchBox onAddressFilter={setSelectedCommune} />
+      <RFCommuneSearchBox onAddressFilter={setSelectedCommune} />
       <div>
         Commune sélectionnée :{" "}
         {selectedCommune ? (
@@ -525,6 +528,19 @@ function CommuneSearchBoxExample() {
         ) : (
           "Aucune"
         )}
+      </div>
+    </Example>
+  );
+}
+
+function VulnerabilityIndexExample() {
+  return (
+    <Example
+      title="Indice de vulnérabilité"
+      className="items-center justify-center gap-4"
+    >
+      <div className="w-70">
+        <RfVulnerabilityIndex value={2.5} />
       </div>
     </Example>
   );
