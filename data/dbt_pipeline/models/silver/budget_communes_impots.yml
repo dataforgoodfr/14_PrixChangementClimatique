@@ -26,3 +26,8 @@ models:
         type: FLOAT
         tests:
           - not_null
+      - name: montant_budget
+        description: Montant total du budget en euros
+        type: FLOAT
+        tests:
+          - not_null
