@@ -7,7 +7,7 @@ source_impots AS (
     SELECT
         annee,
         code_geo,
-        SUM(montant) as montant_impot
+        SUM(montant) AS montant_impot
     FROM {{ ref('donnees_financieres_ofgl') }}
     WHERE agregat = 'Impôts locaux'
     GROUP BY annee, code_geo
@@ -21,7 +21,8 @@ SELECT
     b.type_budget,
     b.montant AS montant_budget, -- On renomme pour éviter le conflit avec montant_impot
     COALESCE(i.montant_impot, 0) AS montant_impot
-FROM source_budget b
-LEFT JOIN source_impots i
-    ON b.code_geo = i.code_geo
-    AND b.annee = i.annee
+FROM source_budget AS b
+LEFT JOIN source_impots AS i
+    ON
+        b.code_geo = i.code_geo
+        AND b.annee = i.annee
