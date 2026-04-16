@@ -11,16 +11,16 @@ models:
         type: STRING
       - name: score_economique
         description: "Score économique de la commune"
-        type: DECIMAL (3, 2)
+        type: FLOAT
       - name: score_georisque
         description: "Score géorisque de la commune"
-        type: DECIMAL (3, 2)
+        type: FLOAT
       - name: score_assurance
         description: "Score assurance de la commune"
-        type: DECIMAL (3, 2)
+        type: FLOAT
       - name: indice_vulnerabilite
         description: "Indice de vulnérabilité de la commune"
-        type: DECIMAL (3, 2)
+        type: FLOAT
       - name: indice_vulnerabilite_niveau
         description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
         type: INT
