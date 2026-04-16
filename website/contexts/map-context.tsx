@@ -16,14 +16,17 @@ import type { MapRef, ViewState } from "@vis.gl/react-maplibre";
 export interface MapFeature {
   code_insee: string;
   nom_commune?: string;
-  departement?: string;
-  region?: string;
+  nom_departement?: string;
+  code_departement?: string;
+  nom_region?: string;
+  code_region?: string;
   geo_point_2_d?: string;
   score_economique?: number;
   score_georisque?: number;
   score_assurance?: number;
   indice_vulnerabilite?: number;
   indice_vulnerabilite_niveau?: number;
+  valeur?: number;
 }
 
 export interface MapContextValue {

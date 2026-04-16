@@ -136,6 +136,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
             duration: 1000,
           });
         }
+        console.log(f.properties);
         selectFeature(f.properties as MapFeature);
       }
     },
@@ -220,6 +221,7 @@ function MainMap() {
         });
 
         if (features.length > 0) {
+          console.log(features[0].properties);
           selectFeature(features[0].properties as MapFeature);
         }
       };
