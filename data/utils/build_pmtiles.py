@@ -22,7 +22,7 @@ DOCKER_IMAGE = "tippecanoe-local"
 REPO_ROOT = SCRIPT_DIR.parent.parent
 WEBSITE_DIR = REPO_ROOT / "website"
 
-DUCKDB_PATH = REPO_ROOT / "data" / "dbt_pipeline" / "dev.duckdb"
+DUCKDB_PATH = REPO_ROOT / "data" / "exploration" / "dev.duckdb"
 CACHE_DIR = REPO_ROOT / ".cache"
 GEOJSON_PATH = CACHE_DIR / "communes.geojsonl"
 PMTILES_PATH = WEBSITE_DIR / "public/pmtiles/communes.pmtiles"
