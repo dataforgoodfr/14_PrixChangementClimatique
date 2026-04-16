@@ -1,0 +1,27 @@
+models:
+  - name: indicateurs_tri_rga_bats_par_com
+    description: >
+      Table montrant les indicateurs d'exposition au RGA et TRI par commune
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune"
+        data_type: string
+        data_test:
+          - unique
+          - not_null
+
+      - name: indicateur_tri
+        description: >
+          indicateur d'exposition aux inondations (TRI).
+          Somme pondérée des indicateurs de risque : faible (coefficient 1), moyen (coefficient 3)
+          et fort (coefficient 5).
+          Il a été décidé que le type de bâtiment n'entrait pas en ligne de compte (coefficient 1).
+        data_type: float
+      - name: indicateur_rga
+        description: >
+          indicateur de vulnérabilité au Retrait-Gonflement des Argiles (RGA).
+          Somme pondérée par la valeur du risque et la période de construction
+          Poids périodes : 1976-2020 (1.0), 1945-1975 & post-2020 (0.5), pré-1945 (0.0), inconnu (0.5).
+          Poids sévérité : faible (1.0), moyen (5.0), fort (10.0).
+          Etant donné qu'il n'y a pas les DROMs pour le RGA, leur score sera 'null'.
+        data_type: float
