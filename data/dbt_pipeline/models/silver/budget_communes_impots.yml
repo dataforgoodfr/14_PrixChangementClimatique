@@ -24,5 +24,5 @@ models:
       - name: montant_impot
         description: Montant des impots en euros
         type: FLOAT
-      - test:
+      - tests:
           - not_null
