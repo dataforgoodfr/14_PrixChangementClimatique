@@ -22,7 +22,7 @@ models:
         type: STRING
       - name: geometry
         description: "Géométrie spatiale de la commune (polygone ou multipolygone en WKT ou format spatial)"
-        type: GEOMETRY
+        type: STRING
       - name: score_economique
         description: "Score économique de la commune"
         type: FLOAT

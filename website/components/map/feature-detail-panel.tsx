@@ -18,9 +18,9 @@ export function FeatureDetailPanel() {
         <Panel.Title>
           {String(selectedFeature?.nom_commune ?? "Commune")}
         </Panel.Title>
-        {!!selectedFeature?.code_geo && (
+        {!!selectedFeature?.code_insee && (
           <Panel.Subtitle>
-            Code INSEE : {String(selectedFeature.code_geo)}
+            Code INSEE : {String(selectedFeature.code_insee)}
           </Panel.Subtitle>
         )}
       </Panel.Header>

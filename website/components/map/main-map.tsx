@@ -36,7 +36,7 @@ function CommunesLayer() {
       id={COMMUNES_SOURCE_ID}
       type="vector"
       url={`pmtiles://${COMMUNES_PMTILES_URL}`}
-      promoteId="code_geo"
+      promoteId="code_insee"
     >
       <Layer
         id={COMMUNES_LAYER_ID}
@@ -44,19 +44,17 @@ function CommunesLayer() {
         source-layer="communes"
         paint={{
           "fill-color": [
-            "interpolate",
-            ["linear"],
-            ["coalesce", ["get", "valeur"], 0],
-            0,
-            "#ffffcc",
-            0.25,
-            "#fed976",
-            0.5,
-            "#fd8d3c",
-            0.75,
-            "#e31a1c",
-            1,
-            "#800026",
+            "step",
+            ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
+            "#518F83",
+            2,
+            "#B2A052",
+            3,
+            "#FFB74B",
+            4,
+            "#EA580D",
+            5,
+            "#B91C1C",
           ],
           "fill-opacity": 0.7,
         }}
@@ -200,7 +198,7 @@ function MainMap() {
       const [lng, lat] = result.centre.coordinates;
 
       selectFeature({
-        code_geo: result.code,
+        code_insee: result.code,
         nom_commune: result.nom,
       });
 
@@ -218,7 +216,7 @@ function MainMap() {
 
         const features = map.querySourceFeatures("communes-source", {
           sourceLayer: "communes",
-          filter: ["==", ["get", "code_geo"], result.code],
+          filter: ["==", ["get", "code_insee"], result.code],
         });
 
         if (features.length > 0) {
