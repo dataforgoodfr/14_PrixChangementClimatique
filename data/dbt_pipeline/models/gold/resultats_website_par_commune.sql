@@ -43,14 +43,8 @@ budget_last AS (
 pprn AS (
     SELECT
         code_geo,
-        CASE
-            WHEN pprn_desc ILIKE '%tassements différentiels%' THEN TRUE
-            ELSE FALSE
-        END AS pprn_rga,
-        CASE
-            WHEN pprn_desc ILIKE '%Inondation%' THEN TRUE
-            ELSE FALSE
-        END AS pprn_ino
+        COALESCE(pprn_desc ILIKE '%tassements différentiels%', FALSE) AS pprn_rga,
+        COALESCE(pprn_desc ILIKE '%Inondation%', FALSE) AS pprn_ino
     FROM {{ ref('pprn_clean') }}
 )
 
