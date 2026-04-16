@@ -98,7 +98,7 @@ models:
       - name: nb_total_arretes_sec
         description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sécheresse" par commune
         data_type: int
-      - name: multiple_franchise
+      - name: multiple_franchise_last
         description: multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)
         data_type: int
       - name: population
