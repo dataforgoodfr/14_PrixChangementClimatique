@@ -231,17 +231,15 @@ function MainMap() {
   );
 
   return (
-    <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
+    <div className="relative h-[calc(100dvh-4rem)] overflow-hidden">
       {/* Map wrapper and canvas that fills the full area */}
-      <div className="absolute inset-0">
-        <MapCanvas isFiltersPanelOpen={filtersOpen} />
-      </div>
+      <MapCanvas isFiltersPanelOpen={filtersOpen} />
 
       <div className="absolute top-8 left-4">
         <RFCommuneSearchBox
           filterValue={selectedFeature?.nom_commune}
           onAddressFilter={selectCommune}
-          className="w-100 z-50 max-w-[calc(100dvw-5rem)]"
+          className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
         />
       </div>
 
