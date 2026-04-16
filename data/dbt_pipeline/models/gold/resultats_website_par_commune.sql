@@ -10,10 +10,13 @@ WITH prime AS (
         code_geo,
 
         MAX(CASE WHEN annee = 2024 THEN prime_assurance END) AS prime_assurance_2024,
+        MAX(CASE WHEN annee = 2023 THEN prime_assurance END) AS prime_assurance_2023,
+        MAX(CASE WHEN annee = 2022 THEN prime_assurance END) AS prime_assurance_2022,
+        MAX(CASE WHEN annee = 2021 THEN prime_assurance END) AS prime_assurance_2021,
         MAX(CASE WHEN annee = 2020 THEN prime_assurance END) AS prime_assurance_2020
 
     FROM primes_par_communes
-    WHERE annee IN (2020, 2024)
+    WHERE annee BETWEEN 2020 AND 2024
     GROUP BY code_geo
 ),
 
@@ -44,7 +47,16 @@ pprn AS (
     SELECT
         code_geo,
         COALESCE(pprn_desc ILIKE '%tassements différentiels%', FALSE) AS pprn_rga,
-        COALESCE(pprn_desc ILIKE '%Inondation%', FALSE) AS pprn_ino
+        COALESCE(pprn_desc ILIKE '%Inondation%', FALSE) AS pprn_ino,
+        CASE
+            WHEN pprn_desc ILIKE '%tassements différentiels%'
+                THEN date_approbation
+        END AS date_approbation_rga,
+
+        CASE
+            WHEN pprn_desc ILIKE '%inondation%'
+                THEN date_approbation
+        END AS date_approbation_ino
     FROM {{ ref('pprn_clean') }}
 )
 
@@ -83,9 +95,15 @@ SELECT
     t.multiple_franchise_last,
 
     p.prime_assurance_2024,
+    p.prime_assurance_2023,
+    p.prime_assurance_2022,
+    p.prime_assurance_2021,
+    p.prime_assurance_2020,
 
     pr.pprn_rga,
     pr.pprn_ino,
+    pr.date_approbation_rga,
+    pr.date_approbation_ino,
 
     pop.population,
 

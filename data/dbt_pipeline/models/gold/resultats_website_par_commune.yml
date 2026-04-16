@@ -49,10 +49,16 @@ models:
         type: INT
       - name: pprn_rga
         description: True ou False si il y a un pprn rga
-        data_type: varchar
+        data_type: boolean
       - name: pprn_ino
         description: True ou False si il y a un pprn inondation
-        data_type: varchar
+        data_type: boolean
+      - name: date_approbation_ino
+        description: Date d'approbation du PPRN inondation
+        data_type: datetime
+      - name: date_approbation_rga
+        description: Date d'approbation du PPRN RGA
+        data_type: datetime
       - name: ratio_dettes_depenses
         description: dettes/depenses de la derniere année 2024
         data_type: double
