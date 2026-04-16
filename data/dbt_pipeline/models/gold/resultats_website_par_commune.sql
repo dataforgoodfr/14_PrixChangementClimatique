@@ -10,6 +10,7 @@ SELECT
     c.nom_departement AS departement,
     c.nom_region AS region,
     c.geo_point_2_d,
+    c.geometry,
 
     -- KPI randoms récupérés depuis la table indices
     i.score_economique,
@@ -18,7 +19,6 @@ SELECT
     i.indice_vulnerabilite,
     i.indice_vulnerabilite_niveau,
 
-    CAST(c.geometry AS geometry) AS geometry --noqa
 
 FROM {{ ref('opendatasoft_communes') }} AS c
 LEFT JOIN {{ ref('indice_par_commune') }} AS i
