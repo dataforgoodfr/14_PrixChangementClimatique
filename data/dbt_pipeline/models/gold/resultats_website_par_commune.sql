@@ -17,10 +17,10 @@ WITH prime AS (
 ccr_totals AS (
     SELECT
         code_geo,
-        SUM(nb_arrete_recon) AS nb_arrete_recon,
-        SUM(nb_arrete) AS nb_arrete,
-        SUM(nb_arrete_ino) AS nb_arrete_ino,
-        SUM(nb_arrete_sec) AS nb_arrete_sec
+        SUM(nb_arrete_recon) AS nb_total_arrete_recon,
+        SUM(nb_arrete) AS nb_total_arrete,
+        SUM(nb_arrete_ino) AS nb_total_arrete_ino,
+        SUM(nb_arrete_sec) AS nb_total_arrete_sec
     FROM {{ ref('ccr_stats') }}
     GROUP BY code_geo
 ),
