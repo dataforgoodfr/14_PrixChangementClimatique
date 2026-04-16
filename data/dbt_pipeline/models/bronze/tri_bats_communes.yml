@@ -11,7 +11,7 @@ models:
           nb_bats_exposition_tri : Nombre de bâtiments en zone de risque (Faible, Moyen, Fort).
           pct_exposition_tri : Ratio de batiments exposées (hors pondération).
           [usage]_[scenario] : Détail par usage (resid, service, agri, indus, autres) et scénario (nul, faible, moyen, fort).
-      Sources : BDTOPO (v3) pour le bâti, croisé avec le Zonage TRI (DGPR - Directive Inondation).
+      Sources : BDTOPO (v3) pour le bâti, croisé avec le Zonage TRI (DGPR - Directive Inondation) => https://www.data.gouv.fr/datasets/territoire-a-risque-dinondation-tri-du-sig-directive-inondation-france-metropolitaine-rapportage-2020-241
 
     columns:
       - name: code_geo

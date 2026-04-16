@@ -11,7 +11,7 @@ models:
           nb_maisons_exposition_rga : Nombre cumulé de maisons en zones d'aléa (Faible, Moyen, Fort).
           pct_exposition_rga : Ratio de maisons exposées (hors pondération).
           [p]_[rga] : Détail par période (pre1945, 1945-1975, 1976-2020, post2020, unk) et niveau d'aléa (nul, faible, moyen, fort).
-      Sources : BDNB (CSTB).
+      Sources : BDNB (CSTB) => https://bdnb.io/
 
     columns:
       - name: code_geo
