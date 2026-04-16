@@ -96,10 +96,10 @@ SELECT
     b.ratio_dettes_depenses,
     b.depenses_per_pop,
 
-    t.nb_arrete_recon,
-    t.nb_arrete,
-    t.nb_arrete_ino,
-    t.nb_arrete_sec,
+    t.nb_total_arretes_recon,
+    t.nb_total_arretes,
+    t.nb_total_arretes_ino,
+    t.nb_total_arretes_sec,
     l.multiple_franchise,
 
     p.prime_assurance_2024,
