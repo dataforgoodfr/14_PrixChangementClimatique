@@ -8,10 +8,13 @@
 WITH prime AS (
     SELECT
         code_geo,
-        CASE WHEN annee = 2024 THEN prime_assurance END AS prime_assurance_2024,
-        CASE WHEN annee = 2020 THEN prime_assurance END AS prime_assurance_2020
-    FROM {{ ref('primes_par_communes') }}
+
+        MAX(CASE WHEN annee = 2024 THEN prime_assurance END) AS prime_assurance_2024,
+        MAX(CASE WHEN annee = 2020 THEN prime_assurance END) AS prime_assurance_2020
+
+    FROM primes_par_communes
     WHERE annee IN (2020, 2024)
+    GROUP BY code_geo
 ),
 
 ccr_totals AS (
@@ -20,52 +23,28 @@ ccr_totals AS (
         SUM(nb_arrete_recon) AS nb_total_arretes_recon,
         SUM(nb_arrete) AS nb_total_arretes,
         SUM(nb_arrete_ino) AS nb_total_arretes_ino,
-        SUM(nb_arrete_sec) AS nb_total_arretes_sec
+        SUM(nb_arrete_sec) AS nb_total_arretes_sec,
+        MAX_BY(multiple_franchise, annee) AS multiple_franchise_last
     FROM {{ ref('ccr_stats') }}
     GROUP BY code_geo
-),
-
-ccr_last AS (
-    SELECT
-        code_geo,
-        multiple_franchise
-    FROM (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (
-                PARTITION BY code_geo
-                ORDER BY annee DESC
-            ) AS rn
-        FROM {{ ref('ccr_stats') }}
-    )
-    WHERE rn = 1
 ),
 
 budget_last AS (
     SELECT
         code_geo,
-        ratio_dettes_depenses,
-        depenses_per_pop,
-        depenses
-    FROM (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (
-                PARTITION BY code_geo
-                ORDER BY
-                    CASE WHEN depenses_per_pop IS NOT NULL THEN 0 ELSE 1 END,
-                    annee DESC
-            ) AS rn
-        FROM {{ ref('indicateurs_budget') }}
-    )
-    WHERE rn = 1
+        MAX(ratio_dettes_depenses) FILTER (WHERE annee = 2024) AS ratio_dettes_depenses,
+        MAX(depenses) FILTER (WHERE annee = 2024) AS depenses,
+        MAX_BY(depenses_per_pop, annee) AS depenses_per_pop
+    FROM {{ ref('indicateurs_budget') }}
+    WHERE annee IN (2022,2023, 2024)
+    GROUP BY code_geo
 ),
 
 pprn AS (
     SELECT
         code_geo,
-        (pprn_desc ILIKE '%tassements différentiels%') AS pprn_rga,
-        (pprn_libelle ILIKE '%Inondation%') AS pprn_ino
+        (pprn_desc ILIKE '%tassements différentiels%', FALSE) AS pprn_rga,
+        (pprn_libelle ILIKE '%Inondation%', FALSE) AS pprn_ino
     FROM {{ ref('pprn_clean') }}
 )
 
@@ -76,6 +55,7 @@ SELECT
     c.geo_point_2_d,
     c.code_departement,
     c.code_region,
+    c.geometry,
 
     -- KPI randoms récupérés depuis la table indices
     i.score_economique,
@@ -83,6 +63,9 @@ SELECT
     i.score_assurance,
     i.indice_vulnerabilite,
     i.indice_vulnerabilite_niveau,
+
+    tr.indicateur_tri,
+    tr.indicateur_rga,
 
     r.swi_04_d_abs,
     r.rr_50_d_abs,
@@ -96,7 +79,7 @@ SELECT
     t.nb_total_arretes,
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
-    l.multiple_franchise,
+    t.multiple_franchise_last,
 
     p.prime_assurance_2024,
 
@@ -104,7 +87,6 @@ SELECT
     pr.pprn_ino,
 
     pop.population,
-    CAST(c.geometry AS geometry) AS geometry, --noqa
 
     p.prime_assurance_2024 / b.depenses AS part_prime_budget,
     (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
@@ -114,19 +96,19 @@ FROM {{ ref('opendatasoft_communes') }} AS c
 LEFT JOIN {{ ref('scenario_2050') }} AS r
     ON c.code_geo = r.code_geo
 
+LEFT JOIN {{ ref('indicateurs_tri_rga_bats_par_com') }} AS tr
+    ON c.code_geo = tr.code_geo
+
 LEFT JOIN {{ ref('population_par_com_annee') }} AS pop
     ON
         c.code_geo = pop.code_geo
-        AND pop.annee = 2026
+        AND pop.annee_recensement = 2023
 
 LEFT JOIN budget_last AS b
     ON c.code_geo = b.code_geo
 
 LEFT JOIN ccr_totals AS t
     ON c.code_geo = t.code_geo
-
-LEFT JOIN ccr_last AS l
-    ON c.code_geo = l.code_geo
 
 LEFT JOIN prime AS p
     ON c.code_geo = p.code_geo
