@@ -76,38 +76,36 @@ SELECT
     c.geo_point_2_d,
     c.code_departement,
     c.code_region,
+    i.score_economique,
 
     -- KPI randoms récupérés depuis la table indices
-    i.score_economique,
     i.score_georisque,
     i.score_assurance,
     i.indice_vulnerabilite,
     i.indice_vulnerabilite_niveau,
-
-    CAST(c.geometry AS geometry) AS geometry --noqa
-
-    o.geometry,
-
     r.swi_04_d_abs,
+
     r.rr_50_d_abs,
+
     r.pxcwd_abs,
     r.tx_35_d_abs,
-
     b.ratio_dettes_depenses,
     b.depenses_per_pop,
 
     t.nb_total_arretes_recon,
     t.nb_total_arretes,
+
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
     l.multiple_franchise,
-
     p.prime_assurance_2024,
-
     pr.pprn_rga,
+
     pr.pprn_ino,
 
     pop.population,
+    CAST(c.geometry AS geometry) AS geometry, --noqa
+
     p.prime_assurance_2024 / b.depenses AS part_prime_budget,
 
     (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
@@ -115,27 +113,27 @@ SELECT
 FROM {{ ref('opendatasoft_communes') }} AS c
 
 LEFT JOIN {{ ref('scenario_2050') }} AS r
-    ON o.code_geo = r.code_geo
+    ON c.code_geo = r.code_geo
 
 LEFT JOIN {{ ref('population_par_com_annee') }} AS pop
     ON
-        o.code_geo = pop.code_geo
+        c.code_geo = pop.code_geo
         AND pop.annee = 2026
 
 LEFT JOIN budget_last AS b
-    ON o.code_geo = b.code_geo
+    ON c.code_geo = b.code_geo
 
 LEFT JOIN ccr_totals AS t
-    ON o.code_geo = t.code_geo
+    ON c.code_geo = t.code_geo
 
 LEFT JOIN ccr_last AS l
-    ON o.code_geo = l.code_geo
+    ON c.code_geo = l.code_geo
 
 LEFT JOIN prime AS p
-    ON o.code_geo = p.code_geo
+    ON c.code_geo = p.code_geo
 
 LEFT JOIN pprn AS pr
-    ON o.code_geo = pr.code_geo
+    ON c.code_geo = pr.code_geo
 
 LEFT JOIN {{ ref('indice_par_commune') }} AS i
     ON c.code_geo = i.code_geo
