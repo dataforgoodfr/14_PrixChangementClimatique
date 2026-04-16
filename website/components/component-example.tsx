@@ -101,12 +101,14 @@ import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
 import { Separator } from "@/components/ui/separator";
+import { StatCard } from "@/components/core/stat-card";
 
 export function ComponentExample() {
   return (
     <ExampleWrapper>
       <CardExample />
       <FormExample />
+      <StatCardExample />
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
@@ -531,6 +533,40 @@ function CommuneSearchBoxExample() {
         ) : (
           "Aucune"
         )}
+      </div>
+    </Example>
+  );
+}
+
+function StatCardExample() {
+  return (
+    <Example
+      title="Cartes de statistiques"
+      className="items-center justify-center gap-4"
+      containerClassName="md:col-span-2"
+    >
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <StatCard
+          title="Budget / habitant"
+          currentValue={2637}
+          previousValue={2690}
+          unit="€"
+          comparisonText="vs. 2024"
+        />
+        <StatCard
+          title="Taux d'endettement"
+          currentValue={971}
+          previousValue={952}
+          unit="M€"
+          comparisonText="vs. 2024"
+        />
+        <StatCard
+          title="Taux de résidence secondaire"
+          currentValue={2.6}
+          previousValue={2.55}
+          unit="%"
+          comparisonText="vs. 2024"
+        />
       </div>
     </Example>
   );
