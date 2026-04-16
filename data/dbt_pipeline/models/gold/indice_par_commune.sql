@@ -10,5 +10,5 @@ SELECT
     CAST(RANDOM() AS FLOAT) AS score_assurance,
     CAST(RANDOM() AS FLOAT) AS indice_vulnerabilite,
     -- KPI temporaires: génère des valeurs aléatoires entières entre 1 et 5
-    FLOOR(1 + (RANDOM() * 5)) AS indice_vulnerabilite_niveau
+    CAST(FLOOR(1 + (RANDOM() * 5)) AS INT) AS indice_vulnerabilite_niveau
 FROM {{ ref('opendatasoft_communes') }}
