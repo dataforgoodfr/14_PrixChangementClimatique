@@ -1,0 +1,28 @@
+SELECT
+    lat,
+    lon,
+    "Rx1D_abs" AS rx_1_d_abs,
+    "RR20D_abs" AS rr_20_d_abs,
+    "PXCDD_abs" AS pxcdd_abs,
+    "TMm_abs" AS tmm_abs,
+    "TX40D_abs" AS tx_40_d_abs,
+    "TR_abs" AS tr_abs,
+    "PXCWD_abs" AS pxcwd_abs,
+    "TX35D_abs" AS tx_35_d_abs,
+    "RR50D_abs" AS rr_50_d_abs,
+    "RR100D_abs" AS rr_100_d_abs,
+    "RR10D_abs" AS rr_10_d_abs,
+    "TMm_ecart" AS tmm_ecart,
+    "PXCWD_ecart" AS pxcwd_ecart,
+    "TX40D_ecart" AS tx_40_d_ecart,
+    "RR10D_ecart" AS rr_10_d_ecart,
+    "RR20D_ecart" AS rr_20_d_ecart,
+    "PXCDD_ecart" AS pxcdd_ecart,
+    "TR_ecart" AS tr_ecart,
+    "RR50D_ecart" AS rr_50_d_ecart,
+    "RR100D_ecart" AS rr_100_d_ecart,
+    "TX35D_ecart" AS tx_35_d_ecart,
+    "Rx1D_ecart" AS rx_1_d_ecart,
+    "SWI04D_abs" AS swi_04_d_abs
+FROM
+    'pipeline_inputs/drias_TRACC.csv'

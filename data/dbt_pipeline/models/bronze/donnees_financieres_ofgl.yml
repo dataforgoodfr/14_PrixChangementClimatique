@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: donnees_financieres_ofgl
+    description: Modèle de staging (Bronze) traitant les données financières retraitées par l'équipe Data Analyst.
+    columns:
+      - name: annee
+        description: "Année de l'exercice budgétaire (ex: 2022)."
+        tests:
+          - not_null
+
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères). Clé de jointure principale."
+        tests:
+          - not_null
+
+      - name: nom_commune
+        description: "Libellé officiel de la commune au moment de l'exercice."
+
+      - name: agregat
+        description: "Type de donnée financière (ex: Produits des impôts locaux)."
+
+      - name: montant
+        description: "Montant total de l'agrégat en euros."
+
+      - name: population_totale
+        description: "Population totale (ptot) de la commune utilisée pour les calculs de ratios."
+
+      - name: euros_par_habitant
+        description: "Ratio du montant divisé par la population totale."
