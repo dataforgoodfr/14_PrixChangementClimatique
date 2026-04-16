@@ -1,10 +1,25 @@
 -- resultats_par_commune.sql
 -- Gold layer: Résultats enrichis par commune avec KPI temporaire
--- Source: Bronze layer communes + random KPI
--- Description: Contient toutes les données des communes avec un KPI temporaire 'valeur' (nombre aléatoire)
+-- Source: Bronze layer communes +  KPI
+-- Description: Contient les données communes nécessaires pour le site web
+-- avec les KPI attendus :
+-- o indices et scores temporaires randoms issus de la table indice_par_commune
 
 SELECT
-    *,
-    -- KPI temporaire: génère un nombre aléatoire entre 0 et 1
-    RANDOM() AS valeur
-FROM {{ ref('opendatasoft_communes') }}
+    c.code_geo AS code_insee,
+    c.nom_departement AS departement,
+    c.nom_region AS region,
+    c.geo_point_2_d,
+
+    -- KPI randoms récupérés depuis la table indices
+    i.score_economique,
+    i.score_georisque,
+    i.score_assurance,
+    i.indice_vulnerabilite,
+    i.indice_vulnerabilite_niveau,
+
+    CAST(c.geometry AS geometry) AS geometry --noqa
+
+FROM {{ ref('opendatasoft_communes') }} AS c
+LEFT JOIN {{ ref('indice_par_commune') }} AS i
+    ON c.code_geo = i.code_geo

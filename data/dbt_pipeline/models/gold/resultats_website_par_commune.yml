@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: resultats_website_par_commune
+    description: >
+      Gold layer: Table des résultats website par commune avec KPI.
+      Cette table contient toutes les données administratives et géographiques des communes françaises
+      enrichies avec des indicateurs métier.
+      Source: Bronze layer (opendatasoft_communes) avec transformation et ajout de KPI.
+    columns:
+      - name: code_insee
+        description: "Code INSEE de la commune (5 caractères) appelé code_geo en bronze"
+        type: CHAR(5)
+      - name: departement
+        description: "Nom du département"
+        type: VARCHAR(100)
+      - name: region
+        description: "Nom de la region"
+        type: VARCHAR(100)
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en format JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone en WKT ou format spatial)"
+        type: GEOMETRY
+      - name: score_economique
+        description: "Score économique de la commune"
+        type: FLOAT
+      - name: score_georisque
+        description: "Score géorisque de la commune"
+        type: FLOAT
+      - name: score_assurance
+        description: "Score assurance de la commune"
+        type: FLOAT
+      - name: indice_vulnerabilite
+        description: "Indice de vulnérabilité de la commune"
+        type: FLOAT
+      - name: indice_vulnerabilite_niveau
+        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
+        type: INT
