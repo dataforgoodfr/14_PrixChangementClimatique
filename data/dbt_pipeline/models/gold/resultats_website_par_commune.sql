@@ -61,7 +61,7 @@ pprn AS (
 )
 
 SELECT
-    c.code_geo,
+    c.code_geo AS code_insee,
     c.nom_departement AS departement,
     c.nom_region AS region,
     c.geo_point_2_d,
