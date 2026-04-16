@@ -17,8 +17,7 @@ SELECT
     i.score_georisque,
     i.score_assurance,
     i.indice_vulnerabilite,
-    i.indice_vulnerabilite_niveau,
-
+    i.indice_vulnerabilite_niveau
 
 FROM {{ ref('opendatasoft_communes') }} AS c
 LEFT JOIN {{ ref('indice_par_commune') }} AS i
