@@ -85,7 +85,7 @@ models:
         type: STRING
       - name: geometry
         description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
-        type: GEOMETRY
+        type: STRING
       - name: nb_total_arretes
         description: Cumulé du nombre d'arrêtés enregistrés par commune
         data_type: int
