@@ -99,6 +99,8 @@ import {
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
+import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
+import { Separator } from "@/components/ui/separator";
 
 export function ComponentExample() {
   return (
@@ -108,6 +110,7 @@ export function ComponentExample() {
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
+      <RecognitionRequestExample />
     </ExampleWrapper>
   );
 }
@@ -542,6 +545,40 @@ function VulnerabilityIndexExample() {
       <div className="w-70">
         <RfVulnerabilityIndex value={2.5} />
       </div>
+    </Example>
+  );
+}
+
+function RecognitionRequestExample() {
+  return (
+    <Example
+      title="Reconnaissance de catastrophe naturelle"
+      className="items-center justify-center gap-4"
+      containerClassName="md:col-span-2"
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>
+            Demandes de reconnaissances de catastrophes naturelles
+          </CardTitle>
+          <span className="italic text-muted-foreground">
+            Reconnues par la commission interministérielle - Depuis 1982
+          </span>
+        </CardHeader>
+        <CardContent className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="w-full md:w-1/2">
+            <RfRecognitionRequestChart recognized={53} unrecognized={8} />
+          </div>
+          <Separator orientation="vertical" className="hidden md:block" />
+          <div className="w-full md:w-1/2 text-muted-foreground">
+            Due to the average rating of general equipment&#39;s end-markets,
+            such as safety equipment. 3M Co&#39;s forward-looking performance
+            has a neutral impact on its overall rating. Due to the average
+            rating of general equipment&#39;s end-markets, such as safety
+            equipment.
+          </div>
+        </CardContent>
+      </Card>
     </Example>
   );
 }

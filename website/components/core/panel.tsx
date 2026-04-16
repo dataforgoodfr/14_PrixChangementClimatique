@@ -28,25 +28,37 @@ function usePanelContext() {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function PanelTitle({ children }: { children: ReactNode }) {
-  return (
-    <p className="pt-30 text-3xl font-semibold text-gray-900">{children}</p>
-  );
+function PanelTitle({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <p className={cn("text-4xl font-semibold", className)}>{children}</p>;
 }
 
 function PanelSubtitle({ children }: { children: ReactNode }) {
-  return <p className="text-xs text-gray-500">{children}</p>;
+  return (
+    <p className="text-base text-muted-foreground font-medium">{children}</p>
+  );
 }
 
-function PanelHeader({ children }: { children: ReactNode }) {
+function PanelHeader({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   const { onClose, showCloseButton } = usePanelContext();
   return (
-    <div className="flex items-start justify-between px-4 py-3 border-b border-gray-200 shrink-0">
-      <div className="flex flex-col gap-0.5 min-w-0">{children}</div>
+    <div className={cn("relative px-4 py-3", className)}>
+      {children}
       {showCloseButton && (
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 p-1 -mr-1 shrink-0"
+          className="text-gray-400 hover:text-gray-600 absolute top-4 right-4"
           aria-label="Fermer"
         >
           <X size={16} />

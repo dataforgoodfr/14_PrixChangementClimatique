@@ -136,6 +136,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
             duration: 1000,
           });
         }
+        console.log(f.properties);
         selectFeature(f.properties as MapFeature);
       }
     },
@@ -220,6 +221,7 @@ function MainMap() {
         });
 
         if (features.length > 0) {
+          console.log(features[0].properties);
           selectFeature(features[0].properties as MapFeature);
         }
       };
@@ -235,11 +237,11 @@ function MainMap() {
         <MapCanvas isFiltersPanelOpen={filtersOpen} />
       </div>
 
-      <div className="absolute top-8 left-8">
+      <div className="absolute top-8 left-4">
         <RFCommuneSearchBox
           filterValue={selectedFeature?.nom_commune}
           onAddressFilter={selectCommune}
-          className="w-100 z-50"
+          className="w-100 z-50 max-w-[calc(100dvw-5rem)]"
         />
       </div>
 
