@@ -106,22 +106,22 @@ models:
         type: STRING
       - name: nb_total_arretes
         description: Cumulé du nombre d'arrêtés enregistrés par commune
-        data_type: int
+        data_type: INT
       - name: nb_total_arretes_recon
         description: Cumulé du nombre d'arrêtés reconnus enregistrés par commune
-        data_type: int
+        data_type: INT
       - name: nb_total_arretes_ino
         description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "inondation" par commune
-        data_type: int
+        data_type: INT
       - name: nb_total_arretes_sec
         description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sécheresse" par commune
-        data_type: int
+        data_type: INT
       - name: multiple_franchise_last
         description: multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)
-        data_type: int
+        data_type: INT
       - name: population
         description: Population municipale dernière année recensée
-        data_type: integer
+        data_type: INT
       - name: indicateur_tri
         description: >
           indicateur d'exposition aux inondations (TRI).

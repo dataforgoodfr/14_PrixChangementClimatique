@@ -23,10 +23,10 @@ WITH prime AS (
 ccr_totals AS (
     SELECT
         code_geo,
-        SUM(nb_arrete_recon) AS nb_total_arretes_recon,
-        SUM(nb_arrete) AS nb_total_arretes,
-        SUM(nb_arrete_ino) AS nb_total_arretes_ino,
-        SUM(nb_arrete_sec) AS nb_total_arretes_sec,
+        SUM(nb_arrete_recon)::INTEGER AS nb_total_arretes_recon,
+        SUM(nb_arrete)::INTEGER AS nb_total_arretes,
+        SUM(nb_arrete_ino)::INTEGER AS nb_total_arretes_ino,
+        SUM(nb_arrete_sec)::INTEGER AS nb_total_arretes_sec,
         MAX_BY(multiple_franchise, annee) AS multiple_franchise_last
     FROM {{ ref('ccr_stats') }}
     GROUP BY code_geo
