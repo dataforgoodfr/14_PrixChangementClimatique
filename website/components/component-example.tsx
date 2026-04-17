@@ -99,15 +99,20 @@ import {
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
+import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
+import { Separator } from "@/components/ui/separator";
+import { StatCard } from "@/components/core/stat-card";
 
 export function ComponentExample() {
   return (
     <ExampleWrapper>
       <CardExample />
       <FormExample />
+      <StatCardExample />
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
+      <RecognitionRequestExample />
     </ExampleWrapper>
   );
 }
@@ -533,6 +538,40 @@ function CommuneSearchBoxExample() {
   );
 }
 
+function StatCardExample() {
+  return (
+    <Example
+      title="Cartes de statistiques"
+      className="items-center justify-center gap-4"
+      containerClassName="md:col-span-2"
+    >
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <StatCard
+          title="Budget / habitant"
+          currentValue={2637}
+          previousValue={2690}
+          unit="€"
+          comparisonText="vs. 2024"
+        />
+        <StatCard
+          title="Taux d'endettement"
+          currentValue={971}
+          previousValue={952}
+          unit="M€"
+          comparisonText="vs. 2024"
+        />
+        <StatCard
+          title="Taux de résidence secondaire"
+          currentValue={2.6}
+          previousValue={2.55}
+          unit="%"
+          comparisonText="vs. 2024"
+        />
+      </div>
+    </Example>
+  );
+}
+
 function VulnerabilityIndexExample() {
   return (
     <Example
@@ -542,6 +581,40 @@ function VulnerabilityIndexExample() {
       <div className="w-70">
         <RfVulnerabilityIndex value={2.5} />
       </div>
+    </Example>
+  );
+}
+
+function RecognitionRequestExample() {
+  return (
+    <Example
+      title="Reconnaissance de catastrophe naturelle"
+      className="items-center justify-center gap-4"
+      containerClassName="md:col-span-2"
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>
+            Demandes de reconnaissances de catastrophes naturelles
+          </CardTitle>
+          <span className="italic text-muted-foreground">
+            Reconnues par la commission interministérielle - Depuis 1982
+          </span>
+        </CardHeader>
+        <CardContent className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="w-full md:w-1/2">
+            <RfRecognitionRequestChart recognized={53} unrecognized={8} />
+          </div>
+          <Separator orientation="vertical" className="hidden md:block" />
+          <div className="w-full md:w-1/2 text-muted-foreground">
+            Due to the average rating of general equipment&#39;s end-markets,
+            such as safety equipment. 3M Co&#39;s forward-looking performance
+            has a neutral impact on its overall rating. Due to the average
+            rating of general equipment&#39;s end-markets, such as safety
+            equipment.
+          </div>
+        </CardContent>
+      </Card>
     </Example>
   );
 }

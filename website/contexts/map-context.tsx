@@ -18,9 +18,9 @@ export interface MapFeature {
   nom_commune?: string;
   departement?: string;
   region?: string;
-  geo_point_2_d?: string;
   code_departement?: string;
   code_region?: string;
+  geo_point_2_d?: string;
 
   // Indices
   score_economique?: number;
