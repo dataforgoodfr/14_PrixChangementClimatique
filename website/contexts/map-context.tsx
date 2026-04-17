@@ -16,17 +16,57 @@ import type { MapRef, ViewState } from "@vis.gl/react-maplibre";
 export interface MapFeature {
   code_insee: string;
   nom_commune?: string;
-  nom_departement?: string;
+  departement?: string;
+  region?: string;
   code_departement?: string;
-  nom_region?: string;
   code_region?: string;
   geo_point_2_d?: string;
+
+  // Indices
   score_economique?: number;
   score_georisque?: number;
   score_assurance?: number;
   indice_vulnerabilite?: number;
   indice_vulnerabilite_niveau?: number;
-  valeur?: number;
+
+  // TRI / RGA
+  indicateur_tri?: number;
+  indicateur_rga?: number;
+
+  // Scénario 2050
+  swi_04_d_abs?: number;
+  rr_50_d_abs?: number;
+  pxcwd_abs?: number;
+  tx_35_d_abs?: number;
+
+  // Budget
+  ratio_dettes_depenses?: number;
+  depenses_per_pop?: number;
+
+  // CCR
+  nb_total_arretes_recon?: number;
+  nb_total_arretes?: number;
+  nb_total_arretes_ino?: number;
+  nb_total_arretes_sec?: number;
+  multiple_franchise_last?: number;
+
+  // Primes assurance
+  prime_assurance_2024?: number;
+  prime_assurance_2023?: number;
+  prime_assurance_2022?: number;
+  prime_assurance_2021?: number;
+  prime_assurance_2020?: number;
+
+  // PPRN
+  pprn_rga?: boolean;
+  pprn_ino?: boolean;
+  date_approbation_rga?: string;
+  date_approbation_ino?: string;
+
+  // Population & ratios
+  population?: number;
+  part_prime_budget?: number;
+  evolution_prime_assurance?: number;
 }
 
 export interface MapContextValue {
