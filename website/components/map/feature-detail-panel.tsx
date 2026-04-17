@@ -29,8 +29,8 @@ export function FeatureDetailPanel() {
             <span className="flex gap-2">
               <MapPinIcon className="inline-block size-6" />
               <span>
-                {selectedFeature?.nom_region},{" "}
-                {selectedFeature?.nom_departement},{" "}
+                {selectedFeature?.region},{" "}
+                {selectedFeature?.departement},{" "}
                 {selectedFeature?.code_departement}
               </span>
             </span>
@@ -42,10 +42,10 @@ export function FeatureDetailPanel() {
             </span>
           </Panel.Subtitle>
         </div>
-        {selectedFeature?.valeur && (
+        {selectedFeature?.indice_vulnerabilite_niveau && (
           <RfVulnerabilityIndex
             className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
-            value={Math.round(selectedFeature?.valeur * 50) / 10}
+            value={selectedFeature.indice_vulnerabilite_niveau}
           />
         )}
       </Panel.Header>
