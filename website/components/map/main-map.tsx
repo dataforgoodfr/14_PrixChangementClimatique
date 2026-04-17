@@ -192,6 +192,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
             duration: 1000,
           });
         }
+        console.log(f.properties);
         selectFeature(f.properties as MapFeature);
       }
     },
@@ -276,6 +277,7 @@ function MainMap() {
         });
 
         if (features.length > 0) {
+          console.log(features[0].properties);
           selectFeature(features[0].properties as MapFeature);
         }
       };
@@ -285,17 +287,15 @@ function MainMap() {
   );
 
   return (
-    <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
+    <div className="relative h-[calc(100dvh-4rem)] overflow-hidden">
       {/* Map wrapper and canvas that fills the full area */}
-      <div className="absolute inset-0">
-        <MapCanvas isFiltersPanelOpen={filtersOpen} />
-      </div>
+      <MapCanvas isFiltersPanelOpen={filtersOpen} />
 
-      <div className="absolute top-8 left-8">
+      <div className="absolute top-8 left-4">
         <RFCommuneSearchBox
           filterValue={selectedFeature?.nom_commune}
           onAddressFilter={selectCommune}
-          className="w-100 z-50"
+          className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
         />
       </div>
 

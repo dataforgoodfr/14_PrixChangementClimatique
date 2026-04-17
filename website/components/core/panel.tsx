@@ -82,7 +82,7 @@ function PanelHeader({
       {showCloseButton && (
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 p-1 -mr-1 shrink-0"
+          className="text-gray-400 hover:text-gray-600 absolute top-4 right-4"
           aria-label="Fermer"
         >
           <X size={16} />

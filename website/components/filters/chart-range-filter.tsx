@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ChevronUp, ChevronDown, Info } from "lucide-react";
-import { Bar, BarChart, Cell } from "recharts";
+import { Bar, BarChart, BarShapeProps, Rectangle } from "recharts";
 import {
   ChartContainer,
   ChartTooltip,
@@ -38,6 +38,16 @@ const CHART_CONFIG = {
   count: { label: "Communes", color: "#15803d" },
 } satisfies ChartConfig;
 
+function getBarColor(
+  props: BarShapeProps,
+  activeStart: number,
+  activeEnd: number,
+): string {
+  return props.index >= activeStart && props.index < activeEnd
+    ? "#15803d"
+    : "#d1d5db";
+}
+
 export interface ChartRangeFilterProps {
   title: string;
   filterMin: number;
@@ -55,6 +65,11 @@ export function ChartRangeFilter({
   const binCount = HISTOGRAM_DATA.length;
   const activeStart = Math.round((range[0] / filterMax) * binCount);
   const activeEnd = Math.round((range[1] / filterMax) * binCount);
+
+  const MyCustomRectangle = (props: BarShapeProps) => {
+    const color = getBarColor(props, activeStart, activeEnd);
+    return <Rectangle {...props} fill={color} />;
+  };
 
   return (
     <div className="border-b border-gray-200">
@@ -102,16 +117,11 @@ export function ChartRangeFilter({
                   />
                 }
               />
-              <Bar dataKey="count" radius={[2, 2, 0, 0]}>
-                {HISTOGRAM_DATA.map((_, i) => (
-                  <Cell
-                    key={i}
-                    fill={
-                      i >= activeStart && i < activeEnd ? "#15803d" : "#d1d5db"
-                    }
-                  />
-                ))}
-              </Bar>
+              <Bar
+                dataKey="count"
+                radius={[2, 2, 0, 0]}
+                shape={MyCustomRectangle}
+              />
             </BarChart>
           </ChartContainer>
 

@@ -11,12 +11,21 @@ models:
       - name: code_insee
         description: "Code INSEE de la commune (5 caractères) appelé code_geo en bronze"
         type: CHAR(5)
+      - name: nom_commune
+        description: "Nom officiel de la commune"
+        type: STRING
       - name: departement
         description: "Nom du département"
         type: VARCHAR(100)
       - name: region
         description: "Nom de la region"
         type: VARCHAR(100)
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
       - name: geo_point_2_d
         description: "Point géographique central de la commune (coordonnées lat/lon en format JSON)"
         type: STRING
@@ -38,3 +47,93 @@ models:
       - name: indice_vulnerabilite_niveau
         description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
         type: INT
+      - name: pprn_rga
+        description: True ou False si il y a un pprn rga
+        data_type: boolean
+      - name: pprn_ino
+        description: True ou False si il y a un pprn inondation
+        data_type: boolean
+      - name: date_approbation_ino
+        description: Date d'approbation du PPRN inondation
+        data_type: datetime
+      - name: date_approbation_rga
+        description: Date d'approbation du PPRN RGA
+        data_type: datetime
+      - name: ratio_dettes_depenses
+        description: dettes/depenses de la derniere année 2024
+        data_type: double
+      - name: depenses_per_pop
+        description: Solde net pour le type de compte "depenses" par population municipale de 2023
+        data_type: double
+      - name: pxcwd_abs
+        description: "Nombre max de jours de pluie consécutifs (> 1mm)"
+        type: FLOAT
+      - name: tx_35_d_abs
+        description: "Nombre de jours avec une température maximale ≥ 35 °C"
+        type: FLOAT
+      - name: rr_50_d_abs
+        description: "Nombre de jours de pluie ≥ 50 mm par an"
+        type: FLOAT
+      - name: swi_04_d_abs
+        description: "Nombre de jours où SWI < 0.4"
+        type: FLOAT
+      - name: prime_assurance_2024
+        description: Somme des primes d'assurances pour le compte 6161 en 2024
+        data_type: float
+      - name: prime_assurance_2023
+        description: Somme des primes d'assurances pour le compte 6161 en 2023
+        data_type: float
+      - name: prime_assurance_2022
+        description: Somme des primes d'assurances pour le compte 6161 en 2022
+        data_type: float
+      - name: prime_assurance_2021
+        description: Somme des primes d'assurances pour le compte 6161 en 2021
+        data_type: float
+      - name: prime_assurance_2020
+        description: Somme des primes d'assurances pour le compte 6161 en 2020
+        data_type: float
+      - name: evolution_prime_assurance
+        description: Evolution des primes entre 2020 et 2024
+        data_type: float
+      - name: part_prime_budget
+        description: Primes sur dépense 2024
+        data_type: float
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
+        type: STRING
+      - name: nb_total_arretes
+        description: Cumulé du nombre d'arrêtés enregistrés par commune
+        data_type: INT
+      - name: nb_total_arretes_recon
+        description: Cumulé du nombre d'arrêtés reconnus enregistrés par commune
+        data_type: INT
+      - name: nb_total_arretes_ino
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "inondation" par commune
+        data_type: INT
+      - name: nb_total_arretes_sec
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sécheresse" par commune
+        data_type: INT
+      - name: multiple_franchise_last
+        description: multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)
+        data_type: INT
+      - name: population
+        description: Population municipale dernière année recensée
+        data_type: INT
+      - name: indicateur_tri
+        description: >
+          indicateur d'exposition aux inondations (TRI).
+          Somme pondérée des indicateurs de risque : faible (coefficient 1), moyen (coefficient 3)
+          et fort (coefficient 5).
+          Il a été décidé que le type de bâtiment n'entrait pas en ligne de compte (coefficient 1).
+        data_type: float
+      - name: indicateur_rga
+        description: >
+          indicateur de vulnérabilité au Retrait-Gonflement des Argiles (RGA).
+          Somme pondérée par la valeur du risque et la période de construction
+          Poids périodes : 1976-2020 (1.0), 1945-1975 & post-2020 (0.5), pré-1945 (0.0), inconnu (0.5).
+          Poids sévérité : faible (1.0), moyen (5.0), fort (10.0).
+          Etant donné qu'il n'y a pas les DROMs pour le RGA, leur score sera 'null'.
+        data_type: float
