@@ -13,6 +13,13 @@ import type { MapRef, ViewState } from "@vis.gl/react-maplibre";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export type KpiField =
+  | "indice_vulnerabilite_niveau"
+  | "score_georisque"
+  | "indice_vulnerabilite"
+  | "score_economique"
+  | "score_assurance";
+
 export interface MapFeature {
   code_insee: string;
   nom_commune?: string;
@@ -38,6 +45,9 @@ export interface MapContextValue {
   /** Setters for the map instance selected feature */
   selectFeature: (properties: MapFeature) => void;
   clearSelectedFeature: () => void;
+  /** Currently active KPI field displayed on the map */
+  kpi: KpiField;
+  setKpi: (kpi: KpiField) => void;
 }
 
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -72,6 +82,7 @@ export function MapProvider({ children }: { children: ReactNode }) {
   const [selectedFeature, setSelectedFeature] = useState<MapFeature | null>(
     null,
   );
+  const [kpi, setKpi] = useState<KpiField>("indice_vulnerabilite_niveau");
 
   const selectFeature = useCallback(
     (properties: MapFeature) => setSelectedFeature(properties),
@@ -89,6 +100,8 @@ export function MapProvider({ children }: { children: ReactNode }) {
         selectedFeature,
         selectFeature,
         clearSelectedFeature,
+        kpi,
+        setKpi,
       }}
     >
       {children}

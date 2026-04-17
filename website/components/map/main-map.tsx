@@ -15,7 +15,12 @@ import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { FiltersPanel } from "@/components/map/filters-panel";
 import { FeatureDetailPanel } from "@/components/map/feature-detail-panel";
-import { MapFeature, MapProvider, useMapContext } from "@/contexts/map-context";
+import {
+  MapFeature,
+  MapProvider,
+  useMapContext,
+  type KpiField,
+} from "@/contexts/map-context";
 import {
   RFCommuneSearchBox,
   SearchCommuneResult,
@@ -30,7 +35,70 @@ const COMMUNES_SOURCE_ID = "communes-source";
 
 // ─── Map Layers: Communes ──────────────
 
+function buildFillColor(kpi: KpiField): maplibregl.ExpressionSpecification {
+  if (kpi === "indice_vulnerabilite_niveau") {
+    return [
+      "step",
+      ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
+      "#518F83",
+      2,
+      "#B2A052",
+      3,
+      "#FFB74B",
+      4,
+      "#EA580D",
+      5,
+      "#B91C1C",
+    ];
+  }
+  if (kpi === "score_georisque") {
+    return [
+      "interpolate",
+      ["linear"],
+      ["coalesce", ["get", "score_georisque"], 0],
+      0,
+      "#FFF0EE",
+      1,
+      "#7F1D1D",
+    ];
+  }
+  if (kpi === "indice_vulnerabilite") {
+    return [
+      "interpolate",
+      ["linear"],
+      ["coalesce", ["get", "indice_vulnerabilite"], 0],
+      0,
+      "#FFF0EE",
+      1,
+      "#7F1D1D",
+    ];
+  }
+  if (kpi === "score_economique") {
+    return [
+      "interpolate",
+      ["linear"],
+      ["coalesce", ["get", "score_economique"], 0],
+      0,
+      "#FFF7ED",
+      1,
+      "#7C2D12",
+    ];
+  }
+  // score_assurance
+  return [
+    "interpolate",
+    ["linear"],
+    ["coalesce", ["get", "score_assurance"], 0],
+    0,
+    "#FEF2F2",
+    1,
+    "#1E3A5F",
+  ];
+}
+
 function CommunesLayer() {
+  const { kpi } = useMapContext();
+
   return (
     <Source
       id={COMMUNES_SOURCE_ID}
@@ -43,19 +111,7 @@ function CommunesLayer() {
         type="fill"
         source-layer="communes"
         paint={{
-          "fill-color": [
-            "step",
-            ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
-            "#518F83",
-            2,
-            "#B2A052",
-            3,
-            "#FFB74B",
-            4,
-            "#EA580D",
-            5,
-            "#B91C1C",
-          ],
+          "fill-color": buildFillColor(kpi),
           "fill-opacity": 0.7,
         }}
       />
@@ -163,7 +219,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
         position="top-right"
         style={{
           marginTop: "72px",
-          marginRight: `${isFiltersPanelOpen ? "376px" : "16px"}`,
+          marginRight: `${isFiltersPanelOpen ? "416px" : "16px"}`,
         }}
       />
       <CommunesLayer />
