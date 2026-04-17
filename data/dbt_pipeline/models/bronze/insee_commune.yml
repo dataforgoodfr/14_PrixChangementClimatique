@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: insee_commune
+    description: >
+      Données INSEE Code officiel géographique au 1er janvier 2025 Sous-titre : Liste des communes, arrondissements municipaux, communes déléguées et communes associées au 1er janvier 2025, avec le code des niveaux supérieurs (canton ou pseudo-canton, département, région) URL : https://www.insee.fr/fr/information/8377162
+    columns:
+      - name: type_com
+        description: "Type de commune"
+        type: STRING
+      - name: code_geo
+        description: "Code commune - appelé code_geo dans les données bronze du projet"
+        type: STRING
+      - name: reg
+        description: "Code region"
+        type: STRING
+      - name: dep
+        description: "Code departement - appelé code_departement dans les données bronze du projet"
+        type: STRING
+      - name: ctcd
+        description: "Code de la collectivité territoriale ayant les compétences départementales"
+        type: STRING
+      - name: arr
+        description: "Code arrondissement"
+        type: STRING
+      - name: tncc
+        description: "Type de nom en clair"
+        type: STRING
+      - name: ncc
+        description: "Nom en clair (majuscules)"
+        type: STRING
+      - name: nccenr
+        description: "Nom en clair (typographie riche)"
+        type: STRING
+      - name: libelle
+        description: "Nom en clair (typographie riche) avec article"
+        type: STRING
+      - name: can
+        description: "Code canton. Pour les communes « multi-cantonales », code décliné de 99 à 90 (pseudo-canton) ou de 89 à 80 (communes nouvelles)"
+        type: STRING
+      - name: com_parent
+        description: "Code de la commune parente pour les arrondissements municipaux et les communes associées ou déléguées."
+        type: STRING

@@ -51,4 +51,29 @@ Le fichier final sera généré dans `data/csv_large/france_all_bats_clean.parqu
 
 ## Lancer les precommit-hook localement
 
-...
+[Installer les precommit](https://pre-commit.com/)
+
+    pre-commit run --all-files
+
+## Utiliser Tox pour tester votre code
+
+    tox -vv
+
+## Déploiement Docker
+
+Le site web peut être construit et lancé via Docker.
+
+Build (depuis la racine du projet) :
+
+```bash
+docker build -t pcc-website .
+```
+
+Lancer the container :
+
+```bash
+docker run -p 3000:3000 pcc-website
+```
+
+Puis ouvrir http://localhost:3000.
+

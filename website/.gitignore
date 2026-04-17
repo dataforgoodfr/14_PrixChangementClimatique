@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# PMTiles files generated from data/utils/build_pmtiles.py
+/public/pmtiles/*.pmtiles

@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: azi_gaspar
+    description:
+      1. Définition - Les Atlas de Zones Inondables (AZI) sont élaborés par les Directions Départementales des Territoires (DDT) dans chaque département. Ils sont construits dans la plupart des cas à partir d'études hydrogéomorphologiques ou à partir des plus hautes eaux connues (PHEC), voire à partir des inondations de période de retour centennale à l'échelle des bassins hydrographiques. Ils sont rattachés au volet « gestion des risques » des SDAGE (Schéma Départemental d'Aménagement et de Gestion des Eaux), élaborés par les comités de bassins.
+
+      2. Structure - Un atlas est décrit par une ligne par commune concernée. Une commune peut être décrite par plusieurs atlas.
+
+      3. Dictionnaire des données - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: cod_nat_azi
+        description: Code unique identifiant l’atlas (code national généré par Gaspar)
+        data_type: varchar
+      - name: lib_azi
+        data_type: varchar
+        description: Nom de l’atlas
+      - name: lib_bassin_risque
+        data_type: varchar
+        description: Nom du bassin de risque décrit (bassin versant, bassin hydrographique, ensemble de communes, département, région...)
+      - name: list_risques
+        data_type: varchar
+        description: Libellé du risque (un seul possible)
+      - name: cod_commune
+        data_type: varchar
+        description: Code de la commune concernée
+      - name: lib_commune
+        data_type: varchar
+        description: Nom de la commune concernée
+      - name: dat_program_deb
+        data_type: timestamp
+        description: Date de début de programmation
+      - name: dat_program_fin
+        data_type: timestamp
+        description: Date de fin de programmation
+      - name: dat_etu_deb
+        data_type: timestamp
+        description: Date de début des études
+      - name: dat_etu_fin
+        data_type: timestamp
+        description: Date de fin des études
+      - name: dat_info_deb
+        data_type: timestamp
+        description: Date de début d’information des communes
+      - name: dat_info_fin
+        data_type: timestamp
+        description: Date de fin d’information des communes
+      - name: dat_realisation
+        data_type: timestamp
+        description: Date de réalisation de l’atlas
+      - name: dat_diffusion
+        data_type: timestamp
+        description: Date de diffusion de l’atlas (accès aux cartes)
+      - name: dat_pub_net
+        data_type: timestamp
+        description: Date de publication sur Internet
+      - name: dat_maj
+        data_type: timestamp
+        description: Date de mise à jour de la fiche GASPAR

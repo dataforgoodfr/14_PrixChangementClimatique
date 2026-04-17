@@ -1,0 +1,10 @@
+SELECT
+    id_collectivity,
+    department_code,
+    department_name,
+    collectivity,
+    type_collectivity,
+    respondent_job,
+    code_geo
+FROM
+    'pipeline_inputs/collectivities_pdf.csv'

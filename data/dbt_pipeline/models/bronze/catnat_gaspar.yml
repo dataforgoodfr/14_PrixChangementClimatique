@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: catnat_gaspar
+    description: |-
+      1. Définition -
+      Les arrêtés interministériels de reconnaissances de l’état de catastrophe naturelle sont
+      délivrés pour un ensemble de communes, un aléa et une période donnée, après examen des
+      demandes de reconnaissance déposées par les maires des communes concernées.
+      http://www.georisques.gouv.fr/articles/guide-juridique-indemnisation-des-castastrophesnaturelles
+
+      2. Structure -
+      Une ligne correspond à une reconnaissance, qui concerne une commune, un événement
+      (date de début et de fin) et un risque. On peut avoir plusieurs reconnaissances sur une
+      même commune pour un même événement (ex : tempête et inondation).
+
+      3. Dictionnaire données -
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: cod_nat_catnat
+        description: |-
+          Code unique identifiant une reconnaissance (code national généré par
+          Gaspar)
+        data_type: varchar
+      - name: cod_commune
+        description: Code de la commune concernée
+        data_type: varchar
+      - name: lib_commune
+        description: Nom de la commune concernée
+        data_type: varchar
+      - name: num_risque_jo
+        description: Numéro du risque mentionné
+        data_type: varchar
+      - name: lib_risque_jo
+        description: Libellé du risque mentionné dans le journal officiel
+        data_type: varchar
+      - name: dat_deb
+        description: Date de début de l’événement
+        data_type: date
+      - name: dat_fin
+        description: Date de fin de l’événement
+        data_type: date
+      - name: dat_pub_arrete
+        description: Date de l’arrêté
+        data_type: date
+      - name: dat_pub_jo
+        description: Date de publication au journal officiel
+        data_type: date
+      - name: dat_maj
+        description: Date de mise à jour de la fiche GASPAR
+        data_type: timestamp

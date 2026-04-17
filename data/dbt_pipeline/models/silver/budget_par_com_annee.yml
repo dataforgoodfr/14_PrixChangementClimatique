@@ -1,0 +1,29 @@
+models:
+  - name: budget_par_com_annee
+    description: Indicateurs budget par année et par communes, depuis 2010
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - annee
+
+    columns:
+      - name: code_geo
+        description: le code geo venant du merge sur le siren avec le fichier https://www.data.gouv.fr/datasets/table-de-correspondance-entre-ndeg-siren-et-code-insee-des-communes
+        data_tests:
+          - not_null
+        data_type: varchar
+      - name: annee
+        description: Année de l'exercice
+        data_type: bigint
+        data_tests:
+          - not_null
+      - name: dettes
+        description: Solde net pour le type de compte "dettes"
+        data_type: double
+      - name: depenses
+        description: Solde net pour le type de compte "depenses"
+        data_type: double
+      - name: produits
+        description: Solde net pour le type de compte "produits"
+        data_type: double

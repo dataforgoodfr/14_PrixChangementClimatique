@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: collectivities_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les collectivités.
+    columns:
+      - name: id_collectivity
+        description: "Identifiant unique de la collectivité"
+        type: INTEGER
+      - name: department_code
+        description: "Code du département (ex : 95, 974, 2A)"
+        type: STRING
+      - name: department_name
+        description: "Nom du département"
+        type: STRING
+      - name: collectivity
+        description: "Nom de la collectivité"
+        type: STRING
+      - name: type_collectivity
+        description: "Type de collectivité"
+        type: STRING
+      - name: respondent_job
+        description: "Fonction de la personne ayant répondu au questionnaire"
+        type: STRING
+      - name: code_geo
+        description: "Code geo de la collectivites"
+        type: STRING

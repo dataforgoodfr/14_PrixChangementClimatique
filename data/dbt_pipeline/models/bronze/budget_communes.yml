@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: budget_communes
+    description: |-
+      Budget des communes -
+      https://data.ofgl.fr/pages/acces-donnees-comptables-detaillees/
+    columns:
+      - name: annee
+        description: Exercice budgétaire de référence de la donnée
+        type: INT
+      - name: code_geo
+        description: Code INSEE 2024de la commune
+        type: VARCHAR
+      - name: siret_budget
+        description: Siret de l'entité juridique à laquelle correspond le budget
+        type: VARCHAR
+      - name: libelle_budget
+        description: Libellé du budget
+        type: VARCHAR
+      - name: type_budget
+        description: Type de budget (principal / annexe)
+        type: VARCHAR
+      - name: montant
+        description: Montant du budget en euros
+        type: FLOAT

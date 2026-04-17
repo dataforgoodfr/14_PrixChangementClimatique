@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: opendatasoft_communes
+    description: >
+      Table des communes françaises avec géométries spatiales (polygones).
+      Source : HuWise / Georef France Commune
+      URL : https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/georef-france-commune/exports/geojson
+      Cette table contient les données administratives et géographiques complètes
+      de toutes les communes françaises avec leurs polygones géométriques.
+      Source non officielle, alternatives envisageable: IGN ADMIN-EXPRESS 2026 France Entière
+      ("https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16/ADMIN-EXPRESS_4-0__GPKG_WGS84G_FRA_2026-02-16.7z")
+      ou données OpenStreeMap via Ouverture Maps ("https://docs.overturemaps.org/getting-data/duckdb/")
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: nom_commune
+        description: "Nom officiel de la commune"
+        type: STRING
+      - name: code_geo_actuel
+        description: "Code INSEE actuel (en cas de fusion/changement)"
+        type: STRING
+      - name: nom_commune_majuscule
+        description: "Nom de la commune en majuscules"
+        type: STRING
+      - name: nom_commune_minuscule
+        description: "Nom de la commune en minuscules"
+        type: STRING
+      - name: code_zone_superficie
+        description: "Code de la zone de superficie"
+        type: STRING
+      - name: type_commune
+        description: "Type de commune (COM, ARM, COMD, etc.)"
+        type: STRING
+      - name: code_siren
+        description: "Code SIREN de la commune (9 chiffres)"
+        type: STRING
+      - name: zone_montagne
+        description: "Indicateur si la commune est en zone de montagne"
+        type: STRING
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: nom_departement
+        description: "Nom du département"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
+      - name: nom_region
+        description: "Nom de la région"
+        type: STRING
+      - name: code_arrondissement_departemental
+        description: "Code de l'arrondissement départemental"
+        type: STRING
+      - name: nom_arrondissement_departemental
+        description: "Nom de l'arrondissement départemental"
+        type: STRING
+      - name: code_epci
+        description: "Code de l'EPCI (Établissement Public de Coopération Intercommunale)"
+        type: STRING
+      - name: nom_epci
+        description: "Nom de l'EPCI"
+        type: STRING
+      - name: code_zone_emploi_2020
+        description: "Code de la zone d'emploi 2020"
+        type: STRING
+      - name: nom_zone_emploi_2020
+        description: "Nom de la zone d'emploi 2020"
+        type: STRING
+      - name: code_bassin_vie_2022
+        description: "Code du bassin de vie 2022"
+        type: STRING
+      - name: nom_bassin_vie_2022
+        description: "Nom du bassin de vie 2022"
+        type: STRING
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"
+        type: STRING
+      - name: geometry
+        description: "Géométrie spatiale de la commune (polygone ou multipolygone)"
+        type: GEOMETRY

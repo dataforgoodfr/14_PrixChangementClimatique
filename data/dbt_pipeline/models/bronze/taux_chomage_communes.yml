@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: taux_chomage_communes
+    description: |-
+      Taux de chômage par commune -
+      Source Pôle Emploi, données au 3ème trimestre 2025 -
+
+      https://www.insee.fr/fr/statistiques/1893230 -
+      https://www.insee.fr/fr/statistiques/2012804 -
+      https://dares.travail-emploi.gouv.fr/donnees/les-inscrits-france-travail-donnees-communales
+    columns:
+      - name: code_region
+        description: Code de la région
+        type: INT
+      - name: region
+        description: Nom de la région
+        type: VARCHAR
+      - name: code_departement
+        description: Code du département
+        type: VARCHAR
+      - name: departement
+        description: Nom du département
+        type: VARCHAR
+      - name: code_commune
+        description: Code de la commune
+        type: VARCHAR
+      - name: commune
+        description: Nom de la commune
+        type: VARCHAR
+      - name: code_geo
+        description: Code géographique de la commune (code INSEE à 5 chiffres)
+        type: VARCHAR
+      - name: nombre_de_demandeurs_d_emploi
+        description: Nombre de demandeurs d'emploi
+        type: INT
+      - name: p_23_pop
+        description: Population de la commune en 2023
+        type: INT
+      - name: ratio_abc_pop_commune
+        description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
+        type: FLOAT
+      - name: ratio_abc_pop_dep
+        description: Ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale du département
+        type: FLOAT
+      - name: t_3_2025_departement
+        description: Taux de chômage au 3ème trimestre 2025 pour le département
+        type: FLOAT
+      - name: t_3_2025_proxy_commune
+        description: Taux de chômage au 3ème trimestre 2025 pour la commune, estimé à partir du taux de chômage départemental et du ratio entre le nombre de demandeurs d'emploi de catégorie A, B et C et la population totale de la commune
+        type: FLOAT

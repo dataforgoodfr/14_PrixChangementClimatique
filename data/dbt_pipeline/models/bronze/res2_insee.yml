@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: res2_insee
+    description: |-
+      Part de résidences secondaires par commune -
+      Source INSEE, données au 1er janvier 2022 -
+      https://www.observatoire-des-territoires.gouv.fr/part-des-residences-secondaires-et-logements-occasionnels
+    columns:
+      - name: code_geo
+        description: Code géographique de la commune (code INSEE à 5 chiffres)
+        type: VARCHAR
+      - name: lib_geo
+        description: Nom de la commune
+        type: VARCHAR
+      - name: an
+        description: Année de référence de la donnée
+        type: INT
+      - name: part_resid_2
+        description: Part en % des résidences secondaires et logements occasionnels dans le total des résidences principales, secondaires et logements occasionnels
+        type: FLOAT

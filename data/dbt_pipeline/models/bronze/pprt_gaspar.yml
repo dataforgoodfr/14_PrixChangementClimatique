@@ -1,0 +1,114 @@
+version: 2
+
+models:
+  - name: pprt_gaspar
+    description: |-
+      8.1. Définition -
+      Le plan de prévention des risques technologiques est un document réalisé par l’État qui
+      réglemente l'utilisation des sols en fonction des risques technologiques auxquels ils sont soumis.
+      Cette réglementation va de l'interdiction de construire à la possibilité de construire sous certaines conditions.
+      http://www.georisques.gouv.fr/articles/les-plans-de-prevention-des-risques-naturels-pprn
+
+      2. Structure -
+      Chaque procédure est décrite par une ligne par commune et par risque traité.
+      La table comprend les procédures en vigueur, les procédures en cours, les procédures annulées, abrogées et déprescrites, ainsi que les procédures révisées par une autre procédure.
+
+      3. Dictionnaire de données (erreur) - https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+    columns:
+      - name: code_geo
+        description: Code commune sous le format code géographique à 5 chiffres (ex 75056 pour Paris)
+        type: VARCHAR
+        data_type: varchar
+      - name: code_modele
+        description: TO DO
+        data_type: varchar
+      - name: libelle_modele
+        description: TO DO
+        data_type: varchar
+      - name: code_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_procedure
+        description: TO DO
+        data_type: varchar
+      - name: libelle_organisme
+        description: TO DO
+        data_type: varchar
+      - name: bassin_risque
+        description: TO DO
+        data_type: varchar
+      - name: bassins_hydrographiques
+        description: TO DO
+        data_type: varchar
+      - name: cours_eau
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_1
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_2
+        description: TO DO
+        data_type: varchar
+      - name: code_risque_2_1
+        description: TO DO
+        data_type: bigint
+      - name: libelle_risque_3
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisante
+        description: TO DO
+        data_type: varchar
+      - name: codes_revises
+        description: TO DO
+        data_type: varchar
+      - name: procedure_revisee
+        description: TO DO
+        data_type: varchar
+      - name: codes_revisants
+        description: TO DO
+        data_type: varchar
+      - name: prescription
+        description: TO DO
+        data_type: timestamp
+      - name: enquete_publ_debut
+        description: TO DO
+        data_type: timestamp
+      - name: enquete_publ_fin
+        description: TO DO
+        data_type: timestamp
+      - name: annex_plu
+        description: TO DO
+        data_type: date
+      - name: deprescription
+        description: TO DO
+        data_type: date
+      - name: approbation
+        description: TO DO
+        data_type: timestamp
+      - name: annulation
+        description: TO DO
+        data_type: date
+      - name: abrogation
+        description: TO DO
+        data_type: date
+      - name: libelle_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_etat
+        description: TO DO
+        data_type: date
+      - name: libelle_sous_etat
+        description: TO DO
+        data_type: varchar
+      - name: date_sous_etat
+        description: TO DO
+        data_type: date
+      - name: date_derniere_mise_a_jour
+        description: TO DO
+        data_type: timestamp

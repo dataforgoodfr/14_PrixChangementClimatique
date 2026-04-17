@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: relation_with_assurance_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les relations entre les collectivités et les assureurs.
+    columns:
+      - name: id_collectivity
+        description: "Identifiant unique de la collectivité"
+        type: INTEGER
+      - name: solution
+        description: "Solutions proposées pour régler les problèmes d’assurance des collectivités"
+        type: STRING
+      - name: relation_score
+        description: "Qualité de la relation avec l’assureur (note sur 10)"
+        type: FLOAT

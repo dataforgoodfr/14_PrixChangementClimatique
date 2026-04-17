@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: problems_pdf
+    description: >
+      Données scrappées du PDF https://www.senat.fr/rap/r23-474/r23-474-annexe3.pdf donnant des informations sur les problèmes rencontrés par les collectivités .
+    columns:
+      - name: id_collectivite
+        description: "Identifiant unique de la collectivité"
+        type: INTEGER
+      - name: problem
+        description: "Problèmes rencontrés par les collectivités "
+        type: STRING

@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: dicrim_gaspar
+    description: |-
+      1. Définition -
+      Le document d’information communal sur les risques majeurs (DICRIM) recense
+       les mesures de sauvegarde répondant aux risques naturels et technologiques majeurs
+       sur le territoire de la commune, conformément au décret du 11 octobre 1990.
+      http://www.georisques.gouv.fr/articles/le-document-dinformation-communal-sur-les-risquesmajeurs-dicrim
+
+      2. Structure -
+      Un DICRIM par commune (identification et suppression des doublons en cours).
+
+      3. Dictionnaire de données -
+      https://www.georisques.gouv.fr/sites/default/files/Georisques_DictionnaireDonneesGaspar_1.0.pdf
+
+      4. Nota - données incomplètes par rapport au dictionnaire
+    columns:
+      - name: cod_commune
+        description: Code de la commune concernée
+        data_type: varchar
+      - name: lib_commune
+        description: Nom de la commune concernée
+        data_type: varchar
+      - name: dat_publi_dicrim
+        description: Date de publication
+        data_type: timestamp
