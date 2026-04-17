@@ -190,7 +190,7 @@ function Panel({
   );
 
   const controlsClassName = cn(
-    "absolute top-4 bottom-4 flex flex-col justify-between duration-300 ease-in-out",
+    "absolute top-4 bottom-4 flex flex-col justify-between duration-300 ease-in-out pointer-events-none [&>*]:pointer-events-auto",
     isLtr ? "items-start" : "items-end",
     zIndex,
     isLtr
