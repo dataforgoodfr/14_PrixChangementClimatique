@@ -129,7 +129,7 @@ export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
             Tout effacer
           </Button>
           <Button size="lg" disabled>
-            Afficher 2 252 communes
+            Appliquer les filtres
           </Button>
         </Panel.Actions>
       </Panel.Footer>
