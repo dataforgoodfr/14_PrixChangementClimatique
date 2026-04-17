@@ -8,14 +8,22 @@ import { Separator } from "@/components/ui/separator";
 import * as React from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 import { MapPinIcon, UserIcon } from "lucide-react";
+import { useQueryState } from "nuqs";
+import { useCallback } from "react";
 
 export function FeatureDetailPanel() {
+  const [, setCommune] = useQueryState("commune");
   const { selectedFeature, clearSelectedFeature } = useMapContext();
+
+  const onClose = useCallback(() => {
+    setCommune(null);
+    clearSelectedFeature();
+  }, [setCommune, clearSelectedFeature]);
 
   return (
     <Panel
       isOpen={selectedFeature !== null}
-      onClose={clearSelectedFeature}
+      onClose={onClose}
       dir="ltr"
       width={800}
       zIndex="z-30"
@@ -41,10 +49,10 @@ export function FeatureDetailPanel() {
             </span>
           </Panel.Subtitle>
         </div>
-        {selectedFeature?.indice_vulnerabilite_niveau && (
+        {selectedFeature?.indice_vulnerabilite && (
           <RfVulnerabilityIndex
             className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
-            value={selectedFeature.indice_vulnerabilite_niveau}
+            value={Math.round(selectedFeature.indice_vulnerabilite * 50) / 10}
           />
         )}
       </Panel.Header>
