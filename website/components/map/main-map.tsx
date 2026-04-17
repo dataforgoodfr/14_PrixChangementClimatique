@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react";
 import {
   Map,
-  NavigationControl,
   Popup,
   Layer,
   Source,
@@ -216,13 +215,6 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
       onClick={handleClick}
       onMouseEnter={handleCursorEnter}
     >
-      <NavigationControl
-        position="top-right"
-        style={{
-          marginTop: "72px",
-          marginRight: `${isFiltersPanelOpen ? "416px" : "16px"}`,
-        }}
-      />
       <CommunesLayer />
       {hoverInfo && (
         <Popup

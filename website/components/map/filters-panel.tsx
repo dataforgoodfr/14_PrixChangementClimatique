@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { KpiStatCard } from "@/components/core/rf-kpi-stat-card";
 import { Legend } from "@/components/core/rf-legend";
 import { KPISelector } from "@/components/core/rf-kpi-selector";
+import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
 import { useMapContext, type KpiField } from "@/contexts/map-context";
 import {
   IndiceVulnerabiliteNiveauIcon,
@@ -134,13 +135,17 @@ export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
       </Panel.Footer>
 
       <Panel.Controls>
-        <Button
-          onClick={onToggle}
-          title={isOpen ? "Fermer les paramètres" : "Ouvrir les paramètres"}
-          size="icon-lg"
-        >
-          <SlidersHorizontal size={18} />
-        </Button>
+        <div className="flex flex-col gap-2 items-end">
+          <Button
+            onClick={onToggle}
+            title={isOpen ? "Fermer les paramètres" : "Ouvrir les paramètres"}
+            size="icon-lg"
+            className="h-10 w-10"
+          >
+            <SlidersHorizontal className="size-5" />
+          </Button>
+          <MapZoomControl />
+        </div>
         <Legend />
       </Panel.Controls>
     </Panel>

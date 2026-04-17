@@ -31,15 +31,18 @@ function usePanelContext() {
 function PanelTitle({
   children,
   size = "large",
+  className,
 }: {
   children: ReactNode;
   size?: "small" | "large";
+  className?: string;
 }) {
   return (
     <p
       className={cn(
         "font-semibold text-gray-900",
         size === "large" ? "pt-30 text-3xl" : "text-lg",
+        className,
       )}
     >
       {children}
@@ -50,13 +53,15 @@ function PanelTitle({
 function PanelSubtitle({
   children,
   size = "large",
+  className,
 }: {
   children: ReactNode;
   size?: "small" | "large";
+  className?: string;
 }) {
   return (
     <p
-      className={cn(size === "large" ? "text-xs" : "text-xs", "text-gray-500")}
+      className={cn("text-xs text-gray-500", className)}
     >
       {children}
     </p>
@@ -66,9 +71,11 @@ function PanelSubtitle({
 function PanelHeader({
   children,
   size = "large",
+  className,
 }: {
   children: ReactNode;
   size?: "small" | "large";
+  className?: string;
 }) {
   const { onClose, showCloseButton } = usePanelContext();
   return (
@@ -76,6 +83,7 @@ function PanelHeader({
       className={cn(
         "flex items-start justify-between px-4 border-b border-gray-200 shrink-0",
         size === "large" ? "py-3" : "py-2",
+        className,
       )}
     >
       <div className="flex flex-col gap-0.5 min-w-0">{children}</div>

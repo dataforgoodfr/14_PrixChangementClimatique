@@ -644,6 +644,10 @@ function LegendExample() {
       <MapProvider>
         <Legend />
       </MapProvider>
+    </Example>
+  );
+}
+
 function RecognitionRequestExample() {
   return (
     <Example
