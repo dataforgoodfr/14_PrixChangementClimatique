@@ -1,7 +1,6 @@
 "use client";
 
 import { Panel } from "@/components/core/panel";
-import { useMapContext } from "@/contexts/map-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
 import { Separator } from "@/components/ui/separator";
@@ -10,19 +9,22 @@ import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 import { MapPinIcon, UserIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useCallback } from "react";
+import { Commune } from "@/lib/types/communes";
 
-export function FeatureDetailPanel() {
+export function FeatureDetailPanel({
+  selectedCommune,
+}: {
+  selectedCommune: Commune | null;
+}) {
   const [, setCommune] = useQueryState("commune");
-  const { selectedFeature, clearSelectedFeature } = useMapContext();
 
   const onClose = useCallback(() => {
     setCommune(null);
-    clearSelectedFeature();
-  }, [setCommune, clearSelectedFeature]);
+  }, [setCommune]);
 
   return (
     <Panel
-      isOpen={selectedFeature !== null}
+      isOpen={!!selectedCommune}
       onClose={onClose}
       dir="ltr"
       width={800}
@@ -31,14 +33,14 @@ export function FeatureDetailPanel() {
       <Panel.Header className="flex flex-col gap-4 relative md:min-h-72 bg-panel-header">
         <div className="w-full">
           <Panel.Title className="pt-24 pb-4">
-            {String(selectedFeature?.nom_commune ?? "Commune")}
+            {selectedCommune?.nom_commune}
           </Panel.Title>
           <Panel.Subtitle>
             <span className="flex gap-2">
               <MapPinIcon className="inline-block size-6" />
               <span>
-                {selectedFeature?.region}, {selectedFeature?.departement},{" "}
-                {selectedFeature?.code_departement}
+                {selectedCommune?.region}, {selectedCommune?.departement},{" "}
+                {selectedCommune?.code_departement}
               </span>
             </span>
           </Panel.Subtitle>
@@ -49,10 +51,10 @@ export function FeatureDetailPanel() {
             </span>
           </Panel.Subtitle>
         </div>
-        {selectedFeature?.indice_vulnerabilite && (
+        {selectedCommune?.indice_vulnerabilite && (
           <RfVulnerabilityIndex
             className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
-            value={Math.round(selectedFeature.indice_vulnerabilite * 50) / 10}
+            value={Math.round(selectedCommune.indice_vulnerabilite * 50) / 10}
           />
         )}
       </Panel.Header>
@@ -82,10 +84,10 @@ export function FeatureDetailPanel() {
               </div>
             </CardContent>
           </Card>
-          {selectedFeature ? (
+          {selectedCommune ? (
             <table className="w-full">
               <tbody>
-                {Object.entries(selectedFeature).map(([key, value]) => (
+                {Object.entries(selectedCommune).map(([key, value]) => (
                   <tr
                     key={key}
                     className="border-b border-gray-100 last:border-0"
