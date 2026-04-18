@@ -58,6 +58,19 @@ pprn AS (
                 THEN date_approbation
         END AS date_approbation_ino
     FROM {{ ref('pprn_clean') }}
+),
+
+kpi_impots AS (
+    SELECT
+        code_geo,
+        SUM(CASE WHEN annee = 2024 AND agregat = 'Impôts locaux' THEN montant ELSE 0 END) AS impots_locaux,
+        (SUM(CASE WHEN annee = 2024 AND agregat = 'Impôts locaux' THEN montant ELSE 0 END) -
+         SUM(CASE WHEN annee = 2020 AND agregat = 'Impôts locaux' THEN montant ELSE 0 END))
+        / NULLIF(SUM(CASE WHEN annee = 2020 AND agregat = 'Impôts locaux' THEN montant ELSE 0 END), 0) AS impots_locaux_evolution,
+        SUM(CASE WHEN annee = 2024 AND agregat = 'Impôts locaux' THEN montant ELSE 0 END)
+        / NULLIF(SUM(CASE WHEN annee = 2024 AND agregat = 'Recettes de fonctionnement' THEN montant ELSE 0 END), 0) AS part_impots_locaux
+    FROM {{ ref('donnees_financieres_ofgl') }}
+    GROUP BY code_geo
 )
 
 SELECT
@@ -108,7 +121,11 @@ SELECT
     pop.population,
 
     p.prime_assurance_2024 / b.depenses AS part_prime_budget,
-    (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
+    (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance,
+
+    i_loc.impots_locaux,
+    i_loc.impots_locaux_evolution,
+    i_loc.part_impots_locaux
 
 FROM {{ ref('opendatasoft_communes') }} AS c
 
@@ -137,3 +154,6 @@ LEFT JOIN pprn AS pr
 
 LEFT JOIN {{ ref('indice_par_commune') }} AS i
     ON c.code_geo = i.code_geo
+
+LEFT JOIN kpi_impots AS i_loc
+    ON c.code_geo = i_loc.code_geo
