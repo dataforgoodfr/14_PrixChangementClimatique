@@ -125,12 +125,12 @@ SELECT
 
     pop.population,
 
-    p.prime_assurance_2024 / b.depenses AS part_prime_budget,
-    (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance,
-
     i_loc.impots_locaux,
     i_loc.impots_locaux_evolution,
-    i_loc.part_impots_locaux
+
+    i_loc.part_impots_locaux,
+    p.prime_assurance_2024 / b.depenses AS part_prime_budget,
+    (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
 
 FROM {{ ref('opendatasoft_communes') }} AS c
 
