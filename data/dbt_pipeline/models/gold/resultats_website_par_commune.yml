@@ -137,3 +137,12 @@ models:
           Poids sévérité : faible (1.0), moyen (5.0), fort (10.0).
           Etant donné qu'il n'y a pas les DROMs pour le RGA, leur score sera 'null'.
         data_type: float
+      - name: impots_locaux
+        description: Somme des impots locaux pour 2024 (Source OFGL)
+        data_types: float
+      - name: evolution_impots_locaux
+        description: Evolution des impots locaux entre 2020 et 2024
+        data_types: float
+      - name: part_impots_locaux_budget
+        description: Part des impots locaux sur le budget total de la commune en 2024
+        data_types: float
