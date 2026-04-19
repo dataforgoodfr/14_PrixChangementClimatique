@@ -7,9 +7,9 @@ import Image from "next/image";
 
 const Hero: React.FC = () => {
   return (
-    <div className="relative h-screen  overflow-hidden bg-[linear-gradient(to_bottom,#FDF7EE55_10%,#FFF9F377_70%,#FFFFFF_100%),url('/home-background.svg')] px-[16px] pt-[60px] lg:pt-[74px] lg:pr-[88px] lg:pl-[104px]">
+    <div className="relative  bg-[linear-gradient(to_bottom,#FDF7EE55_10%,#FFF9F377_70%,#FFFFFF_100%),url('/home-background.svg')] px-[16px] pt-[60px] lg:pt-[74px] lg:pr-[88px] lg:pl-[104px]">
       {/* image desktop - absolute position  */}
-      <div className="hidden lg:block absolute right-0  top-[20%] -translate-y-1/2 w-[clamp(400px,50vw,771px)] max-h-[70vh]">
+      <div className="hidden lg:block absolute right-0  top-[70%] -translate-y-1/2 w-[clamp(400px,50vw,771px)] max-h-[70vh]">
         <Image
           src="/home-hero-map.svg"
           alt="Map"
@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
         <div className="absolute bottom-0 w-full h-[200px] bg-[linear-gradient(207.6deg,rgba(254,251,247,0)_10.58%,#FFFFFF_52.37%)] blur-[54px]"></div>
       </div>
 
-      <div className=" flex flex-col max-w-[750px] md:items-start m-auto lg:mx-0">
+      <div className=" flex flex-col max-w-[800px] md:items-start m-auto lg:mx-0">
         <div className="flex flex-col gap-[24px] lg:gap-[56px]">
           <h1 className="text-[28px] md:text-[40px]  lg:text-[64px] tracking-[-0.034em] text-rf-green-dark font-[700] leading-[100%]">
             Les communes françaises <br /> face aux évènements <br />
@@ -29,10 +29,15 @@ const Hero: React.FC = () => {
           <div className="lg:max-w-[500px]">
             <StatCallout
               value={"1/4"}
-              text={
-                "des communes est aujourd'hui trés vulnérables face aux conséquences du changement climatique"
+              title={{ text: "des", highlight: "communes" }}
+              subtitle={
+                <p>
+                  {
+                    "est aujourd'hui trés vulnérable face aux conséquences du changement climatique"
+                  }
+                </p>
               }
-              highlight={"communes"}
+              variant="fullGreen"
             />
           </div>
           <Button
