@@ -1,4 +1,4 @@
-import Hero from "@/components/home/hero";
+import Home from "@/components/home/home";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Hero />;
+  return <Home />;
 }
