@@ -100,12 +100,12 @@ SELECT
     p.prime_assurance_2021,
     p.prime_assurance_2020,
 
-    pr.pprn_rga IS TRUE AS pprn_rga,
-    pr.pprn_ino IS TRUE AS pprn_ino,
     pr.date_approbation_rga,
     pr.date_approbation_ino,
-
     pop.population,
+    pr.pprn_rga IS TRUE AS pprn_rga,
+
+    pr.pprn_ino IS TRUE AS pprn_ino,
 
     p.prime_assurance_2024 / b.depenses AS part_prime_budget,
     (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
