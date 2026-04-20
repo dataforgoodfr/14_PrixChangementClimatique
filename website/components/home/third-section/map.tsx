@@ -7,7 +7,7 @@ const Map: React.FC = () => {
     <div className="flex flex-col gap-[16px] w-full min-width-[550px]">
       <div className="flex flex-col gap-[4px] text-center ">
         <p className="text-[14px] md:text-[21px] font-[600] text-white">
-          Exposition du territoire metropolitain au retrait-Gonflement des
+          Exposition du territoire métropolitain au retrait-Gonflement des
           argiles (RGA)
         </p>
         <p className="text-[12px] md:text-[16px] text-white/70">

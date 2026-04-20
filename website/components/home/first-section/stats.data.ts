@@ -2,9 +2,9 @@ const mobileStats = [
   {
     id: 1,
     caption:
-      "Evolution du nombre de communes touchées par un arrêté Cat-Nat depuis 1982",
+      "Evolution du nombre d'évènements ayant donné lieu à une reconnaissance d'état de catastrophe naturelle",
     url: "/home-cat-nat-stats.svg",
-    alt: "Cat Nat statistiques",
+    alt: "Reconnaissance d'état de catastrophe naturelle statistiques",
   },
   {
     id: 2,
