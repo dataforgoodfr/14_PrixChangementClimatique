@@ -1,3 +1,4 @@
+import Hero from "@/components/home/hero";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,9 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-rf-gray">Accueil</h1>
-    </div>
-  );
+  return <Hero />;
 }
