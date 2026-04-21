@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { href: "/carte", label: "Carte" },
   { href: "/methodologies", label: "Méthodologie" },
   { href: "/analyses", label: "Analyses" },
+  { href: "/apropos", label: "À propos" },
 ];
 
 export function Header() {
