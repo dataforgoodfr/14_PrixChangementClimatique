@@ -63,7 +63,7 @@ export function Header() {
           type="button"
           variant="outline"
           aria-labelledby="Menu Toggle Button"
-          className="size-8"
+          className="size-8 lg:hidden"
           onClick={toggleMenu}
         >
           {isMenuOpen ? (
