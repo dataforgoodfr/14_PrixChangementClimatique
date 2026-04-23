@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getCommuneCodeFromUrl,
   isValidCodeCommune,
-  VALIDATION_ERRORS,
 } from "@/lib/api/validators";
 import { withDuckDb } from "@/lib/api/duckdb-handler";
 
 export async function GET(request: NextRequest) {
   const code = getCommuneCodeFromUrl(request);
-
   if (!isValidCodeCommune(code)) {
     return NextResponse.json(
-      { error: VALIDATION_ERRORS.INVALID_CODE_COMMUNE },
+      {
+        error: "Code commune invalide : code INSEE à 5 chiffres attendu",
+      },
       { status: 400 },
     );
   }
