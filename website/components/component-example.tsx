@@ -102,6 +102,7 @@ import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
 import { Separator } from "@/components/ui/separator";
 import { StatCard } from "@/components/core/stat-card";
+import { CatnatTypesChart } from "@/components/core/catnat-types-chart";
 
 export function ComponentExample() {
   return (
@@ -113,6 +114,7 @@ export function ComponentExample() {
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
       <RecognitionRequestExample />
+      <CatnatTypesChartExample />
     </ExampleWrapper>
   );
 }
@@ -590,7 +592,7 @@ function RecognitionRequestExample() {
     <Example
       title="Reconnaissance de catastrophe naturelle"
       className="items-center justify-center gap-4"
-      containerClassName="md:col-span-2"
+      containerClassName="md:col-span-2 max-w-none"
     >
       <Card className="w-full">
         <CardHeader>
@@ -615,6 +617,53 @@ function RecognitionRequestExample() {
           </div>
         </CardContent>
       </Card>
+    </Example>
+  );
+}
+
+function CatnatTypesChartExample() {
+  const mockData = [
+    ...Array.from({ length: 11 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2010 + i),
+      date_debut: `${2010 + i}-01-15`,
+      date_fin: `${2010 + i}-01-20`,
+      type_catnat: "Inondation",
+      is_reconnue: true,
+    })),
+    ...Array.from({ length: 8 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2010 + i),
+      date_debut: `${2010 + i}-03-10`,
+      date_fin: `${2010 + i}-03-15`,
+      type_catnat: "Mouvement de Terrain",
+      is_reconnue: true,
+    })),
+    ...Array.from({ length: 6 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2015 + i),
+      date_debut: `${2015 + i}-07-01`,
+      date_fin: `${2015 + i}-08-31`,
+      type_catnat: "Sécheresse",
+      is_reconnue: true,
+    })),
+    ...Array.from({ length: 5 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2018 + i),
+      date_debut: `${2018 + i}-12-10`,
+      date_fin: `${2018 + i}-12-15`,
+      type_catnat: "Météo",
+      is_reconnue: true,
+    })),
+  ];
+
+  return (
+    <Example
+      title="Types de catastrophes naturelles"
+      className="gap-4"
+      containerClassName="md:col-span-2 max-w-none"
+    >
+      <CatnatTypesChart data={mockData} />
     </Example>
   );
 }
