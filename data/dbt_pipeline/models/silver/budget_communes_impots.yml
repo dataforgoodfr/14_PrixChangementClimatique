@@ -5,6 +5,11 @@ models:
     description: |-
       Budget des communes avec une colonne impots ajoutée à partir des données de OFGL.
       https://data.ofgl.fr/pages/acces-donnees-comptables-detaillees/
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code_geo
+            - annee
     columns:
       - name: annee
         description: Exercice budgétaire de référence de la donnée
