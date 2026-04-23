@@ -1,8 +1,9 @@
 WITH source_budget AS (
+    -- On agrège par commune et année pour éviter les doublons de budgets multiples
     SELECT
         annee,
         code_geo,
-        SUM(montant) AS montant_budget -- On somme tous les budgets de la commune
+        SUM(montant) AS montant_budget
     FROM {{ ref('budget_communes') }}
     GROUP BY annee, code_geo
 ),
@@ -21,13 +22,9 @@ source_impots AS (
 SELECT
     b.annee,
     b.code_geo,
-    b.siret_budget,
-    b.libelle_budget,
-    b.type_budget,
-    b.montant AS montant_budget, -- On renomme pour éviter le conflit avec montant_impot
+    b.montant_budget,
     COALESCE(i.montant_impot, 0) AS montant_impot
 FROM source_budget AS b
 LEFT JOIN source_impots AS i
-    ON
-        b.code_geo = i.code_geo
-        AND b.annee = i.annee
+    ON b.code_geo = i.code_geo
+    AND b.annee = i.annee
