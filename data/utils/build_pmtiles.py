@@ -68,7 +68,7 @@ def export_geojson():
     """)
     conn.close()
 
-    count = sum(1 for line in open(GEOJSON_PATH, encoding='utf-8') if line.strip())
+    count = sum(1 for line in open(GEOJSON_PATH, encoding="utf-8") if line.strip())
     print(f"  → {count} features written to {GEOJSON_PATH}")
 
 
