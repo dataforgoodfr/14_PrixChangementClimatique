@@ -61,6 +61,7 @@ pprn AS (
             END
         ) AS date_approbation_ino
     FROM {{ ref('pprn_clean') }}
+    GROUP BY code_geo
 ),
 
 kpi_impots AS (
