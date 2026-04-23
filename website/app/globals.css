@@ -2,22 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@font-face {
-  font-family: "PolySans";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/polysans-bulky.otf") format("opentype");
-}
-
-@font-face {
-  font-family: "PolySans";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/polysans-neutral.otf") format("opentype");
-}
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -32,7 +16,6 @@
 
   /* Fonts */
   --font-sans: var(--font-sans);
-  --font-polysans: "PolySans", var(--font-sans);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);

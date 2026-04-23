@@ -11,7 +11,7 @@ const sectionClass =
   "max-w-[1200px] mx-auto px-5 sm:px-8 md:px-10 py-12 flex flex-col gap-6";
 
 const bodyClass =
-  "font-polysans font-normal text-rf-body text-[18px] md:text-[24px] leading-[120%] tracking-[-0.034em]";
+  "font-sans font-normal text-rf-body text-[14px] md:text-[20px] lg:text-[24px]";
 
 export default function AProposPage() {
   return (
@@ -19,10 +19,10 @@ export default function AProposPage() {
       {/* ── 1. HERO ── */}
       <section className="overflow-hidden text-center bg-[#FDF7EE] bg-[linear-gradient(to_bottom,#FDF7EE22_10%,#FDF7EE66_60%,#FFFFFF_100%),url('/home-background.svg')] bg-cover bg-top px-6 pt-14 pb-24 md:pt-20 md:pb-32">
         <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-6">
-          <h1 className="font-polysans font-bold text-rf-green-dark leading-[100%] tracking-[-0.034em] text-[36px] md:text-[48px] lg:text-[64px]">
+          <h1 className="font-sans font-bold text-rf-green-dark leading-[100%] tracking-[-0.034em] text-[36px] md:text-[48px] lg:text-[64px]">
             À propos
           </h1>
-          <p className="font-polysans font-normal text-rf-subtitle text-[18px] md:text-[24px] leading-[120%] tracking-[-0.034em]">
+          <p className="font-sans font-normal text-rf-subtitle text-[18px] md:text-[24px] leading-[120%] tracking-[-0.034em]">
             Sous-titre qui introduit les informations affichées sur cet écran
           </p>
         </div>
@@ -93,33 +93,25 @@ export default function AProposPage() {
           className="h-12 w-auto object-contain object-left"
         />
         <p className={bodyClass}>
-          Reclaim Finance est une organisation non-gouvernementale de recherche
-          et de campagne. Elle a été fondée en mars 2020 par Lucie Pinson,
-          lauréate du prix Goldman pour l&apos;environnement en 2020, avec pour
-          objectif de mettre la finance au service de la justice sociale et
-          climatique.
+          Reclaim Finance est une ONG de recherche et de plaidoyer 100 % dédiée
+          aux questions liant finance, justice sociale et climatique. Fondée en
+          2020, Reclaim Finance s'est rapidement imposée comme une référence sur
+          les enjeux finance/climat auprès d'autres ONG, des journalistes, des
+          représentants politiques, des responsables gouvernementaux et des
+          parties prenantes du secteur financier.
         </p>
         <p className={bodyClass}>
-          Les dérèglements climatiques s&apos;accélèrent, avec des impacts de
-          plus en plus violents qui menacent la vie de milliers de personnes et
-          d&apos;espèces. Si on ne fait rien pour réduire les émissions de gaz à
-          effet de serre, ils seront demain des millions.
+          Nous poursuivons trois objectifs : mettre fin aux services financiers
+          dirigés vers des secteurs intrinsèquement incompatibles avec
+          l’objectif de limiter le réchauffement climatique à 1,5 °C ; utiliser
+          la finance comme levier pour accélérer la décarbonation des secteurs
+          essentiels à la transition ; et transformer en profondeur le
+          fonctionnement du secteur financier afin qu’il réponde aux impératifs
+          sociaux et environnementaux.
         </p>
         <p className={bodyClass}>
-          La finance est un levier critique dans la lutte contre le dérèglement
-          climatique. Mais aujourd&apos;hui, la finance dominante demeure aux
-          antipodes des objectifs de justice sociale et climatique.
-        </p>
-        <p className={bodyClass}>
-          Malgré la popularité croissante des thèmes liés à la finance durable,
-          la quasi-totalité des services financiers est consacrée au
-          développement de pratiques fondées sur la surexploitation des
-          ressources naturelles et rien ne permet d&apos;affirmer que les
-          nouveaux outils de la «&nbsp;finance verte&nbsp;» ont un impact
-          positif réel. Reclaim Finance entend jouer un rôle de contre-pouvoir
-          citoyen car l&apos;action en cours n&apos;est pas suffisante. Nous
-          suivons et analysons donc les activités des acteurs financiers pour en
-          proposer un décryptage alternatif et exposer leurs réels impacts.
+          Notre équipe, composée d’environ quarante personnes, est présente en
+          France, à Berlin, Bristol, Amsterdam, Singapour et San Francisco.
         </p>
       </section>
     </main>
