@@ -1,5 +1,10 @@
 WITH source_budget AS (
-    SELECT * FROM {{ ref('budget_communes') }}
+    SELECT
+        annee,
+        code_geo,
+        SUM(montant) AS montant_budget -- On somme tous les budgets de la commune
+    FROM {{ ref('budget_communes') }}
+    GROUP BY annee, code_geo
 ),
 
 source_impots AS (
