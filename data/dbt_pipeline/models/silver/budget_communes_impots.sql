@@ -26,5 +26,6 @@ SELECT
     COALESCE(i.montant_impot, 0) AS montant_impot
 FROM source_budget AS b
 LEFT JOIN source_impots AS i
-    ON b.code_geo = i.code_geo
-    AND b.annee = i.annee
+    ON
+        b.code_geo = i.code_geo
+        AND b.annee = i.annee
