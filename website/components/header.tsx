@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 const NAV_LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/carte", label: "Carte" },
-  { href: "/methodologies", label: "Méthodologie" },
+  { href: "/methodologie", label: "Méthodologie" },
   { href: "/analyses", label: "Analyses" },
   { href: "/apropos", label: "À propos" },
 ];
