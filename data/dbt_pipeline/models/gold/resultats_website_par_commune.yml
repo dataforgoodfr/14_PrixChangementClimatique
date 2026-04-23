@@ -116,9 +116,27 @@ models:
       - name: nb_total_arretes_sec
         description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sécheresse" par commune
         data_type: INT
+      - name: nb_total_arretes_mvt
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "mouvement de terrain" par commune
+        data_type: INT
+      - name: nb_total_arretes_meteo
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "météo" par commune
+        data_type: INT
+      - name: nb_total_arretes_marin
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "marin" par commune
+        data_type: INT
+      - name: nb_total_arretes_sism
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "sismique" par commune
+        data_type: INT
+      - name: nb_total_arretes_autre
+        description: Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat "autre" par commune
+        data_type: INT
       - name: multiple_franchise_last
         description: multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)
         data_type: INT
+      - name: part_arretes_non_reconnus
+        description: part d'arrêtés non reconnus sur le nombre total d'arrêtés par commune
+        data_type: FLOAT
       - name: population
         description: Population municipale dernière année recensée
         data_type: INT
