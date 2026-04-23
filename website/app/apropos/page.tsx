@@ -11,7 +11,7 @@ const sectionClass =
   "max-w-[1200px] mx-auto px-5 sm:px-8 md:px-10 py-12 flex flex-col gap-6";
 
 const bodyClass =
-  "font-sans font-normal text-rf-body text-[14px] md:text-[20px] lg:text-[24px]";
+  "font-sans font-normal text-[#7C7AA1] text-[14px] md:text-[20px] lg:text-[24px]";
 
 export default function AProposPage() {
   return (
