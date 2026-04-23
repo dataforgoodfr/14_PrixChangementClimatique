@@ -6,9 +6,17 @@
       "source.organizeImports": "explicit"
     }
   },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "notebook.formatOnSave.enabled": true,
   "python.terminal.useEnvFile": true,
-    "workbench.editorAssociations": {
+  "workbench.editorAssociations": {
     "*.copilotmd": "vscode.markdown.preview.editor",
     "*.parquet": "duckdb.dataFileViewer",
     "*.csv": "duckdb.dataFileViewer",
@@ -21,5 +29,5 @@
   "dbt.enableNewLineagePanel": true,
   "dbt.lineage.defaultExpansion": 4,
   "dbt.perspectiveTheme": "Vintage",
-  "dbt.queryLimit": 50000,
+  "dbt.queryLimit": 50000
 }
