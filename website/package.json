@@ -19,6 +19,7 @@
     "lucide-react": "^0.563.0",
     "maplibre-gl": "^5.16.0",
     "next": "16.1.4",
+    "nuqs": "^2.8.9",
     "pmtiles": "^4.4.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",

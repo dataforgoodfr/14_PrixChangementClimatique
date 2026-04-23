@@ -48,6 +48,7 @@ export function RFCommuneSearchBox({
   filterValue,
   className,
 }: CommuneSearchBoxProps) {
+  const delayHandler = useRef<NodeJS.Timeout | null>(null);
   const [filterString, setFilterString] = useState("");
   const [debouncedFilter, setDebouncedFilter] = useState("");
   const [dropDownIsOpened, setDropDownOpen] = useState(false);
@@ -67,41 +68,36 @@ export function RFCommuneSearchBox({
 
   // Handle commune selection from click on the map
   useEffect(() => {
-    if (filterValue && filterValue !== filterString) {
+    if (filterValue !== filterString) {
       isExternalUpdate.current = true;
-      setFilterString(filterValue);
-      setDebouncedFilter(filterValue);
+      setFilterString(filterValue ?? "");
+      setDebouncedFilter(filterValue ?? "");
     }
     // We only want this hook to execute when filterValue change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterValue]);
-
-  // Handle commune selection from searchbox with debounce
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      // Skip dropdown opening and research if this is an external update (from map click)
-      if (isExternalUpdate.current) {
-        isExternalUpdate.current = false;
-        return;
-      }
-
-      if (filterString.length >= 3) {
-        setDebouncedFilter(filterString);
-        setDropDownOpen(true);
-      } else {
-        setDebouncedFilter("");
-        setDropDownOpen(false);
-      }
-    }, 200);
-
-    return () => clearTimeout(timeoutId);
-  }, [filterString]);
 
   function handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e?.target?.value) {
       setFilterString("");
       setDropDownOpen(false);
       return;
+    }
+
+    if (delayHandler.current) {
+      clearTimeout(delayHandler.current);
+    }
+
+    setFilterString(e.target.value);
+
+    if (e.target.value?.length >= 3) {
+      delayHandler.current = setTimeout(() => {
+        setDebouncedFilter(e.target.value);
+      }, 200);
+      setDropDownOpen(true);
+    } else {
+      setDebouncedFilter("");
+      setDropDownOpen(false);
     }
 
     setFilterString(e.target.value);
