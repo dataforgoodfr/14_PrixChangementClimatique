@@ -90,7 +90,7 @@ function CommunesLayer() {
 // ─── Initial state ────────────────────────────────────────────────────────────
 
 /** Initial is set to display all the France Métropolitaine
- * (TODO: add rapid navigation to other french colonies, oups.. territories) */
+ * (TODO: add rapid navigation to DROMs) */
 export const INITIAL_VIEW_STATE: ViewState = {
   longitude: 2.3522,
   latitude: 46.5,

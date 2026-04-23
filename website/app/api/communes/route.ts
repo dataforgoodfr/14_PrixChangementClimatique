@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   try {
     connection = await getDuckDbConnection();
     const reader = await connection.runAndReadAll(
-      "SELECT * FROM resultats_website_par_commune WHERE code_insee = $1",
+      "SELECT * EXCLUDE (geometry) FROM resultats_website_par_commune WHERE code_insee = $1",
       [code],
     );
     const rows = reader.getRowObjectsJson();
