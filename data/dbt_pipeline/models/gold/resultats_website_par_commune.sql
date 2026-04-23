@@ -46,17 +46,20 @@ budget_last AS (
 pprn AS (
     SELECT
         code_geo,
-        COALESCE(pprn_desc ILIKE '%tassements différentiels%', FALSE) AS pprn_rga,
-        COALESCE(pprn_desc ILIKE '%Inondation%', FALSE) AS pprn_ino,
-        CASE
-            WHEN pprn_desc ILIKE '%tassements différentiels%'
-                THEN date_approbation
-        END AS date_approbation_rga,
-
-        CASE
-            WHEN pprn_desc ILIKE '%inondation%'
-                THEN date_approbation
-        END AS date_approbation_ino
+        COALESCE(BOOL_OR(pprn_desc ILIKE '%tassements différentiels%'), FALSE) AS pprn_rga,
+        COALESCE(BOOL_OR(pprn_libelle ILIKE '%Inondation%'), FALSE) AS pprn_ino,
+        MAX(
+            CASE
+                WHEN pprn_desc ILIKE '%tassements différentiels%'
+                    THEN date_approbation
+            END
+        ) AS date_approbation_rga,
+        MAX(
+            CASE
+                WHEN pprn_libelle ILIKE '%inondation%'
+                    THEN date_approbation
+            END
+        ) AS date_approbation_ino
     FROM {{ ref('pprn_clean') }}
 ),
 
@@ -118,12 +121,12 @@ SELECT
     p.prime_assurance_2021,
     p.prime_assurance_2020,
 
-    pr.pprn_rga,
-    pr.pprn_ino,
     pr.date_approbation_rga,
     pr.date_approbation_ino,
-
     pop.population,
+    pr.pprn_rga IS TRUE AS pprn_rga,
+
+    pr.pprn_ino IS TRUE AS pprn_ino,
 
     i_loc.impots_locaux,
     i_loc.impots_locaux_evolution,

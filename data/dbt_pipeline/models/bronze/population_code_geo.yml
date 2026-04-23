@@ -3,7 +3,8 @@ version: 2
 models:
   - name: population_code_geo
     description: >
-      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143
+      Population municipale par commune (code_geo) importée depuis un fichier Excel converti en CSV. Source : https://www.data.gouv.fr/datasets/population-municipale-des-communes-france-entiere Métadonnées originales complètes : https://open.isogeo.com/s/1742fb942d7b4756b9778c3b3cbc992e/HWglEr-z4Bry_rKQOTINX9gAH4Yu0/r/39cd8e16795a45318dac9b9568c1a143.
+      On y ajoute également la population de Mayotte (inexistante dans les sources ci-dessus) en 2017 à partir d'un table CSV entièrement reconstruite tirée d'une source insee :  https://www.insee.fr/fr/statistiques/5392668?sommaire=2120838.
 
     columns:
       - name: code_geo
