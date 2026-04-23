@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { href: "/carte", label: "Carte" },
   { href: "/methodologies", label: "Méthodologie" },
   { href: "/analyses", label: "Analyses" },
+  { href: "/apropos", label: "À propos" },
 ];
 
 export function Header() {
@@ -29,7 +30,7 @@ export function Header() {
       <div className="h-full flex items-center justify-between px-8 gap-6 relative">
         <Link href="/" className="shrink-0">
           <Image
-            src="/logo-rf.png"
+            src="/logo-rf.svg"
             alt="Reclaim Finance"
             width={140}
             height={40}

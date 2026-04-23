@@ -11,10 +11,14 @@
   --color-rf-gray: #4e4e5c;
   --color-rf-gray-light: #9d9a9f;
   --color-rf-green-light: #4ead78;
+  --color-rf-subtitle: #514d81;
+  --color-rf-body: #7c7aa1;
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
