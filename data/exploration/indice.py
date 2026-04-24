@@ -18,6 +18,8 @@ def _():
     from sklearn.preprocessing import StandardScaler, MinMaxScaler,RobustScaler
     from sklearn.decomposition import PCA
     from sklearn.compose import ColumnTransformer
+    import matplotlib.gridspec as gridspec
+    from scipy import stats
 
     return (
         ColumnTransformer,
@@ -29,6 +31,7 @@ def _():
         mo,
         np,
         plt,
+        stats,
         wkt,
     )
 
@@ -255,9 +258,6 @@ def _(PCA, StandardScaler, col_selector_secheresse, gdf):
     pca_sec = PCA(n_components=2)
     pca_sec.fit(X_sec_scaled)
 
-    # print(pca_sec.explained_variance_ratio_)
-    # print(f"Total : {pca_sec.explained_variance_ratio_.sum():.1%}")
-
     w1, w2 = pca_sec.explained_variance_ratio_
     scores = pca_sec.transform(X_sec_scaled)
     score_unique = w1 * scores[:,0] + w2 * scores[:,1]
@@ -368,49 +368,134 @@ def _(col_selector_inondation, col_selector_secheresse, mo):
     return
 
 
+@app.function(hide_code=True)
+def clip_minmax(series, lower=1, upper=99):
+    p_low  = series.quantile(lower / 100)
+    p_high = series.quantile(upper / 100)
+    clipped = series.clip(lower=p_low, upper=p_high)
+    return (clipped - clipped.min()) / (clipped.max() - clipped.min())
+
+
+@app.cell
+def _(gdf_calc, mo):
+    col_selector_distrib = mo.ui.multiselect(
+        options=list(gdf_calc.select_dtypes(include='number').columns),
+        value=['score_secheresse', 'score_inondation','part_prime_budget','evolution_prime_assurance'],
+        label='Colonnes à visualiser'
+    )
+    col_selector_distrib
+    return (col_selector_distrib,)
+
+
+@app.cell
+def _():
+    return
+
+
 @app.cell(hide_code=True)
-def _(
-    MinMaxScaler,
-    StandardScaler,
-    datas_inondation,
-    gdf,
-    metropole_datas,
-    poids_prevention,
-):
+def _(col_selector_distrib, gdf_calc, mo, plt, stats):
+    colors_palette = [
+        '#1D9E75', '#534AB7', '#E24B4A', '#BA7517',
+        '#185FA5', '#993556', '#3B6D11', '#5F5E5A'
+    ]
+    colors = {col: colors_palette[i % len(colors_palette)] for i, col in enumerate(col_selector_distrib.value)}
+    # scores_test = {
+    #     'score_secheresse': gdf_calc['score_secheresse'].dropna(),
+    #     'score_inondation': gdf_calc['score_inondation'].dropna(),
+    # }
+    selected = col_selector_distrib.value
+    # Sécurité : force en liste si marimo retourne une string
+    if isinstance(selected, str):
+        selected = [selected]
+
+    scores_test = {
+        col: gdf_calc[col].dropna()
+        for col in selected
+    }
+    normalizations = {
+        'Brut (PCA)':          lambda s: s,
+        'StandardScaler':      lambda s: (s - s.mean()) / s.std(),
+        'MinMaxScaler':        lambda s: (s - s.min()) / (s.max() - s.min()),
+        'Clip p1–p99 + MinMax': clip_minmax,
+        'QuantileTransformer': lambda s: s.rank(pct=True),
+    }
+
+
+    n_rows = len(scores_test)
+    n_cols = len(normalizations)
+    # fig_test = plt.figure(figsize=(18, 10))
+    # fig_test.suptitle('Comparaison des normalisations — distributions des scores', fontsize=13, y=1.01)
+
+    # gs = gridspec.GridSpec(2, len(normalizations), figure=fig_test, hspace=0.5, wspace=0.3)
+
+    # for col_test, (norm_name, norm_fn) in enumerate(normalizations.items()):
+    #     for row, (score_name, raw) in enumerate(scores_test.items()):
+    #         ax_test = fig_test.add_subplot(gs[row, col_test])
+    #         transformed = norm_fn(raw)
+        
+    #         ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
+        
+    #         sk = stats.skew(transformed)
+    #         mn, mx = transformed.min(), transformed.max()
+        
+    #         ax_test.set_title(norm_name if row == 0 else '', fontsize=9, fontweight='bold')
+    #         ax_test.set_ylabel(score_name.replace('score_', '') if col_test == 0 else '', fontsize=9)
+    #         ax_test.tick_params(labelsize=7)
+        
+    #         ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
+    #                 transform=ax_test.transAxes, fontsize=7,
+    #                 verticalalignment='top', horizontalalignment='right',
+    #                 color='#555')
+
+    # plt.tight_layout()
+    # plt.show()
+    if n_rows == 0:
+        mo.md("Sélectionne au moins une colonne.")
+    else:
+        fig_test, axes = plt.subplots(
+            n_rows, n_cols,
+            figsize=(4 * n_cols, 3 * n_rows),
+            squeeze=False
+        )
+        for col_idx, (norm_name, norm_fn) in enumerate(normalizations.items()):
+            for row_idx, (score_name, raw) in enumerate(scores_test.items()):
+                ax_test = axes[row_idx][col_idx]
+                transformed = norm_fn(raw)
+                sk = stats.skew(transformed)
+                mn, mx = transformed.min(), transformed.max()
+
+                ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
+                ax_test.set_title(norm_name if row_idx == 0 else '', fontsize=9, fontweight='bold')
+                ax_test.set_ylabel(score_name if col_idx == 0 else '', fontsize=8)
+                ax_test.tick_params(labelsize=7)
+                ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
+                        transform=ax_test.transAxes, fontsize=7,
+                        va='top', ha='right', color='#555')
+
+        plt.tight_layout()
+        plt.show()
+    return
+
+
+@app.cell(hide_code=True)
+def _(datas_inondation, gdf, metropole_datas, poids_prevention):
     gdf_calc = gdf.copy()
 
     gdf_calc.loc[metropole_datas.index, "score_secheresse"] = metropole_datas["score_secheresse"]
 
     gdf_calc.loc[datas_inondation.index, "score_inondation"] = datas_inondation["score_inondation"].values
 
-    # scaler_sec_minmax = MinMaxScaler()
-    # scaler_ino_minmax = MinMaxScaler()
+    gdf_calc['score_secheresse_norm'] = clip_minmax(gdf_calc['score_secheresse'])
+    gdf_calc['score_inondation_norm'] = clip_minmax(gdf_calc['score_inondation'])
 
-    # gdf_calc['score_secheresse_norm'] = scaler_sec_minmax.fit_transform(
-    #     gdf_calc[['score_secheresse']]
-    # )
+    # scaler_sec_robust = StandardScaler()
+    # scaler_ino_robust = StandardScaler()
 
-    # gdf_calc['score_inondation_norm'] = scaler_ino_minmax.fit_transform(
-    #     gdf_calc[['score_inondation']]
-    # )
-    # scaler_sec_stand = StandardScaler()
-    # scaler_ino_stand = StandardScaler()
+    # sec = scaler_sec_robust.fit_transform(gdf_calc[['score_secheresse']])
+    # ino = scaler_ino_robust.fit_transform(gdf_calc[['score_inondation']])
 
-    # gdf_calc['score_secheresse_norm'] = scaler_sec_stand.fit_transform(
-    #     gdf_calc[['score_secheresse']]
-    # )
-
-    # gdf_calc['score_inondation_norm'] = scaler_ino_stand.fit_transform(
-    #     gdf_calc[['score_inondation']]
-    # )
-    scaler_sec_robust = StandardScaler()
-    scaler_ino_robust = StandardScaler()
-
-    sec = scaler_sec_robust.fit_transform(gdf_calc[['score_secheresse']])
-    ino = scaler_ino_robust.fit_transform(gdf_calc[['score_inondation']])
-
-    gdf_calc['score_secheresse_norm'] = MinMaxScaler().fit_transform(sec)
-    gdf_calc['score_inondation_norm'] = MinMaxScaler().fit_transform(ino)
+    # gdf_calc['score_secheresse_norm'] = MinMaxScaler().fit_transform(sec)
+    # gdf_calc['score_inondation_norm'] = MinMaxScaler().fit_transform(ino)
 
     p = poids_prevention.value
 
@@ -421,18 +506,6 @@ def _(
         ['score_secheresse_net','score_inondation_net']
     ].mean(axis=1)
     return (gdf_calc,)
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc['score_inondation_norm'].max(),gdf_calc['score_inondation_norm'].min()
-    return
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc['score_secheresse_norm'].max(),gdf_calc['score_secheresse_norm'].min()
-    return
 
 
 @app.cell
@@ -474,6 +547,11 @@ def _(mo):
         poids_prevention_franchise,
         poids_prevention_prime_budget,
     )
+
+
+@app.cell
+def _():
+    return
 
 
 @app.cell(hide_code=True)
