@@ -29,4 +29,5 @@ dependencies = [
     "tox>=4.34.1",
     "pymupdf==1.26.7",
     "tqdm>=4.67.3",
+    "marimo>=0.23.2",
 ]

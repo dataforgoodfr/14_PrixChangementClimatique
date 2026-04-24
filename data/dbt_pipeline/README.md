@@ -292,3 +292,42 @@ uv run dbt test --select model mon_model.sql
 - Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+
+
+### Launch Marimo
+
+_(prérequis) Installer les dépendances du projet,_ en installant uv et en faisant
+```bash
+uv sync
+```
+
+_Se placer dans le dossier du projet dbt pour le faire tourner :_
+```bash
+cd data/dbt_pipeline
+```
+
+_Download dependencies :_
+```bash
+uv run dbt deps
+```
+
+_Lancer le seed :_
+```bash
+uv run dbt seed
+```
+
+_Lancer le dbt (run sans tests) :_
+```bash
+uv run dbt run
+```
+
+_Se placer à la racine du projet puis aller dans marimo :_
+```bash
+cd ../../
+```
+
+_Lancer marimo :_
+```bash
+uv run marimo edit data/exploration/indice.py
+```
+
