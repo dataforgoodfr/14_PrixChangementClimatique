@@ -247,6 +247,12 @@ def _(mo):
     return
 
 
+@app.cell
+def _(col_selector_secheresse):
+    col_selector_secheresse
+    return
+
+
 @app.cell(hide_code=True)
 def _(PCA, StandardScaler, col_selector_secheresse, gdf):
     selected_cols = col_selector_secheresse.value
@@ -255,15 +261,15 @@ def _(PCA, StandardScaler, col_selector_secheresse, gdf):
     scaler_sec = StandardScaler()
     X_sec_scaled = scaler_sec.fit_transform(metropole_datas[selected_cols])
 
-    pca_sec = PCA(n_components=2)
+    pca_sec = PCA(n_components=1)
     pca_sec.fit(X_sec_scaled)
 
-    w1, w2 = pca_sec.explained_variance_ratio_
+    # w1, w2 = pca_sec.explained_variance_ratio_
     scores = pca_sec.transform(X_sec_scaled)
-    score_unique = w1 * scores[:,0] + w2 * scores[:,1]
+    # score_unique = w1 * scores[:,0] + w2 * scores[:,1]
 
-    metropole_datas['score_secheresse'] = score_unique
-    return metropole_datas, selected_cols
+    metropole_datas['score_secheresse'] = scores
+    return metropole_datas, pca_sec, selected_cols
 
 
 @app.cell(hide_code=True)
@@ -281,6 +287,32 @@ def _(metropole_datas, np, plt, selected_cols):
     cbar = fig.colorbar(cax, ax=ax)
     cbar.set_label("Corrélation")
     plt.show()
+    return
+
+
+@app.cell
+def _(selected_cols):
+    print(selected_cols)
+    return
+
+
+@app.cell
+def _(pca_sec):
+    print(pca_sec.components_)
+    # print(pca_sec.feature_names_in_)
+    return
+
+
+@app.cell
+def _(pca_sec):
+    print(pca_sec.explained_variance_ratio_)
+    print(f"Total : {pca_sec.explained_variance_ratio_.sum():.1%}")
+    return
+
+
+@app.cell
+def _(col_selector_inondation):
+    col_selector_inondation
     return
 
 
@@ -328,7 +360,7 @@ def _(ColumnTransformer, PCA, StandardScaler, col_selector_inondation, gdf):
     score_unique_ino = w1_ino * scores_ino[:,0] + w2_ino * scores_ino[:,1]
 
     datas_inondation['score_inondation'] = score_unique_ino
-    return datas_inondation, pca_ino, selected_cols_inondation
+    return datas_inondation, pca_ino, preprocessor, selected_cols_inondation
 
 
 @app.cell(hide_code=True)
@@ -353,6 +385,25 @@ def _(datas_inondation, np, plt, selected_cols_inondation):
     cbar_ino = fig_ino.colorbar(cax_ino, ax=ax_ino)
     cbar_ino.set_label("Corrélation Inondation")
     plt.show()
+    return
+
+
+@app.cell
+def _(preprocessor):
+    print(preprocessor.get_feature_names_out())
+    return
+
+
+@app.cell
+def _(pca_ino):
+    print(pca_ino.components_)
+    return
+
+
+@app.cell
+def _(pca_ino):
+    print(pca_ino.explained_variance_ratio_)
+    print(f"Total : {pca_ino.explained_variance_ratio_.sum():.1%}")
     return
 
 
@@ -432,16 +483,16 @@ def _(col_selector_distrib, gdf_calc, mo, plt, stats):
     #     for row, (score_name, raw) in enumerate(scores_test.items()):
     #         ax_test = fig_test.add_subplot(gs[row, col_test])
     #         transformed = norm_fn(raw)
-        
+
     #         ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
-        
+
     #         sk = stats.skew(transformed)
     #         mn, mx = transformed.min(), transformed.max()
-        
+
     #         ax_test.set_title(norm_name if row == 0 else '', fontsize=9, fontweight='bold')
     #         ax_test.set_ylabel(score_name.replace('score_', '') if col_test == 0 else '', fontsize=9)
     #         ax_test.tick_params(labelsize=7)
-        
+
     #         ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
     #                 transform=ax_test.transAxes, fontsize=7,
     #                 verticalalignment='top', horizontalalignment='right',
@@ -509,6 +560,12 @@ def _(datas_inondation, gdf, metropole_datas, poids_prevention):
 
 
 @app.cell
+def _(col_selector_score_expo):
+    col_selector_score_expo
+    return
+
+
+@app.cell
 def _(carte_continue, col_selector_score_expo, gdf_calc):
     carte_continue(gdf_calc, col_selector_score_expo.value)
     return
@@ -566,16 +623,18 @@ def _(
     ppb = poids_prevention_prime_budget.value
     pep = poids_prevention_evolution_prime.value
     pf = poids_prevention_franchise.value
+    pna = 1 - pep - ppb
     mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise])
     gdf_calc['part_arretes_non_reco'] = (gdf_calc['nb_total_arretes'] - gdf_calc['nb_total_arretes_recon'])/gdf_calc['nb_total_arretes']
     # scaler = StandardScaler()
+    gdf_calc['part_arretes_non_reco'] = gdf_calc['part_arretes_non_reco'].fillna(1)
     gdf_calc_assurance  = gdf_calc.copy()
 
     # 'part_prime_budget', 'evolution_prime_assurance'
     # 'franchise_norm'
 
     for col_ in ['part_prime_budget', 'evolution_prime_assurance']:
-        # low = gdf_calc_assurance[col_].quantile(0.01)
+        low = gdf_calc_assurance[col_].quantile(0.01)
         high = gdf_calc_assurance[col_].quantile(0.99)
         gdf_calc_assurance[col_ + '_clipped'] = gdf_calc_assurance[col_].clip(gdf_calc_assurance[col_].min(), high)
 
@@ -592,11 +651,16 @@ def _(
     gdf_calc_assurance['score_assurance'] = (
         pep * gdf_calc_assurance['evolution_prime_assurance_clipped_norm'] +
          ppb* gdf_calc_assurance['part_prime_budget_clipped_norm']
-    )
+        + pna * gdf_calc_assurance['part_arretes_non_reco'])
     gdf_calc_assurance['multiple_franchise_last'] = gdf_calc_assurance['multiple_franchise_last'].fillna(1)
     gdf_calc_assurance['score_assurance'] += (
          pf*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
     return (gdf_calc_assurance,)
+
+
+@app.cell
+def _():
+    return
 
 
 @app.cell
@@ -672,8 +736,8 @@ def _(MinMaxScaler, gdf_calc_assurance, np, poids_prevention_dettes):
     cols_eco = ['depenses_per_pop', 'ratio_dettes_depenses']
 
     for cols_ in cols_eco:
-        low_ = gdf_calc_eco[cols_].quantile(0.05)
-        high_ = gdf_calc_eco[cols_].quantile(0.95)
+        low_ = gdf_calc_eco[cols_].quantile(0.1)
+        high_ = gdf_calc_eco[cols_].quantile(0.99)
         gdf_calc_eco[cols_ + '_clip'] = gdf_calc_eco[cols_].clip(low_, high_)
 
     scaler = MinMaxScaler()
