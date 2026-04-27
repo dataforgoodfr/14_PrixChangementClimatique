@@ -4,11 +4,17 @@ import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Panel } from "@/components/core/panel";
 import { Button } from "@/components/ui/button";
-import { KpiStatCard } from "@/components/core/rf-kpi-stat-card";
+import { IndicateurStatCard } from "@/components/core/rf-indicateur-stat-card";
 import { Legend } from "@/components/core/rf-legend";
-import { KPISelector } from "@/components/core/rf-kpi-selector";
+import { IndicateurSelector } from "@/components/core/rf-indicateur-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
-import { useMapContext, type KpiField } from "@/contexts/map-context";
+import type { Map as MaplibreMap } from "maplibre-gl";
+import { useQueryState, parseAsStringLiteral } from "nuqs";
+import {
+  INDICATEUR_VALUES,
+  DEFAULT_INDICATEUR,
+  type IndicateurField,
+} from "@/lib/types/indicateur";
 import {
   IndiceVulnerabiliteNiveauIcon,
   ScoreGeorisqueIcon,
@@ -17,10 +23,19 @@ import {
   ScoreAssuranceIcon,
   type IconComponent,
 } from "@/components/icons";
+import { VulnerabiliteFilters } from "@/components/filters/kpi-filters/vulnerabilite-filters";
+import { ExpositionFilters } from "@/components/filters/kpi-filters/exposition-filters";
+import { PreventionFilters } from "@/components/filters/kpi-filters/prevention-filters";
+import { EconomiqueFilters } from "@/components/filters/kpi-filters/economique-filters";
+import { AssuranceFilters } from "@/components/filters/kpi-filters/assurance-filters";
 
-// ─── KPI options ──────────────────────────────────────────────────────────────
+// ─── Indicateur options ───────────────────────────────────────────────────────
 
-const KPI_OPTIONS: { value: KpiField; label: string; Icon: IconComponent }[] = [
+const INDICATEUR_OPTIONS: {
+  value: IndicateurField;
+  label: string;
+  Icon: IconComponent;
+}[] = [
   {
     value: "indice_vulnerabilite_niveau",
     label: "Vulnérabilité",
@@ -39,15 +54,10 @@ const KPI_OPTIONS: { value: KpiField; label: string; Icon: IconComponent }[] = [
   },
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
-import { VulnerabiliteFilters } from "@/components/filters/kpi-filters/vulnerabilite-filters";
-import { ExpositionFilters } from "@/components/filters/kpi-filters/exposition-filters";
-import { PreventionFilters } from "@/components/filters/kpi-filters/prevention-filters";
-import { EconomiqueFilters } from "@/components/filters/kpi-filters/economique-filters";
-import { AssuranceFilters } from "@/components/filters/kpi-filters/assurance-filters";
 
 // ─── Filter components map ────────────────────────────────────────────────────
 
-const FILTER_COMPONENTS: Record<KpiField, React.ComponentType> = {
+const FILTER_COMPONENTS: Record<IndicateurField, React.ComponentType> = {
   indice_vulnerabilite_niveau: VulnerabiliteFilters,
   score_georisque: ExpositionFilters,
   indice_vulnerabilite: PreventionFilters,
@@ -61,15 +71,19 @@ interface FiltersPanelProps {
   isOpen: boolean;
   onClose: () => void;
   onToggle: () => void;
+  map?: MaplibreMap;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
-  const { kpi, setKpi } = useMapContext();
+export function FiltersPanel({ isOpen, onClose, onToggle, map }: FiltersPanelProps) {
+  const [indicateur, setIndicateur] = useQueryState(
+    "indicateur",
+    parseAsStringLiteral(INDICATEUR_VALUES).withDefault(DEFAULT_INDICATEUR),
+  );
   const [filtersOpen, setFiltersOpen] = useState(true);
 
-  const ActiveFilters = FILTER_COMPONENTS[kpi];
+  const ActiveFilters = FILTER_COMPONENTS[indicateur];
 
   return (
     <Panel isOpen={isOpen} onClose={onClose} dir="rtl">
@@ -80,27 +94,27 @@ export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
       <Panel.Content>
         {/* Stat cards */}
         <div className="grid grid-cols-2 gap-2 px-4 pt-4 pb-8 shadow-lg/5">
-          <KpiStatCard label="Communes" value="2 252" total="36 529" />
-          <KpiStatCard
+          <IndicateurStatCard label="Communes" value="2 252" total="36 529" />
+          <IndicateurStatCard
             label="Habitants concernés"
             value="161 343"
             total="70M"
           />
         </div>
 
-        {/* Exploration / KPI selector */}
+        {/* Exploration / indicateur selector */}
         <div className="px-4 pt-5 pb-8 border-b-2 border-b-neutral-100">
           <p className="text-sm font-semibold text-gray-700 mb-3">
             Exploration
           </p>
           <div className="grid grid-cols-5 gap-2">
-            {KPI_OPTIONS.map(({ value, label, Icon }) => (
-              <KPISelector
+            {INDICATEUR_OPTIONS.map(({ value, label, Icon }) => (
+              <IndicateurSelector
                 key={value}
                 label={label}
                 icon={Icon}
-                active={kpi === value}
-                onClick={() => setKpi(value)}
+                active={indicateur === value}
+                onClick={() => setIndicateur(value)}
               />
             ))}
           </div>
@@ -144,7 +158,7 @@ export function FiltersPanel({ isOpen, onClose, onToggle }: FiltersPanelProps) {
           >
             <SlidersHorizontal className="size-5" />
           </Button>
-          <MapZoomControl />
+          <MapZoomControl map={map} />
         </div>
         <Legend />
       </Panel.Controls>

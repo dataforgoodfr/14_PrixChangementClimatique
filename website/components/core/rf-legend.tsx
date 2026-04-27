@@ -1,9 +1,14 @@
 "use client";
 
-import { useMapContext, type KpiField } from "@/contexts/map-context";
+import { useQueryState, parseAsStringLiteral } from "nuqs";
+import {
+  INDICATEUR_VALUES,
+  DEFAULT_INDICATEUR,
+  type IndicateurField,
+} from "@/lib/types/indicateur";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface KpiMeta {
+interface IndicateurMeta {
   title: string;
   labelMin: string;
   labelMax: string;
@@ -11,7 +16,7 @@ interface KpiMeta {
   discrete?: { color: string }[];
 }
 
-const KPI_META: Record<KpiField, KpiMeta> = {
+const INDICATEUR_META: Record<IndicateurField, IndicateurMeta> = {
   indice_vulnerabilite_niveau: {
     title: "Niveau de vulnérabilité",
     labelMin: "Peu vulnérable",
@@ -52,8 +57,11 @@ const KPI_META: Record<KpiField, KpiMeta> = {
 };
 
 export function Legend() {
-  const { kpi } = useMapContext();
-  const meta = KPI_META[kpi];
+  const [indicateur] = useQueryState(
+    "indicateur",
+    parseAsStringLiteral(INDICATEUR_VALUES).withDefault(DEFAULT_INDICATEUR),
+  );
+  const meta = INDICATEUR_META[indicateur];
 
   return (
     <Card

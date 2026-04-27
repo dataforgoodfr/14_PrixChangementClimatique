@@ -1,12 +1,12 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
-interface KpiStatCardProps {
+interface IndicateurStatCardProps {
   label: string;
   value: string;
   total: string;
 }
 
-export function KpiStatCard({ label, value, total }: KpiStatCardProps) {
+export function IndicateurStatCard({ label, value, total }: IndicateurStatCardProps) {
   return (
     <Card className="flex flex-col gap-0.5 p-3 bg-white rounded-lg shadow-md">
       <CardTitle className="text-xs uppercase tracking-wide text-gray-500 font-medium">

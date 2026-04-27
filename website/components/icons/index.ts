@@ -4,7 +4,7 @@ export { ExpositionIcon } from "./ExpositionIcon";
 export { PreventionIcon } from "./PreventionIcon";
 export { VulnerabiliteIcon } from "./VulnerabiliteIcon";
 
-// KPI-named aliases
+// Indicateur-named aliases
 export { VulnerabiliteIcon as IndiceVulnerabiliteNiveauIcon } from "./VulnerabiliteIcon";
 export { ExpositionIcon as ScoreGeorisqueIcon } from "./ExpositionIcon";
 export { PreventionIcon as IndiceVulnerabiliteIcon } from "./PreventionIcon";

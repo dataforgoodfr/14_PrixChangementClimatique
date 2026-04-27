@@ -6,13 +6,15 @@ import {
   ButtonGroup,
   ButtonGroupSeparator,
 } from "@/components/ui/button-group";
-import { useMapContext } from "@/contexts/map-context";
+import type { Map as MaplibreMap } from "maplibre-gl";
 
-export function MapZoomControl() {
-  const { mapRef } = useMapContext();
+interface MapZoomControlProps {
+  map?: MaplibreMap;
+}
 
-  const zoomIn = () => mapRef.current?.getMap()?.zoomIn();
-  const zoomOut = () => mapRef.current?.getMap()?.zoomOut();
+export function MapZoomControl({ map }: MapZoomControlProps) {
+  const zoomIn = () => map?.zoomIn();
+  const zoomOut = () => map?.zoomOut();
 
   return (
     <div className="rounded-lg bg-white shadow-md overflow-hidden my-6">

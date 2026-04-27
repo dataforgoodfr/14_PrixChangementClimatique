@@ -99,10 +99,10 @@ import {
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
-import { KpiStatCard } from "@/components/core/rf-kpi-stat-card";
-import { KPISelector } from "@/components/core/rf-kpi-selector";
+import { IndicateurStatCard } from "@/components/core/rf-indicateur-stat-card";
+import { IndicateurSelector } from "@/components/core/rf-indicateur-selector";
 import { Legend } from "@/components/core/rf-legend";
-import { MapProvider, type KpiField } from "@/contexts/map-context";
+import { type IndicateurField } from "@/lib/types/indicateur";
 import {
   IndiceVulnerabiliteNiveauIcon,
   ScoreGeorisqueIcon,
@@ -124,8 +124,8 @@ export function ComponentExample() {
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
-      <KpiStatCardExample />
-      <KPISelectorExample />
+      <IndicateurStatCardExample />
+      <IndicateurSelectorExample />
       <LegendExample />
       <RecognitionRequestExample />
     </ExampleWrapper>
@@ -600,18 +600,18 @@ function VulnerabilityIndexExample() {
   );
 }
 
-function KpiStatCardExample() {
+function IndicateurStatCardExample() {
   return (
-    <Example title="KpiStatCard" className="gap-4">
+    <Example title="IndicateurStatCard" className="gap-4">
       <div className="grid grid-cols-2 gap-2 w-full">
-        <KpiStatCard label="Communes" value="2 252" total="36 529" />
-        <KpiStatCard label="Habitants concernés" value="161 343" total="70M" />
+        <IndicateurStatCard label="Communes" value="2 252" total="36 529" />
+        <IndicateurStatCard label="Habitants concernés" value="161 343" total="70M" />
       </div>
     </Example>
   );
 }
 
-const KPI_DEMO_OPTIONS: { value: KpiField; label: string; Icon: IconComponent }[] = [
+const INDICATEUR_DEMO_OPTIONS: { value: IndicateurField; label: string; Icon: IconComponent }[] = [
   { value: "indice_vulnerabilite_niveau", label: "Vulnérabilité", Icon: IndiceVulnerabiliteNiveauIcon },
   { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
   { value: "indice_vulnerabilite", label: "Prévention", Icon: IndiceVulnerabiliteIcon },
@@ -619,18 +619,18 @@ const KPI_DEMO_OPTIONS: { value: KpiField; label: string; Icon: IconComponent }[
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
 
-function KPISelectorExample() {
-  const [activeKpi, setActiveKpi] = useState<KpiField>("indice_vulnerabilite_niveau");
+function IndicateurSelectorExample() {
+  const [activeIndicateur, setActiveIndicateur] = useState<IndicateurField>("indice_vulnerabilite_niveau");
   return (
-    <Example title="KPISelector">
+    <Example title="IndicateurSelector">
       <div className="grid grid-cols-5 gap-2 w-full">
-        {KPI_DEMO_OPTIONS.map(({ value, label, Icon }) => (
-          <KPISelector
+        {INDICATEUR_DEMO_OPTIONS.map(({ value, label, Icon }) => (
+          <IndicateurSelector
             key={value}
             label={label}
             icon={Icon}
-            active={activeKpi === value}
-            onClick={() => setActiveKpi(value)}
+            active={activeIndicateur === value}
+            onClick={() => setActiveIndicateur(value)}
           />
         ))}
       </div>
@@ -641,9 +641,7 @@ function KPISelectorExample() {
 function LegendExample() {
   return (
     <Example title="Legend" className="items-center justify-center gap-4">
-      <MapProvider>
-        <Legend />
-      </MapProvider>
+      <Legend />
     </Example>
   );
 }

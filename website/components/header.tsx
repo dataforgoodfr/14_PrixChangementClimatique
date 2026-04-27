@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button";
 const NAV_LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/carte", label: "Carte" },
-  { href: "/methodologies", label: "Méthodologie" },
-  { href: "/analyses", label: "Analyses" },
+  { href: "/methodologie", label: "Méthodologie" },
+  { href: "/apropos", label: "À propos" },
 ];
 
 export function Header() {
@@ -29,7 +29,7 @@ export function Header() {
       <div className="h-full flex items-center justify-between px-8 gap-6 relative">
         <Link href="/" className="shrink-0">
           <Image
-            src="/logo-rf.png"
+            src="/logo-rf.svg"
             alt="Reclaim Finance"
             width={140}
             height={40}
@@ -63,7 +63,7 @@ export function Header() {
           type="button"
           variant="outline"
           aria-labelledby="Menu Toggle Button"
-          className="size-8"
+          className="size-8 lg:hidden"
           onClick={toggleMenu}
         >
           {isMenuOpen ? (

@@ -4,19 +4,19 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { IconComponent } from "@/components/icons";
 
-interface KPISelectorProps {
+interface IndicateurSelectorProps {
   label: string;
   icon: IconComponent;
   active?: boolean;
   onClick: () => void;
 }
 
-export function KPISelector({
+export function IndicateurSelector({
   label,
   icon: Icon,
   active = false,
   onClick,
-}: KPISelectorProps) {
+}: IndicateurSelectorProps) {
   return (
     <div className="flex flex-col items-center gap-1.5">
       <Button
