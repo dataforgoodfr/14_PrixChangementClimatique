@@ -37,16 +37,10 @@ export function DownloadCsvButton({
   return (
     <button
       onClick={handleDownload}
-      className={`flex items-center justify-center gap-1 h-6 rounded-lg border-[1.2px] border-[var(--color-rf-button-border)] px-2 py-1 text-xs font-medium whitespace-nowrap cursor-pointer transition-all hover:border-[var(--color-rf-button-icon)] ${className || ""}`}
-      style={{
-        backgroundColor: "var(--color-rf-button-bg)",
-      }}
+      className={`flex items-center justify-center gap-1 h-6 rounded-lg border-[1.2px] border-rf-button-border bg-rf-button-bg px-2 py-1 text-xs font-medium whitespace-nowrap cursor-pointer transition-all hover:border-rf-button-icon ${className || ""}`}
     >
-      <Download
-        className="size-4"
-        style={{ color: "var(--color-rf-button-icon)" }}
-      />
-      <span style={{ color: "var(--color-rf-gray-light)" }}>Download CSV</span>
+      <Download className="size-4 text-rf-button-icon " />
+      <span className="text-rf-gray-light">Download CSV</span>
     </button>
   );
 }
