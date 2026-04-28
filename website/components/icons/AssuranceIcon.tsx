@@ -1,9 +1,4 @@
-interface IconProps {
-  width?: number;
-  height?: number;
-  color?: string;
-  className?: string;
-}
+import type { IconProps } from "./types";
 
 export function AssuranceIcon({
   width = 26,
