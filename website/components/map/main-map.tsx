@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Map,
   NavigationControl,
@@ -9,17 +9,20 @@ import {
   Source,
   type ViewStateChangeEvent,
   type MapRef,
+  type ViewState,
 } from "@vis.gl/react-maplibre";
 import { Protocol } from "pmtiles";
 import maplibregl, { MapMouseEvent, MapGeoJSONFeature } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { FiltersPanel } from "@/components/map/filters-panel";
 import { FeatureDetailPanel } from "@/components/map/feature-detail-panel";
-import { MapFeature, MapProvider, useMapContext } from "@/contexts/map-context";
 import {
   RFCommuneSearchBox,
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
+import { useQueryState } from "nuqs";
+import useSWR from "swr";
+import { Commune } from "@/lib/types/communes";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -84,10 +87,32 @@ function CommunesLayer() {
   );
 }
 
+// ─── Initial state ────────────────────────────────────────────────────────────
+
+/** Initial is set to display all the France Métropolitaine
+ * (TODO: add rapid navigation to DROMs) */
+export const INITIAL_VIEW_STATE: ViewState = {
+  longitude: 2.3522,
+  latitude: 46.5,
+  zoom: 5,
+  bearing: 0,
+  pitch: 0,
+  padding: { top: 0, bottom: 0, left: 0, right: 0 },
+};
+
 // ─── Map Canvas: Here is the main map canvas component that renders the map and handles interactions.  ──────────────
 
-function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
-  const { mapRef, viewState, setViewState, selectFeature } = useMapContext();
+function MapCanvas({
+  isFiltersPanelOpen,
+  setCommune,
+  onMapLoaded,
+}: {
+  isFiltersPanelOpen: boolean;
+  setCommune: (value: string | null) => void;
+  onMapLoaded: (map: ReturnType<MapRef["getMap"]>) => void;
+}) {
+  const [viewState, setViewState] = useState<ViewState>(INITIAL_VIEW_STATE);
+  const mapRef = useRef<MapRef | null>(null);
 
   const [hoverInfo, setHoverInfo] = useState<{
     longitude: number;
@@ -126,21 +151,10 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
     (e: MapMouseEvent & { features?: MapGeoJSONFeature[] }) => {
       const f = e.features?.[0];
       if (f) {
-        const map = mapRef.current?.getMap();
-        const { lon, lat } = JSON.parse(f.properties.geo_point_2_d);
-        if (map) {
-          map.flyTo({
-            center: [lon, lat],
-            zoom: 12,
-            offset: [400, 0],
-            duration: 1000,
-          });
-        }
-        console.log(f.properties);
-        selectFeature(f.properties as MapFeature);
+        setCommune(f.properties.code_insee);
       }
     },
-    [selectFeature, mapRef],
+    [setCommune],
   );
 
   const handleCursorEnter = useCallback((e: MapMouseEvent) => {
@@ -149,7 +163,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
 
   return (
     <Map
-      ref={mapRef as React.RefObject<MapRef>}
+      ref={mapRef}
       {...viewState}
       onMove={handleMove}
       style={{ width: "100%", height: "100%" }}
@@ -159,6 +173,7 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
       onMouseLeave={() => setHoverInfo(null)}
       onClick={handleClick}
       onMouseEnter={handleCursorEnter}
+      onLoad={() => onMapLoaded(mapRef.current!.getMap())}
     >
       <NavigationControl
         position="top-right"
@@ -184,67 +199,55 @@ function MapCanvas({ isFiltersPanelOpen }: { isFiltersPanelOpen: boolean }) {
 
 function MainMap() {
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const { mapRef, selectFeature, clearSelectedFeature, selectedFeature } =
-    useMapContext();
+  const [map, setMap] = useState<ReturnType<MapRef["getMap"]>>();
+  const [commune, setCommune] = useQueryState("commune");
+
+  const { data } = useSWR<Commune>(
+    commune ? `/api/communes?code=${commune}` : null,
+    { keepPreviousData: true },
+  );
+
+  const selectedCommune = commune && data ? data : null;
+
+  useEffect(() => {
+    if (!map || !selectedCommune?.geo_point_2_d) return;
+
+    // 1. Fly vers la commune pour charger les tuiles
+    const { lon, lat } = JSON.parse(selectedCommune.geo_point_2_d);
+    map.flyTo({
+      center: [lon, lat],
+      zoom: 12,
+      offset: [400, 0],
+      duration: 1000,
+    });
+  }, [map, selectedCommune]);
 
   const selectCommune = useCallback(
     (result: SearchCommuneResult | undefined) => {
-      const map = mapRef.current?.getMap();
-      if (!result) {
-        clearSelectedFeature();
-        return;
-      }
-      if (!map) return;
-
-      const [lng, lat] = result.centre.coordinates;
-
-      selectFeature({
-        code_insee: result.code,
-        nom_commune: result.nom,
-      });
-
-      // 1. Fly vers la commune pour charger les tuiles
-      map.flyTo({
-        center: [lng, lat],
-        zoom: 12,
-        offset: [400, 0],
-        duration: 1000,
-      });
-
-      // 2. Une fois les tuiles chargées, query par code_geo
-      const onIdle = () => {
-        map.off("idle", onIdle);
-
-        const features = map.querySourceFeatures("communes-source", {
-          sourceLayer: "communes",
-          filter: ["==", ["get", "code_insee"], result.code],
-        });
-
-        if (features.length > 0) {
-          console.log(features[0].properties);
-          selectFeature(features[0].properties as MapFeature);
-        }
-      };
-      map.on("idle", onIdle);
+      setCommune(result?.code ?? null);
     },
-    [mapRef, selectFeature, clearSelectedFeature],
+    [setCommune],
   );
 
   return (
     <div className="relative h-[calc(100dvh-4rem)] overflow-hidden">
       {/* Map wrapper and canvas that fills the full area */}
-      <MapCanvas isFiltersPanelOpen={filtersOpen} />
+      <MapCanvas
+        isFiltersPanelOpen={filtersOpen}
+        setCommune={setCommune}
+        onMapLoaded={setMap}
+      />
 
       <div className="absolute top-8 left-4">
         <RFCommuneSearchBox
-          filterValue={selectedFeature?.nom_commune}
+          filterValue={selectedCommune?.nom_commune}
           onAddressFilter={selectCommune}
           className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
         />
       </div>
 
       {/* Left: commune detail panel – reads selectedFeature from context */}
-      <FeatureDetailPanel />
+      <FeatureDetailPanel selectedCommune={selectedCommune} />
 
       {/* Right: filter panel – toggle button rendered via Panel.Controls */}
       <FiltersPanel
@@ -257,9 +260,5 @@ function MainMap() {
 }
 
 export default function MainMapLayout() {
-  return (
-    <MapProvider>
-      <MainMap />
-    </MapProvider>
-  );
+  return <MainMap />;
 }

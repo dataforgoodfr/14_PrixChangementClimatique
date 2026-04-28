@@ -8,14 +8,29 @@
   /* Brand colors */
   --color-rf-green-dark: #043f2d;
   --color-rf-lime: #c8f069;
-  --color-rf-gray: #4e4e5c;
-  --color-rf-gray-light: #9d9a9f;
   --color-rf-green-light: #4ead78;
   --color-rf-subtitle: #514d81;
   --color-rf-body: #7c7aa1;
 
   /* Fonts */
   --font-sans: var(--font-sans);
+
+  /* Gray colors */
+  --color-rf-gray: #4e4e5c;
+  --color-rf-gray-light: #7c7aa1;
+  --color-rf-gray-lightest: #9d9a9f;
+  --color-rf-gray-darkest: #1e1b39;
+
+  /* Graph colors */
+  --color-rf-graph-1: #545b6b;
+  --color-rf-graph-2: #6a7b95;
+  --color-rf-graph-3: #829bc2;
+  --color-rf-graph-4: #a4c2e8;
+
+  /* Button colors */
+  --color-rf-button-bg: #fafbfd;
+  --color-rf-button-border: #3d85ff1a;
+  --color-rf-button-icon: #3d85ff;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -60,6 +75,18 @@
 }
 
 :root {
+  /* Custom colors also in :root for direct CSS access */
+  --color-rf-gray-light: #7c7aa1;
+  --color-rf-gray-lightest: #9d9a9f;
+  --color-rf-gray-darkest: #1e1b39;
+  --color-rf-graph-1: #545b6b;
+  --color-rf-graph-2: #6a7b95;
+  --color-rf-graph-3: #829bc2;
+  --color-rf-graph-4: #a4c2e8;
+  --color-rf-button-bg: #fafbfd;
+  --color-rf-button-border: #3d85ff1a;
+  --color-rf-button-icon: #3d85ff;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
