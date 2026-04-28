@@ -120,11 +120,10 @@ SELECT
     t.nb_total_arretes,
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
-    t.nb_total_arretes_mvt,
-    t.nb_total_arretes_meteo,
-    t.nb_total_arretes_marin,
-    t.nb_total_arretes_sism,
-    t.nb_total_arretes_autre,
+    (
+        t.nb_total_arretes_mvt + t.nb_total_arretes_meteo + t.nb_total_arretes_marin
+        + t.nb_total_arretes_sism + t.nb_total_arretes_autre
+    ) AS nb_total_arretes_autre,
     t.multiple_franchise_last,
     t.part_arretes_non_reconnus,
 
