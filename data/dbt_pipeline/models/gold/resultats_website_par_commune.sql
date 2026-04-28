@@ -15,7 +15,7 @@ WITH prime AS (
         MAX(CASE WHEN annee = 2021 THEN prime_assurance END) AS prime_assurance_2021,
         MAX(CASE WHEN annee = 2020 THEN prime_assurance END) AS prime_assurance_2020
 
-    FROM primes_par_communes
+    FROM {{ ref('primes_par_communes') }}
     WHERE annee BETWEEN 2020 AND 2024
     GROUP BY code_geo
 ),
@@ -27,7 +27,12 @@ ccr_totals AS (
         SUM(nb_arrete)::INTEGER AS nb_total_arretes,
         SUM(nb_arrete_ino)::INTEGER AS nb_total_arretes_ino,
         SUM(nb_arrete_sec)::INTEGER AS nb_total_arretes_sec,
-        MAX_BY(multiple_franchise, annee) AS multiple_franchise_last
+        (
+            SUM(nb_arrete_mvt)::INTEGER + SUM(nb_arrete_meteo)::INTEGER + SUM(nb_arrete_marin)::INTEGER
+            + SUM(nb_arrete_sism)::INTEGER + SUM(nb_arrete_autre)::INTEGER
+        ) AS nb_total_arretes_autre,
+        MAX_BY(multiple_franchise, annee) AS multiple_franchise_last,
+        COALESCE(SUM(nb_arrete_refus)::INTEGER / NULLIF(SUM(nb_arrete)::INTEGER, 0), 0) AS part_arretes_non_reconnus
     FROM {{ ref('ccr_stats') }}
     GROUP BY code_geo
 ),
@@ -114,7 +119,9 @@ SELECT
     t.nb_total_arretes,
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
+    t.nb_total_arretes_autre,
     t.multiple_franchise_last,
+    t.part_arretes_non_reconnus,
 
     p.prime_assurance_2024,
     p.prime_assurance_2023,
