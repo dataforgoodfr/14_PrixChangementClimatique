@@ -62,7 +62,6 @@ const FILTER_COMPONENTS: Record<IndicatorField, React.ComponentType> = {
 };
 
 // ─── Props ────────────────────────────────────────────────────────────────────
-
 interface FiltersPanelProps {
   isOpen: boolean;
   onClose: () => void;
