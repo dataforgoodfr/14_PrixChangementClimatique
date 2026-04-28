@@ -24,14 +24,14 @@ export function IndicatorSelector({
         variant="outline"
         size="icon"
         className={cn(
-          `w-16 h-16 `,
+          "size-16",
           active
             ? "border-neutral-900 bg-white hover:bg-white"
             : "border-transparent bg-neutral-100 hover:bg-neutral-200",
         )}
       >
         <Icon
-          color={active ? "oklch(52.7% 0.154 150.069)" : "oklch(55.6% 0 0)"}
+          color={active ? "var(--color-rf-green-dark)" : "var(--color-rf-gray)"}
           className="size-6"
         />
       </Button>
