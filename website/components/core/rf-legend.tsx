@@ -2,13 +2,13 @@
 
 import { useQueryState, parseAsStringLiteral } from "nuqs";
 import {
-  INDICATEUR_VALUES,
-  DEFAULT_INDICATEUR,
-  type IndicateurField,
-} from "@/lib/types/indicateur";
+  INDICATOR_VALUES,
+  DEFAULT_INDICATOR,
+  type IndicatorField,
+} from "@/lib/types/indicator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface IndicateurMeta {
+interface IndicatorMeta {
   title: string;
   labelMin: string;
   labelMax: string;
@@ -16,7 +16,7 @@ interface IndicateurMeta {
   discrete?: { color: string }[];
 }
 
-const INDICATEUR_META: Record<IndicateurField, IndicateurMeta> = {
+const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
   indice_vulnerabilite_niveau: {
     title: "Niveau de vulnérabilité",
     labelMin: "Peu vulnérable",
@@ -57,11 +57,11 @@ const INDICATEUR_META: Record<IndicateurField, IndicateurMeta> = {
 };
 
 export function Legend() {
-  const [indicateur] = useQueryState(
+  const [indicator] = useQueryState(
     "indicateur",
-    parseAsStringLiteral(INDICATEUR_VALUES).withDefault(DEFAULT_INDICATEUR),
+    parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
   );
-  const meta = INDICATEUR_META[indicateur];
+  const meta = INDICATOR_META[indicator];
 
   return (
     <Card

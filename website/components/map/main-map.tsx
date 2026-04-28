@@ -22,10 +22,10 @@ import {
 } from "@/components/core/rf-commune-searchbox";
 import { useQueryState, parseAsStringLiteral } from "nuqs";
 import {
-  INDICATEUR_VALUES,
-  DEFAULT_INDICATEUR,
-  type IndicateurField,
-} from "@/lib/types/indicateur";
+  INDICATOR_VALUES,
+  DEFAULT_INDICATOR,
+  type IndicatorField,
+} from "@/lib/types/indicator";
 import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
 
@@ -39,9 +39,9 @@ const COMMUNES_SOURCE_ID = "communes-source";
 // ─── Map Layers: Communes ──────────────
 
 function buildFillColor(
-  indicateur: IndicateurField,
+  indicator: IndicatorField,
 ): maplibregl.ExpressionSpecification {
-  if (indicateur === "indice_vulnerabilite_niveau") {
+  if (indicator === "indice_vulnerabilite_niveau") {
     return [
       "step",
       ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
@@ -56,7 +56,7 @@ function buildFillColor(
       "#B91C1C",
     ];
   }
-  if (indicateur === "score_georisque") {
+  if (indicator === "score_georisque") {
     return [
       "interpolate",
       ["linear"],
@@ -67,7 +67,7 @@ function buildFillColor(
       "#7F1D1D",
     ];
   }
-  if (indicateur === "indice_vulnerabilite") {
+  if (indicator === "indice_vulnerabilite") {
     return [
       "interpolate",
       ["linear"],
@@ -78,7 +78,7 @@ function buildFillColor(
       "#7F1D1D",
     ];
   }
-  if (indicateur === "score_economique") {
+  if (indicator === "score_economique") {
     return [
       "interpolate",
       ["linear"],
@@ -102,9 +102,9 @@ function buildFillColor(
 }
 
 function CommunesLayer() {
-  const [indicateur] = useQueryState(
+  const [indicator] = useQueryState(
     "indicateur",
-    parseAsStringLiteral(INDICATEUR_VALUES).withDefault(DEFAULT_INDICATEUR),
+    parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
   );
 
   return (
@@ -119,7 +119,7 @@ function CommunesLayer() {
         type="fill"
         source-layer="communes"
         paint={{
-          "fill-color": buildFillColor(indicateur),
+          "fill-color": buildFillColor(indicator),
           "fill-opacity": 0.7,
         }}
       />

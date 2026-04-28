@@ -4,17 +4,17 @@ import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Panel } from "@/components/core/panel";
 import { Button } from "@/components/ui/button";
-import { IndicateurStatCard } from "@/components/core/rf-indicateur-stat-card";
+import { IndicatorStatCard } from "@/components/core/rf-indicator-stat-card";
 import { Legend } from "@/components/core/rf-legend";
-import { IndicateurSelector } from "@/components/core/rf-indicateur-selector";
+import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
 import type { Map as MaplibreMap } from "maplibre-gl";
 import { useQueryState, parseAsStringLiteral } from "nuqs";
 import {
-  INDICATEUR_VALUES,
-  DEFAULT_INDICATEUR,
-  type IndicateurField,
-} from "@/lib/types/indicateur";
+  INDICATOR_VALUES,
+  DEFAULT_INDICATOR,
+  type IndicatorField,
+} from "@/lib/types/indicator";
 import {
   IndiceVulnerabiliteNiveauIcon,
   ScoreGeorisqueIcon,
@@ -29,10 +29,10 @@ import { PreventionFilters } from "@/components/filters/kpi-filters/prevention-f
 import { EconomiqueFilters } from "@/components/filters/kpi-filters/economique-filters";
 import { AssuranceFilters } from "@/components/filters/kpi-filters/assurance-filters";
 
-// ─── Indicateur options ───────────────────────────────────────────────────────
+// ─── Indicator options ────────────────────────────────────────────────────────
 
-const INDICATEUR_OPTIONS: {
-  value: IndicateurField;
+const INDICATOR_OPTIONS: {
+  value: IndicatorField;
   label: string;
   Icon: IconComponent;
 }[] = [
@@ -57,7 +57,7 @@ const INDICATEUR_OPTIONS: {
 
 // ─── Filter components map ────────────────────────────────────────────────────
 
-const FILTER_COMPONENTS: Record<IndicateurField, React.ComponentType> = {
+const FILTER_COMPONENTS: Record<IndicatorField, React.ComponentType> = {
   indice_vulnerabilite_niveau: VulnerabiliteFilters,
   score_georisque: ExpositionFilters,
   indice_vulnerabilite: PreventionFilters,
@@ -77,13 +77,13 @@ interface FiltersPanelProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function FiltersPanel({ isOpen, onClose, onToggle, map }: FiltersPanelProps) {
-  const [indicateur, setIndicateur] = useQueryState(
+  const [indicator, setIndicator] = useQueryState(
     "indicateur",
-    parseAsStringLiteral(INDICATEUR_VALUES).withDefault(DEFAULT_INDICATEUR),
+    parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
   );
   const [filtersOpen, setFiltersOpen] = useState(true);
 
-  const ActiveFilters = FILTER_COMPONENTS[indicateur];
+  const ActiveFilters = FILTER_COMPONENTS[indicator];
 
   return (
     <Panel isOpen={isOpen} onClose={onClose} dir="rtl">
@@ -94,27 +94,27 @@ export function FiltersPanel({ isOpen, onClose, onToggle, map }: FiltersPanelPro
       <Panel.Content>
         {/* Stat cards */}
         <div className="grid grid-cols-2 gap-2 px-4 pt-4 pb-8 shadow-lg/5">
-          <IndicateurStatCard label="Communes" value="2 252" total="36 529" />
-          <IndicateurStatCard
+          <IndicatorStatCard label="Communes" value="2 252" total="36 529" />
+          <IndicatorStatCard
             label="Habitants concernés"
             value="161 343"
             total="70M"
           />
         </div>
 
-        {/* Exploration / indicateur selector */}
+        {/* Indicator selector */}
         <div className="px-4 pt-5 pb-8 border-b-2 border-b-neutral-100">
           <p className="text-sm font-semibold text-gray-700 mb-3">
             Exploration
           </p>
           <div className="grid grid-cols-5 gap-2">
-            {INDICATEUR_OPTIONS.map(({ value, label, Icon }) => (
-              <IndicateurSelector
+            {INDICATOR_OPTIONS.map(({ value, label, Icon }) => (
+              <IndicatorSelector
                 key={value}
                 label={label}
                 icon={Icon}
-                active={indicateur === value}
-                onClick={() => setIndicateur(value)}
+                active={indicator === value}
+                onClick={() => setIndicator(value)}
               />
             ))}
           </div>

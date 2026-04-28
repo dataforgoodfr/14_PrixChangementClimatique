@@ -99,10 +99,10 @@ import {
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
-import { IndicateurStatCard } from "@/components/core/rf-indicateur-stat-card";
-import { IndicateurSelector } from "@/components/core/rf-indicateur-selector";
+import { IndicatorStatCard } from "@/components/core/rf-indicator-stat-card";
+import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { Legend } from "@/components/core/rf-legend";
-import { type IndicateurField } from "@/lib/types/indicateur";
+import { type IndicatorField } from "@/lib/types/indicator";
 import {
   IndiceVulnerabiliteNiveauIcon,
   ScoreGeorisqueIcon,
@@ -125,8 +125,8 @@ export function ComponentExample() {
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
-      <IndicateurStatCardExample />
-      <IndicateurSelectorExample />
+      <IndicatorStatCardExample />
+      <IndicatorSelectorExample />
       <LegendExample />
       <RecognitionRequestExample />
       <CatnatTypesChartExample />
@@ -602,18 +602,18 @@ function VulnerabilityIndexExample() {
   );
 }
 
-function IndicateurStatCardExample() {
+function IndicatorStatCardExample() {
   return (
-    <Example title="IndicateurStatCard" className="gap-4">
+    <Example title="IndicatorStatCard" className="gap-4">
       <div className="grid grid-cols-2 gap-2 w-full">
-        <IndicateurStatCard label="Communes" value="2 252" total="36 529" />
-        <IndicateurStatCard label="Habitants concernés" value="161 343" total="70M" />
+        <IndicatorStatCard label="Communes" value="2 252" total="36 529" />
+        <IndicatorStatCard label="Habitants concernés" value="161 343" total="70M" />
       </div>
     </Example>
   );
 }
 
-const INDICATEUR_DEMO_OPTIONS: { value: IndicateurField; label: string; Icon: IconComponent }[] = [
+const INDICATOR_DEMO_OPTIONS: { value: IndicatorField; label: string; Icon: IconComponent }[] = [
   { value: "indice_vulnerabilite_niveau", label: "Vulnérabilité", Icon: IndiceVulnerabiliteNiveauIcon },
   { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
   { value: "indice_vulnerabilite", label: "Prévention", Icon: IndiceVulnerabiliteIcon },
@@ -621,18 +621,18 @@ const INDICATEUR_DEMO_OPTIONS: { value: IndicateurField; label: string; Icon: Ic
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
 
-function IndicateurSelectorExample() {
-  const [activeIndicateur, setActiveIndicateur] = useState<IndicateurField>("indice_vulnerabilite_niveau");
+function IndicatorSelectorExample() {
+  const [activeIndicator, setActiveIndicator] = useState<IndicatorField>("indice_vulnerabilite_niveau");
   return (
-    <Example title="IndicateurSelector">
+    <Example title="IndicatorSelector">
       <div className="grid grid-cols-5 gap-2 w-full">
-        {INDICATEUR_DEMO_OPTIONS.map(({ value, label, Icon }) => (
-          <IndicateurSelector
+        {INDICATOR_DEMO_OPTIONS.map(({ value, label, Icon }) => (
+          <IndicatorSelector
             key={value}
             label={label}
             icon={Icon}
-            active={activeIndicateur === value}
-            onClick={() => setActiveIndicateur(value)}
+            active={activeIndicator === value}
+            onClick={() => setActiveIndicator(value)}
           />
         ))}
       </div>
