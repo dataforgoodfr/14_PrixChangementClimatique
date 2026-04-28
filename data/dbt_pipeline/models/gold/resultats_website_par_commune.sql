@@ -32,7 +32,7 @@ ccr_totals AS (
             + SUM(nb_arrete_sism)::INTEGER + SUM(nb_arrete_autre)::INTEGER
         ) AS nb_total_arretes_autre,
         MAX_BY(multiple_franchise, annee) AS multiple_franchise_last,
-        IFNULL(SUM(nb_arrete_refus)::INTEGER / NULLIF(SUM(nb_arrete)::INTEGER, 0), 0) AS part_arretes_non_reconnus
+        COALESCE(SUM(nb_arrete_refus)::INTEGER / NULLIF(SUM(nb_arrete)::INTEGER, 0), 0) AS part_arretes_non_reconnus
     FROM {{ ref('ccr_stats') }}
     GROUP BY code_geo
 ),
