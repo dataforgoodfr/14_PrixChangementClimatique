@@ -30,6 +30,7 @@ def _():
         gpd,
         mo,
         np,
+        pd,
         plt,
         stats,
         wkt,
@@ -49,6 +50,41 @@ def _(duckdb, wkt):
 
 @app.cell
 def _(con):
+
+    ccr_stats = con.sql("""SELECT	* FROM dev.main.ccr_stats""").df()
+    return (ccr_stats,)
+
+
+@app.cell
+def _(ccr_stats):
+    ccr_stats['nb_arrete_autres'] = ccr_stats['nb_arrete_mvt'] + ccr_stats['nb_arrete_meteo'] +  ccr_stats['nb_arrete_marin'] + ccr_stats['nb_arrete_sism']+ ccr_stats['nb_arrete_autre']
+    return
+
+
+@app.cell
+def _():
+    # ccr_totals = ccr_stats.groupby('code_geo').agg(
+    #     nb_total_arretes_recon=('nb_arrete_recon', 'sum'),
+    #     nb_total_arretes=('nb_arrete', 'sum'),
+    #     nb_total_arretes_ino=('nb_arrete_ino', 'sum'),
+    #     nb_total_arretes_sec=('nb_arrete_sec', 'sum'),
+    #     multiple_franchise_last=('multiple_franchise', 'last')  # approximation de MAX_BY
+    # ).reset_index()
+
+    # # puis compare
+    # print(ccr_totals['nb_total_arretes'].sum())
+    # print(resultats_website_par_commune['nb_total_arretes'].sum())
+    return
+
+
+@app.cell
+def _(ccr_stats, resultats_website_par_commune):
+    resultats_website_par_commune_ = resultats_website_par_commune.merge(ccr_stats[['nb_arrete_autres','code_geo']], left_on = 'code_insee', right_on = 'code_geo')
+    return (resultats_website_par_commune_,)
+
+
+@app.cell
+def _(con):
     con.execute("""
     COPY (
         SELECT * FROM resultats_website_par_commune
@@ -60,8 +96,8 @@ def _(con):
 
 
 @app.cell
-def _(gpd, resultats_website_par_commune):
-    gdf = gpd.GeoDataFrame(resultats_website_par_commune, geometry="geometry")
+def _(gpd, resultats_website_par_commune_):
+    gdf = gpd.GeoDataFrame(resultats_website_par_commune_, geometry="geometry")
     gdf = gdf.set_crs(4326).to_crs(2154)
     gdf["code_insee"] = gdf["code_insee"].astype(str)
     return (gdf,)
@@ -81,7 +117,7 @@ def _(gdf):
     "nb_total_arretes_sec"]] = gdf[["nb_total_arretes_recon",
     "nb_total_arretes",
     "nb_total_arretes_ino",
-    "nb_total_arretes_sec"]].fillna(0)
+    "nb_total_arretes_sec","nb_arrete_autres"]].fillna(0)
     return
 
 
@@ -140,6 +176,61 @@ def _(plt):
     return (carte_continue,)
 
 
+@app.cell
+def _(plt):
+    def carte_discret(df,col_color):
+        fig = plt.figure(figsize=(20, 10))
+
+        ax_metro = fig.add_axes([0.0, 0.0, 0.65, 1.0])
+        # vmin = df[col_color].quantile(0.01)
+        # vmax = df[col_color].quantile(0.99)
+        metro = df[~df["code_insee"].str.startswith(("97","98"))]
+        colors = ['#24AD46','#B4FF5E','#FFF45E','#F5A927','#F54927']
+        metro.plot(
+            column=col_color,
+            # cmap="viridis",
+            ax=ax_metro,
+            linewidth=0.1,
+            legend=True,rasterized=True,
+            # vmin=vmin,
+            # vmax=vmax
+        )
+
+        ax_metro.set_title(col_color, fontsize=14)
+        ax_metro.set_aspect("equal")
+        ax_metro.axis("off")
+
+        droms = {
+            "Guadeloupe": ("971", [0.66, 0.75, 0.16, 0.22]),
+            "Martinique": ("972", [0.83, 0.75, 0.16, 0.22]),
+            "Guyane": ("973", [0.66, 0.50, 0.16, 0.22]),
+            "Réunion": ("974", [0.83, 0.50, 0.16, 0.22]),
+            "Mayotte": ("976", [0.74, 0.25, 0.16, 0.22]),
+        }
+
+        for name, (code, pos) in droms.items():
+            ax = fig.add_axes(pos)
+
+            drom = df[df["code_insee"].str.startswith(code)]
+
+            drom.plot(
+                column=col_color,
+                # cmap="viridis",
+                ax=ax,
+                linewidth=0.1,rasterized=True,
+                # vmin=vmin,
+                # vmax=vmax
+            )
+
+            ax.set_title(name, fontsize=9)
+            ax.axis("off")
+
+        plt.tight_layout()
+        plt.show()
+
+    return
+
+
 @app.cell(hide_code=True)
 def _(gdf, mo):
     colonnes = [
@@ -186,7 +277,7 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    poids_prevention = mo.ui.slider(0, 1, step=0.1)
+    poids_prevention = mo.ui.slider(0, 1, step=0.1,value=0.2)
     return (poids_prevention,)
 
 
@@ -428,10 +519,16 @@ def clip_minmax(series, lower=1, upper=99):
 
 
 @app.cell
+def _(gdf_calc):
+    gdf_calc.columns
+    return
+
+
+@app.cell
 def _(gdf_calc, mo):
     col_selector_distrib = mo.ui.multiselect(
         options=list(gdf_calc.select_dtypes(include='number').columns),
-        value=['score_secheresse', 'score_inondation','part_prime_budget','evolution_prime_assurance'],
+        value=['score_secheresse', 'score_inondation','part_prime_budget','evolution_prime_assurance','nb_arrete_autres'],
         label='Colonnes à visualiser'
     )
     col_selector_distrib
@@ -439,11 +536,6 @@ def _(gdf_calc, mo):
 
 
 @app.cell
-def _():
-    return
-
-
-@app.cell(hide_code=True)
 def _(col_selector_distrib, gdf_calc, mo, plt, stats):
     colors_palette = [
         '#1D9E75', '#534AB7', '#E24B4A', '#BA7517',
@@ -451,7 +543,7 @@ def _(col_selector_distrib, gdf_calc, mo, plt, stats):
     ]
     colors = {col: colors_palette[i % len(colors_palette)] for i, col in enumerate(col_selector_distrib.value)}
     # scores_test = {
-    #     'score_secheresse': gdf_calc['score_secheresse'].dropna(),
+    #     'score_secheresse': gdf_ca|lc['score_secheresse'].dropna(),
     #     'score_inondation': gdf_calc['score_inondation'].dropna(),
     # }
     selected = col_selector_distrib.value
@@ -468,7 +560,7 @@ def _(col_selector_distrib, gdf_calc, mo, plt, stats):
         'StandardScaler':      lambda s: (s - s.mean()) / s.std(),
         'MinMaxScaler':        lambda s: (s - s.min()) / (s.max() - s.min()),
         'Clip p1–p99 + MinMax': clip_minmax,
-        'QuantileTransformer': lambda s: s.rank(pct=True),
+        # 'QuantileTransformer': lambda s: s.rank(pct=True),
     }
 
 
@@ -510,6 +602,7 @@ def _(col_selector_distrib, gdf_calc, mo, plt, stats):
         )
         for col_idx, (norm_name, norm_fn) in enumerate(normalizations.items()):
             for row_idx, (score_name, raw) in enumerate(scores_test.items()):
+
                 ax_test = axes[row_idx][col_idx]
                 transformed = norm_fn(raw)
                 sk = stats.skew(transformed)
@@ -539,6 +632,7 @@ def _(datas_inondation, gdf, metropole_datas, poids_prevention):
     gdf_calc['score_secheresse_norm'] = clip_minmax(gdf_calc['score_secheresse'])
     gdf_calc['score_inondation_norm'] = clip_minmax(gdf_calc['score_inondation'])
 
+    gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_arrete_autres'])
     # scaler_sec_robust = StandardScaler()
     # scaler_ino_robust = StandardScaler()
 
@@ -555,7 +649,7 @@ def _(datas_inondation, gdf, metropole_datas, poids_prevention):
 
     gdf_calc['score_climatique_global'] = gdf_calc[
         ['score_secheresse_net','score_inondation_net']
-    ].mean(axis=1)
+    ].mean(axis=1)*0.9+0.1*gdf_calc['score_autres']
     return (gdf_calc,)
 
 
@@ -596,9 +690,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    poids_prevention_prime_budget = mo.ui.slider(0, 1, step=0.1)
-    poids_prevention_evolution_prime = mo.ui.slider(0, 1, step=0.1)
-    poids_prevention_franchise = mo.ui.slider(0, 1, step=0.05)
+    poids_prevention_prime_budget = mo.ui.slider(0, 1, step=0.1,value=0.4)
+    poids_prevention_evolution_prime = mo.ui.slider(0, 1, step=0.1,value=0.3)
+    poids_prevention_franchise = mo.ui.slider(0, 1, step=0.05,value=0.2)
     return (
         poids_prevention_evolution_prime,
         poids_prevention_franchise,
@@ -627,7 +721,7 @@ def _(
     mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise])
     gdf_calc['part_arretes_non_reco'] = (gdf_calc['nb_total_arretes'] - gdf_calc['nb_total_arretes_recon'])/gdf_calc['nb_total_arretes']
     # scaler = StandardScaler()
-    gdf_calc['part_arretes_non_reco'] = gdf_calc['part_arretes_non_reco'].fillna(1)
+    gdf_calc['part_arretes_non_reco'] = gdf_calc['part_arretes_non_reco'].fillna(0)
     gdf_calc_assurance  = gdf_calc.copy()
 
     # 'part_prime_budget', 'evolution_prime_assurance'
@@ -718,11 +812,11 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    poids_prevention_dettes = mo.ui.slider(0, 1, step=0.1)
+    poids_prevention_dettes = mo.ui.slider(0, 1, step=0.1,value=0.5)
     return (poids_prevention_dettes,)
 
 
-@app.cell(hide_code=True)
+@app.cell
 def _(MinMaxScaler, gdf_calc_assurance, np, poids_prevention_dettes):
     poids_prevention_dettes
 
@@ -732,6 +826,8 @@ def _(MinMaxScaler, gdf_calc_assurance, np, poids_prevention_dettes):
     gdf_calc_eco = gdf_calc_assurance.copy()
 
     gdf_calc_eco['depenses_per_pop'] = gdf_calc_eco['depenses_per_pop'].replace(np.inf,np.nan)
+
+
 
     cols_eco = ['depenses_per_pop', 'ratio_dettes_depenses']
 
@@ -749,6 +845,7 @@ def _(MinMaxScaler, gdf_calc_assurance, np, poids_prevention_dettes):
     )
     gdf_calc_eco['depenses_per_pop_norm'] = 1 - gdf_calc_eco['depenses_per_pop_norm']
     gdf_calc_eco['ratio_dettes_depenses_norm'] = 1 - gdf_calc_eco['ratio_dettes_depenses_norm']
+
     # dette = poids_prevention_dettes.value
     # dep = 1 - dette
 
@@ -798,7 +895,7 @@ def _(mo):
 @app.cell
 def _(mo):
     colonnes_score = [
-    'score_final','score_eco','score_assurance',
+    'Score_vulnerabilite','score_final','score_eco','score_assurance',
            'score_climatique_global','score_final'
     ]
 
@@ -851,6 +948,18 @@ def _(col_selector_score):
 @app.cell
 def _(carte_continue, col_selector_score, gdf_calc_final):
     carte_continue(gdf_calc_final, col_selector_score.value)
+    return
+
+
+@app.cell
+def _(gdf_calc_final, pd):
+    gdf_calc_final['Score_vulnerabilite'] = pd.cut(gdf_calc_final['score_final'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                         labels=[1, 2, 3, 4, 5], include_lowest=True)
+    return
+
+
+@app.cell
+def _():
     return
 
 
