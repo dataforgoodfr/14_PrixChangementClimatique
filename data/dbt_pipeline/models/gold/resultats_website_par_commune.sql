@@ -27,11 +27,10 @@ ccr_totals AS (
         SUM(nb_arrete)::INTEGER AS nb_total_arretes,
         SUM(nb_arrete_ino)::INTEGER AS nb_total_arretes_ino,
         SUM(nb_arrete_sec)::INTEGER AS nb_total_arretes_sec,
-        SUM(nb_arrete_mvt)::INTEGER AS nb_total_arretes_mvt,
-        SUM(nb_arrete_meteo)::INTEGER AS nb_total_arretes_meteo,
-        SUM(nb_arrete_marin)::INTEGER AS nb_total_arretes_marin,
-        SUM(nb_arrete_sism)::INTEGER AS nb_total_arretes_sism,
-        SUM(nb_arrete_autre)::INTEGER AS nb_total_arretes_autre,
+        (
+            SUM(nb_arrete_mvt)::INTEGER + SUM(nb_arrete_meteo)::INTEGER + SUM(nb_arrete_marin)::INTEGER
+            + SUM(nb_arrete_sism)::INTEGER + SUM(nb_arrete_autre)::INTEGER
+        ) AS nb_total_arretes_autre,
         MAX_BY(multiple_franchise, annee) AS multiple_franchise_last,
         SUM(nb_arrete_refus)::INTEGER / NULLIF(SUM(nb_arrete)::INTEGER, 0) AS part_arretes_non_reconnus
     FROM {{ ref('ccr_stats') }}
@@ -120,10 +119,7 @@ SELECT
     t.nb_total_arretes,
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
-    (
-        t.nb_total_arretes_mvt + t.nb_total_arretes_meteo + t.nb_total_arretes_marin
-        + t.nb_total_arretes_sism + t.nb_total_arretes_autre
-    ) AS nb_total_arretes_autre,
+    t.nb_total_arretes_autre,
     t.multiple_franchise_last,
     t.part_arretes_non_reconnus,
 
