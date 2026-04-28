@@ -1,11 +1,7 @@
 "use client";
 
-import { useQueryState, parseAsStringLiteral } from "nuqs";
-import {
-  INDICATOR_VALUES,
-  DEFAULT_INDICATOR,
-  type IndicatorField,
-} from "@/lib/types/indicator";
+import { useIndicator } from "@/hooks";
+import { type IndicatorField } from "@/lib/types/indicator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface IndicatorMeta {
@@ -57,10 +53,7 @@ const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
 };
 
 export function Legend() {
-  const [indicator] = useQueryState(
-    "indicateur",
-    parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
-  );
+  const [indicator] = useIndicator();
   const meta = INDICATOR_META[indicator];
 
   return (

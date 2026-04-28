@@ -9,12 +9,8 @@ import { Legend } from "@/components/core/rf-legend";
 import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
 import type { Map as MaplibreMap } from "maplibre-gl";
-import { useQueryState, parseAsStringLiteral } from "nuqs";
-import {
-  INDICATOR_VALUES,
-  DEFAULT_INDICATOR,
-  type IndicatorField,
-} from "@/lib/types/indicator";
+import { type IndicatorField } from "@/lib/types/indicator";
+import { useIndicator } from "@/hooks";
 import {
   IndiceVulnerabiliteNiveauIcon,
   ScoreGeorisqueIcon,
@@ -82,10 +78,7 @@ export function FiltersPanel({
   onToggle,
   map,
 }: FiltersPanelProps) {
-  const [indicator, setIndicator] = useQueryState(
-    "indicateur",
-    parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
-  );
+  const [indicator, setIndicator] = useIndicator();
   const [filtersOpen, setFiltersOpen] = useState(true);
 
   const ActiveFilters = FILTER_COMPONENTS[indicator];

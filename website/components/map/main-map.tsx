@@ -20,12 +20,9 @@ import {
   RFCommuneSearchBox,
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
-import { useQueryState, parseAsStringLiteral } from "nuqs";
-import {
-  INDICATOR_VALUES,
-  DEFAULT_INDICATOR,
-  type IndicatorField,
-} from "@/lib/types/indicator";
+import { useQueryState } from "nuqs";
+import { type IndicatorField } from "@/lib/types/indicator";
+import { useIndicator } from "@/hooks";
 import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
 
@@ -102,10 +99,7 @@ function buildFillColor(
 }
 
 function CommunesLayer() {
-  const [indicator] = useQueryState(
-    "indicateur",
-    parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
-  );
+  const [indicator] = useIndicator();
 
   return (
     <Source
