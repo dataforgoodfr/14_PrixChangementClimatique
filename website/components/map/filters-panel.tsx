@@ -37,7 +37,7 @@ const INDICATOR_OPTIONS: {
   Icon: IconComponent;
 }[] = [
   {
-    value: "indice_vulnerabilite_niveau",
+    value: DEFAULT_INDICATOR,
     label: "Vulnérabilité",
     Icon: IndiceVulnerabiliteNiveauIcon,
   },
@@ -76,7 +76,12 @@ interface FiltersPanelProps {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function FiltersPanel({ isOpen, onClose, onToggle, map }: FiltersPanelProps) {
+export function FiltersPanel({
+  isOpen,
+  onClose,
+  onToggle,
+  map,
+}: FiltersPanelProps) {
   const [indicator, setIndicator] = useQueryState(
     "indicateur",
     parseAsStringLiteral(INDICATOR_VALUES).withDefault(DEFAULT_INDICATOR),
