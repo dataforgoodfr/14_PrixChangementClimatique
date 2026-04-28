@@ -15,7 +15,7 @@ WITH prime AS (
         MAX(CASE WHEN annee = 2021 THEN prime_assurance END) AS prime_assurance_2021,
         MAX(CASE WHEN annee = 2020 THEN prime_assurance END) AS prime_assurance_2020
 
-    FROM primes_par_communes
+    FROM {{ ref('primes_par_communes') }}
     WHERE annee BETWEEN 2020 AND 2024
     GROUP BY code_geo
 ),
