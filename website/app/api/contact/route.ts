@@ -5,7 +5,14 @@ const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL!;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { nom, situation, email, message } = body;
+    const {
+      nom,
+      type_utilisateur,
+      email,
+      message,
+      ville,
+      assurance_climatique,
+    } = body;
 
     // Basic server-side validation
     if (!nom || !email || !message) {
@@ -26,7 +33,14 @@ export async function POST(req: NextRequest) {
     const gsRes = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nom, situation, email, message }),
+      body: JSON.stringify({
+        nom,
+        type_utilisateur,
+        email,
+        message,
+        ville,
+        assurance_climatique,
+      }),
     });
 
     const responseText = await gsRes.text();
