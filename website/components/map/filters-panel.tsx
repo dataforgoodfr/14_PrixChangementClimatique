@@ -9,7 +9,7 @@ import { Legend } from "@/components/core/rf-legend";
 import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
 import type { Map as MaplibreMap } from "maplibre-gl";
-import { type IndicatorField } from "@/lib/types/indicator";
+import { type IndicatorField, DEFAULT_INDICATOR } from "@/lib/types/indicator";
 import { useIndicator } from "@/hooks";
 import {
   IndiceVulnerabiliteNiveauIcon,
