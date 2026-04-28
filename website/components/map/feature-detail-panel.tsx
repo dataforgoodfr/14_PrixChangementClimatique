@@ -40,7 +40,6 @@ export function FeatureDetailPanel({
                 {selectedCommune?.code_departement}
               </span>
             </span>
-            Ò
           </Panel.Subtitle>
           <Panel.Subtitle>
             <span className="flex gap-2 pt-2">
