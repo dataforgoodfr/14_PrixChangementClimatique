@@ -76,11 +76,21 @@ export function Legend() {
       <CardContent>
         {meta.discrete ? (
           hasLabels ? (
-            <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${meta.discrete.length}, 1fr)` }}>
+            <div
+              className="grid gap-1.5"
+              style={{
+                gridTemplateColumns: `repeat(${meta.discrete.length}, 1fr)`,
+              }}
+            >
               {meta.discrete.map((seg, i) => (
                 <div key={i} className="flex flex-col items-center gap-1">
-                  <div className="w-full h-3 rounded-sm" style={{ backgroundColor: seg.color }} />
-                  <span className="text-xs text-gray-500 text-center leading-tight">{seg.label}</span>
+                  <div
+                    className="w-full h-3 rounded-sm"
+                    style={{ backgroundColor: seg.color }}
+                  />
+                  <span className="text-xs text-gray-500 text-center leading-tight">
+                    {seg.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -88,7 +98,11 @@ export function Legend() {
             <>
               <div className="flex rounded overflow-hidden h-3">
                 {meta.discrete.map((seg, i) => (
-                  <div key={i} className="flex-1" style={{ backgroundColor: seg.color }} />
+                  <div
+                    key={i}
+                    className="flex-1"
+                    style={{ backgroundColor: seg.color }}
+                  />
                 ))}
               </div>
               <div className="flex justify-between mt-1">
@@ -99,7 +113,10 @@ export function Legend() {
           )
         ) : (
           <>
-            <div className="h-3 rounded" style={{ background: meta.gradient }} />
+            <div
+              className="h-3 rounded"
+              style={{ background: meta.gradient }}
+            />
             <div className="flex justify-between mt-1">
               <span className="text-xs text-gray-500">{meta.labelMin}</span>
               <span className="text-xs text-gray-500">{meta.labelMax}</span>

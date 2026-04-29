@@ -607,22 +607,40 @@ function IndicatorStatCardExample() {
     <Example title="IndicatorStatCard" className="gap-4">
       <div className="grid grid-cols-2 gap-2 w-full">
         <IndicatorStatCard label="Communes" value="2 252" total="36 529" />
-        <IndicatorStatCard label="Habitants concernés" value="161 343" total="70M" />
+        <IndicatorStatCard
+          label="Habitants concernés"
+          value="161 343"
+          total="70M"
+        />
       </div>
     </Example>
   );
 }
 
-const INDICATOR_DEMO_OPTIONS: { value: IndicatorField; label: string; Icon: IconComponent }[] = [
-  { value: "indice_vulnerabilite_niveau", label: "Vulnérabilité", Icon: IndiceVulnerabiliteNiveauIcon },
+const INDICATOR_DEMO_OPTIONS: {
+  value: IndicatorField;
+  label: string;
+  Icon: IconComponent;
+}[] = [
+  {
+    value: "indice_vulnerabilite_niveau",
+    label: "Vulnérabilité",
+    Icon: IndiceVulnerabiliteNiveauIcon,
+  },
   { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
   { value: "prevention", label: "Prévention", Icon: IndiceVulnerabiliteIcon },
-  { value: "score_economique", label: "Situation économique", Icon: ScoreEconomiqueIcon },
+  {
+    value: "score_economique",
+    label: "Situation économique",
+    Icon: ScoreEconomiqueIcon,
+  },
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
 
 function IndicatorSelectorExample() {
-  const [activeIndicator, setActiveIndicator] = useState<IndicatorField>("indice_vulnerabilite_niveau");
+  const [activeIndicator, setActiveIndicator] = useState<IndicatorField>(
+    "indice_vulnerabilite_niveau",
+  );
   return (
     <Example title="IndicatorSelector">
       <div className="grid grid-cols-5 gap-2 w-full">

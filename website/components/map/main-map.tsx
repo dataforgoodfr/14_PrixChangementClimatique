@@ -67,7 +67,11 @@ function buildFillColor(
   if (indicator === "prevention") {
     return [
       "case",
-      ["all", ["==", ["get", "pprn_rga"], true], ["==", ["get", "pprn_ino"], true]],
+      [
+        "all",
+        ["==", ["get", "pprn_rga"], true],
+        ["==", ["get", "pprn_ino"], true],
+      ],
       "#2d7a3a",
       ["==", ["get", "pprn_rga"], true],
       "#92400e",

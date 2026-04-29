@@ -59,13 +59,7 @@ function PanelSubtitle({
   size?: "small" | "large";
   className?: string;
 }) {
-  return (
-    <p
-      className={cn("text-xs text-gray-500", className)}
-    >
-      {children}
-    </p>
-  );
+  return <p className={cn("text-xs text-gray-500", className)}>{children}</p>;
 }
 
 function PanelHeader({
