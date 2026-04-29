@@ -67,7 +67,7 @@ const Hero: React.FC = () => {
               <span className="mx-1 text-rf-green-light">
                 cartographie de vulnérabilité
               </span>
-              des communes face aux effets du
+              des communes face aux impacts du
               <span className="mx-1 text-rf-green-light">
                 changement climatique ?
               </span>

@@ -29,7 +29,7 @@ export function Header() {
       <div className="h-full flex items-center justify-between px-8 gap-6 relative">
         <Link href="/" className="shrink-0">
           <Image
-            src="/logo-rf.svg"
+            src="/logo-assurer-ma-ville.svg"
             alt="Reclaim Finance"
             width={140}
             height={40}
@@ -57,7 +57,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block shrink-0">
-          <RFButton title="Nous contacter" path="/" />
+          <RFButton title="Agissez pour protéger votre commune" path="/" />
         </div>
         <Button
           type="button"

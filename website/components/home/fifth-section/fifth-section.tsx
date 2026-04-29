@@ -37,12 +37,12 @@ const FifthSection: React.FC = () => {
         </div>
 
         <StatCallout
-          value={"70%"}
-          title={{ text: "", highlight: "d'augmentation" }}
+          value={"x2"}
+          title={{ text: "", highlight: "" }}
           subtitle={
             <p>
               {
-                "des dépenses d'assurance des communes françaises en moyenne entre 2020 et 2024"
+                "les dépenses d’assurance multirisque ont été multipliée par 2 en moyenne pour les communes françaises entre 2020 et 2024"
               }
             </p>
           }
