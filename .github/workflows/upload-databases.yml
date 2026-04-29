@@ -2,6 +2,10 @@ name: upload-databases
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - "data/dbt_pipeline/models/**"
   workflow_dispatch:
 
 jobs:
@@ -56,7 +60,6 @@ jobs:
 
       - name: Create website.duckdb
         run: |
-          cd data/dbt_pipeline
           uv run python data/utils/trim_website_db.py
 
       - name: Upload dev and website databases to bucket root
