@@ -25,6 +25,7 @@ import { type IndicatorField } from "@/lib/types/indicator";
 import { useIndicator } from "@/hooks";
 import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
+import { ComparisonPanel } from "@/components/map/comparison-panel";
 import { useFilters } from "../filters/filter-context";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
@@ -264,9 +265,11 @@ function MapCanvas({
 }
 
 function MainMap() {
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [map, setMap] = useState<ReturnType<MapRef["getMap"]>>();
   const [commune, setCommune] = useQueryState("commune");
+  const [compare] = useQueryState("comparaison");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [isComparisonPanelOpen, setComparisonPanelOpen] = useState(!!compare);
+  const [map, setMap] = useState<ReturnType<MapRef["getMap"]>>();
 
   const { data } = useSWR<Commune>(
     commune ? `/api/communes?code=${commune}` : null,
@@ -300,16 +303,29 @@ function MainMap() {
       {/* Map wrapper and canvas that fills the full area */}
       <MapCanvas setCommune={setCommune} onMapLoaded={setMap} />
 
-      <div className="absolute top-8 left-4">
-        <RFCommuneSearchBox
-          filterValue={selectedCommune?.nom_commune}
-          onAddressFilter={selectCommune}
-          className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
-        />
-      </div>
+      {!isComparisonPanelOpen && (
+        <div className="absolute top-8 left-4">
+          <RFCommuneSearchBox
+            filterValue={selectedCommune?.nom_commune}
+            onAddressFilter={selectCommune}
+            onCompare={() => setComparisonPanelOpen(true)}
+            placeholder="Rechercher une commune par son nom"
+            className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
+          />
+        </div>
+      )}
 
-      {/* Left: commune detail panel – reads selectedFeature from context */}
-      <FeatureDetailPanel selectedCommune={selectedCommune} />
+      {/* Left: commune detail panel */}
+      <FeatureDetailPanel
+        selectedCommune={isComparisonPanelOpen ? null : selectedCommune}
+      />
+
+      {/* Left: comparison panel */}
+      <ComparisonPanel
+        isOpen={isComparisonPanelOpen}
+        onClose={() => setComparisonPanelOpen(false)}
+        selectedCommune={selectedCommune}
+      />
 
       {/* Right: filter panel – toggle button rendered via Panel.Controls */}
       <FiltersPanel

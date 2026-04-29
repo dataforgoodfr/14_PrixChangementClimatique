@@ -55,10 +55,15 @@ export const RecognitionRequests = ({ data }: { data: CatnatResponse[] }) => {
         </div>
         <Separator orientation="vertical" className="hidden md:block" />
         <div className="w-full md:w-1/2 text-muted-foreground">
-          Due to the average rating of general equipment&#39;s end-markets, such
-          as safety equipment. 3M Co&#39;s forward-looking performance has a
-          neutral impact on its overall rating. Due to the average rating of
-          general equipment&#39;s end-markets, such as safety equipment.
+          Le maire dispose d’un délai de 24 mois après la survenue du phénomène
+          pour déposer sa demande de reconnaissance de l’état de catastrophe
+          naturelle auprès du préfet de département. Une commission
+          interministérielle est chargée de donner un avis sur chaque dossier
+          communal. Elle se prononce sur le caractère naturel et l’intensité
+          anormale du phénomène en se basant sur les expertises techniques
+          réalisées. Sur le fondement de ces avis, les ministres compétents
+          décident de la reconnaissance ou non des communes en état de
+          catastrophe naturelle.
         </div>
       </CardContent>
     </Card>

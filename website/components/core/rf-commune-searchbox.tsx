@@ -15,9 +15,10 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { Search, X } from "lucide-react";
+import { ArrowLeftRight, Search, X } from "lucide-react";
 import { ErrorMessage } from "@/components/ui/error-message";
 import useSWR from "swr";
+import { Button } from "@/components/ui/button";
 
 type QueryResult = {
   nom: string;
@@ -38,21 +39,27 @@ export type SearchCommuneResult = {
 };
 
 interface CommuneSearchBoxProps {
-  onAddressFilter: (result: SearchCommuneResult | undefined) => void;
+  onAddressFilter?: (result: SearchCommuneResult | undefined) => void;
+  onCompare?: () => void;
   filterValue?: string;
   className?: string;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
 export function RFCommuneSearchBox({
   onAddressFilter,
+  onCompare,
   filterValue,
   className,
+  disabled,
+  placeholder,
 }: CommuneSearchBoxProps) {
   const delayHandler = useRef<NodeJS.Timeout | null>(null);
   const [filterString, setFilterString] = useState("");
   const [debouncedFilter, setDebouncedFilter] = useState("");
   const [dropDownIsOpened, setDropDownOpen] = useState(false);
-  const isExternalUpdate = useRef(false);
+  const [isCommuneSelected, setCommuneSelected] = useState(false);
 
   const apiUrl = debouncedFilter
     ? `https://geo.api.gouv.fr/communes?boost=population&fields=code,nom,departement,centre&limit=20&nom=${encodeURIComponent(
@@ -69,9 +76,9 @@ export function RFCommuneSearchBox({
   // Handle commune selection from click on the map
   useEffect(() => {
     if (filterValue !== filterString) {
-      isExternalUpdate.current = true;
       setFilterString(filterValue ?? "");
       setDebouncedFilter(filterValue ?? "");
+      setCommuneSelected(!!filterValue);
     }
     // We only want this hook to execute when filterValue change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,16 +112,17 @@ export function RFCommuneSearchBox({
 
   function handleAddressSelect(commune: QueryResult) {
     setDropDownOpen(false);
-
+    setCommuneSelected(true);
     setFilterString(commune.nom);
-    onAddressFilter(commune);
+    onAddressFilter?.(commune);
   }
 
   function clearSearch() {
     setFilterString("");
     setDebouncedFilter("");
     setDropDownOpen(false);
-    onAddressFilter(undefined);
+    setCommuneSelected(false);
+    onAddressFilter?.(undefined);
   }
 
   return (
@@ -131,8 +139,9 @@ export function RFCommuneSearchBox({
             <Search size={16} className="absolute left-3 pointer-events-none" />
             <Input
               className="pl-8"
+              disabled={disabled}
               value={filterString}
-              placeholder="Rechercher une commune par son nom"
+              placeholder={placeholder}
               onChange={handleFilterChange}
               onFocus={() => {
                 if (filterString?.length >= 3) {
@@ -142,7 +151,16 @@ export function RFCommuneSearchBox({
               autoComplete="off"
               data-1p-ignore
             />
-            {filterString && (
+            {!!onCompare && isCommuneSelected && (
+              <Button
+                size="lg"
+                className="absolute right-8"
+                onClick={onCompare}
+              >
+                <ArrowLeftRight /> Comparer
+              </Button>
+            )}
+            {!disabled && filterString && (
               <button
                 onClick={clearSearch}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"

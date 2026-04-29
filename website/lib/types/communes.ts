@@ -13,7 +13,7 @@ export interface Commune {
   score_economique?: number;
   score_georisque?: number;
   score_assurance?: number;
-  indice_vulnerabilite?: number;
+  indice_vulnerabilite: number;
   indice_vulnerabilite_niveau?: number;
 
   // TRI / RGA
@@ -28,7 +28,7 @@ export interface Commune {
 
   // Budget
   ratio_dettes_depenses?: number;
-  depenses_per_pop?: number;
+  depenses_per_pop: number;
 
   // CCR
   nb_total_arretes_recon?: number;
