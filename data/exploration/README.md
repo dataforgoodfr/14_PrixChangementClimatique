@@ -58,3 +58,7 @@ L'ui de duckdb (voir la section précédente de visualisation) propose égalemen
 Installer l'extension duckdb pour les données géographiques:
 
 `uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"`
+
+
+
+uv run marimo edit indice.py
