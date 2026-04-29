@@ -27,7 +27,7 @@ const FirstSection: React.FC = () => {
           ]}
         />
         <StatCallout
-          value={"75%"}
+          value={"90%"}
           title={{ text: "des", highlight: "communes" }}
           subtitle={
             "touchées au moins une fois par une catastrophe naturelle depuis 1982"
