@@ -1,26 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Check, X } from "lucide-react";
-import clsx from "clsx";
+import { ArrowRight, Check } from "lucide-react";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import type { ContactFormData } from "@/lib/types/contact";
 
-interface FormData {
-  name: string;
-  userType: "citoyen" | "maire_ou_elu";
-  city: string;
-  insuranceQuestion?: "oui" | "non";
-  email: string;
-  message: string;
-}
-
-type FormErrors = Partial<Record<keyof FormData, boolean>>;
+type FormErrors = Partial<Record<keyof ContactFormData, boolean>>;
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     userType: "citoyen",
     city: "",
-    insuranceQuestion: "",
+    insuranceQuestion: undefined,
     email: "",
     message: "",
   });
@@ -37,80 +30,49 @@ const ContactSection = () => {
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [failed, setFailed] = useState(false);
-
-  const handleFailureWithTimeout = () => {
-    setFailed(true);
-    // Masquer l'erreur après 2 secondes
-    const timer = setTimeout(() => {
-      setFailed(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  };
-
-  const handleReset = () => {
-    setErrors({
-      name: false,
-      userType: false,
-      city: false,
-      ...(isMayor && { insuranceQuestion: false }),
-      email: false,
-      message: false,
-    });
-    setFailed(false);
-  };
 
   const handleSubmit = async () => {
     const newErrors: FormErrors = {
       name: !formData.name.trim(),
       userType: !formData.userType,
       city: !formData.city.trim(),
-      ...(isMayor && {
-        insuranceQuestion: !formData.insuranceQuestion,
-      }),
       email: !formData.email.trim(),
       message: !formData.message.trim(),
     };
+    if (isMayor) {
+      newErrors.insuranceQuestion = !formData.insuranceQuestion;
+    }
     setErrors(newErrors);
     if (Object.values(newErrors).some(Boolean)) return;
 
     setLoading(true);
     try {
-      const payload: any = {
-        nom: formData.name,
-        type_utilisateur: formData.userType,
-        ville: formData.city,
-        email: formData.email,
-        message: formData.message,
-      };
-
-      if (isMayor && formData.insuranceQuestion) {
-        payload.assurance_climatique = formData.insuranceQuestion;
-      }
-
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
 
       if (res.ok) {
         setSubmitted(true);
       } else {
-        console.error("Erreur lors de l'envoi du formulaire", await res.text());
-        handleFailureWithTimeout();
+        const errorText = await res.text();
+        console.error("Erreur lors de l'envoi du formulaire", errorText);
+        toast.error("Erreur lors de l'envoi du message. Veuillez réessayer.");
       }
     } catch (err) {
-      console.error("Erreur réseau", err);
-      handleFailureWithTimeout();
+      console.error("Erreur réseau:", err);
+      toast.error(
+        "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const inputClass = (error: boolean) =>
-    clsx(
-      "w-full bg-transparent border-b pb-3 pt-1 outline-none text-[16px] md:text-[20px] transition-colors",
+  const inputClass = (error: boolean | undefined) =>
+    cn(
+      "w-full bg-transparent border-b pb-3 pt-1 outline-none text-base md:text-xl transition-colors",
       "placeholder:transition-colors",
       error
         ? "border-red-500 text-red-500 placeholder:text-red-500"
@@ -125,14 +87,14 @@ const ContactSection = () => {
       {/* ── Titre ── */}
       <div className="flex flex-col items-center gap-3 text-center">
         <div>
-          <span className="inline-block bg-rf-green-dark text-rf-lime font-bold rotate-[-1deg] px-3 py-1 text-[32px] md:text-[44px] lg:text-[56px] leading-[110%]">
+          <span className="inline-block bg-rf-green-dark text-rf-lime font-bold rotate-[-1deg] px-3 py-1 text-2xl md:text-4xl lg:text-5xl leading-[110%]">
             Contactez-nous
           </span>
         </div>
-        <h2 className="text-rf-green-dark font-normal text-[28px] md:text-[38px] lg:text-[48px] leading-[110%]">
+        <h2 className="text-rf-green-dark font-normal text-2xl md:text-3xl lg:text-4xl leading-[110%]">
           pour agir dès maintenant
         </h2>
-        <p className="text-[#4E4E5C] text-[14px] md:text-[16px] mt-1">
+        <p className="text-[#4E4E5C] text-sm md:text-base mt-1">
           Vous êtes citoyen.ne ou élu.e, contactez-nous dès maintenant pour en
           savoir plus
         </p>
@@ -144,9 +106,12 @@ const ContactSection = () => {
           type="text"
           placeholder="Prénom / Nom"
           value={formData.name}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, name: e.target.value }))
-          }
+          onChange={(e) => {
+            setFormData((prev) => ({
+              ...prev,
+              name: (e.target as HTMLInputElement).value,
+            }));
+          }}
           className={inputClass(errors.name)}
         />
 
@@ -154,15 +119,18 @@ const ContactSection = () => {
           type="text"
           placeholder="Votre ville"
           value={formData.city}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, city: e.target.value }))
-          }
+          onChange={(e) => {
+            setFormData((prev) => ({
+              ...prev,
+              city: (e.target as HTMLInputElement).value,
+            }));
+          }}
           className={inputClass(errors.city)}
         />
 
         {/* ── Sélecteur Vous êtes: ── */}
         <div className="flex flex-col gap-2">
-          <label className="text-rf-green-dark font-medium text-[16px] md:text-[18px]">
+          <label className="text-rf-green-dark font-medium text-base md:text-lg">
             Vous êtes:
           </label>
           <div className="flex gap-6 md:gap-8">
@@ -172,12 +140,12 @@ const ContactSection = () => {
                 name="userType"
                 value="citoyen"
                 checked={formData.userType === "citoyen"}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, userType: "citoyen" }))
-                }
+                onChange={() => {
+                  setFormData((prev) => ({ ...prev, userType: "citoyen" }));
+                }}
                 className="w-5 h-5 cursor-pointer accent-rf-green-dark"
               />
-              <span className="text-[16px] md:text-[18px] text-rf-green-dark">
+              <span className="text-base md:text-lg text-rf-green-dark">
                 Citoyen.ne
               </span>
             </label>
@@ -187,12 +155,15 @@ const ContactSection = () => {
                 name="userType"
                 value="maire_ou_elu"
                 checked={formData.userType === "maire_ou_elu"}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, userType: "maire_ou_elu" }))
-                }
+                onChange={() => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    userType: "maire_ou_elu",
+                  }));
+                }}
                 className="w-5 h-5 cursor-pointer accent-rf-green-dark"
               />
-              <span className="text-[16px] md:text-[18px] text-rf-green-dark">
+              <span className="text-base md:text-lg text-rf-green-dark">
                 Maire ou élu.e
               </span>
             </label>
@@ -202,7 +173,7 @@ const ContactSection = () => {
         {/* ── Sélecteur conditionnel pour maire/élu ── */}
         {isMayor && (
           <div className="flex flex-col gap-2">
-            <label className="text-rf-green-dark font-medium text-[16px] md:text-[18px]">
+            <label className="text-rf-green-dark font-medium text-base md:text-lg">
               Votre ville est-elle assurée contre les risques climatiques ?
             </label>
             <div className="flex gap-6 md:gap-8">
@@ -212,15 +183,15 @@ const ContactSection = () => {
                   name="insuranceQuestion"
                   value="oui"
                   checked={formData.insuranceQuestion === "oui"}
-                  onChange={(e) =>
+                  onChange={() => {
                     setFormData((prev) => ({
                       ...prev,
                       insuranceQuestion: "oui",
-                    }))
-                  }
+                    }));
+                  }}
                   className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                 />
-                <span className="text-[16px] md:text-[18px] text-rf-green-dark">
+                <span className="text-base md:text-lg text-rf-green-dark">
                   Oui
                 </span>
               </label>
@@ -230,15 +201,15 @@ const ContactSection = () => {
                   name="insuranceQuestion"
                   value="non"
                   checked={formData.insuranceQuestion === "non"}
-                  onChange={(e) =>
+                  onChange={() => {
                     setFormData((prev) => ({
                       ...prev,
                       insuranceQuestion: "non",
-                    }))
-                  }
+                    }));
+                  }}
                   className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                 />
-                <span className="text-[16px] md:text-[18px] text-rf-green-dark">
+                <span className="text-base md:text-lg text-rf-green-dark">
                   Non
                 </span>
               </label>
@@ -250,20 +221,26 @@ const ContactSection = () => {
           type="email"
           placeholder="Email"
           value={formData.email}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, email: e.target.value }))
-          }
+          onChange={(e) => {
+            setFormData((prev) => ({
+              ...prev,
+              email: (e.target as HTMLInputElement).value,
+            }));
+          }}
           className={inputClass(errors.email)}
         />
         <textarea
           placeholder="Tapez ici votre message"
           value={formData.message}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, message: e.target.value }))
-          }
+          onChange={(e) => {
+            setFormData((prev) => ({
+              ...prev,
+              message: (e.target as HTMLTextAreaElement).value,
+            }));
+          }}
           rows={6}
-          className={clsx(
-            "w-full bg-transparent border p-4 outline-none resize-none text-[16px] md:text-[20px] transition-colors",
+          className={cn(
+            "w-full bg-transparent border p-4 outline-none resize-none text-base md:text-xl transition-colors",
             "placeholder:transition-colors",
             errors.message
               ? "border-red-500 text-red-500 placeholder:text-red-500"
@@ -276,13 +253,11 @@ const ContactSection = () => {
       <button
         type="button"
         onClick={handleSubmit}
-        disabled={loading || submitted || failed}
-        className={clsx(
+        disabled={loading || submitted}
+        className={cn(
           "inline-flex items-center justify-center gap-2 px-5 py-2 min-w-[160px] text-sm font-semibold border rounded-none transition-all duration-150",
           "disabled:translate-x-0 disabled:translate-y-0 disabled:cursor-default",
-          failed
-            ? "bg-red-600 text-white border-red-400 shadow-[4px_4px_0px_#f87171] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-            : "bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-lime)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 disabled:shadow-[4px_4px_0px_var(--color-rf-lime)]",
+          "bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-lime)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 disabled:shadow-[4px_4px_0px_var(--color-rf-lime)]",
         )}
       >
         {loading ? (
@@ -293,8 +268,6 @@ const ContactSection = () => {
           </span>
         ) : submitted ? (
           <Check className="w-5 h-5 animate-in zoom-in duration-300" />
-        ) : failed ? (
-          <X className="w-5 h-5 animate-in zoom-in duration-300" />
         ) : (
           <>
             Nous contacter

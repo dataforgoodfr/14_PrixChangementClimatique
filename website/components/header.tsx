@@ -61,13 +61,11 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block shrink-0">
-          <button
-            type="button"
+          <RFButton
+            as="button"
+            title="Nous contacter"
             onClick={scrollToContact}
-            className="inline-flex items-center gap-[8px] px-5 py-2 w-fit text-sm font-semibold border rounded-none transition-all duration-150 bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-lime)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-          >
-            Nous contacter
-          </button>
+          />
         </div>
         <Button
           type="button"
@@ -109,16 +107,14 @@ export function Header() {
           );
         })}
         <li>
-          <button
-            type="button"
+          <RFButton
+            as="button"
+            title="Nous contacter"
             onClick={() => {
               toggleMenu();
               scrollToContact();
             }}
-            className="inline-flex items-center gap-[8px] px-5 py-2 w-fit text-sm font-semibold border rounded-none transition-all duration-150 bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-lime)] hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-          >
-            Nous contacter
-          </button>
+          />
         </li>
       </ul>
     </header>

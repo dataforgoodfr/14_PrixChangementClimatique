@@ -1,21 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { ContactFormData, GoogleScriptPayload } from "@/lib/types/contact";
 
 const GOOGLE_SCRIPT_URL = process.env.GOOGLE_SCRIPT_URL!;
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const {
-      nom,
-      type_utilisateur,
-      email,
-      message,
-      ville,
-      assurance_climatique,
-    } = body;
+    const formData: ContactFormData = body;
 
     // Basic server-side validation
-    if (!nom || !email || !message) {
+    if (!formData.name || !formData.email || !formData.message) {
       return NextResponse.json(
         { error: "nom, email et message sont requis." },
         { status: 400 },
@@ -30,17 +24,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Convert ContactFormData (camelCase) to GoogleScriptPayload (snake_case)
+    const gsPayload: GoogleScriptPayload = {
+      nom: formData.name,
+      type_utilisateur: formData.userType,
+      email: formData.email,
+      message: formData.message,
+      ville: formData.city,
+    };
+
+    if (formData.insuranceQuestion) {
+      gsPayload.assurance_climatique = formData.insuranceQuestion;
+    }
+
     const gsRes = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        nom,
-        type_utilisateur,
-        email,
-        message,
-        ville,
-        assurance_climatique,
-      }),
+      body: JSON.stringify(gsPayload),
     });
 
     const responseText = await gsRes.text();
@@ -57,8 +57,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err) {
     console.error("Contact route error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    const errorMessage =
+      err instanceof Error ? err.message : "Unknown error occurred";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

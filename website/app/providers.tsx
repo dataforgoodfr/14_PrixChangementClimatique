@@ -2,6 +2,7 @@
 
 import { SWRConfig } from "swr";
 import type { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -32,6 +33,7 @@ export function Providers({ children }: { children: ReactNode }) {
       }}
     >
       {children}
+      <Toaster />
     </SWRConfig>
   );
 }
