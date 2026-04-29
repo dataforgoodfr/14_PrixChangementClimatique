@@ -185,7 +185,8 @@ data/dbt_pipeline/package-lock.yml
 
 # VSCode settings
 .vscode
-
+# Zed settings
+.zed
 # webstorm settings
 .idea
 

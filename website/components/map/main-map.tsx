@@ -3,10 +3,10 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Map,
-  NavigationControl,
   Popup,
   Layer,
   Source,
+  AttributionControl,
   type ViewStateChangeEvent,
   type MapRef,
   type ViewState,
@@ -21,6 +21,8 @@ import {
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
 import { useQueryState } from "nuqs";
+import { type IndicatorField } from "@/lib/types/indicator";
+import { useIndicator } from "@/hooks";
 import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
 
@@ -33,7 +35,77 @@ const COMMUNES_SOURCE_ID = "communes-source";
 
 // ─── Map Layers: Communes ──────────────
 
+function buildFillColor(
+  indicator: IndicatorField,
+): maplibregl.ExpressionSpecification {
+  if (indicator === "indice_vulnerabilite_niveau") {
+    return [
+      "step",
+      ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
+      "#518F83",
+      2,
+      "#B2A052",
+      3,
+      "#FFB74B",
+      4,
+      "#EA580D",
+      5,
+      "#B91C1C",
+    ];
+  }
+  if (indicator === "score_georisque") {
+    return [
+      "interpolate",
+      ["linear"],
+      ["coalesce", ["get", "score_georisque"], 0],
+      0,
+      "#FFF0EE",
+      1,
+      "#7F1D1D",
+    ];
+  }
+  if (indicator === "prevention") {
+    return [
+      "case",
+      [
+        "all",
+        ["==", ["get", "pprn_rga"], true],
+        ["==", ["get", "pprn_ino"], true],
+      ],
+      "#2d7a3a",
+      ["==", ["get", "pprn_rga"], true],
+      "#92400e",
+      ["==", ["get", "pprn_ino"], true],
+      "#1d4ed8",
+      "#fed7aa",
+    ];
+  }
+  if (indicator === "score_economique") {
+    return [
+      "interpolate",
+      ["linear"],
+      ["coalesce", ["get", "score_economique"], 0],
+      0,
+      "#FFF7ED",
+      1,
+      "#7C2D12",
+    ];
+  }
+  // score_assurance
+  return [
+    "interpolate",
+    ["linear"],
+    ["coalesce", ["get", "score_assurance"], 0],
+    0,
+    "#FEF2F2",
+    1,
+    "#1E3A5F",
+  ];
+}
+
 function CommunesLayer() {
+  const [indicator] = useIndicator();
+
   return (
     <Source
       id={COMMUNES_SOURCE_ID}
@@ -46,19 +118,7 @@ function CommunesLayer() {
         type="fill"
         source-layer="communes"
         paint={{
-          "fill-color": [
-            "step",
-            ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
-            "#518F83",
-            2,
-            "#B2A052",
-            3,
-            "#FFB74B",
-            4,
-            "#EA580D",
-            5,
-            "#B91C1C",
-          ],
+          "fill-color": buildFillColor(indicator),
           "fill-opacity": 0.7,
         }}
       />
@@ -86,7 +146,12 @@ function CommunesLayer() {
     </Source>
   );
 }
+// ─── Map Attribution: Custom ──────────────
 
+const CustomMapAttributions: string[] = [
+  `<a href="https://reclaimfinance.org/site/">Reclaim Finance</a>`,
+  `<a href="https://dataforgood.fr/">Data for Good</a>`,
+];
 // ─── Initial state ────────────────────────────────────────────────────────────
 
 /** Initial is set to display all the France Métropolitaine
@@ -103,11 +168,9 @@ export const INITIAL_VIEW_STATE: ViewState = {
 // ─── Map Canvas: Here is the main map canvas component that renders the map and handles interactions.  ──────────────
 
 function MapCanvas({
-  isFiltersPanelOpen,
   setCommune,
   onMapLoaded,
 }: {
-  isFiltersPanelOpen: boolean;
   setCommune: (value: string | null) => void;
   onMapLoaded: (map: ReturnType<MapRef["getMap"]>) => void;
 }) {
@@ -174,13 +237,12 @@ function MapCanvas({
       onClick={handleClick}
       onMouseEnter={handleCursorEnter}
       onLoad={() => onMapLoaded(mapRef.current!.getMap())}
+      attributionControl={false}
     >
-      <NavigationControl
-        position="top-right"
-        style={{
-          marginTop: "72px",
-          marginRight: `${isFiltersPanelOpen ? "376px" : "16px"}`,
-        }}
+      <AttributionControl
+        position="bottom-left"
+        customAttribution={CustomMapAttributions}
+        compact={true}
       />
       <CommunesLayer />
       {hoverInfo && (
@@ -232,11 +294,7 @@ function MainMap() {
   return (
     <div className="relative h-[calc(100dvh-4rem)] overflow-hidden">
       {/* Map wrapper and canvas that fills the full area */}
-      <MapCanvas
-        isFiltersPanelOpen={filtersOpen}
-        setCommune={setCommune}
-        onMapLoaded={setMap}
-      />
+      <MapCanvas setCommune={setCommune} onMapLoaded={setMap} />
 
       <div className="absolute top-8 left-4">
         <RFCommuneSearchBox
@@ -254,6 +312,7 @@ function MainMap() {
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
         onToggle={() => setFiltersOpen((v) => !v)}
+        map={map}
       />
     </div>
   );

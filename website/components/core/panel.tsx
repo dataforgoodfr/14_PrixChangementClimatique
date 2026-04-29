@@ -30,31 +30,57 @@ function usePanelContext() {
 
 function PanelTitle({
   children,
+  size = "large",
   className,
 }: {
   children: ReactNode;
+  size?: "small" | "large";
   className?: string;
 }) {
-  return <p className={cn("text-4xl font-semibold", className)}>{children}</p>;
+  return (
+    <p
+      className={cn(
+        "font-semibold text-gray-900",
+        size === "large" ? "pt-30 text-3xl" : "text-lg",
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
 }
 
-function PanelSubtitle({ children }: { children: ReactNode }) {
-  return (
-    <p className="text-base text-muted-foreground font-medium">{children}</p>
-  );
+function PanelSubtitle({
+  children,
+  size = "large",
+  className,
+}: {
+  children: ReactNode;
+  size?: "small" | "large";
+  className?: string;
+}) {
+  return <p className={cn("text-xs text-gray-500", className)}>{children}</p>;
 }
 
 function PanelHeader({
   children,
+  size = "large",
   className,
 }: {
   children: ReactNode;
+  size?: "small" | "large";
   className?: string;
 }) {
   const { onClose, showCloseButton } = usePanelContext();
   return (
-    <div className={cn("relative px-4 py-3", className)}>
-      {children}
+    <div
+      className={cn(
+        "flex items-start justify-between px-4 border-b border-gray-200 shrink-0",
+        size === "large" ? "py-3" : "py-2",
+        className,
+      )}
+    >
+      <div className="flex flex-col gap-0.5 min-w-0">{children}</div>
       {showCloseButton && (
         <button
           onClick={onClose}
@@ -115,7 +141,7 @@ function Panel({
   isOpen,
   onClose,
   dir = "ltr",
-  width = 360,
+  width = 400,
   zIndex = "z-20",
   showCloseButton = true,
   children,
@@ -158,7 +184,8 @@ function Panel({
   );
 
   const controlsClassName = cn(
-    "absolute top-4 duration-300 ease-in-out",
+    "absolute top-4 bottom-4 flex flex-col justify-between duration-300 ease-in-out pointer-events-none [&>*]:pointer-events-auto",
+    isLtr ? "items-start" : "items-end",
     zIndex,
     isLtr
       ? [
@@ -169,7 +196,7 @@ function Panel({
           "transition-[right]",
           isOpen ? "right-[calc(var(--panel-w)_+_1rem)]" : "right-4",
         ],
-    isOpen && "hidden sm:block",
+    isOpen && "hidden sm:flex",
   );
 
   return (
