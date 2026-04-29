@@ -95,8 +95,8 @@ export default function AProposPage() {
         <p className={bodyClass}>
           Reclaim Finance est une ONG de recherche et de plaidoyer 100 % dédiée
           aux questions liant finance, justice sociale et climatique. Fondée en
-          2020, Reclaim Finance s'est rapidement imposée comme une référence sur
-          les enjeux finance/climat auprès d'autres ONG, des journalistes, des
+          2020, Reclaim Finance s&apos;est rapidement imposée comme une référence sur
+          les enjeux finance/climat auprès d&apos;autres ONG, des journalistes, des
           représentants politiques, des responsables gouvernementaux et des
           parties prenantes du secteur financier.
         </p>
