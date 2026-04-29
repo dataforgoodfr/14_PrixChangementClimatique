@@ -20,6 +20,7 @@ def _():
     from sklearn.compose import ColumnTransformer
     import matplotlib.gridspec as gridspec
     from scipy import stats
+    from sklearn.cluster import KMeans
 
     return (
         ColumnTransformer,
@@ -32,7 +33,6 @@ def _():
         np,
         pd,
         plt,
-        stats,
         wkt,
     )
 
@@ -49,38 +49,8 @@ def _(duckdb, wkt):
 
 
 @app.cell
-def _(con):
-
-    ccr_stats = con.sql("""SELECT	* FROM dev.main.ccr_stats""").df()
-    return (ccr_stats,)
-
-
-@app.cell
-def _(ccr_stats):
-    ccr_stats['nb_arrete_autres'] = ccr_stats['nb_arrete_mvt'] + ccr_stats['nb_arrete_meteo'] +  ccr_stats['nb_arrete_marin'] + ccr_stats['nb_arrete_sism']+ ccr_stats['nb_arrete_autre']
-    return
-
-
-@app.cell
 def _():
-    # ccr_totals = ccr_stats.groupby('code_geo').agg(
-    #     nb_total_arretes_recon=('nb_arrete_recon', 'sum'),
-    #     nb_total_arretes=('nb_arrete', 'sum'),
-    #     nb_total_arretes_ino=('nb_arrete_ino', 'sum'),
-    #     nb_total_arretes_sec=('nb_arrete_sec', 'sum'),
-    #     multiple_franchise_last=('multiple_franchise', 'last')  # approximation de MAX_BY
-    # ).reset_index()
-
-    # # puis compare
-    # print(ccr_totals['nb_total_arretes'].sum())
-    # print(resultats_website_par_commune['nb_total_arretes'].sum())
     return
-
-
-@app.cell
-def _(ccr_stats, resultats_website_par_commune):
-    resultats_website_par_commune_ = resultats_website_par_commune.merge(ccr_stats[['nb_arrete_autres','code_geo']], left_on = 'code_insee', right_on = 'code_geo')
-    return (resultats_website_par_commune_,)
 
 
 @app.cell
@@ -96,8 +66,8 @@ def _(con):
 
 
 @app.cell
-def _(gpd, resultats_website_par_commune_):
-    gdf = gpd.GeoDataFrame(resultats_website_par_commune_, geometry="geometry")
+def _(gpd, resultats_website_par_commune):
+    gdf = gpd.GeoDataFrame(resultats_website_par_commune, geometry="geometry")
     gdf = gdf.set_crs(4326).to_crs(2154)
     gdf["code_insee"] = gdf["code_insee"].astype(str)
     return (gdf,)
@@ -114,10 +84,10 @@ def _(gdf):
     gdf[["nb_total_arretes_recon",
     "nb_total_arretes",
     "nb_total_arretes_ino",
-    "nb_total_arretes_sec"]] = gdf[["nb_total_arretes_recon",
+    "nb_total_arretes_sec","nb_total_arretes_autre"]] = gdf[["nb_total_arretes_recon",
     "nb_total_arretes",
     "nb_total_arretes_ino",
-    "nb_total_arretes_sec","nb_arrete_autres"]].fillna(0)
+    "nb_total_arretes_sec","nb_total_arretes_autre"]].fillna(0)
     return
 
 
@@ -177,7 +147,7 @@ def _(plt):
 
 
 @app.cell
-def _(plt):
+def _(pd, plt):
     def carte_discret(df,col_color):
         fig = plt.figure(figsize=(20, 10))
 
@@ -185,13 +155,20 @@ def _(plt):
         # vmin = df[col_color].quantile(0.01)
         # vmax = df[col_color].quantile(0.99)
         metro = df[~df["code_insee"].str.startswith(("97","98"))]
-        colors = ['#24AD46','#B4FF5E','#FFF45E','#F5A927','#F54927']
+        colors = ['#608D83','#AFA15D','#F4BA5F','#D9622C','#AA2E26']
+
+        vals = sorted(df[col_color].dropna().unique())
+        # colors = ['#24AD46', '#B4FF5E', '#FFF45E', '#F5A927', '#F54927']
+        color_map = {val: col for val, col in zip(vals, colors)}
+
+
         metro.plot(
-            column=col_color,
-            # cmap="viridis",
+            # column=col_color,
+            color=metro[col_color].map(lambda x: color_map.get(x, color_map.get(int(x) if pd.notna(x) else x, '#D3D3D3'))),        # cmap="viridis",
             ax=ax_metro,
             linewidth=0.1,
-            legend=True,rasterized=True,
+            # legend=True,
+            rasterized=True,
             # vmin=vmin,
             # vmax=vmax
         )
@@ -214,10 +191,11 @@ def _(plt):
             drom = df[df["code_insee"].str.startswith(code)]
 
             drom.plot(
-                column=col_color,
-                # cmap="viridis",
+                # column=col_color,
+                color=metro[col_color].map(lambda x: color_map.get(x, color_map.get(int(x) if pd.notna(x) else x, '#D3D3D3'))),            # cmap="viridis",
                 ax=ax,
-                linewidth=0.1,rasterized=True,
+                linewidth=0.1,
+                rasterized=True,
                 # vmin=vmin,
                 # vmax=vmax
             )
@@ -228,7 +206,7 @@ def _(plt):
         plt.tight_layout()
         plt.show()
 
-    return
+    return (carte_discret,)
 
 
 @app.cell(hide_code=True)
@@ -382,12 +360,6 @@ def _(metropole_datas, np, plt, selected_cols):
 
 
 @app.cell
-def _(selected_cols):
-    print(selected_cols)
-    return
-
-
-@app.cell
 def _(pca_sec):
     print(pca_sec.components_)
     # print(pca_sec.feature_names_in_)
@@ -519,105 +491,99 @@ def clip_minmax(series, lower=1, upper=99):
 
 
 @app.cell
-def _(gdf_calc):
-    gdf_calc.columns
+def _(gdf_calc, mo):
+    col_selector_distrib = mo.ui.multiselect(
+        options=list(gdf_calc.select_dtypes(include='number').columns),
+        value=['score_secheresse', 'score_inondation','part_prime_budget','evolution_prime_assurance','nb_total_arretes_autre'],
+        label='Colonnes à visualiser'
+    )
+    col_selector_distrib
     return
 
 
 @app.cell
-def _(gdf_calc, mo):
-    col_selector_distrib = mo.ui.multiselect(
-        options=list(gdf_calc.select_dtypes(include='number').columns),
-        value=['score_secheresse', 'score_inondation','part_prime_budget','evolution_prime_assurance','nb_arrete_autres'],
-        label='Colonnes à visualiser'
-    )
-    col_selector_distrib
-    return (col_selector_distrib,)
+def _():
+    # colors_palette = [
+    #     '#1D9E75', '#534AB7', '#E24B4A', '#BA7517',
+    #     '#185FA5', '#993556', '#3B6D11', '#5F5E5A'
+    # ]
+    # colors = {col: colors_palette[i % len(colors_palette)] for i, col in enumerate(col_selector_distrib.value)}
+    # # scores_test = {
+    # #     'score_secheresse': gdf_ca|lc['score_secheresse'].dropna(),
+    # #     'score_inondation': gdf_calc['score_inondation'].dropna(),
+    # # }
+    # selected = col_selector_distrib.value
+    # # Sécurité : force en liste si marimo retourne une string
+    # if isinstance(selected, str):
+    #     selected = [selected]
 
-
-@app.cell
-def _(col_selector_distrib, gdf_calc, mo, plt, stats):
-    colors_palette = [
-        '#1D9E75', '#534AB7', '#E24B4A', '#BA7517',
-        '#185FA5', '#993556', '#3B6D11', '#5F5E5A'
-    ]
-    colors = {col: colors_palette[i % len(colors_palette)] for i, col in enumerate(col_selector_distrib.value)}
     # scores_test = {
-    #     'score_secheresse': gdf_ca|lc['score_secheresse'].dropna(),
-    #     'score_inondation': gdf_calc['score_inondation'].dropna(),
+    #     col: gdf_calc[col].dropna()
+    #     for col in selected
     # }
-    selected = col_selector_distrib.value
-    # Sécurité : force en liste si marimo retourne une string
-    if isinstance(selected, str):
-        selected = [selected]
-
-    scores_test = {
-        col: gdf_calc[col].dropna()
-        for col in selected
-    }
-    normalizations = {
-        'Brut (PCA)':          lambda s: s,
-        'StandardScaler':      lambda s: (s - s.mean()) / s.std(),
-        'MinMaxScaler':        lambda s: (s - s.min()) / (s.max() - s.min()),
-        'Clip p1–p99 + MinMax': clip_minmax,
-        # 'QuantileTransformer': lambda s: s.rank(pct=True),
-    }
+    # normalizations = {
+    #     'Brut (PCA)':          lambda s: s,
+    #     'StandardScaler':      lambda s: (s - s.mean()) / s.std(),
+    #     'MinMaxScaler':        lambda s: (s - s.min()) / (s.max() - s.min()),
+    #     'Clip p1–p99 + MinMax': clip_minmax,
+    #     # 'QuantileTransformer': lambda s: s.rank(pct=True),
+    # }
 
 
-    n_rows = len(scores_test)
-    n_cols = len(normalizations)
-    # fig_test = plt.figure(figsize=(18, 10))
-    # fig_test.suptitle('Comparaison des normalisations — distributions des scores', fontsize=13, y=1.01)
+    # n_rows = len(scores_test)
+    # n_cols = len(normalizations)
+    # # fig_test = plt.figure(figsize=(18, 10))
+    # # fig_test.suptitle('Comparaison des normalisations — distributions des scores', fontsize=13, y=1.01)
 
-    # gs = gridspec.GridSpec(2, len(normalizations), figure=fig_test, hspace=0.5, wspace=0.3)
+    # # gs = gridspec.GridSpec(2, len(normalizations), figure=fig_test, hspace=0.5, wspace=0.3)
 
-    # for col_test, (norm_name, norm_fn) in enumerate(normalizations.items()):
-    #     for row, (score_name, raw) in enumerate(scores_test.items()):
-    #         ax_test = fig_test.add_subplot(gs[row, col_test])
-    #         transformed = norm_fn(raw)
+    # # for col_test, (norm_name, norm_fn) in enumerate(normalizations.items()):
+    # #     for row, (score_name, raw) in enumerate(scores_test.items()):
+    # #         ax_test = fig_test.add_subplot(gs[row, col_test])
+    # #         transformed = norm_fn(raw)
 
-    #         ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
+    # #         ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
 
-    #         sk = stats.skew(transformed)
-    #         mn, mx = transformed.min(), transformed.max()
+    # #         sk = stats.skew(transformed)
+    # #         mn, mx = transformed.min(), transformed.max()
 
-    #         ax_test.set_title(norm_name if row == 0 else '', fontsize=9, fontweight='bold')
-    #         ax_test.set_ylabel(score_name.replace('score_', '') if col_test == 0 else '', fontsize=9)
-    #         ax_test.tick_params(labelsize=7)
+    # #         ax_test.set_title(norm_name if row == 0 else '', fontsize=9, fontweight='bold')
+    # #         ax_test.set_ylabel(score_name.replace('score_', '') if col_test == 0 else '', fontsize=9)
+    # #         ax_test.tick_params(labelsize=7)
 
-    #         ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
-    #                 transform=ax_test.transAxes, fontsize=7,
-    #                 verticalalignment='top', horizontalalignment='right',
-    #                 color='#555')
+    # #         ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
+    # #                 transform=ax_test.transAxes, fontsize=7,
+    # #                 verticalalignment='top', horizontalalignment='right',
+    # #                 color='#555')
 
-    # plt.tight_layout()
-    # plt.show()
-    if n_rows == 0:
-        mo.md("Sélectionne au moins une colonne.")
-    else:
-        fig_test, axes = plt.subplots(
-            n_rows, n_cols,
-            figsize=(4 * n_cols, 3 * n_rows),
-            squeeze=False
-        )
-        for col_idx, (norm_name, norm_fn) in enumerate(normalizations.items()):
-            for row_idx, (score_name, raw) in enumerate(scores_test.items()):
+    # # plt.tight_layout()
+    # # plt.show()
+    # if n_rows == 0:
+    #     mo.md("Sélectionne au moins une colonne.")
+    # else:
+    #     fig_test, axes = plt.subplots(
+    #         n_rows, n_cols,
+    #         figsize=(4 * n_cols, 3 * n_rows),
+    #         squeeze=False
+    #     )
+    #     for col_idx, (norm_name, norm_fn) in enumerate(normalizations.items()):
+    #         for row_idx, (score_name, raw) in enumerate(scores_test.items()):
 
-                ax_test = axes[row_idx][col_idx]
-                transformed = norm_fn(raw)
-                sk = stats.skew(transformed)
-                mn, mx = transformed.min(), transformed.max()
+    #             ax_test = axes[row_idx][col_idx]
+    #             transformed = norm_fn(raw)
+    #             sk = stats.skew(transformed)
+    #             mn, mx = transformed.min(), transformed.max()
 
-                ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
-                ax_test.set_title(norm_name if row_idx == 0 else '', fontsize=9, fontweight='bold')
-                ax_test.set_ylabel(score_name if col_idx == 0 else '', fontsize=8)
-                ax_test.tick_params(labelsize=7)
-                ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
-                        transform=ax_test.transAxes, fontsize=7,
-                        va='top', ha='right', color='#555')
+    #             ax_test.hist(transformed, bins=60, color=colors[score_name], alpha=0.75, edgecolor='none')
+    #             ax_test.set_title(norm_name if row_idx == 0 else '', fontsize=9, fontweight='bold')
+    #             ax_test.set_ylabel(score_name if col_idx == 0 else '', fontsize=8)
+    #             ax_test.tick_params(labelsize=7)
+    #             ax_test.text(0.97, 0.95, f'skew={sk:.2f}\n[{mn:.2f}, {mx:.2f}]',
+    #                     transform=ax_test.transAxes, fontsize=7,
+    #                     va='top', ha='right', color='#555')
 
-        plt.tight_layout()
-        plt.show()
+    #     plt.tight_layout()
+    #     plt.show()
     return
 
 
@@ -632,7 +598,7 @@ def _(datas_inondation, gdf, metropole_datas, poids_prevention):
     gdf_calc['score_secheresse_norm'] = clip_minmax(gdf_calc['score_secheresse'])
     gdf_calc['score_inondation_norm'] = clip_minmax(gdf_calc['score_inondation'])
 
-    gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_arrete_autres'])
+    gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_total_arretes_autre'])
     # scaler_sec_robust = StandardScaler()
     # scaler_ino_robust = StandardScaler()
 
@@ -749,7 +715,7 @@ def _(
     gdf_calc_assurance['multiple_franchise_last'] = gdf_calc_assurance['multiple_franchise_last'].fillna(1)
     gdf_calc_assurance['score_assurance'] += (
          pf*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
-    return (gdf_calc_assurance,)
+    return gdf_calc_assurance, pna
 
 
 @app.cell
@@ -760,11 +726,12 @@ def _():
 @app.cell
 def _(
     mo,
+    pna,
     poids_prevention_evolution_prime,
     poids_prevention_franchise,
     poids_prevention_prime_budget,
 ):
-    mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise])
+    mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise,pna])
     return
 
 
@@ -896,7 +863,7 @@ def _(mo):
 def _(mo):
     colonnes_score = [
     'Score_vulnerabilite','score_final','score_eco','score_assurance',
-           'score_climatique_global','score_final'
+           'score_climatique_global','score_final','score_final_discret'
     ]
 
     col_selector_score = mo.ui.dropdown(
@@ -907,10 +874,18 @@ def _(mo):
     return (col_selector_score,)
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Methode poids pondéréé
+    """)
+    return
+
+
 @app.cell
 def _(mo):
-    poids_score_eco = mo.ui.slider(0, 1, step=0.01)
-    poids_score_assurance = mo.ui.slider(0, 1, step=0.01)
+    poids_score_eco = mo.ui.slider(0, 1, step=0.01,value=0.33)
+    poids_score_assurance = mo.ui.slider(0, 1, step=0.01,value=0.33)
     return poids_score_assurance, poids_score_eco
 
 
@@ -923,13 +898,39 @@ def _(poids_score_assurance, poids_score_eco):
 
 
 @app.cell
+def _(gdf_calc_final):
+    variances = gdf_calc_final[['score_assurance','score_climatique_global','score_eco']].var()
+    poids_variance = (1 / variances) / (1 / variances).sum()
+    return (poids_variance,)
+
+
+@app.cell
+def _(gdf_calc_final):
+    medians = gdf_calc_final[['score_assurance','score_climatique_global','score_eco']].median()
+    poids_median = (1 - medians) / (1 - medians).sum()
+    return (poids_median,)
+
+
+@app.cell
+def _(poids_variance):
+    poids_variance
+    return
+
+
+@app.cell
+def _(poids_median):
+    poids_median
+    return
+
+
+@app.cell
 def _(gdf_calc_eco, poids_assurance, poids_eco, poids_expo):
     poids_eco
     poids_assurance
     poids_expo
 
     gdf_calc_final = gdf_calc_eco.copy()
-    gdf_calc_final['score_final'] = poids_eco*gdf_calc_final['score_eco'] +poids_assurance*gdf_calc_final['score_assurance'] + poids_expo*gdf_calc_final['score_climatique_global']
+    gdf_calc_final['score_final'] = poids_eco*gdf_calc_final['score_eco'] + poids_assurance*gdf_calc_final['score_assurance'] + poids_expo*gdf_calc_final['score_climatique_global']
     return (gdf_calc_final,)
 
 
@@ -940,21 +941,85 @@ def _(mo, poids_expo, poids_score_assurance, poids_score_eco):
 
 
 @app.cell
+def _():
+    # for col_2 in ['score_assurance','score_climatique_global','score_eco']:
+    #     r_ = gdf_calc_final[col_2].corr(gdf_calc_final['Score_vulnerabilite'])
+    #     print(f"{col_2}: {r_:.3f}")
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    for col_1 in ['score_assurance','score_climatique_global','score_eco']:
+        r = gdf_calc_final[col_1].corr(gdf_calc_final['score_final'])
+        print(f"{col_1}: {r:.3f}")
+    return
+
+
+@app.cell
 def _(col_selector_score):
     col_selector_score
     return
 
 
 @app.cell
-def _(carte_continue, col_selector_score, gdf_calc_final):
-    carte_continue(gdf_calc_final, col_selector_score.value)
+def _():
+    return
+
+
+@app.cell
+def _(carte_continue, gdf_calc_final):
+    carte_continue(gdf_calc_final, 'score_final')
     return
 
 
 @app.cell
 def _(gdf_calc_final, pd):
-    gdf_calc_final['Score_vulnerabilite'] = pd.cut(gdf_calc_final['score_final'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1.0],
-                         labels=[1, 2, 3, 4, 5], include_lowest=True)
+    gdf_calc_final['Score_vulnerabilite'] = pd.cut(gdf_calc_final['score_final'], bins=[0, 0.2, 0.3, 0.4, 0.5, 1],labels=[1, 2, 3, 4, 5], include_lowest=True)
+    return
+
+
+@app.cell
+def _(col_selector_score):
+    col_selector_score.value
+    return
+
+
+@app.cell
+def _(carte_discret, col_selector_score, gdf_calc_final):
+    carte_discret(gdf_calc_final, col_selector_score.value)
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final['Score_vulnerabilite'].value_counts()
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final['indice_vulnerabilite_niveau'] = gdf_calc_final['Score_vulnerabilite']
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final['indice_vulnerabilite'] = gdf_calc_final['score_final']
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final.columns
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    df_to_save = gdf_calc_final[['code_insee', 'departement', 'region', 'geo_point_2_d',
+           'code_departement', 'code_region', 'nom_commune',
+           'score_economique', 'score_georisque', 'score_assurance','indice_vulnerabilite','indice_vulnerabilite_niveau']]
     return
 
 
@@ -964,7 +1029,154 @@ def _():
 
 
 @app.cell
+def _(con):
+    con.execute("""
+    COPY (
+        SELECT * FROM df_to_save
+    )
+    TO 'Score_vulnerabilite.parquet'
+    (FORMAT PARQUET);
+    """)
+    return
+
+
+@app.cell
 def _():
+    # plt.hist(gdf_calc_final['Score_vulnerabilite'])
+    return
+
+
+@app.cell
+def _(gdf_calc_final, plt):
+    plt.hist(gdf_calc_final['score_final'],bins=200)
+    return
+
+
+@app.cell
+def _(col_selector_score):
+    col_selector_score
+    return
+
+
+@app.cell
+def _(gdf_calc_final, plt):
+    plt.hist(gdf_calc_final['score_assurance'])
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final['score_climatique_global'].median()
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final['score_assurance'].median()
+    return
+
+
+@app.cell
+def _(gdf_calc_final):
+    gdf_calc_final['score_eco'].median()
+    return
+
+
+@app.cell
+def _(gdf_calc_final, plt):
+    plt.hist(gdf_calc_final['score_eco'])
+    return
+
+
+@app.cell
+def _(gdf_calc_final, plt):
+    plt.hist(gdf_calc_final['score_climatique_global'])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Méthode combinaison
+    """)
+    return
+
+
+@app.cell
+def _(gdf_calc_final, pd):
+    def niveau(x, s1=0.3, s2=0.5):
+        if pd.isna(x): return None
+        if x < s1: return "bas"
+        elif x < s2: return "moyen"
+        else: return "haut"
+
+    gdf_calc_final['niveau_eco'] = gdf_calc_final['score_eco'].map(niveau)
+    gdf_calc_final['niveau_assurance'] = gdf_calc_final['score_assurance'].map(niveau)
+    gdf_calc_final['niveau_climat'] = gdf_calc_final['score_climatique_global'].map(niveau)
+    return
+
+
+@app.cell
+def _():
+    matrice = {
+        # Tous bas
+        ("bas", "bas", "bas"):       1,
+        # Un seul moyen
+        ("moyen", "bas", "bas"):     1,
+        ("bas", "moyen", "bas"):     1,
+        ("bas", "bas", "moyen"):     1,
+        # Un seul haut ou deux moyens
+        ("haut", "bas", "bas"):      2,
+        ("bas", "haut", "bas"):      2,
+        ("bas", "bas", "haut"):      2,
+        ("moyen", "moyen", "bas"):   2,
+        ("moyen", "bas", "moyen"):   2,
+        ("bas", "moyen", "moyen"):   2,
+        # Deux moyens + un haut, ou un moyen + deux bas
+        ("moyen", "moyen", "moyen"): 3,
+        ("haut", "moyen", "bas"):    3,
+        ("haut", "bas", "moyen"):    3,
+        ("bas", "haut", "moyen"):    3,
+        ("moyen", "haut", "bas"):    3,
+        ("bas", "moyen", "haut"):    3,
+        ("moyen", "bas", "haut"):    3,
+
+        ("haut", "haut", "bas"):     4,
+        ("haut", "bas", "haut"):     4,
+        ("bas", "haut", "haut"):     4,
+        ("haut", "moyen", "moyen"):  4,
+        ("moyen", "haut", "moyen"):  4,
+        ("moyen", "moyen", "haut"):  4,
+
+        ("haut", "haut", "moyen"):   5,
+        ("haut", "moyen", "haut"):   5,
+        ("moyen", "haut", "haut"):   5,
+        ("haut", "haut", "haut"):    5,
+    }
+    return (matrice,)
+
+
+@app.cell
+def _(gdf_calc_final, matrice):
+    gdf_calc_final['score_final_discret'] = gdf_calc_final.apply(
+        lambda row: matrice.get(
+            (row['niveau_eco'], row['niveau_assurance'], row['niveau_climat']),
+            None  # NaN si combinaison manquante
+        ),
+        axis=1
+    )
+    return
+
+
+@app.cell
+def _(col_selector_score):
+    col_selector_score
+    return
+
+
+@app.cell
+def _(carte_discret, col_selector_score, gdf_calc_final):
+    carte_discret(gdf_calc_final, col_selector_score.value)
     return
 
 
