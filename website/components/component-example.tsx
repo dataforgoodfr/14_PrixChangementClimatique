@@ -106,7 +106,7 @@ import { type IndicatorField } from "@/lib/types/indicator";
 import {
   IndiceVulnerabiliteNiveauIcon,
   ScoreGeorisqueIcon,
-  IndiceVulnerabiliteIcon,
+  PreventionIcon,
   ScoreEconomiqueIcon,
   ScoreAssuranceIcon,
   type IconComponent,
@@ -628,7 +628,7 @@ const INDICATOR_DEMO_OPTIONS: {
     Icon: IndiceVulnerabiliteNiveauIcon,
   },
   { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
-  { value: "prevention", label: "Prévention", Icon: IndiceVulnerabiliteIcon },
+  { value: "prevention", label: "Prévention", Icon: PreventionIcon },
   {
     value: "score_economique",
     label: "Situation économique",
