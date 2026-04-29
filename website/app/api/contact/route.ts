@@ -27,10 +27,11 @@ export async function POST(req: NextRequest) {
     // Convert ContactFormData (camelCase) to GoogleScriptPayload (snake_case)
     const gsPayload: GoogleScriptPayload = {
       nom: formData.name,
-      type_utilisateur: formData.userType,
+      situation: formData.userType,
       email: formData.email,
       message: formData.message,
       ville: formData.city,
+      assurance_climatique: formData.insuranceQuestion || "",
     };
 
     if (formData.insuranceQuestion) {
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
 
     const gsData = JSON.parse(responseText);
     if (!gsData.success) {
-      return NextResponse.json({ error: gsData.error }, { status: 500 });
+      throw new Error(gsData.error || "Unknown error from Google Script.");
     }
 
     return NextResponse.json({ success: true });

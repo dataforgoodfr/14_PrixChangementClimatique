@@ -17,9 +17,9 @@ export interface ContactFormData {
  */
 export interface GoogleScriptPayload {
   nom: string;
-  type_utilisateur: "citoyen" | "maire_ou_elu";
+  situation: string;
   ville: string;
-  assurance_climatique?: "oui" | "non";
+  assurance_climatique: string;
   email: string;
   message: string;
 }
