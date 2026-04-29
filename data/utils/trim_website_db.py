@@ -40,7 +40,7 @@ if WEBSITE_PATH.exists():
 
 con = duckdb.connect(WEBSITE_PATH)
 con.execute(f"ATTACH '{DEV_PATH}' AS dev (READ_ONLY)")
-con.execute("CREATE SCHEMA IF NOT EXISTS main_gold")
+con.execute("CREATE SCHEMA IF NOT EXISTS main")
 
 tables = con.execute("""
     SELECT table_name FROM information_schema.tables
@@ -53,10 +53,10 @@ log.info(f"{len(tables)} tables gold trouvées dans dev.duckdb")
 for (table_name,) in tables:
     rows = con.execute(f"SELECT COUNT(*) FROM dev.main_gold.{table_name}").fetchone()[0]
     con.execute(f"""
-        CREATE OR REPLACE TABLE main_gold.{table_name}
+        CREATE OR REPLACE TABLE main.{table_name}
         AS SELECT * FROM dev.main_gold.{table_name}
     """)
-    log.info(f"  ✅ main_gold.{table_name} ({rows:,} lignes)")
+    log.info(f"  ✅ main.{table_name} ({rows:,} lignes)")
 
 con.close()
 
