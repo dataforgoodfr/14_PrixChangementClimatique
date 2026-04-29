@@ -1,6 +1,6 @@
 ## Stage 1: Build PMTiles and prepare DuckDB database
 # Builds tippecanoe from source,
-# downloads dev.duckdb from public S3,
+# downloads website.duckdb from public S3,
 # and runs the PMTiles build script.
 FROM python:3.12-slim AS pmtiles-builder
 
@@ -17,8 +17,8 @@ WORKDIR /app
 COPY data/utils/download.py data/utils/download.py
 COPY data/utils/build_pmtiles.py data/utils/build_pmtiles.py
 
-# Download dev.duckdb from public S3 (no credentials needed)
-RUN python data/utils/download.py
+# Download website.duckdb from public S3 (no credentials needed)
+RUN python data/utils/download.py  --select website
 
 # Pre-install DuckDB spatial extension (required by build_pmtiles.py)
 RUN python -c "import duckdb; conn = duckdb.connect(); conn.execute('INSTALL spatial'); conn.close()"
@@ -43,8 +43,8 @@ COPY website/ ./
 COPY --from=pmtiles-builder /app/website/public/pmtiles ./public/pmtiles
 
 # Copy DuckDB
-COPY --from=pmtiles-builder /app/data/exploration/dev.duckdb /data/dev.duckdb
-ENV DUCKDB_PATH=/data/dev.duckdb
+COPY --from=pmtiles-builder /app/data/exploration/website.duckdb /data/website.duckdb
+ENV DUCKDB_PATH=/data/website.duckdb
 
 RUN npm run build
 
@@ -61,7 +61,7 @@ RUN chown nextjs:nodejs /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV DUCKDB_PATH=/data/dev.duckdb
+ENV DUCKDB_PATH=/data/website.duckdb
 # Required for Next.js standalone to listen on all interfaces (not just localhost)
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
@@ -75,7 +75,7 @@ COPY --from=nextjs-builder --chown=nextjs:nodejs /app/public ./public
 
 # DuckDB database
 RUN mkdir -p /data && chown nextjs:nodejs /data
-COPY --from=pmtiles-builder --chown=nextjs:nodejs /app/data/exploration/dev.duckdb /data/dev.duckdb
+COPY --from=pmtiles-builder --chown=nextjs:nodejs /app/data/exploration/website.duckdb /data/website.duckdb
 
 USER nextjs
 
