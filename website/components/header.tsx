@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { RFButton } from "@/components/core/rf-button";
 import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -15,10 +16,6 @@ const NAV_LINKS = [
   { href: "/methodologie", label: "Méthodologie" },
   { href: "/apropos", label: "À propos" },
 ];
-
-const scrollToContact = () => {
-  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-};
 
 export function Header() {
   const pathname = usePathname();
@@ -65,9 +62,8 @@ export function Header() {
 
         <div className="hidden md:block shrink-0">
           <RFButton
-            as="button"
+            path="/#contact"
             title="Agissez pour protéger votre commune"
-            onClick={scrollToContact}
           />
         </div>
         <Button
@@ -111,12 +107,9 @@ export function Header() {
         })}
         <li>
           <RFButton
-            as="button"
+            path="/#contact"
             title="Nous contacter"
-            onClick={() => {
-              toggleMenu();
-              scrollToContact();
-            }}
+            onClick={toggleMenu}
           />
         </li>
       </ul>
