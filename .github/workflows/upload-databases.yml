@@ -1,4 +1,4 @@
-name: update-dev-duckdb
+name: upload-databases
 
 on:
   push:
