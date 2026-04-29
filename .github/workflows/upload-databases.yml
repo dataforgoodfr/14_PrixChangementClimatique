@@ -2,10 +2,6 @@ name: upload-databases
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "data/dbt_pipeline/models/**"
   workflow_dispatch:
 
 jobs:
