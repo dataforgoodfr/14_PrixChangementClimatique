@@ -11,7 +11,7 @@ const Map: React.FC = () => {
           argiles (RGA)
         </p>
         <p className="text-[12px] md:text-[16px] text-white/70">
-          Corrélation spaciale avec couverture PPRN
+          Corrélation spatiale avec l'existence d'un PPRN
         </p>
       </div>
       <Image
