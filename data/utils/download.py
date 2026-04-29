@@ -86,6 +86,14 @@ def _write_etag(marker: Path, key: str, etag: str) -> None:
     marker.write_text("\n".join(lines) + "\n")
 
 
+def _get_selection() -> list[str]:
+    if "--select" in sys.argv:
+        idx = sys.argv.index("--select")
+        if idx + 1 < len(sys.argv):
+            return [sys.argv[idx + 1]]
+    return ["website", "dev", "odis"]
+
+
 def main():
     # Get the project root (2 levels up from this script)
     project_root = Path(__file__).parent.parent.parent
@@ -94,13 +102,16 @@ def main():
     # Ensure the exploration directory exists
     exploration_dir.mkdir(parents=True, exist_ok=True)
 
-    # Files to download
-    files = [
-        ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
-        ("https://s3.fr-par.scw.cloud/qppcc-upload/odis.duckdb", "odis.duckdb"),
-    ]
+    FILES = {
+        "dev": ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
+        "odis": ("https://s3.fr-par.scw.cloud/qppcc-upload/odis.duckdb", "odis.duckdb"),
+        "website": ("https://s3.fr-par.scw.cloud/qppcc-upload/website.duckdb", "website.duckdb"),
+    }
 
-    # Download each file
+    selection = _get_selection()
+
+    files = [FILES[k] for k in selection if k in FILES]
+
     success_count = 0
     marker = exploration_dir / ".downloaded"
 
