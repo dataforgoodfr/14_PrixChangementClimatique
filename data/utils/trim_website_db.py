@@ -1,3 +1,24 @@
+"""
+Build a trimmed version of website.duckdb from dev.duckdb.
+
+This script extracts all tables from the `main_gold` schema of dev.duckdb
+and copies them into the `main` schema of website.duckdb.
+
+Workflow:
+- Remove existing website.duckdb if it exists
+- Create a new DuckDB database for website
+- Attach dev.duckdb in read-only mode
+- Copy each table from dev.main_gold into website.main
+- Print copied tables and final database sizes
+
+Source:
+    dev.duckdb (schema: main_gold)
+
+Destination:
+    website.duckdb (schema: main)
+
+
+"""
 import duckdb
 import os
 import logging

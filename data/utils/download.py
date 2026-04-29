@@ -1,5 +1,20 @@
 #!/usr/bin/env python
-"""Download DuckDB database files from S3."""
+"""Download DuckDB database files from S3.
+
+Usage:
+    python download.py
+        -> downloads dev, odis, and website databases (default)
+
+    python download.py --select website
+        -> downloads only the specified database (website, dev, or odis)
+
+Features:
+- Downloads files from S3 URLs
+- Supports partial download resume prevention via ETag checking
+- Skips download if local file is already up to date
+- Stores ETags in a local marker file (.downloaded)
+"""
+
 
 import sys
 from pathlib import Path

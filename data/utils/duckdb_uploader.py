@@ -1,3 +1,28 @@
+"""
+Upload DuckDB database files to S3.
+
+Usage:
+    python upload.py
+        -> uploads dev.duckdb
+
+    python upload.py --website
+        -> uploads website.duckdb
+
+Behavior:
+- Selects which local DuckDB file to upload based on CLI argument
+- Uses S3 credentials from environment (.env file)
+- Uploads file to S3 bucket defined by S3_PCC_BUCKET
+- Overwrites remote file if it already exists (replace=True)
+
+Available targets:
+    - dev
+    - website
+
+Dependencies:
+- s3_connector (get_s3_client, send_large_file_to_s3)
+- python-dotenv
+"""
+
 from s3_connector import get_s3_client, send_large_file_to_s3
 from pathlib import Path
 import os

@@ -7,16 +7,24 @@ Se référer au [README.md global](../../README.md) pour cela.
 
 ## Téléchargement des données à jour
 
-Tout d'abord 2 types de données sont à disposition :
+Tout d'abord 3 types de données sont à disposition :
 
 - les données du projet, créées par l'équipe de Data Engineering (depuis leur dossier /data/dbt_pipeline). Elles auront le format d'une base de donnée : dev.duckdb
 
+- les données du projet restreintes aux tables utilisées par le site web (tables gold), créée dans dbt_pipeline par le script `trim_website_db` : `website.duckdb`
+
 - les données odis, des données socio-demo provenant d'un projet DataForGood de la saison précédente. Disponibles pour exploration / utilisation, dans la base de donnée odis.duckdb
 
-Pour télécharger ces deux bases de données, lancer le script suivant depuis la racine du projet :
+Pour télécharger ces trois bases de données, lancer le script suivant depuis la racine du projet :
 
 ```bash
 uv run python data/utils/download.py
+```
+
+ou (dev peut être remplacé par website ou odis) :
+
+```bash
+uv run python data/utils/download.py --select dev
 ```
 
 Les bases de données seront automatiquement téléchargées dans `data/exploration/`.

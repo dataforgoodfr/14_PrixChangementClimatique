@@ -74,6 +74,11 @@ _Télécharger tous les fichiers sources depuis le s3 :_
 uv run python data/utils/download_pipeline_inputs.py
 ```
 
+_Extraire website.duckdb de dev.duckdb (sotckés dans data/dbt pipeline) :_
+```bash
+uv run python data/utils/trim_website_db.py
+```
+
 ### Pour les données géographiques
 
 Installer l'extension duckdb pour les données géographiques:
