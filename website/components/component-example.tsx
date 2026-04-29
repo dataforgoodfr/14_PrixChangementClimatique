@@ -616,7 +616,7 @@ function IndicatorStatCardExample() {
 const INDICATOR_DEMO_OPTIONS: { value: IndicatorField; label: string; Icon: IconComponent }[] = [
   { value: "indice_vulnerabilite_niveau", label: "Vulnérabilité", Icon: IndiceVulnerabiliteNiveauIcon },
   { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
-  { value: "indice_vulnerabilite", label: "Prévention", Icon: IndiceVulnerabiliteIcon },
+  { value: "prevention", label: "Prévention", Icon: IndiceVulnerabiliteIcon },
   { value: "score_economique", label: "Situation économique", Icon: ScoreEconomiqueIcon },
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];

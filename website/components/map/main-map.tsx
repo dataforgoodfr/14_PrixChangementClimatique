@@ -64,15 +64,16 @@ function buildFillColor(
       "#7F1D1D",
     ];
   }
-  if (indicator === "indice_vulnerabilite") {
+  if (indicator === "prevention") {
     return [
-      "interpolate",
-      ["linear"],
-      ["coalesce", ["get", "indice_vulnerabilite"], 0],
-      0,
-      "#FFF0EE",
-      1,
-      "#7F1D1D",
+      "case",
+      ["all", ["==", ["get", "pprn_rga"], true], ["==", ["get", "pprn_ino"], true]],
+      "#2d7a3a",
+      ["==", ["get", "pprn_rga"], true],
+      "#92400e",
+      ["==", ["get", "pprn_ino"], true],
+      "#1d4ed8",
+      "#fed7aa",
     ];
   }
   if (indicator === "score_economique") {
