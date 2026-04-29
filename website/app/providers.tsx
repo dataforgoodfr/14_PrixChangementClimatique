@@ -1,7 +1,6 @@
 "use client";
 
 import { SWRConfig } from "swr";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
 
 const fetcher = async (url: string) => {
@@ -19,22 +18,20 @@ const fetcher = async (url: string) => {
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <NuqsAdapter>
-      <SWRConfig
-        value={{
-          fetcher,
-          revalidateOnFocus: false,
-          shouldRetryOnError: true,
-          errorRetryCount: 3,
-          errorRetryInterval: 1000,
-          onError: (error, key) => {
-            // Log errors pour debug
-            console.error(`SWR Error [${key}]:`, error);
-          },
-        }}
-      >
-        {children}
-      </SWRConfig>
-    </NuqsAdapter>
+    <SWRConfig
+      value={{
+        fetcher,
+        revalidateOnFocus: false,
+        shouldRetryOnError: true,
+        errorRetryCount: 3,
+        errorRetryInterval: 1000,
+        onError: (error, key) => {
+          // Log errors pour debug
+          console.error(`SWR Error [${key}]:`, error);
+        },
+      }}
+    >
+      {children}
+    </SWRConfig>
   );
 }
