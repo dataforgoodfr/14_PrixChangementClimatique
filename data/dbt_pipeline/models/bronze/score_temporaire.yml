@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: score_temporaire
+    description: >
+      score temporaire faire à partir de marimo
+    columns:
+      - name: code_insee
+        description: "Code INSEE de la commune (5 caractères) appelé code_geo en bronze"
+        type: CHAR(5)
+      - name: nom_commune
+        description: "Nom officiel de la commune"
+        type: STRING
+      - name: departement
+        description: "Nom du département"
+        type: VARCHAR(100)
+      - name: region
+        description: "Nom de la region"
+        type: VARCHAR(100)
+      - name: code_departement
+        description: "Code du département (2 ou 3 caractères)"
+        type: STRING
+      - name: code_region
+        description: "Code de la région"
+        type: STRING
+      - name: geo_point_2_d
+        description: "Point géographique central de la commune (coordonnées lat/lon en format JSON)"
+        type: STRING
+      - name: score_economique
+        description: "Score économique de la commune"
+        type: FLOAT
+      - name: score_georisque
+        description: "Score géorisque de la commune"
+        type: FLOAT
+      - name: score_assurance
+        description: "Score assurance de la commune"
+        type: FLOAT
+      - name: indice_vulnerabilite
+        description: "Indice de vulnérabilité de la commune"
+        type: FLOAT
+      - name: indice_vulnerabilite_niveau
+        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
+        type: INT
