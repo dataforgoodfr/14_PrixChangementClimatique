@@ -19,18 +19,15 @@ const ContactSection = () => {
     message: "",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({
-    name: false,
-    userType: false,
-    city: false,
-    email: false,
-    message: false,
-  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const isMayor = formData.userType === "maire_ou_elu";
 
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const handleChange = (field: keyof ContactFormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = async () => {
     const newErrors: FormErrors = {
@@ -44,7 +41,10 @@ const ContactSection = () => {
       newErrors.insuranceQuestion = !formData.insuranceQuestion;
     }
     setErrors(newErrors);
-    if (Object.values(newErrors).some(Boolean)) return;
+    if (Object.values(newErrors).some(Boolean)) {
+      toast.error("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -56,6 +56,9 @@ const ContactSection = () => {
 
       if (res.ok) {
         setSubmitted(true);
+        toast.success(
+          "Message envoyé à Reclaim Finance ! Merci pour votre engagement.",
+        );
       } else {
         const errorText = await res.text();
         console.error("Erreur lors de l'envoi du formulaire", errorText);
@@ -108,12 +111,7 @@ const ContactSection = () => {
             type="text"
             placeholder="Prénom / Nom"
             value={formData.name}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                name: (e.target as HTMLInputElement).value,
-              }));
-            }}
+            onChange={(e) => handleChange("name", e.target.value)}
             className={inputClass(errors.name)}
           />
 
@@ -121,12 +119,7 @@ const ContactSection = () => {
             type="text"
             placeholder="Votre ville"
             value={formData.city}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                city: (e.target as HTMLInputElement).value,
-              }));
-            }}
+            onChange={(e) => handleChange("city", e.target.value)}
             className={inputClass(errors.city)}
           />
 
@@ -142,9 +135,7 @@ const ContactSection = () => {
                   name="userType"
                   value="citoyen"
                   checked={formData.userType === "citoyen"}
-                  onChange={() => {
-                    setFormData((prev) => ({ ...prev, userType: "citoyen" }));
-                  }}
+                  onChange={() => handleChange("userType", "citoyen")}
                   className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                 />
                 <span className="text-base md:text-lg text-rf-green-dark">
@@ -157,12 +148,7 @@ const ContactSection = () => {
                   name="userType"
                   value="maire_ou_elu"
                   checked={formData.userType === "maire_ou_elu"}
-                  onChange={() => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      userType: "maire_ou_elu",
-                    }));
-                  }}
+                  onChange={() => handleChange("userType", "maire_ou_elu")}
                   className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                 />
                 <span className="text-base md:text-lg text-rf-green-dark">
@@ -185,12 +171,7 @@ const ContactSection = () => {
                     name="insuranceQuestion"
                     value="oui"
                     checked={formData.insuranceQuestion === "oui"}
-                    onChange={() => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        insuranceQuestion: "oui",
-                      }));
-                    }}
+                    onChange={() => handleChange("insuranceQuestion", "oui")}
                     className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                   />
                   <span className="text-base md:text-lg text-rf-green-dark">
@@ -203,12 +184,7 @@ const ContactSection = () => {
                     name="insuranceQuestion"
                     value="non"
                     checked={formData.insuranceQuestion === "non"}
-                    onChange={() => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        insuranceQuestion: "non",
-                      }));
-                    }}
+                    onChange={() => handleChange("insuranceQuestion", "non")}
                     className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                   />
                   <span className="text-base md:text-lg text-rf-green-dark">
@@ -223,23 +199,13 @@ const ContactSection = () => {
             type="email"
             placeholder="Email"
             value={formData.email}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                email: (e.target as HTMLInputElement).value,
-              }));
-            }}
+            onChange={(e) => handleChange("email", e.target.value)}
             className={inputClass(errors.email)}
           />
           <textarea
             placeholder="Tapez ici votre message"
             value={formData.message}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                message: (e.target as HTMLTextAreaElement).value,
-              }));
-            }}
+            onChange={(e) => handleChange("message", e.target.value)}
             rows={6}
             className={cn(
               "w-full bg-transparent border p-4 outline-none resize-none text-base md:text-xl transition-colors",
