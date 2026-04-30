@@ -48,10 +48,11 @@ export function FeatureDetailPanel({
             </span>
           </Panel.Subtitle>
         </div>
-        {selectedCommune?.indice_vulnerabilite && (
+        {selectedCommune?.indice_vulnerabilite_niveau && (
           <RfVulnerabilityIndex
             className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
-            value={Math.round(selectedCommune.indice_vulnerabilite * 50) / 10}
+            value={selectedCommune.indice_vulnerabilite_niveau}
+            mode="discrete"
           />
         )}
       </Panel.Header>
