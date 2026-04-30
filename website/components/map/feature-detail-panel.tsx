@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { Commune } from "@/lib/types/communes";
 import { CatNatHistory } from "./cat-nat-history";
 import { safeFormatNumber } from "@/utils/format";
+import { EconomicalSituation } from "./economical-situation";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -61,10 +62,15 @@ export function FeatureDetailPanel({
       </Panel.Header>
 
       <Panel.Content>
-        <CatNatHistory
-          communeCode={commune}
-          selectedCommuneData={selectedCommune}
-        />
+        {selectedCommune && (
+          <div className="space-y-10 mt-10">
+            <EconomicalSituation selectedCommuneData={selectedCommune} />
+            <CatNatHistory
+              communeCode={commune}
+              selectedCommuneData={selectedCommune}
+            />
+          </div>
+        )}
       </Panel.Content>
     </Panel>
   );
