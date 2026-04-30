@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Providers } from "./providers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { FiltersProvider } from "@/components/filters/filter-context";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
       <body className={"font-sans antialiased"}>
         <Header />
         <Providers>
-          <NuqsAdapter>{children}</NuqsAdapter>
+          <FiltersProvider>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </FiltersProvider>
         </Providers>
       </body>
     </html>

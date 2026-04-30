@@ -11,8 +11,13 @@ import {
 } from "@/components/ui/chart";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import {
+  FilterActionType,
+  FilterRangeKey,
+} from "@/lib/types/filters/filters-actions";
+import { useFilters } from "./filter-context";
+import { FILTER_BOUNDS } from "@/lib/types/filters/filters";
 
-// Normal-distribution histogram data for demo purposes
 const HISTOGRAM_DATA: { bin: string; count: number }[] = [
   { bin: "0–5", count: 3 },
   { bin: "5–10", count: 7 },
@@ -50,26 +55,47 @@ function getBarColor(
 
 export interface ChartRangeFilterProps {
   title: string;
-  filterMin: number;
-  filterMax: number;
+  filterKey: FilterRangeKey;
 }
 
-export function ChartRangeFilter({
-  title = "Exposition au risque",
-  filterMin = 0,
-  filterMax = 100,
-}: ChartRangeFilterProps) {
+export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
+  const { filters, dispatch } = useFilters();
   const [filterExpanded, setFilterExpanded] = useState<boolean>(true);
-  const [range, setRange] = useState<[number, number]>([filterMin, filterMax]);
+
+  // Les bornes du slider viennent de FILTER_BOUNDS //TODO - à voir si on garde
+  const bounds = FILTER_BOUNDS[filterKey];
+
+  const activeRange: [number, number] = [
+    filters[filterKey]?.min ?? bounds.min,
+    filters[filterKey]?.max ?? bounds.max,
+  ];
 
   const binCount = HISTOGRAM_DATA.length;
-  const activeStart = Math.round((range[0] / filterMax) * binCount);
-  const activeEnd = Math.round((range[1] / filterMax) * binCount);
+  const activeStart = Math.round(
+    ((activeRange[0] - bounds.min) / (bounds.max - bounds.min)) * binCount,
+  );
+  const activeEnd = Math.round(
+    ((activeRange[1] - bounds.min) / (bounds.max - bounds.min)) * binCount,
+  );
 
-  const MyCustomRectangle = (props: BarShapeProps) => {
-    const color = getBarColor(props, activeStart, activeEnd);
-    return <Rectangle {...props} fill={color} />;
-  };
+  const MyCustomRectangle = (props: BarShapeProps) => (
+    <Rectangle {...props} fill={getBarColor(props, activeStart, activeEnd)} />
+  );
+
+  function handleChange(v: number[]) {
+    const [min, max] = v as [number, number];
+
+    // Si retour aux bornes max → on supprime le filtre (undefined)
+    if (min === bounds.min && max === bounds.max) {
+      dispatch({ type: FilterActionType.CLEAR_RANGE, key: filterKey });
+    } else {
+      dispatch({
+        type: FilterActionType.SET_RANGE,
+        key: filterKey,
+        payload: { min, max },
+      });
+    }
+  }
 
   return (
     <div className="border-b border-gray-200">
@@ -93,16 +119,14 @@ export function ChartRangeFilter({
         <div className="px-4 pb-5">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-1.5 text-sm text-gray-700">
-              <span>Indice d&apos;exposition aux risques</span>
+              <span>{title}</span>
               <Info size={14} className="text-gray-400" />
             </div>
-            <span className="text-sm text-gray-500">Moy: 45</span>
           </div>
           <p className="text-xs text-gray-400 mb-2">
             Distribution des communes
           </p>
 
-          {/* Histogram chart */}
           <ChartContainer config={CHART_CONFIG} className="h-16 w-full mb-0">
             <BarChart
               data={HISTOGRAM_DATA}
@@ -125,20 +149,18 @@ export function ChartRangeFilter({
             </BarChart>
           </ChartContainer>
 
-          {/* Range slider */}
           <Slider
-            min={filterMin}
-            max={filterMax}
+            min={bounds.min}
+            max={bounds.max}
             step={1}
-            value={range}
-            onValueChange={(v) => setRange(v as [number, number])}
+            value={activeRange}
+            onValueChange={handleChange}
             className="mt-3 mb-3"
           />
 
-          {/* Range value labels */}
           <div className="flex justify-between text-xs text-gray-500">
-            <span>{range[0]}</span>
-            <span>{range[1]}</span>
+            <span>{activeRange[0]}</span>
+            <span>{activeRange[1]}</span>
           </div>
         </div>
       )}

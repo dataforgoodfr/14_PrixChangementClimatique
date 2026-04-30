@@ -25,6 +25,7 @@ import { type IndicatorField } from "@/lib/types/indicator";
 import { useIndicator } from "@/hooks";
 import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
+import { useFilters } from "../filters/filter-context";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -106,6 +107,8 @@ function buildFillColor(
 function CommunesLayer() {
   const [indicator] = useIndicator();
 
+  const { maplibreFilter } = useFilters();
+
   return (
     <Source
       id={COMMUNES_SOURCE_ID}
@@ -117,6 +120,7 @@ function CommunesLayer() {
         id={COMMUNES_LAYER_ID}
         type="fill"
         source-layer="communes"
+        filter={maplibreFilter}
         paint={{
           "fill-color": buildFillColor(indicator),
           "fill-opacity": 0.7,
