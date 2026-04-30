@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { RFButton } from "@/components/core/rf-button";
 import { MenuIcon, XIcon } from "lucide-react";
 import { useState } from "react";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +28,7 @@ export function Header() {
   return (
     <header className="h-16 bg-white border-b border-gray-200">
       <div className="h-full flex items-center justify-between px-8 gap-6 relative">
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="shrink-0 flex items-center gap-3">
           <Image
             src="/logo-assurer-ma-ville.svg"
             alt="Reclaim Finance"
@@ -35,6 +36,9 @@ export function Header() {
             height={40}
             className="h-10 w-auto"
           />
+          <span className="hidden lg:block text-sm font-semibold text-rf-gray">
+            Assurer ma ville
+          </span>
         </Link>
 
         <nav className="hidden md:flex flex-1 items-center justify-center gap-8">
@@ -57,7 +61,10 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block shrink-0">
-          <RFButton title="Agissez pour protéger votre commune" path="/" />
+          <RFButton
+            path="/#contact"
+            title="Agissez pour protéger votre commune"
+          />
         </div>
         <Button
           type="button"
@@ -99,7 +106,11 @@ export function Header() {
           );
         })}
         <li>
-          <RFButton title="Nous contacter" onClick={toggleMenu} path="/" />
+          <RFButton
+            path="/#contact"
+            title="Nous contacter"
+            onClick={toggleMenu}
+          />
         </li>
       </ul>
     </header>
