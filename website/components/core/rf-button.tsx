@@ -61,7 +61,7 @@ export function RFButton(props: RFButtonProps) {
 
   const className = clsx(baseClasses, variantClasses[variant]);
 
-  if (as === "button") {
+  if (props.as === "button") {
     return (
       <button
         type={props.type || "button"}
