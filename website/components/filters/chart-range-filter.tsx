@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronUp, ChevronDown, Info } from "lucide-react";
 import { Bar, BarChart, BarShapeProps, Rectangle } from "recharts";
 import {
   ChartContainer,
@@ -9,14 +7,14 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import {
   FilterActionType,
   FilterRangeKey,
 } from "@/lib/types/filters/filters-actions";
 import { useFilters } from "./filter-context";
 import { FILTER_BOUNDS } from "@/lib/types/filters/filters";
+import FilterHeader from "./filter-header";
+import FilterSlider from "./filter-slider";
 
 const HISTOGRAM_DATA: { bin: string; count: number }[] = [
   { bin: "0–5", count: 3 },
@@ -60,7 +58,6 @@ export interface ChartRangeFilterProps {
 
 export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
   const { filters, dispatch } = useFilters();
-  const [filterExpanded, setFilterExpanded] = useState<boolean>(true);
 
   // Les bornes du slider viennent de FILTER_BOUNDS //TODO - à voir si on garde
   const bounds = FILTER_BOUNDS[filterKey];
@@ -70,6 +67,7 @@ export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
     filters[filterKey]?.max ?? bounds.max,
   ];
 
+  const moyenne = (activeRange[0] + activeRange[1]) / 2;
   const binCount = HISTOGRAM_DATA.length;
   const activeStart = Math.round(
     ((activeRange[0] - bounds.min) / (bounds.max - bounds.min)) * binCount,
@@ -98,72 +96,36 @@ export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
   }
 
   return (
-    <div className="border-b border-gray-200">
-      <Button
-        onClick={() => setFilterExpanded((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-4 my-2"
-        size="lg"
-        variant="ghost"
-      >
-        <span className="font-semibold gap-1.5 text-sm text-gray-900">
-          {title}
-        </span>
-        {filterExpanded ? (
-          <ChevronUp size={16} className="text-gray-500" />
-        ) : (
-          <ChevronDown size={16} className="text-gray-500" />
-        )}
-      </Button>
+    <div>
+      <FilterHeader title={title} moyenne={moyenne} />
 
-      {filterExpanded && (
-        <div className="px-4 pb-5">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-1.5 text-sm text-gray-700">
-              <span>{title}</span>
-              <Info size={14} className="text-gray-400" />
-            </div>
-          </div>
-          <p className="text-xs text-gray-400 mb-2">
-            Distribution des communes
-          </p>
-
-          <ChartContainer config={CHART_CONFIG} className="h-16 w-full mb-0">
-            <BarChart
-              data={HISTOGRAM_DATA}
-              margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-              barCategoryGap={1}
-            >
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    hideLabel={false}
-                    formatter={(value) => [`${value} communes`, ""]}
-                  />
-                }
+      <ChartContainer config={CHART_CONFIG} className="h-16 w-full">
+        <BarChart
+          data={HISTOGRAM_DATA}
+          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          barCategoryGap={1}
+        >
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                hideLabel={false}
+                formatter={(value) => [`${value} communes`, ""]}
               />
-              <Bar
-                dataKey="count"
-                radius={[2, 2, 0, 0]}
-                shape={MyCustomRectangle}
-              />
-            </BarChart>
-          </ChartContainer>
-
-          <Slider
-            min={bounds.min}
-            max={bounds.max}
-            step={1}
-            value={activeRange}
-            onValueChange={handleChange}
-            className="mt-3 mb-3"
+            }
           />
+          <Bar
+            dataKey="count"
+            radius={[2, 2, 0, 0]}
+            shape={MyCustomRectangle}
+          />
+        </BarChart>
+      </ChartContainer>
 
-          <div className="flex justify-between text-xs text-gray-500">
-            <span>{activeRange[0]}</span>
-            <span>{activeRange[1]}</span>
-          </div>
-        </div>
-      )}
+      <FilterSlider
+        bounds={bounds}
+        activeRange={activeRange}
+        onChange={handleChange}
+      />
     </div>
   );
 }
