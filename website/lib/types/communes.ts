@@ -28,7 +28,9 @@ export interface Commune {
 
   // Budget
   ratio_dettes_depenses?: number;
-  depenses_per_pop: number;
+  depenses_per_pop?: number;
+  part_impots_locaux?: number;
+  impots_locaux_evolution?: number;
 
   // CCR
   nb_total_arretes_recon?: number;
