@@ -11,11 +11,12 @@ const Hero: React.FC = () => {
       {/* image desktop - absolute position  */}
       <div className="hidden lg:block absolute right-0  top-[70%] -translate-y-1/2 w-[clamp(400px,50vw,771px)] max-h-[70vh]">
         <Image
-          src="/home-hero-map.svg"
+          src="/carte_score_vulnerabilite.png"
           alt="Map"
-          width={771}
-          height={780}
+          width={735}
+          height={746}
           className="w-full"
+          unoptimized
         />
         <div className="absolute bottom-0 w-full h-[200px] bg-[linear-gradient(207.6deg,rgba(254,251,247,0)_10.58%,#FFFFFF_52.37%)] blur-[54px]"></div>
       </div>
