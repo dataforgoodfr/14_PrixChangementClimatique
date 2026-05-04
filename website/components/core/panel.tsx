@@ -41,7 +41,7 @@ function PanelTitle({
     <p
       className={cn(
         "font-semibold text-gray-900",
-        size === "large" ? "pt-30 text-3xl" : "text-lg",
+        size === "large" ? "text-3xl" : "text-lg",
         className,
       )}
     >
@@ -52,7 +52,6 @@ function PanelTitle({
 
 function PanelSubtitle({
   children,
-  size = "large",
   className,
 }: {
   children: ReactNode;
@@ -80,7 +79,7 @@ function PanelHeader({
         className,
       )}
     >
-      <div className="flex flex-col gap-0.5 min-w-0">{children}</div>
+      {children}
       {showCloseButton && (
         <button
           onClick={onClose}

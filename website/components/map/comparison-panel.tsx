@@ -110,19 +110,21 @@ export function ComparisonPanel({
       zIndex="z-30"
       showCloseButton
     >
-      <Panel.Header className="px-4 py-8 grid grid-cols-3 gap-8">
-        <Panel.Title>Comparatif</Panel.Title>
-        <RFCommuneSearchBox
-          className="grow"
-          filterValue={selectedCommune.nom_commune}
-          disabled
-        />
-        <RFCommuneSearchBox
-          className="grow"
-          filterValue={comparedCommune?.nom_commune}
-          onAddressFilter={selectCompare}
-          placeholder="Choisissez une commune à comparer"
-        />
+      <Panel.Header className="px-4 py-8">
+        <div className="w-full grid grid-cols-3 gap-8 items-center">
+          <Panel.Title>Comparatif</Panel.Title>
+          <RFCommuneSearchBox
+            className="grow"
+            filterValue={selectedCommune.nom_commune}
+            disabled
+          />
+          <RFCommuneSearchBox
+            className="grow"
+            filterValue={comparedCommune?.nom_commune}
+            onAddressFilter={selectCompare}
+            placeholder="Choisissez une commune à comparer"
+          />
+        </div>
       </Panel.Header>
       {selectedCommune && comparedCommune && (
         <Panel.Content>
@@ -136,10 +138,12 @@ export function ComparisonPanel({
             />
             <SectionSubtitle title="Indice de vulnérabilité" />
             <RfVulnerabilityIndex
-              value={Math.round(selectedCommune.indice_vulnerabilite * 50) / 10}
+              mode="discrete"
+              value={selectedCommune.indice_vulnerabilite_niveau}
             />
             <RfVulnerabilityIndex
-              value={Math.round(comparedCommune.indice_vulnerabilite * 50) / 10}
+              mode="discrete"
+              value={comparedCommune.indice_vulnerabilite_niveau}
             />
             <SectionTitle
               title="Caractéristiques socio-économiques"
