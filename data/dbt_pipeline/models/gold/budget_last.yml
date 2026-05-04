@@ -1,0 +1,20 @@
+version: 1
+
+models:
+  - name: budget_last
+    description: >
+      Gold layer: Indicateurs du dernier budget de la commune utilisé pour le score économique.
+      Source: Silver layer (indicateurs_budget)
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: ratio_dettes_depenses
+        description: "Dettes/dépenses du budget 2024"
+        type: DOUBLE
+      - name: depenses
+        description: "Solde net pour le type de compte dépenses sur le budget 2024"
+        type: DOUBLE
+      - name: depenses_per_pop
+        description: "Solde net pour le type de compte dépenses par habitant (max des budgets 2022 à 2024)"
+        type: DOUBLE
