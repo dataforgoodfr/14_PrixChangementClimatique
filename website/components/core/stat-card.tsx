@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formatNumber } from "@/utils/format";
 
 export interface StatCardProps {
   title: string;
@@ -14,8 +15,6 @@ interface VariationResult {
   formatted: string;
   color: string;
 }
-
-const numberFormatter = new Intl.NumberFormat("fr-FR");
 
 const getVariationColor = (value: number): string => {
   if (value > 0) return "bg-green-50 text-green-600";
@@ -36,10 +35,6 @@ const getVariation = (
     formatted: `${rounded > 0 ? "+" : ""}${rounded}%`,
     color: getVariationColor(rounded),
   };
-};
-
-const formatNumber = (value: number): string => {
-  return numberFormatter.format(value);
 };
 
 export function StatCard({

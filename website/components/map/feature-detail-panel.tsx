@@ -7,6 +7,7 @@ import { useQueryState } from "nuqs";
 import { useCallback } from "react";
 import { Commune } from "@/lib/types/communes";
 import { CatNatHistory } from "./cat-nat-history";
+import { safeFormatNumber } from "@/utils/format";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -44,7 +45,9 @@ export function FeatureDetailPanel({
           <Panel.Subtitle>
             <span className="flex gap-2 pt-2">
               <UserIcon className="inline-block size-6" />
-              <span>xxx habitants</span>
+              <span>
+                {safeFormatNumber(selectedCommune?.population)} habitants
+              </span>
             </span>
           </Panel.Subtitle>
         </div>
