@@ -56,9 +56,10 @@ function getBarColor(
 export interface ChartRangeFilterProps {
   title: string;
   filterKey: FilterRangeKey;
+  step?: number;
 }
 
-export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
+export function ChartRangeFilter({ title, filterKey, step }: ChartRangeFilterProps) {
   const bounds = FILTER_BOUNDS[filterKey];
   const { filters, dispatch } = useFilters();
   const [activeRange, setActiveRange] = useState<[number, number]>([
@@ -124,7 +125,7 @@ export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
 
       <FilterSlider
         bounds={bounds}
-        step={100}
+        step={step}
         activeRange={activeRange}
         onChange={handleChange}
       />

@@ -21,7 +21,13 @@ import {
 } from "@/components/icons";
 import { ChartRangeFilter } from "@/components/filters/chart-range-filter";
 import { VulnerabiliteRangeFilter } from "@/components/filters/vulnerability-filter";
-import { FilterRangeKey } from "@/lib/types/filters/filters-actions";
+import { ToggleFilter } from "@/components/filters/toggle-filter";
+import {
+  FilterRangeKey,
+  FilterToggleKey,
+} from "@/lib/types/filters/filters-actions";
+import { useFilters } from "@/components/filters/filter-context";
+import { FilterActionType } from "@/lib/types/filters/filters-actions";
 
 // ─── Indicator options ────────────────────────────────────────────────────────
 
@@ -49,6 +55,25 @@ const INDICATOR_OPTIONS: {
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
 
+// ─── Filter section heading ───────────────────────────────────────────────────
+
+function FilterSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mb-1">
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 px-4">
+        {title}
+      </p>
+      {children}
+    </div>
+  );
+}
+
 // ─── Props ────────────────────────────────────────────────────────────────────
 interface FiltersPanelProps {
   isOpen: boolean;
@@ -67,6 +92,11 @@ export function FiltersPanel({
 }: FiltersPanelProps) {
   const [indicator, setIndicator] = useIndicator();
   const [filtersOpen, setFiltersOpen] = useState(true);
+  const { dispatch } = useFilters();
+
+  function handleReset() {
+    dispatch({ type: FilterActionType.RESET });
+  }
 
   return (
     <Panel isOpen={isOpen} onClose={onClose} dir="rtl">
@@ -120,12 +150,69 @@ export function FiltersPanel({
             <div className="py-2 text-sm text-gray-400">
               <VulnerabiliteRangeFilter />
               <ChartRangeFilter
-                title={"Nombre d'habitants"}
+                title="Nombre d'habitants"
                 filterKey={FilterRangeKey.POPULATION}
+                step={500}
               />
               <ChartRangeFilter
-                title={"Dépenses par habitant"}
+                title="Exposition au retrait-gonflement des argiles"
+                filterKey={FilterRangeKey.INDICATEUR_RGA}
+                step={0.01}
+              />
+              <ChartRangeFilter
+                title="Exposition aux inondations"
+                filterKey={FilterRangeKey.INDICATEUR_TRI}
+                step={0.01}
+              />
+              <ChartRangeFilter
+                title="Arrêtés CatNat reconnus"
+                filterKey={FilterRangeKey.NB_TOTAL_ARRETES_RECON}
+                step={1}
+              />
+              <div className="px-4 pb-4 border-b border-gray-200">
+                <ToggleFilter
+                  label="Plan de prévention RGA (PPRN)"
+                  filterKey={FilterToggleKey.PPRN_RGA}
+                />
+                <ToggleFilter
+                  label="Plan de prévention inondation (PPRN)"
+                  filterKey={FilterToggleKey.PPRN_INO}
+                />
+              </div>
+              <ChartRangeFilter
+                title="Dépenses par habitant (€)"
                 filterKey={FilterRangeKey.DEPENSES_PER_POP}
+                step={100}
+              />
+              <ChartRangeFilter
+                title="Ratio dettes / dépenses"
+                filterKey={FilterRangeKey.RATIO_DETTES_DEPENSES}
+                step={0.1}
+              />
+              <ChartRangeFilter
+                title="Impôts locaux (€)"
+                filterKey={FilterRangeKey.IMPOTS_LOCAUX}
+                step={100_000}
+              />
+              <ChartRangeFilter
+                title="Évolution des impôts locaux"
+                filterKey={FilterRangeKey.IMPOTS_LOCAUX_EVOLUTION}
+                step={0.1}
+              />
+              <ChartRangeFilter
+                title="Prime d'assurance (€)"
+                filterKey={FilterRangeKey.PRIME_ASSURANCE_2024}
+                step={1_000}
+              />
+              <ChartRangeFilter
+                title="Évolution des primes d'assurance"
+                filterKey={FilterRangeKey.EVOLUTION_PRIME_ASSURANCE}
+                step={0.1}
+              />
+              <ChartRangeFilter
+                title="Part des primes dans le budget"
+                filterKey={FilterRangeKey.PART_PRIME_BUDGET}
+                step={0.001}
               />
             </div>
           )}
@@ -134,11 +221,8 @@ export function FiltersPanel({
 
       <Panel.Footer>
         <Panel.Actions>
-          <Button variant="ghost" size="lg">
-            Tout effacer
-          </Button>
-          <Button size="lg" disabled>
-            Appliquer les filtres
+          <Button variant="secondary" size="lg" onClick={handleReset}>
+            Effacer les filtres
           </Button>
         </Panel.Actions>
       </Panel.Footer>
