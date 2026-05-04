@@ -19,11 +19,9 @@ import {
   ScoreAssuranceIcon,
   type IconComponent,
 } from "@/components/icons";
-import { VulnerabiliteFilters } from "@/components/filters/kpi-filters/vulnerabilite-filters";
-import { ExpositionFilters } from "@/components/filters/kpi-filters/exposition-filters";
-import { PreventionFilters } from "@/components/filters/kpi-filters/prevention-filters";
-import { EconomiqueFilters } from "@/components/filters/kpi-filters/economique-filters";
-import { AssuranceFilters } from "@/components/filters/kpi-filters/assurance-filters";
+import { ChartRangeFilter } from "@/components/filters/chart-range-filter";
+import { VulnerabiliteRangeFilter } from "@/components/filters/vulnerability-filter";
+import { FilterRangeKey } from "@/lib/types/filters/filters-actions";
 
 // ─── Indicator options ────────────────────────────────────────────────────────
 
@@ -51,16 +49,6 @@ const INDICATOR_OPTIONS: {
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
 
-// ─── Filter components map ────────────────────────────────────────────────────
-
-const FILTER_COMPONENTS: Record<IndicatorField, React.ComponentType> = {
-  indice_vulnerabilite_niveau: VulnerabiliteFilters,
-  score_georisque: ExpositionFilters,
-  prevention: PreventionFilters,
-  score_economique: EconomiqueFilters,
-  score_assurance: AssuranceFilters,
-};
-
 // ─── Props ────────────────────────────────────────────────────────────────────
 interface FiltersPanelProps {
   isOpen: boolean;
@@ -79,8 +67,6 @@ export function FiltersPanel({
 }: FiltersPanelProps) {
   const [indicator, setIndicator] = useIndicator();
   const [filtersOpen, setFiltersOpen] = useState(true);
-
-  const ActiveFilters = FILTER_COMPONENTS[indicator];
 
   return (
     <Panel isOpen={isOpen} onClose={onClose} dir="rtl">
@@ -130,7 +116,19 @@ export function FiltersPanel({
               <ChevronDown size={16} className="text-gray-400" />
             )}
           </button>
-          {filtersOpen && <ActiveFilters />}
+          {filtersOpen && (
+            <div className="py-2 text-sm text-gray-400">
+              <VulnerabiliteRangeFilter />
+              <ChartRangeFilter
+                title={"Nombre d'habitants"}
+                filterKey={FilterRangeKey.POPULATION}
+              />
+              <ChartRangeFilter
+                title={"Dépenses par habitant"}
+                filterKey={FilterRangeKey.DEPENSES_PER_POP}
+              />
+            </div>
+          )}
         </div>
       </Panel.Content>
 

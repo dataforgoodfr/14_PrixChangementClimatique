@@ -15,6 +15,8 @@ import { useFilters } from "./filter-context";
 import { FILTER_BOUNDS } from "@/lib/types/filters/filters";
 import FilterHeader from "./filter-header";
 import FilterSlider from "./filter-slider";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useState } from "react";
 
 const HISTOGRAM_DATA: { bin: string; count: number }[] = [
   { bin: "0–5", count: 3 },
@@ -57,17 +59,14 @@ export interface ChartRangeFilterProps {
 }
 
 export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
-  const { filters, dispatch } = useFilters();
-
-  // Les bornes du slider viennent de FILTER_BOUNDS //TODO - à voir si on garde
   const bounds = FILTER_BOUNDS[filterKey];
-
-  const activeRange: [number, number] = [
+  const { filters, dispatch } = useFilters();
+  const [activeRange, setActiveRange] = useState<[number, number]>([
     filters[filterKey]?.min ?? bounds.min,
     filters[filterKey]?.max ?? bounds.max,
-  ];
+  ]);
+  const debouncedDispatch = useDebounce(dispatch, 200);
 
-  const moyenne = (activeRange[0] + activeRange[1]) / 2;
   const binCount = HISTOGRAM_DATA.length;
   const activeStart = Math.round(
     ((activeRange[0] - bounds.min) / (bounds.max - bounds.min)) * binCount,
@@ -85,9 +84,11 @@ export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
 
     // Si retour aux bornes max → on supprime le filtre (undefined)
     if (min === bounds.min && max === bounds.max) {
-      dispatch({ type: FilterActionType.CLEAR_RANGE, key: filterKey });
+      debouncedDispatch({ type: FilterActionType.CLEAR_RANGE, key: filterKey });
+      setActiveRange([bounds.min, bounds.max]);
     } else {
-      dispatch({
+      setActiveRange([min, max]);
+      debouncedDispatch({
         type: FilterActionType.SET_RANGE,
         key: filterKey,
         payload: { min, max },
@@ -97,7 +98,7 @@ export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
 
   return (
     <div>
-      <FilterHeader title={title} moyenne={moyenne} />
+      <FilterHeader title={title} />
 
       <ChartContainer config={CHART_CONFIG} className="h-16 w-full">
         <BarChart
@@ -123,6 +124,7 @@ export function ChartRangeFilter({ title, filterKey }: ChartRangeFilterProps) {
 
       <FilterSlider
         bounds={bounds}
+        step={100}
         activeRange={activeRange}
         onChange={handleChange}
       />
