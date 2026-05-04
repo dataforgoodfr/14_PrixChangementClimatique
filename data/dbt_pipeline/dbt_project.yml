@@ -38,3 +38,29 @@ models:
 on-run-start:
   - "INSTALL spatial;"
   - "LOAD spatial;"
+
+vars:
+  # Loadings PCA sécheresse calculés depuis Marimo
+  loading_sec_swi: 0.4205
+  loading_sec_arr_sec: 0.6477
+  loading_sec_rga: 0.6353
+
+  # Loadings PCA inondation calculés depuis Marimo (déjà pondérés par variance expliquée)
+  loading_ino_rr50: 0.0809
+  loading_ino_arr_ino: 0.2958
+  loading_ino_tri: 0.4538
+
+  # Poids de prévention (soustraction sur scores nets)
+  poids_prevention: 0.2
+
+  # Score assurance
+  poids_evolution_prime: 0.3
+  poids_prime_budget: 0.4
+  poids_franchise: 0.2
+
+  # Score éco
+  poids_dettes: 0.5
+
+  # Score final
+  poids_score_eco: 0.2
+  poids_score_assurance: 0.4

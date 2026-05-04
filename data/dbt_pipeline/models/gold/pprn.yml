@@ -1,0 +1,23 @@
+version: 1
+
+models:
+  - name: pprn
+    description: >
+      Gold layer: Données PPRN par commune
+      Source: Silver layer : pprn_clean
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: pprn_rga
+        description: Existence d'un pprn rga
+        data_type: BOOLEAN
+      - name: pprn_ino
+        description: Existence d'un pprn inondation
+        data_type: BOOLEAN
+      - name: date_approbation_ino
+        description: Date d'approbation du PPRN inondation
+        data_type: DATE
+      - name: date_approbation_rga
+        description: Date d'approbation du PPRN RGA
+        data_type: DATE

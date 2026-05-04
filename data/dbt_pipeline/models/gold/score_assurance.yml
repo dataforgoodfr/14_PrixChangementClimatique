@@ -1,0 +1,26 @@
+version: 1
+
+models:
+  - name: score_assurance
+    description: >
+      Gold layer: Score assurance par commune construit sur primes, franchise, arrêtés non reconnus
+      Source: Gold layer : primes, catnat
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: part_prime_budget_norm
+        description: "Primes assurances sur dépenses 2024 (valeur normalisée)"
+        type: FLOAT
+      - name: evolution_prime_norm
+        description: "Evolution des primes assurance entre 2020 et 2024 (valeur normalisée)"
+        type: INTEGER
+      - name: franchise_norm
+        description: "Multiplicateur de la franchise par commune de la derniere année (valeur normalisée)"
+        type: INTEGER
+      - name: score_assurance
+        description: "Score assurance de la commune"
+        type: FLOAT
+      - name: part_arretes_non_reco
+        description: part d'arrêtés non reconnus sur le nombre total d'arrêtés par commune
+        data_type: FLOAT

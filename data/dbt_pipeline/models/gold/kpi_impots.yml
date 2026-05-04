@@ -1,0 +1,20 @@
+version: 1
+
+models:
+  - name: kpi_impots
+    description: >
+      Gold layer: KPI impôts reprises dans la table des résultats website.
+      Source: Bronze layer (donnees_financieres_ofgl)
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: impots_locaux
+        description: Somme des impots locaux pour 2024 (Source OFGL)
+        data_type: float
+      - name: impots_locaux_evolution
+        description: Evolution des impots locaux entre 2020 et 2024
+        data_type: float
+      - name: part_impots_locaux
+        description: Part des impots locaux sur le budget total de la commune en 2024
+        data_type: float
