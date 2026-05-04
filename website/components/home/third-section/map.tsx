@@ -15,7 +15,7 @@ const Map: React.FC = () => {
         </p>
       </div>
       <Image
-        src={"/home-clays-map.svg"}
+        src={"/home-clays-map.png"}
         alt={"Retrait gonflement des argiles - Carte"}
         width={331}
         height={340}
