@@ -63,18 +63,20 @@ export function RfRecognitionRequestChart({
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <div>
+        <div className="text-nowrap">
           <span className="align-middle">
             <span className="inline-block size-4 rounded-full bg-[#00B831]" />
-          </span>{" "}
-          <span>Demandes reconnues</span>{" "}
+          </span>
+          &nbsp;
+          <span>Demandes reconnues</span>&nbsp;
           <span className="text-muted-foreground">{recognized}</span>
         </div>
-        <div>
+        <div className="text-nowrap">
           <span className="align-middle">
             <span className="inline-block size-4 rounded-full bg-[#EA580D]" />
-          </span>{" "}
-          <span>Demandes non reconnues</span>{" "}
+          </span>
+          &nbsp;
+          <span>Demandes non reconnues</span>&nbsp;
           <span className="text-muted-foreground">{unrecognized}</span>
         </div>
       </div>
