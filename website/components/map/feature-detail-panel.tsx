@@ -9,6 +9,7 @@ import { Commune } from "@/lib/types/communes";
 import { CatNatHistory } from "./cat-nat-history";
 import { safeFormatNumber } from "@/utils/format";
 import { EconomicalSituation } from "./economical-situation";
+import { InsuranceCoverage } from "./insurance-coverage";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -69,6 +70,7 @@ export function FeatureDetailPanel({
               communeCode={commune}
               selectedCommuneData={selectedCommune}
             />
+            <InsuranceCoverage selectedCommuneData={selectedCommune} />
           </div>
         )}
       </Panel.Content>
