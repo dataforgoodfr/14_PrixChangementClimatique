@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export function debounce<A = unknown, R = void>(
   fn: (args: A) => R,
@@ -26,7 +26,7 @@ export const useDebounce = <A = unknown, R = void>(
   fn: (args: A) => R,
   ms: number,
 ): ((args: A) => Promise<R>) => {
-  const [debouncedFun, teardown] = debounce<A, R>(fn, ms);
+  const [debouncedFun, teardown] = useMemo(() =>debounce<A, R>(fn, ms), [fn, ms]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => teardown(), []);
