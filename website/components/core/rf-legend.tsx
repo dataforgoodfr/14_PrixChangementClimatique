@@ -39,7 +39,7 @@ const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
   prevention: {
     title: "Prévention des risques (PPRN)",
     discrete: [
-      { color: "#fed7aa", label: "Aucun risque" },
+      { color: "#fed7aa", label: "Aucun PPRN" },
       { color: "#92400e", label: "Sécheresse" },
       { color: "#1d4ed8", label: "Inondation" },
       { color: "#2d7a3a", label: "Séch. + Inond." },

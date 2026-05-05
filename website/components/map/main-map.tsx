@@ -74,12 +74,12 @@ function buildFillColor(
         ["==", ["get", "pprn_rga"], true],
         ["==", ["get", "pprn_ino"], true],
       ],
-      "#2d7a3a",
+      "#032E15",
       ["==", ["get", "pprn_rga"], true],
-      "#92400e",
+      "#A66000",
       ["==", ["get", "pprn_ino"], true],
-      "#1d4ed8",
-      "#fed7aa",
+      "#075985",
+      "#D8D8D0",
     ];
   }
   if (indicator === "score_economique") {
@@ -125,6 +125,7 @@ function CommunesLayer() {
         paint={{
           "fill-color": buildFillColor(indicator),
           "fill-opacity": 0.7,
+          "fill-outline-color": "transparent",
         }}
       />
       <Layer
