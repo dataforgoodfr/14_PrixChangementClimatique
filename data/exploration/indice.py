@@ -61,6 +61,54 @@ def _(con):
 
 
 @app.cell
+def _(con):
+    opendatasoft_communes= con.sql("""SELECT	* FROM dev.main.opendatasoft_communes""").df()
+    return
+
+
+@app.cell
+def _(con):
+    indicateurs_tri_rga_bats_par_com = con.sql("""SELECT	* FROM dev.main.indicateurs_tri_rga_bats_par_com""").df() 
+    return
+
+
+@app.cell
+def _(con):
+    rga_bats_communes = con.sql("""SELECT	* FROM dev.main.rga_bats_communes""").df() 
+    return (rga_bats_communes,)
+
+
+@app.cell
+def _(rga_bats_communes):
+    rga_bats_communes.loc[rga_bats_communes['code_geo'].str.startswith('75')]
+    return
+
+
+@app.cell
+def _(con):
+    population_code_geo= con.sql("""SELECT	* FROM dev.main.population_code_geo""").df()
+    return (population_code_geo,)
+
+
+@app.cell
+def _(population_code_geo):
+    population_code_geo.loc[population_code_geo['code_geo'].str.startswith('75')]
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['code_insee'].str.startswith('75')]
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['code_insee'].str.startswith('976')]
+    return
+
+
+@app.cell
 def _(gpd, resultats_website_par_commune):
     gdf = gpd.GeoDataFrame(resultats_website_par_commune, geometry="geometry")
     gdf = gdf.set_crs(4326).to_crs(2154)
