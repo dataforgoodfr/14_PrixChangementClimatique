@@ -1,4 +1,4 @@
--- test resultats_par_commune.sql
+-- resultats_par_commune.sql
 -- Gold layer: Résultats enrichis par commune avec KPI temporaire
 -- Source: Bronze layer communes +  KPI
 -- Description: Contient les données communes nécessaires pour le site web
