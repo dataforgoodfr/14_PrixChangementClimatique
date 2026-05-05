@@ -3,8 +3,8 @@ version: 2
 models:
   - name: resultats_nationaux
     description: >
-      Gold layer: Table des résultats nationaux avec valeurs RANDOM sur les scores et indice de vulnérabilité.
-      Source: Bronze layer (donnees_financieres_ofgl) Silver layer (primes_par_communes) + valeurs RANDOM
+      Gold layer: Table de synthèse des résultats nationaux.
+      Source: Bronze layer (donnees_financieres_ofgl) Silver layer (primes_par_communes) + Gold layer (indice_par_commune)
     columns:
       - name: score_economique_moy
         description: "score economique national moyen"
