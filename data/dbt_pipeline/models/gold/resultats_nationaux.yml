@@ -9,8 +9,8 @@ models:
       - name: score_economique_moy
         description: "score economique national moyen"
         type: DECIMAL(3,2)
-      - name: score_georisque_moy
-        description: "score géorisque national moyen"
+      - name: score_climatique_moy
+        description: "score climatique national moyen"
         type: DECIMAL(3,2)
       - name: score_assurance_moy
         description: "score assurance national moyen"
@@ -20,7 +20,7 @@ models:
         type: DECIMAL(3,2)
       - name: indice_vulnerabilite_niveau
         description: "niveau d'indice de vulnérabilité"
-        type: INT
+        type: DECIMAL(3,2)
       - name: part_communes_vulnerables
         description: "à partir de quel score une commune est vulnérable"
         type: DECIMAL(3,2)
