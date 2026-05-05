@@ -13,7 +13,7 @@ import { type IndicatorField, DEFAULT_INDICATOR } from "@/lib/types/indicator";
 import { useIndicator } from "@/hooks";
 import {
   IndiceVulnerabiliteNiveauIcon,
-  ScoreGeorisqueIcon,
+  ScoreClimatiqueIcon,
   PreventionIcon,
   ScoreEconomiqueIcon,
   ScoreAssuranceIcon,
@@ -37,7 +37,7 @@ const INDICATOR_OPTIONS: {
     label: "Vulnérabilité",
     Icon: IndiceVulnerabiliteNiveauIcon,
   },
-  { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
+  { value: "score_climatique", label: "Exposition", Icon: ScoreClimatiqueIcon },
   {
     value: "prevention",
     label: "Prévention",
@@ -55,7 +55,7 @@ const INDICATOR_OPTIONS: {
 
 const FILTER_COMPONENTS: Record<IndicatorField, React.ComponentType> = {
   indice_vulnerabilite_niveau: VulnerabiliteFilters,
-  score_georisque: ExpositionFilters,
+  score_climatique: ExpositionFilters,
   prevention: PreventionFilters,
   score_economique: EconomiqueFilters,
   score_assurance: AssuranceFilters,

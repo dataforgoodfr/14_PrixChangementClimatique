@@ -11,7 +11,7 @@ export interface Commune {
 
   // Indices
   score_economique?: number;
-  score_georisque?: number;
+  score_climatique?: number;
   score_assurance?: number;
   indice_vulnerabilite: number;
   indice_vulnerabilite_niveau: number;

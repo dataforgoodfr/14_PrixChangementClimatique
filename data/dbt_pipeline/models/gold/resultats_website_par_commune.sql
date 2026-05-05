@@ -13,9 +13,9 @@ SELECT
     c.geometry,
     c.nom_commune,
 
-    -- KPI récupérés depuis la table indice_par_commune
+    -- scores récupérés depuis la table indice_par_commune
     i.score_economique,
-    i.score_climatique AS score_georisque,
+    i.score_climatique,
     i.score_assurance,
     i.indice_vulnerabilite,
     i.indice_vulnerabilite_niveau,

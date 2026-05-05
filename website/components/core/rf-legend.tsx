@@ -30,8 +30,8 @@ const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
       { color: "#B91C1C" },
     ],
   },
-  score_georisque: {
-    title: "Exposition aux risques",
+  score_climatique: {
+    title: "Exposition aux risques climatiques",
     labelMin: "Peu élevé",
     labelMax: "Très élevé",
     gradient: "linear-gradient(to right, #FFF0EE, #7F1D1D)",

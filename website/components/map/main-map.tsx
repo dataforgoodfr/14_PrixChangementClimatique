@@ -55,11 +55,11 @@ function buildFillColor(
       "#B91C1C",
     ];
   }
-  if (indicator === "score_georisque") {
+  if (indicator === "score_climatique") {
     return [
       "interpolate",
       ["linear"],
-      ["coalesce", ["get", "score_georisque"], 0],
+      ["coalesce", ["get", "score_climatique"], 0],
       0,
       "#FFF0EE",
       1,

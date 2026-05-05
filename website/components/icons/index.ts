@@ -6,7 +6,7 @@ export { VulnerabiliteIcon } from "./VulnerabiliteIcon";
 
 // Indicator-named aliases
 export { VulnerabiliteIcon as IndiceVulnerabiliteNiveauIcon } from "./VulnerabiliteIcon";
-export { ExpositionIcon as ScoreGeorisqueIcon } from "./ExpositionIcon";
+export { ExpositionIcon as ScoreClimatiqueIcon } from "./ExpositionIcon";
 export { EconomiqueIcon as ScoreEconomiqueIcon } from "./EconomiqueIcon";
 export { AssuranceIcon as ScoreAssuranceIcon } from "./AssuranceIcon";
 
