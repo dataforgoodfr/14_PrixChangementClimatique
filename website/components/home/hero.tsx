@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
               subtitle={
                 <p>
                   {
-                    "est aujourd'hui trés vulnérable face aux conséquences du changement climatique"
+                    "sont aujourd’hui vulnérables face aux conséquences du changement climatiques et au durcissement des conditions d’accès à l’assurance."
                   }
                 </p>
               }
