@@ -7,7 +7,7 @@ WITH pop_adjusted AS (
         annee_recensement,
         population
     FROM {{ ref('population_par_com_annee') }}
-    
+
     UNION ALL
 
     SELECT
@@ -19,7 +19,6 @@ WITH pop_adjusted AS (
     GROUP BY annee_recensement
 
 )
-
 
 SELECT
     budget.*,
@@ -36,11 +35,12 @@ FROM
     {{ ref('budget_par_com_annee') }} AS budget
 
 LEFT JOIN pop_adjusted AS pop
-    ON budget.code_geo = pop.code_geo
-    AND (
+    ON
+        budget.code_geo = pop.code_geo
+        AND (
         -- Cas 976 → toujours année 2017
-        (budget.code_geo LIKE '976%' AND pop.annee_recensement = 2017)
+            (budget.code_geo LIKE '976%' AND pop.annee_recensement = 2017)
 
-        -- Autres cas 
-        OR (budget.code_geo NOT LIKE '976%' AND budget.annee = pop.annee_recensement)
-    )
+            -- Autres cas
+            OR (budget.code_geo NOT LIKE '976%' AND budget.annee = pop.annee_recensement)
+        )
