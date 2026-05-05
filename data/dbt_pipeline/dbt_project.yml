@@ -46,27 +46,63 @@ on-run-start:
   - "LOAD spatial;"
 
 vars:
-  # Loadings PCA sécheresse calculés depuis Marimo
-  loading_sec_swi: 0.4205
-  loading_sec_arr_sec: 0.6477
-  loading_sec_rga: 0.6353
+  # ── Sécheresse — standardisation ──────────────────────────
+  mean_swi: 139.71562625913776
+  std_swi: 32.76467151099767
+  mean_arr_sec: 2.0292119956253956
+  std_arr_sec: 3.531030878641468
+  mean_rga: 0.17399037031816475
+  std_rga: 0.1603593391505491
 
-  # Loadings PCA inondation calculés depuis Marimo (déjà pondérés par variance expliquée)
-  loading_ino_rr50: 0.0809
-  loading_ino_arr_ino: 0.2958
-  loading_ino_tri: 0.4538
+  # ── Sécheresse — loadings PCA ─────────────────────────────
+  loading_sec_swi: 0.4205456131842876
+  loading_sec_arr_sec: 0.6477392197872031
+  loading_sec_rga: 0.6352757593210343
 
-  # Poids de prévention (soustraction sur scores nets)
+  # ── Sécheresse — normalisation ────────────────────────────
+  p01_sec: -1.9393600207332475
+  p99_sec: 4.464675729691397
+
+  # ── Inondation — standardisation ─────────────────────────
+  mean_rr50: 0.9807548954958571
+  std_rr50: 1.2238681589748657
+  mean_arr_ino: 3.359700679491958
+  std_arr_ino: 2.92036763574908
+  mean_tri: 0.00730561588915048
+  std_tri: 0.047299208723556314
+
+  # ── Inondation — loadings PCA ─────────────────────────────
+  loading_ino_rr50: 0.08088122546099885
+  loading_ino_arr_ino: 0.2958468409807173
+  loading_ino_tri: 0.45377559342794693
+
+  # ── Inondation — normalisation ────────────────────────────
+  p01_ino: -0.458734463421787
+  p99_ino: 2.453433198540532
+
+  # ── Autres arrêtés — normalisation ───────────────────────
+  p01_autre: 0.0
+  p99_autre: 6.0
+
+  # ── Assurance — normalisation ─────────────────────────────
+  cap_ppb: 0.06492051624194653
+  min_ppb: -0.00033697071433470057
+  max_ppb: 0.06492051624194653
+  cap_epa: 3.8475692305770655
+  min_epa: -1.128057846543055
+  max_epa: 3.8475692305770655
+
+  # ── Éco — normalisation ───────────────────────────────────
+  p10_dep: 470.35557617165443
+  p99_dep: 3486.2420722994702
+  p10_dette: -1.6250823307738065
+  p99_dette: 0.0
+
+  # ── Poids métier ──────────────────────────────────────────
   poids_prevention: 0.2
-
-  # Score assurance
   poids_evolution_prime: 0.3
   poids_prime_budget: 0.4
   poids_franchise: 0.2
-
-  # Score éco
   poids_dettes: 0.5
-
-  # Score final
   poids_score_eco: 0.2
   poids_score_assurance: 0.4
