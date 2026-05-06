@@ -1,5 +1,3 @@
-"use-client";
-
 import { RFButton as Button } from "../core/rf-button";
 import StatCallout from "./statCallout";
 import { ArrowRight } from "lucide-react";

@@ -1,5 +1,3 @@
-"use-client";
-
 type Props = {
   label: string;
   color: string;

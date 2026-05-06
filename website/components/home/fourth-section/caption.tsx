@@ -1,5 +1,3 @@
-"use-client";
-
 import CaptionItem from "../caption-item";
 
 const Caption: React.FC = () => {

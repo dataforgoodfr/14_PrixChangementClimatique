@@ -1,9 +1,6 @@
-"use client";
-import dynamic from "next/dynamic";
 import Caption from "./caption";
 import { Info } from "lucide-react";
-
-const ChartContent = dynamic(() => import("./chart-content"), { ssr: false });
+import ChartContent from "./chart-content";
 
 const FourthSection: React.FC = () => {
   return (
