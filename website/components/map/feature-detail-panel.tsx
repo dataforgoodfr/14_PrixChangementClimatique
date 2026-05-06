@@ -23,10 +23,7 @@ export function FeatureDetailPanel({
   }, [setCommune]);
 
   useEffect(() => {
-    console.log(
-      "selected commune",
-      selectedCommune?.indice_vulnerabilite_niveau,
-    );
+    console.log("selected commune", selectedCommune);
   }, [selectedCommune]);
 
   return (
