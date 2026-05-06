@@ -12,7 +12,13 @@ import { CatnatResponse } from "@/lib/types/catnat";
 import { useMemo } from "react";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
 
-export const RecognitionRequests = ({ data }: { data: CatnatResponse[] }) => {
+export const RecognitionRequests = ({
+  data,
+  hideTitle,
+}: {
+  data: CatnatResponse[];
+  hideTitle?: boolean;
+}) => {
   const recognizedRequests = useMemo(
     () => data?.filter((catnat) => catnat.is_reconnue).length ?? 0,
     [data],
@@ -31,30 +37,34 @@ export const RecognitionRequests = ({ data }: { data: CatnatResponse[] }) => {
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle>
-          Demandes de reconnaissances de catastrophes naturelles
-        </CardTitle>
-        <CardDescription>
-          Reconnues par la commission interministérielle - Depuis 1982
-        </CardDescription>
-        <CardAction>
-          <DownloadCsvButton
-            data={csvData}
-            filename="demandes-reconnaissance-catastrophes-naturelles"
-            className="gap-1.5"
-          />
-        </CardAction>
-      </CardHeader>
-      <CardContent className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="w-full md:w-1/2">
+      {!hideTitle && (
+        <CardHeader>
+          <CardTitle>
+            Demandes de reconnaissances de catastrophes naturelles
+          </CardTitle>
+          <CardDescription>
+            Reconnues par la commission interministérielle - Depuis 1982
+          </CardDescription>
+          <CardAction>
+            <DownloadCsvButton
+              data={csvData}
+              filename="demandes-reconnaissance-catastrophes-naturelles"
+              className="gap-1.5"
+            />
+          </CardAction>
+        </CardHeader>
+      )}
+      <CardContent
+        className={`flex flex-col ${!hideTitle && "md:flex-row"} justify-between items-center gap-4`}
+      >
+        <div className="w-full">
           <RfRecognitionRequestChart
             recognized={recognizedRequests}
             unrecognized={unrecognizedRequests}
           />
         </div>
         <Separator orientation="vertical" className="hidden md:block" />
-        <div className="w-full md:w-1/2 text-muted-foreground">
+        <div className="w-full text-muted-foreground">
           Le maire dispose d’un délai de 24 mois après la survenue du phénomène
           pour déposer sa demande de reconnaissance de l’état de catastrophe
           naturelle auprès du préfet de département. Une commission
