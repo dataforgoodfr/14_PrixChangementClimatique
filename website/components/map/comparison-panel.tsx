@@ -11,28 +11,20 @@ import { MapPinIcon, UserIcon } from "lucide-react";
 import { safeFormatNumber } from "@/utils/format";
 import { cn } from "@/lib/utils";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
-import { StatCard } from "@/components/core/stat-card";
 import * as React from "react";
+import { RfFranchiseChart } from "@/components/core/rf-franchise-chart";
+import { InsuranceEvolutionChart } from "@/components/core/insurance-evolution-chart";
+import { SectionTitle } from "@/components/map/section-title";
+import { CatNatHistory } from "@/components/map/cat-nat-history";
+import { DebtCard } from "@/components/map/debt-card";
+import { BudgetCard } from "@/components/map/budget-card";
+import { TaxesCard } from "@/components/map/taxes-card";
 
 type ComparisonPanelProps = {
   isOpen: boolean;
   onClose: () => void;
   selectedCommune: Commune | null;
 };
-
-function SectionTitle({
-  title,
-  className,
-}: {
-  title: string;
-  className?: string;
-}) {
-  return (
-    <p className={cn("text-2xl font-medium text-rf-gray-dark", className)}>
-      {title}
-    </p>
-  );
-}
 
 function SectionSubtitle({
   title,
@@ -63,16 +55,6 @@ function CommuneDescription({ commune }: { commune: Commune }) {
         <span>{safeFormatNumber(commune.population)} habitants</span>
       </div>
     </div>
-  );
-}
-
-function BudgetCard({ commune }: { commune: Commune }) {
-  return (
-    <StatCard
-      title="Budget / habitant"
-      currentValue={commune.depenses_per_pop}
-      unit="€"
-    />
   );
 }
 
@@ -137,14 +119,22 @@ export function ComparisonPanel({
               className="col-span-3"
             />
             <SectionSubtitle title="Indice de vulnérabilité" />
-            <RfVulnerabilityIndex
-              mode="discrete"
-              value={selectedCommune.indice_vulnerabilite_niveau}
-            />
-            <RfVulnerabilityIndex
-              mode="discrete"
-              value={comparedCommune.indice_vulnerabilite_niveau}
-            />
+            {selectedCommune.indice_vulnerabilite_niveau ? (
+              <RfVulnerabilityIndex
+                mode="discrete"
+                value={selectedCommune.indice_vulnerabilite_niveau}
+              />
+            ) : (
+              <div />
+            )}
+            {comparedCommune.indice_vulnerabilite_niveau ? (
+              <RfVulnerabilityIndex
+                mode="discrete"
+                value={comparedCommune.indice_vulnerabilite_niveau}
+              />
+            ) : (
+              <div />
+            )}
             <SectionTitle
               title="Caractéristiques socio-économiques"
               className="col-span-3"
@@ -152,6 +142,36 @@ export function ComparisonPanel({
             <SectionSubtitle title="Budget par habitant" />
             <BudgetCard commune={selectedCommune} />
             <BudgetCard commune={comparedCommune} />
+            <SectionSubtitle title="Taux d’dendettement" />
+            <DebtCard commune={selectedCommune} />
+            <DebtCard commune={comparedCommune} />
+            <SectionSubtitle title="Impôts locaux" />
+            <TaxesCard commune={selectedCommune} />
+            <TaxesCard commune={comparedCommune} />
+            <SectionTitle
+              title="Historique catastrophes naturelles"
+              subTitle="Base de données GASPAR"
+              className="col-span-3"
+            />
+            <SectionSubtitle title="Demandes de reconnaissances de catastrophes naturelles" />
+            <CatNatHistory hideTitle communeCode={selectedCommune.code_insee} />
+            <CatNatHistory hideTitle communeCode={comparedCommune.code_insee} />
+            <SectionSubtitle title="Couverture d'assurance" />
+            <InsuranceEvolutionChart data={selectedCommune} />
+            <InsuranceEvolutionChart data={comparedCommune} />
+            <div />
+            {selectedCommune.multiple_franchise_last && (
+              <RfFranchiseChart
+                size="sm"
+                value={selectedCommune.multiple_franchise_last}
+              />
+            )}
+            {comparedCommune.multiple_franchise_last && (
+              <RfFranchiseChart
+                size="sm"
+                value={comparedCommune.multiple_franchise_last}
+              />
+            )}
           </div>
         </Panel.Content>
       )}

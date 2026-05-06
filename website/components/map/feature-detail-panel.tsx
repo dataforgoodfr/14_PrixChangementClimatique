@@ -4,7 +4,7 @@ import { Panel } from "@/components/core/panel";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 import { MapPinIcon, UserIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Commune } from "@/lib/types/communes";
 import { CatNatHistory } from "./cat-nat-history";
 import { safeFormatNumber } from "@/utils/format";
@@ -22,7 +22,12 @@ export function FeatureDetailPanel({
     setCommune(null);
   }, [setCommune]);
 
-  console.log("selected commune", selectedCommune);
+  useEffect(() => {
+    console.log(
+      "selected commune",
+      selectedCommune?.indice_vulnerabilite_niveau,
+    );
+  }, [selectedCommune]);
 
   return (
     <Panel
@@ -57,7 +62,7 @@ export function FeatureDetailPanel({
         </div>
         {selectedCommune?.indice_vulnerabilite_niveau && (
           <RfVulnerabilityIndex
-            className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
+            className="hidden md:block absolute w-70 h-60 right-8 top-8"
             value={selectedCommune.indice_vulnerabilite_niveau}
             mode="discrete"
           />
@@ -66,7 +71,16 @@ export function FeatureDetailPanel({
 
       <Panel.Content>
         {selectedCommune && (
-          <div className="space-y-10 mt-10">
+          <div className="space-y-10 p-4">
+            {selectedCommune?.indice_vulnerabilite_niveau && (
+              <div className="px-4">
+                <RfVulnerabilityIndex
+                  className="block md:hidden mx-4"
+                  value={selectedCommune.indice_vulnerabilite_niveau}
+                  mode="discrete"
+                />
+              </div>
+            )}
             <EconomicalSituation selectedCommuneData={selectedCommune} />
             <CatNatHistory communeCode={commune} />
             <InsuranceCoverage selectedCommuneData={selectedCommune} />
