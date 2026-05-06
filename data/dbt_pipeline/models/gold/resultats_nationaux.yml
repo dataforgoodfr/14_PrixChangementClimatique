@@ -36,3 +36,15 @@ models:
       - name: impots_locaux_2020
         description: "Total national des impots locaux en 2020"
         type: DECIMAL(15,2)
+      - name: evolution_prime_assurance
+        description: "Evolution des primes entre 2020 et 2024"
+        type: DECIMAL(10,2)
+      - name: part_prime_budget
+        description: "Somme des primes d'assurances et budget de 2024"
+        type: DECIMAL(10,2)
+      - name: depenses_per_pop
+        description: "Solde net des dépenses par population sur 2023 (manque la population municipale de 2024)"
+        type: DECIMAL(10,2)
+      - name: ratio_dettes_depenses
+        description: "dettes 2024 par rapport aux dépenses de 2024"
+        type: DECIMAL(10,5)
