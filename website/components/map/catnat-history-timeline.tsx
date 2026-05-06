@@ -7,7 +7,7 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { CatnatResponse } from "@/lib/types/catnat";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -65,8 +65,17 @@ const formatDate = (dateStr: string): string => {
 export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
   const historyByDecades = useMemo(() => groupByDecade(data), [data]);
   const [expandedDecades, setExpandedDecades] = useState<Set<string>>(
-    new Set(),
+    () => new Set(historyByDecades.map((d) => d.label)),
   );
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setExpandedDecades(new Set(historyByDecades.map((d) => d.label)));
+  }, [historyByDecades]);
+
+  const oldestYear = useMemo(() => {
+    return Math.min(...data.map((item) => parseInt(item.annee_debut)));
+  }, [data]);
 
   const toggleDecade = (label: string) => {
     setExpandedDecades((prev) => {
@@ -96,7 +105,7 @@ export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Historique des catastrophes naturelles</CardTitle>
-        <CardDescription>Depuis 1982</CardDescription>
+        <CardDescription>Depuis {oldestYear}</CardDescription>
         <CardAction>
           <DownloadCsvButton
             data={csvData}
@@ -134,8 +143,11 @@ export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
 
               {isExpanded && (
                 <div className="ml-12 mt-4 space-y-4">
-                  {decade.events.map((event, eventIndex) => (
-                    <div key={eventIndex} className="relative">
+                  {decade.events.map((event) => (
+                    <div
+                      key={`${event.date_debut}-${event.date_fin}-${event.type_catnat}`}
+                      className="relative"
+                    >
                       <div className="absolute -left-[44px] top-0 w-6 h-6 rounded-full bg-white  flex items-center justify-center">
                         <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
                       </div>
@@ -150,7 +162,15 @@ export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
                         <p className="text-base font-normal text-rf-gray-light">
                           {event.type_catnat}
                           {event.is_reconnue && (
-                            <span> reconnue(s) catastrophe naturelle</span>
+                            <span>
+                              {" "}
+                              {["Inondation", "Sécheresse"].includes(
+                                event.type_catnat,
+                              )
+                                ? "reconnue"
+                                : "reconnu"}{" "}
+                              catastrophe naturelle
+                            </span>
                           )}
                         </p>
                       </div>
