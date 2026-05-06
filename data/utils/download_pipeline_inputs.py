@@ -10,8 +10,6 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 import boto3
-from botocore import UNSIGNED
-from botocore.client import Config
 from tqdm import tqdm
 
 tracker_file = "data_version_tracker.json"
@@ -73,13 +71,14 @@ def list_s3_objects_anonymous(bucket_name: str, prefix: str, endpoint_url: str) 
     et retourne une liste de dictionnaires avec 'Key' et 'ETag'.
     Aucun accès authentifié requis (anonyme).
     """
-    # Client S3 anonyme
+    # Client S3 authentifié
     s3 = boto3.client(
         "s3",
-        config=Config(signature_version=UNSIGNED),
         endpoint_url=endpoint_url,
+        aws_access_key_id=os.environ.get("S3_ACCESS_KEY"),
+        aws_secret_access_key=os.environ.get("S3_SECRET_ACCESS_KEY"),
+        region_name=os.environ.get("S3_REGION", "fr-par"),
     )
-
     objects = {}  # dictionnaire clé - ETag
     continuation_token = None
 

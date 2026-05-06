@@ -2,11 +2,36 @@ import { Commune } from "@/lib/types/communes";
 import { StatCard } from "../core/stat-card";
 import { SectionTitle } from "./section-title";
 
+const formatCurrencyAmount = (
+  value: number,
+): { value: number; unit: string } => {
+  if (value >= 1000000000) {
+    return {
+      value: Math.round((value / 1000000000) * 10) / 10,
+      unit: "Md€",
+    };
+  }
+  if (value >= 1000000) {
+    return {
+      value: Math.round(value / 1000000),
+      unit: "M€",
+    };
+  }
+  return {
+    value: Math.round(value),
+    unit: "€",
+  };
+};
+
 export const EconomicalSituation = ({
   selectedCommuneData,
 }: {
   selectedCommuneData: Commune;
 }) => {
+  const localTaxes = selectedCommuneData.impots_locaux
+    ? formatCurrencyAmount(selectedCommuneData.impots_locaux)
+    : null;
+
   return (
     <div className="p-4 space-y-5">
       <SectionTitle title="Situation économique" />
@@ -29,13 +54,11 @@ export const EconomicalSituation = ({
           />
         )}
 
-        {selectedCommuneData.part_impots_locaux && (
+        {localTaxes && (
           <StatCard
-            title="IMPOTS LOCAUX / BUDGET"
-            currentValue={
-              Math.round(selectedCommuneData.part_impots_locaux * 100) / 100
-            }
-            unit="%"
+            title="IMPOTS LOCAUX"
+            currentValue={localTaxes.value}
+            unit={localTaxes.unit}
             variationPercentage={
               selectedCommuneData.impots_locaux_evolution &&
               Math.round(selectedCommuneData.impots_locaux_evolution * 10) / 10

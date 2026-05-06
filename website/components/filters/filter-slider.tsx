@@ -4,17 +4,18 @@ import { FC } from "react";
 
 type Props = {
   bounds: RangeFilter;
+  step?: number;
   activeRange: [number, number];
   onChange: (v: number[]) => void;
 };
 
-const FilterSlider: FC<Props> = ({ bounds, activeRange, onChange }) => {
+const FilterSlider: FC<Props> = ({ bounds, step, activeRange, onChange }) => {
   return (
     <div className="border-b border-gray-200 pb-5">
       <Slider
         min={bounds.min}
         max={bounds.max}
-        step={1}
+        step={step ?? 1}
         value={activeRange}
         onValueChange={onChange}
         className="my-3"
