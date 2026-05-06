@@ -9,6 +9,7 @@ import { Commune } from "@/lib/types/communes";
 import { CatNatHistory } from "./cat-nat-history";
 import { safeFormatNumber } from "@/utils/format";
 import { EconomicalSituation } from "./economical-situation";
+import { InsuranceCoverage } from "./insurance-coverage";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -20,6 +21,8 @@ export function FeatureDetailPanel({
   const onClose = useCallback(() => {
     setCommune(null);
   }, [setCommune]);
+
+  console.log("selected commune", selectedCommune);
 
   return (
     <Panel
@@ -65,10 +68,8 @@ export function FeatureDetailPanel({
         {selectedCommune && (
           <div className="space-y-10 mt-10">
             <EconomicalSituation selectedCommuneData={selectedCommune} />
-            <CatNatHistory
-              communeCode={commune}
-              selectedCommuneData={selectedCommune}
-            />
+            <CatNatHistory communeCode={commune} />
+            <InsuranceCoverage selectedCommuneData={selectedCommune} />
           </div>
         )}
       </Panel.Content>

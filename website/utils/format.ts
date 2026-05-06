@@ -9,3 +9,12 @@ export const formatNumber = (value: number): string => {
 export const safeFormatNumber = (value?: number): string => {
   return value ? numberFormatter.format(value) : "";
 };
+
+export const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+};
