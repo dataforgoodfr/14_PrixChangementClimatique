@@ -42,7 +42,7 @@ const FifthSection: React.FC = () => {
           subtitle={
             <p>
               {
-                "les dépenses d’assurance multirisque ont été multipliée par 2 en moyenne pour les communes françaises entre 2020 et 2024"
+                "les dépenses d’assurance multirisque ont été multipliées par 2 en moyenne pour les communes françaises entre 2020 et 2024."
               }
             </p>
           }
