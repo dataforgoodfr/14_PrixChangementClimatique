@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+const ZONE_NOZONE = 0;
 const ZONE_METROPOLE = 1;
 const ZONE_GUADELOUPE = 2;
 const ZONE_MARTINIQUE = 3;
@@ -159,7 +160,7 @@ export default function MapZoneSelector({ map }: { map?: MaplibreMap }) {
     });
     setSelectedZone(numZone);
   };
-  const [selectedZone, setSelectedZone] = useState<number>(ZONE_METROPOLE);
+  const [selectedZone, setSelectedZone] = useState<number>(ZONE_NOZONE);
 
   return (
     <div className="absolute top-50 right-4">
