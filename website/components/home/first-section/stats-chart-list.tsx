@@ -1,5 +1,3 @@
-"use-client";
-
 import StatsChart from "./stats-chart";
 
 type Stats = {
