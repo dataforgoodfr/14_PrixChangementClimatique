@@ -13,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useQueryState } from "nuqs";
 
 const ZONE_NOZONE = 0;
 const ZONE_METROPOLE = 1;
@@ -150,6 +151,11 @@ const DROMS = [
 ];
 
 export default function MapZoneSelector({ map }: { map?: MaplibreMap }) {
+  const [commune] = useQueryState("commune");
+  const [selectedZone, setSelectedZone] = useState<number>(
+    commune ? ZONE_NOZONE : ZONE_METROPOLE,
+  );
+
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     const numZone: number = parseInt(
       e.currentTarget.getAttribute("value") || "0",
@@ -160,7 +166,6 @@ export default function MapZoneSelector({ map }: { map?: MaplibreMap }) {
     });
     setSelectedZone(numZone);
   };
-  const [selectedZone, setSelectedZone] = useState<number>(ZONE_NOZONE);
 
   return (
     <div className="absolute top-50 right-4">
