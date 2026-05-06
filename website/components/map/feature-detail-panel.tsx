@@ -1,64 +1,77 @@
 "use client";
 
 import { Panel } from "@/components/core/panel";
-import { useMapContext } from "@/contexts/map-context";
+import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
+import { MapPinIcon, UserIcon } from "lucide-react";
+import { useQueryState } from "nuqs";
+import { useCallback } from "react";
+import { Commune } from "@/lib/types/communes";
+import { CatNatHistory } from "./cat-nat-history";
+import { safeFormatNumber } from "@/utils/format";
+import { EconomicalSituation } from "./economical-situation";
+import { InsuranceCoverage } from "./insurance-coverage";
 
-export function FeatureDetailPanel() {
-  const { selectedFeature, clearSelectedFeature } = useMapContext();
+export function FeatureDetailPanel({
+  selectedCommune,
+}: {
+  selectedCommune: Commune | null;
+}) {
+  const [commune, setCommune] = useQueryState("commune");
+
+  const onClose = useCallback(() => {
+    setCommune(null);
+  }, [setCommune]);
+
+  console.log("selected commune", selectedCommune);
 
   return (
     <Panel
-      isOpen={selectedFeature !== null}
-      onClose={clearSelectedFeature}
+      isOpen={!!selectedCommune}
+      onClose={onClose}
       dir="ltr"
-      width={460}
+      width={800}
       zIndex="z-30"
     >
-      <Panel.Header>
-        <Panel.Title>
-          {String(selectedFeature?.nom_commune ?? "Commune")}
-        </Panel.Title>
-        {!!selectedFeature?.code_geo && (
+      <Panel.Header className="flex flex-col gap-4 relative md:min-h-72 bg-panel-header">
+        <div className="w-full">
+          <Panel.Title className="pt-24 pb-4">
+            {selectedCommune?.nom_commune}
+          </Panel.Title>
           <Panel.Subtitle>
-            Code INSEE : {String(selectedFeature.code_geo)}
+            <span className="flex gap-2">
+              <MapPinIcon className="inline-block size-6" />
+              <span>
+                {selectedCommune?.region}, {selectedCommune?.departement},{" "}
+                {selectedCommune?.code_departement}
+              </span>
+            </span>
           </Panel.Subtitle>
+          <Panel.Subtitle>
+            <span className="flex gap-2 pt-2">
+              <UserIcon className="inline-block size-6" />
+              <span>
+                {safeFormatNumber(selectedCommune?.population)} habitants
+              </span>
+            </span>
+          </Panel.Subtitle>
+        </div>
+        {selectedCommune?.indice_vulnerabilite_niveau && (
+          <RfVulnerabilityIndex
+            className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
+            value={selectedCommune.indice_vulnerabilite_niveau}
+            mode="discrete"
+          />
         )}
       </Panel.Header>
 
       <Panel.Content>
-        <div className="p-4">
-          {selectedFeature ? (
-            <table className="w-full">
-              <tbody>
-                {Object.entries(selectedFeature).map(([key, value]) => (
-                  <tr
-                    key={key}
-                    className="border-b border-gray-100 last:border-0"
-                  >
-                    <td className="py-1.5 pr-3 text-xs text-gray-500 font-medium align-top w-1/2 break-all">
-                      {key}
-                    </td>
-                    <td className="py-1.5 text-xs text-gray-800 align-top break-all">
-                      {value === null || value === undefined ? (
-                        <span className="text-gray-300">—</span>
-                      ) : typeof value === "object" ? (
-                        <pre className="text-xs whitespace-pre-wrap">
-                          {JSON.stringify(value, null, 2)}
-                        </pre>
-                      ) : (
-                        String(value)
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-sm text-gray-400 text-center mt-8">
-              Cliquez sur une commune pour afficher ses données.
-            </p>
-          )}
-        </div>
+        {selectedCommune && (
+          <div className="space-y-10 mt-10">
+            <EconomicalSituation selectedCommuneData={selectedCommune} />
+            <CatNatHistory communeCode={commune} />
+            <InsuranceCoverage selectedCommuneData={selectedCommune} />
+          </div>
+        )}
       </Panel.Content>
     </Panel>
   );

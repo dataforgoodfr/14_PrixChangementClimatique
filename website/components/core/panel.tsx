@@ -28,23 +28,62 @@ function usePanelContext() {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function PanelTitle({ children }: { children: ReactNode }) {
-  return <p className="font-semibold text-gray-900">{children}</p>;
+function PanelTitle({
+  children,
+  size = "large",
+  className,
+}: {
+  children: ReactNode;
+  size?: "small" | "large";
+  className?: string;
+}) {
+  return (
+    <p
+      className={cn(
+        "font-semibold text-gray-900",
+        size === "large" ? "text-3xl" : "text-lg",
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
 }
 
-function PanelSubtitle({ children }: { children: ReactNode }) {
-  return <p className="text-xs text-gray-500">{children}</p>;
+function PanelSubtitle({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  size?: "small" | "large";
+  className?: string;
+}) {
+  return <p className={cn("text-xs text-gray-500", className)}>{children}</p>;
 }
 
-function PanelHeader({ children }: { children: ReactNode }) {
+function PanelHeader({
+  children,
+  size = "large",
+  className,
+}: {
+  children: ReactNode;
+  size?: "small" | "large";
+  className?: string;
+}) {
   const { onClose, showCloseButton } = usePanelContext();
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 shrink-0">
-      <div className="flex flex-col gap-0.5 min-w-0">{children}</div>
+    <div
+      className={cn(
+        "flex items-start justify-between px-4 border-b border-gray-200 shrink-0",
+        size === "large" ? "py-3" : "py-2",
+        className,
+      )}
+    >
+      {children}
       {showCloseButton && (
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 p-1 -mr-1 shrink-0"
+          className="text-gray-400 hover:text-gray-600 absolute top-4 right-4"
           aria-label="Fermer"
         >
           <X size={16} />
@@ -101,7 +140,7 @@ function Panel({
   isOpen,
   onClose,
   dir = "ltr",
-  width = 360,
+  width = 400,
   zIndex = "z-20",
   showCloseButton = true,
   children,
@@ -144,7 +183,8 @@ function Panel({
   );
 
   const controlsClassName = cn(
-    "absolute top-4 duration-300 ease-in-out",
+    "absolute top-4 bottom-4 flex flex-col justify-between duration-300 ease-in-out pointer-events-none [&>*]:pointer-events-auto",
+    isLtr ? "items-start" : "items-end",
     zIndex,
     isLtr
       ? [
@@ -155,7 +195,7 @@ function Panel({
           "transition-[right]",
           isOpen ? "right-[calc(var(--panel-w)_+_1rem)]" : "right-4",
         ],
-    isOpen && "hidden sm:block",
+    isOpen && "hidden sm:flex",
   );
 
   return (

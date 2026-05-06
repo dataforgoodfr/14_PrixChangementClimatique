@@ -91,6 +91,7 @@ ratio_dette_dep AS (
 -- CODE COLONNES RANDOM
 
 SELECT
+
     CAST(RANDOM() AS DECIMAL(3, 2)) AS score_economique_moy,
     CAST(RANDOM() AS DECIMAL(3, 2)) AS score_georisque_moy,
     CAST(RANDOM() AS DECIMAL(3, 2)) AS score_assurance_moy,
@@ -122,3 +123,7 @@ CROSS JOIN evol_prime AS e
 CROSS JOIN prime_budget AS b
 CROSS JOIN dep_pop AS d
 CROSS JOIN ratio_dette_dep AS r
+    CAST(i.impots_locaux_2020 AS DECIMAL(15, 2)) AS impots_locaux_2020
+
+FROM primes AS p
+CROSS JOIN impots AS i

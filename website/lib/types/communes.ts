@@ -1,27 +1,60 @@
-/**
- * Type pour une ligne commune renvoyée par l’API duckdb-demo / table communes du DuckDB fourni par l’équipe data.
- */
-export type CommuneRow = {
-  com_code?: string | null;
-  com_name?: string | null;
-  com_current_code?: string | null;
-  dep_code?: string | null;
-  dep_name?: string | null;
-  reg_code?: string | null;
-  reg_name?: string | null;
-  arrdep_code?: string | null;
-  arrdep_name?: string | null;
-  epci_code?: string | null;
-  epci_name?: string | null;
-  ze2020_code?: string | null;
-  ze2020_name?: string | null;
-  bv2022_code?: string | null;
-  bv2022_name?: string | null;
-  com_name_upper?: string | null;
-  com_name_lower?: string | null;
-  com_area_code?: string | null;
-  com_type?: string | null;
-  com_is_mountain_area?: boolean | null;
-  com_siren_code?: string | null;
-  geo_point_2d?: unknown;
-};
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export interface Commune {
+  code_insee: string;
+  nom_commune?: string;
+  departement?: string;
+  region?: string;
+  code_departement?: string;
+  code_region?: string;
+  geo_point_2_d?: string;
+
+  // Indices
+  score_economique?: number;
+  score_georisque?: number;
+  score_assurance?: number;
+  indice_vulnerabilite: number;
+  indice_vulnerabilite_niveau: number;
+
+  // TRI / RGA
+  indicateur_tri?: number;
+  indicateur_rga?: number;
+
+  // Scénario 2050
+  swi_04_d_abs?: number;
+  rr_50_d_abs?: number;
+  pxcwd_abs?: number;
+  tx_35_d_abs?: number;
+
+  // Budget
+  ratio_dettes_depenses?: number;
+  depenses_per_pop: number;
+  part_impots_locaux?: number;
+  impots_locaux_evolution?: number;
+  impots_locaux?: number;
+
+  // CCR
+  nb_total_arretes_recon?: number;
+  nb_total_arretes?: number;
+  nb_total_arretes_ino?: number;
+  nb_total_arretes_sec?: number;
+  multiple_franchise_last?: number;
+
+  // Primes assurance
+  prime_assurance_2024?: number;
+  prime_assurance_2023?: number;
+  prime_assurance_2022?: number;
+  prime_assurance_2021?: number;
+  prime_assurance_2020?: number;
+
+  // PPRN
+  pprn_rga?: boolean;
+  pprn_ino?: boolean;
+  date_approbation_rga?: string;
+  date_approbation_ino?: string;
+
+  // Population & ratios
+  population?: number;
+  part_prime_budget?: number;
+  evolution_prime_assurance?: number;
+}

@@ -93,20 +93,43 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import { FranceMap } from "@/components/france-map";
-import CommuneSearchBox, {
+import {
+  RFCommuneSearchBox,
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
+import { IndicatorStatCard } from "@/components/core/rf-indicator-stat-card";
+import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
+import { Legend } from "@/components/core/rf-legend";
+import { type IndicatorField } from "@/lib/types/indicator";
+import {
+  IndiceVulnerabiliteNiveauIcon,
+  ScoreGeorisqueIcon,
+  PreventionIcon,
+  ScoreEconomiqueIcon,
+  ScoreAssuranceIcon,
+  type IconComponent,
+} from "@/components/icons";
+import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
+import { Separator } from "@/components/ui/separator";
+import { StatCard } from "@/components/core/stat-card";
+import { CatnatTypesChart } from "@/components/core/catnat-types-chart";
 
 export function ComponentExample() {
   return (
     <ExampleWrapper>
       <CardExample />
       <FormExample />
+      <StatCardExample />
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
+      <IndicatorStatCardExample />
+      <IndicatorSelectorExample />
+      <LegendExample />
+      <RecognitionRequestExample />
+      <CatnatTypesChartExample />
     </ExampleWrapper>
   );
 }
@@ -517,7 +540,7 @@ function CommuneSearchBoxExample() {
       title="Recherche d'une commune"
       className="items-center justify-center gap-4"
     >
-      <CommuneSearchBox onAddressFilter={setSelectedCommune} />
+      <RFCommuneSearchBox onAddressFilter={setSelectedCommune} />
       <div>
         Commune sélectionnée :{" "}
         {selectedCommune ? (
@@ -532,6 +555,40 @@ function CommuneSearchBoxExample() {
   );
 }
 
+function StatCardExample() {
+  return (
+    <Example
+      title="Cartes de statistiques"
+      className="items-center justify-center gap-4"
+      containerClassName="md:col-span-2"
+    >
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <StatCard
+          title="Budget / habitant"
+          currentValue={2637}
+          previousValue={2690}
+          unit="€"
+          comparisonText="vs. 2024"
+        />
+        <StatCard
+          title="Taux d'endettement"
+          currentValue={971}
+          previousValue={952}
+          unit="M€"
+          comparisonText="vs. 2024"
+        />
+        <StatCard
+          title="Taux de résidence secondaire"
+          currentValue={2.6}
+          previousValue={2.55}
+          unit="%"
+          comparisonText="vs. 2024"
+        />
+      </div>
+    </Example>
+  );
+}
+
 function VulnerabilityIndexExample() {
   return (
     <Example
@@ -541,6 +598,151 @@ function VulnerabilityIndexExample() {
       <div className="w-70">
         <RfVulnerabilityIndex value={2.5} />
       </div>
+    </Example>
+  );
+}
+
+function IndicatorStatCardExample() {
+  return (
+    <Example title="IndicatorStatCard" className="gap-4">
+      <div className="grid grid-cols-2 gap-2 w-full">
+        <IndicatorStatCard label="Communes" value="2 252" total="36 529" />
+        <IndicatorStatCard
+          label="Habitants concernés"
+          value="161 343"
+          total="70M"
+        />
+      </div>
+    </Example>
+  );
+}
+
+const INDICATOR_DEMO_OPTIONS: {
+  value: IndicatorField;
+  label: string;
+  Icon: IconComponent;
+}[] = [
+  {
+    value: "indice_vulnerabilite_niveau",
+    label: "Vulnérabilité",
+    Icon: IndiceVulnerabiliteNiveauIcon,
+  },
+  { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
+  { value: "prevention", label: "Prévention", Icon: PreventionIcon },
+  {
+    value: "score_economique",
+    label: "Situation économique",
+    Icon: ScoreEconomiqueIcon,
+  },
+  { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
+];
+
+function IndicatorSelectorExample() {
+  const [activeIndicator, setActiveIndicator] = useState<IndicatorField>(
+    "indice_vulnerabilite_niveau",
+  );
+  return (
+    <Example title="IndicatorSelector">
+      <div className="grid grid-cols-5 gap-2 w-full">
+        {INDICATOR_DEMO_OPTIONS.map(({ value, label, Icon }) => (
+          <IndicatorSelector
+            key={value}
+            label={label}
+            icon={Icon}
+            active={activeIndicator === value}
+            onClick={() => setActiveIndicator(value)}
+          />
+        ))}
+      </div>
+    </Example>
+  );
+}
+
+function LegendExample() {
+  return (
+    <Example title="Legend" className="items-center justify-center gap-4">
+      <Legend />
+    </Example>
+  );
+}
+
+function RecognitionRequestExample() {
+  return (
+    <Example
+      title="Reconnaissance de catastrophe naturelle"
+      className="items-center justify-center gap-4"
+      containerClassName="md:col-span-2 max-w-none"
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>
+            Demandes de reconnaissances de catastrophes naturelles
+          </CardTitle>
+          <span className="italic text-muted-foreground">
+            Reconnues par la commission interministérielle - Depuis 1982
+          </span>
+        </CardHeader>
+        <CardContent className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="w-full md:w-1/2">
+            <RfRecognitionRequestChart recognized={53} unrecognized={8} />
+          </div>
+          <Separator orientation="vertical" className="hidden md:block" />
+          <div className="w-full md:w-1/2 text-muted-foreground">
+            Due to the average rating of general equipment&#39;s end-markets,
+            such as safety equipment. 3M Co&#39;s forward-looking performance
+            has a neutral impact on its overall rating. Due to the average
+            rating of general equipment&#39;s end-markets, such as safety
+            equipment.
+          </div>
+        </CardContent>
+      </Card>
+    </Example>
+  );
+}
+
+function CatnatTypesChartExample() {
+  const mockData = [
+    ...Array.from({ length: 11 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2010 + i),
+      date_debut: `${2010 + i}-01-15`,
+      date_fin: `${2010 + i}-01-20`,
+      type_catnat: "Inondation",
+      is_reconnue: true,
+    })),
+    ...Array.from({ length: 8 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2010 + i),
+      date_debut: `${2010 + i}-03-10`,
+      date_fin: `${2010 + i}-03-15`,
+      type_catnat: "Mouvement de Terrain",
+      is_reconnue: true,
+    })),
+    ...Array.from({ length: 6 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2015 + i),
+      date_debut: `${2015 + i}-07-01`,
+      date_fin: `${2015 + i}-08-31`,
+      type_catnat: "Sécheresse",
+      is_reconnue: true,
+    })),
+    ...Array.from({ length: 5 }, (_, i) => ({
+      code_insee: "75056",
+      annee_debut: String(2018 + i),
+      date_debut: `${2018 + i}-12-10`,
+      date_fin: `${2018 + i}-12-15`,
+      type_catnat: "Météo",
+      is_reconnue: true,
+    })),
+  ];
+
+  return (
+    <Example
+      title="Types de catastrophes naturelles"
+      className="gap-4"
+      containerClassName="md:col-span-2 max-w-none"
+    >
+      <CatnatTypesChart data={mockData} />
     </Example>
   );
 }

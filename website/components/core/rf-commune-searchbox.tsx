@@ -6,7 +6,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -14,7 +14,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { MapPin, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowLeftRight, Search, X } from "lucide-react";
+import { ErrorMessage } from "@/components/ui/error-message";
+import useSWR from "swr";
+import { Button } from "@/components/ui/button";
 
 type QueryResult = {
   nom: string;
@@ -23,6 +27,7 @@ type QueryResult = {
     code: string;
     nom: string;
   };
+  centre: { type: string; coordinates: [number, number] };
 };
 
 type QueryResponse = QueryResult[];
@@ -30,147 +35,177 @@ type QueryResponse = QueryResult[];
 export type SearchCommuneResult = {
   code: string;
   nom: string;
+  centre: { coordinates: [number, number] };
 };
 
 interface CommuneSearchBoxProps {
-  onAddressFilter: (result: SearchCommuneResult | undefined) => void;
+  onAddressFilter?: (result: SearchCommuneResult | undefined) => void;
+  onCompare?: () => void;
+  filterValue?: string;
+  className?: string;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
-export default function CommuneSearchBox({
+export function RFCommuneSearchBox({
   onAddressFilter,
+  onCompare,
+  filterValue,
+  className,
+  disabled,
+  placeholder,
 }: CommuneSearchBoxProps) {
+  const delayHandler = useRef<NodeJS.Timeout | null>(null);
   const [filterString, setFilterString] = useState("");
+  const [debouncedFilter, setDebouncedFilter] = useState("");
   const [dropDownIsOpened, setDropDownOpen] = useState(false);
-  const [communesList, setCommunesList] = useState<QueryResult[]>([]);
-  const [delayHandler, setDelayHandler] = useState<NodeJS.Timeout | null>(null);
+  const [isCommuneSelected, setCommuneSelected] = useState(false);
 
-  async function performSearch(filterString: string) {
-    const fetchUrl = new URL(
-      "https://geo.api.gouv.fr/communes?boost=population&fields=departement&limit=20",
-    );
-    fetchUrl.searchParams.set("nom", filterString);
+  const apiUrl = debouncedFilter
+    ? `https://geo.api.gouv.fr/communes?boost=population&fields=code,nom,departement,centre&limit=20&nom=${encodeURIComponent(
+        debouncedFilter,
+      )}`
+    : null;
 
-    try {
-      const response = await fetch(fetchUrl);
-      const data: QueryResponse = await response.json();
+  const {
+    data: communesList,
+    error,
+    isLoading,
+  } = useSWR<QueryResponse>(apiUrl);
 
-      if (data) {
-        setCommunesList(data);
-        setDropDownOpen(true);
-      } else {
-        setCommunesList([]);
-        setDropDownOpen(false);
-      }
-    } catch {
-      setCommunesList([]);
-      setDropDownOpen(false);
+  // Handle commune selection from click on the map
+  useEffect(() => {
+    if (filterValue !== filterString) {
+      setFilterString(filterValue ?? "");
+      setDebouncedFilter(filterValue ?? "");
+      setCommuneSelected(!!filterValue);
     }
-  }
+    // We only want this hook to execute when filterValue change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValue]);
 
-  async function handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e?.target?.value) {
       setFilterString("");
-      setCommunesList([]);
+      setDropDownOpen(false);
       return;
     }
 
-    if (delayHandler) {
-      clearTimeout(delayHandler);
+    if (delayHandler.current) {
+      clearTimeout(delayHandler.current);
     }
 
     setFilterString(e.target.value);
 
     if (e.target.value?.length >= 3) {
-      setDelayHandler(
-        setTimeout(() => {
-          performSearch(e.target.value);
-        }, 200),
-      );
+      delayHandler.current = setTimeout(() => {
+        setDebouncedFilter(e.target.value);
+      }, 200);
+      setDropDownOpen(true);
     } else {
-      setCommunesList([]);
+      setDebouncedFilter("");
+      setDropDownOpen(false);
     }
+
+    setFilterString(e.target.value);
   }
 
   function handleAddressSelect(commune: QueryResult) {
     setDropDownOpen(false);
-
+    setCommuneSelected(true);
     setFilterString(commune.nom);
-    onAddressFilter(commune);
+    onAddressFilter?.(commune);
   }
 
   function clearSearch() {
     setFilterString("");
-    setCommunesList([]);
+    setDebouncedFilter("");
     setDropDownOpen(false);
-    onAddressFilter(undefined);
+    setCommuneSelected(false);
+    onAddressFilter?.(undefined);
   }
 
   return (
-    <Popover open={dropDownIsOpened} onOpenChange={setDropDownOpen}>
-      <PopoverAnchor asChild>
-        <div className="flex items-center relative">
-          <MapPin
-            size={16}
-            className="absolute left-3 text-muted-foreground pointer-events-none"
-          />
-          <Input
-            className="pl-8"
-            value={filterString}
-            placeholder="Rechercher une commune par son nom"
-            onChange={handleFilterChange}
-            onFocus={() => {
-              if (filterString?.length >= 3) {
-                setDropDownOpen(true);
-              }
-            }}
-            autoComplete="off"
-            data-1p-ignore
-          />
-          {filterString && (
-            <button
-              onClick={clearSearch}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
-              aria-label="Vider la recherche"
-            >
-              <X size={16} />
-            </button>
-          )}
-        </div>
-      </PopoverAnchor>
-      <PopoverContent
-        asChild={true}
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        align="start"
-        sideOffset={5}
-        className="p-0 w-(--radix-popover-trigger-width)"
-      >
-        <Command className="rounded-lg border shadow-md">
-          <CommandEmpty className="py-2 text-center text-sm text-muted-foreground">
-            Aucune adresse trouvée.
-          </CommandEmpty>
-          <CommandList className="max-h-75 w-full overflow-auto">
-            <CommandGroup key="CommuneList">
-              {communesList.map((commune) => {
-                return (
-                  <CommandItem
-                    className="flex items-center py-2"
-                    key={commune.code}
-                    value={commune.code}
-                    onSelect={() => handleAddressSelect(commune)}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="grow text-sm">{commune.nom}</div>
-                      <div className="text-xs">
-                        {commune.departement.nom} ({commune.departement.code})
+    <div className="space-y-2">
+      {error && (
+        <ErrorMessage
+          error="Impossible de charger les communes"
+          className="text-sm"
+        />
+      )}
+      <Popover open={dropDownIsOpened} onOpenChange={setDropDownOpen}>
+        <PopoverAnchor asChild>
+          <div className={cn("flex items-center relative", className)}>
+            <Search size={16} className="absolute left-3 pointer-events-none" />
+            <Input
+              className="pl-8"
+              disabled={disabled}
+              value={filterString}
+              placeholder={placeholder}
+              onChange={handleFilterChange}
+              onFocus={() => {
+                if (filterString?.length >= 3) {
+                  setDropDownOpen(true);
+                }
+              }}
+              autoComplete="off"
+              data-1p-ignore
+            />
+            {!!onCompare && isCommuneSelected && (
+              <Button
+                size="lg"
+                className="absolute right-8"
+                onClick={onCompare}
+              >
+                <ArrowLeftRight /> Comparer
+              </Button>
+            )}
+            {!disabled && filterString && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                aria-label="Vider la recherche"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
+        </PopoverAnchor>
+        <PopoverContent
+          asChild={true}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          align="start"
+          sideOffset={5}
+          className="p-0 w-(--radix-popover-trigger-width)"
+        >
+          <Command className="rounded-lg border shadow-md">
+            <CommandEmpty className="py-2 text-center text-sm text-muted-foreground">
+              {isLoading ? "Chargement..." : "Aucune adresse trouvée."}
+            </CommandEmpty>
+            <CommandList className="max-h-75 w-full overflow-auto">
+              <CommandGroup key="CommuneList">
+                {communesList?.map((commune) => {
+                  return (
+                    <CommandItem
+                      className="flex items-center py-2 cursor-pointer"
+                      key={commune.code}
+                      value={commune.code}
+                      onSelect={() => handleAddressSelect(commune)}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="grow text-sm">{commune.nom}</div>
+                        <div className="text-xs">
+                          {commune.departement.nom} ({commune.departement.code})
+                        </div>
                       </div>
-                    </div>
-                  </CommandItem>
-                );
-              })}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+                    </CommandItem>
+                  );
+                })}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
