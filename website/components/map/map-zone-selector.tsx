@@ -2,14 +2,18 @@
 import { MouseEvent, useState } from "react";
 import { type Map as MaplibreMap } from "maplibre-gl";
 import { cn } from "@/lib/utils";
+import { INITIAL_VIEW_STATE } from "@/components/map/map-constants";
 import { Button } from "@/components/ui/button";
+import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+} from "@/components/ui/button-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const ZONE_NOZONE = 0;
 const ZONE_METROPOLE = 1;
 const ZONE_GUADELOUPE = 2;
 const ZONE_MARTINIQUE = 3;
@@ -24,8 +28,8 @@ type ZoneConfig = {
 
 export const ZONE_CONFIGS: { [key: number]: ZoneConfig } = {
   [ZONE_METROPOLE]: {
-    center: [2.5, 46.2],
-    zoom: 5,
+    center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+    zoom: INITIAL_VIEW_STATE.zoom,
   },
   [ZONE_GUADELOUPE]: {
     center: [-61.5, 16.2],
@@ -155,37 +159,44 @@ export default function MapZoneSelector({ map }: { map?: MaplibreMap }) {
     });
     setSelectedZone(numZone);
   };
-  const [selectedZone, setSelectedZone] = useState<number>(ZONE_NOZONE);
+  const [selectedZone, setSelectedZone] = useState<number>(ZONE_METROPOLE);
 
   return (
     <div className="absolute top-50 right-4">
-      <div className="grid gap-2">
-        <div className="w-12 grid-cols-1 gap-2 space-y-2">
-          {DROMS.map(({ id, tooltip, svg }) => {
+      <div className="rounded-lg bg-white shadow-md overflow-hidden">
+        <ButtonGroup orientation="vertical" className="w-full">
+          {DROMS.map(({ id, tooltip, svg }, index) => {
             const isSelected = selectedZone === id;
             return (
-              <Tooltip key={`DROM_${id}`}>
-                <TooltipTrigger asChild>
-                  <Button
-                    key={id}
-                    className={cn(
-                      "px-4 py-2 rounded size-12 border cursor-pointer",
-                      isSelected
-                        ? "bg-rf-green-dark text-rf-lime"
-                        : "bg-white text-rf-green-dark",
-                      "hover:bg-rf-green-dark hover:text-rf-lime",
-                    )}
-                    onClick={handleClick}
-                    value={id}
-                  >
-                    {svg}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="left">{tooltip}</TooltipContent>
-              </Tooltip>
+              <div key={`DROM_${id}`}>
+                {index > 0 && (
+                  <ButtonGroupSeparator
+                    orientation="horizontal"
+                    className="bg-neutral-300"
+                  />
+                )}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        "w-10 h-9 rounded-none border-none cursor-pointer",
+                        isSelected
+                          ? "bg-rf-green-dark text-rf-lime hover:bg-rf-green-dark hover:text-rf-lime"
+                          : "text-neutral-800 hover:bg-neutral-100",
+                      )}
+                      onClick={handleClick}
+                      value={id}
+                    >
+                      {svg}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">{tooltip}</TooltipContent>
+                </Tooltip>
+              </div>
             );
           })}
-        </div>
+        </ButtonGroup>
       </div>
     </div>
   );

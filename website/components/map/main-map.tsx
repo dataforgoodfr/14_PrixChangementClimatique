@@ -28,6 +28,7 @@ import { Commune } from "@/lib/types/communes";
 import { ComparisonPanel } from "@/components/map/comparison-panel";
 import { useFilters } from "../filters/filter-context";
 import MapZoneSelector from "@/components/map/map-zone-selector";
+import { INITIAL_VIEW_STATE } from "@/components/map/map-constants";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -159,18 +160,6 @@ const CustomMapAttributions: string[] = [
   `<a href="https://reclaimfinance.org/site/">Reclaim Finance</a>`,
   `<a href="https://dataforgood.fr/">Data for Good</a>`,
 ];
-// ─── Initial state ────────────────────────────────────────────────────────────
-
-/** Initial is set to display all the France Métropolitaine
- * (TODO: add rapid navigation to DROMs) */
-export const INITIAL_VIEW_STATE: ViewState = {
-  longitude: 2.3522,
-  latitude: 46.5,
-  zoom: 5,
-  bearing: 0,
-  pitch: 0,
-  padding: { top: 0, bottom: 0, left: 0, right: 0 },
-};
 
 // ─── Map Canvas: Here is the main map canvas component that renders the map and handles interactions.  ──────────────
 
