@@ -27,6 +27,7 @@ import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
 import { ComparisonPanel } from "@/components/map/comparison-panel";
 import { useFilters } from "../filters/filter-context";
+import MapZoneSelector from "@/components/map/map-zone-selector";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -335,6 +336,8 @@ function MainMap() {
         onToggle={() => setFiltersOpen((v) => !v)}
         map={map}
       />
+
+      <MapZoneSelector map={map} />
     </div>
   );
 }
