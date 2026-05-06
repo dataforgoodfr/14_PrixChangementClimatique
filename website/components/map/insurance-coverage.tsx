@@ -9,13 +9,11 @@ export const InsuranceCoverage = ({
 }) => {
   return (
     <div className="p-4 space-y-10">
-      <>
-        <SectionTitle
-          title="Couverture d'assurances"
-          subTitle="Base de données GASPAR"
-        />
-        <InsuranceEvolutionChart data={selectedCommuneData} />
-      </>
+      <SectionTitle
+        title="Couverture d'assurances"
+        subTitle="Base de données GASPAR"
+      />
+      <InsuranceEvolutionChart data={selectedCommuneData} />
     </div>
   );
 };

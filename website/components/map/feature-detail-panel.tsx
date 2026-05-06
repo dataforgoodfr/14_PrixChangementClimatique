@@ -22,6 +22,8 @@ export function FeatureDetailPanel({
     setCommune(null);
   }, [setCommune]);
 
+  console.log("selected commune", selectedCommune);
+
   return (
     <Panel
       isOpen={!!selectedCommune}
@@ -66,10 +68,7 @@ export function FeatureDetailPanel({
         {selectedCommune && (
           <div className="space-y-10 mt-10">
             <EconomicalSituation selectedCommuneData={selectedCommune} />
-            <CatNatHistory
-              communeCode={commune}
-              selectedCommuneData={selectedCommune}
-            />
+            <CatNatHistory communeCode={commune} />
             <InsuranceCoverage selectedCommuneData={selectedCommune} />
           </div>
         )}

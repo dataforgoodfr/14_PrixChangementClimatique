@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
 import { useMemo } from "react";
+import { formatCurrency } from "@/utils/format";
 
 const chartConfig = {
   expenses: {
@@ -52,15 +53,6 @@ interface CustomTooltipProps {
   payload?: TooltipPayload[];
 }
 
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-};
-
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
@@ -81,14 +73,37 @@ export function InsuranceEvolutionChart({
   data,
 }: InsuranceEvolutionChartProps) {
   const chartData = useMemo(() => {
-    return [
-      { year: "2020", expenses: data.prime_assurance_2020 || 0 },
-      { year: "2021", expenses: data.prime_assurance_2021 || 0 },
-      { year: "2022", expenses: data.prime_assurance_2022 || 0 },
-      { year: "2023", expenses: data.prime_assurance_2023 || 0 },
-      { year: "2024", expenses: data.prime_assurance_2024 || 0 },
-    ];
+    const yearData = [];
+
+    if (data.prime_assurance_2020) {
+      yearData.push({ year: "2020", expenses: data.prime_assurance_2020 });
+    }
+    if (data.prime_assurance_2021) {
+      yearData.push({ year: "2021", expenses: data.prime_assurance_2021 });
+    }
+    if (data.prime_assurance_2022) {
+      yearData.push({ year: "2022", expenses: data.prime_assurance_2022 });
+    }
+    if (data.prime_assurance_2023) {
+      yearData.push({ year: "2023", expenses: data.prime_assurance_2023 });
+    }
+    if (data.prime_assurance_2024) {
+      yearData.push({ year: "2024", expenses: data.prime_assurance_2024 });
+    }
+
+    return yearData;
   }, [data]);
+
+  if (chartData.length < 2) {
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Evolution des dépenses d&apos;assurance</CardTitle>
+          <CardDescription>Aucune donnée disponible</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   const csvData = [
     ["Année", "Dépenses d'assurance (€)"],
@@ -99,7 +114,7 @@ export function InsuranceEvolutionChart({
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Evolution des dépenses d&apos;assurance</CardTitle>
-        <CardDescription>Depuis 2020</CardDescription>
+        <CardDescription>Depuis {chartData[0].year}</CardDescription>
         <CardAction>
           <DownloadCsvButton
             data={csvData}
@@ -109,7 +124,7 @@ export function InsuranceEvolutionChart({
         </CardAction>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[400px] w-full">
+        <ChartContainer config={chartConfig} className="h-100 w-full">
           <AreaChart
             data={chartData}
             margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
@@ -146,7 +161,8 @@ export function InsuranceEvolutionChart({
               }}
               tickFormatter={(value) => {
                 if (value >= 1000000) {
-                  return `${(value / 1000000).toFixed(0)}M`;
+                  const millions = value / 1000000;
+                  return `${millions.toFixed(1)}M`;
                 }
                 if (value >= 1000) {
                   return `${(value / 1000).toFixed(0)}K`;
