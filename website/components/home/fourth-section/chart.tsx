@@ -11,7 +11,7 @@ const FourthSection: React.FC = () => {
       <div className="flex flex-col gap-[4px]">
         <p className="text-[14px]  md:text-[20px] md:text-[22px] font-[600] text-[#1E1B39]">
           Répartition de la part des dépenses d&apos;assurance dans le budget
-          des communes en 2025
+          des communes en 2024
         </p>
         <div className="flex gap-[4px] text-[12px] md:text-[16px] text-rf-gray italic">
           Depuis 2020 <Info size={14} />
