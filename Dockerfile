@@ -28,7 +28,7 @@ RUN python data/utils/build_pmtiles.py
 
 
 ## Stage 2: Build Next.js app
-FROM node:20-slim AS nextjs-builder
+FROM node:22-slim AS nextjs-builder
 
 WORKDIR /app
 
@@ -50,7 +50,7 @@ RUN npm run build
 
 
 ## Stage 3: Production runtime
-FROM node:20-slim AS runner
+FROM node:22-slim AS runner
 
 # Non-root user for security
 RUN addgroup --system --gid 1001 nodejs && \
