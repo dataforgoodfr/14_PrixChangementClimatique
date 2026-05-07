@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatDate } from "@/utils/format";
 
 interface DecadeGroup {
   label: string;
@@ -51,15 +52,6 @@ const groupByDecade = (data: CatnatResponse[]): DecadeGroup[] => {
   }
 
   return decades;
-};
-
-const formatDate = (dateStr: string): string => {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
 };
 
 export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {

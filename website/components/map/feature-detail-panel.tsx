@@ -73,13 +73,11 @@ export function FeatureDetailPanel({
             <VulnerabilityFactors commune={selectedCommune} />
             <div className="space-y-10 p-4">
               {selectedCommune?.indice_vulnerabilite_niveau && (
-                <div className="px-4">
-                  <RfVulnerabilityIndex
-                    className="block md:hidden mx-4"
-                    value={selectedCommune.indice_vulnerabilite_niveau}
-                    mode="discrete"
-                  />
-                </div>
+                <RfVulnerabilityIndex
+                  className="block md:hidden"
+                  value={selectedCommune.indice_vulnerabilite_niveau}
+                  mode="discrete"
+                />
               )}
               <EconomicalSituation selectedCommuneData={selectedCommune} />
               <CatNatHistory communeCode={commune} />
