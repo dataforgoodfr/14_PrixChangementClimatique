@@ -8,16 +8,6 @@ WITH pop_adjusted AS (
         population
     FROM {{ ref('population_par_com_annee') }}
 
-    UNION ALL
-
-    SELECT
-        '75056' AS code_geo,
-        annee_recensement,
-        SUM(population) AS population
-    FROM {{ ref('population_par_com_annee') }}
-    WHERE code_geo LIKE '75%'
-    GROUP BY annee_recensement
-
 )
 
 SELECT
