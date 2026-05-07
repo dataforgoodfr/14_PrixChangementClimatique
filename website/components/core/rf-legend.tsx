@@ -23,11 +23,11 @@ const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
     labelMin: "Peu vulnérable",
     labelMax: "Très vulnérable",
     discrete: [
-      { color: "#518F83" },
-      { color: "#B2A052" },
-      { color: "#FFB74B" },
-      { color: "#EA580D" },
-      { color: "#B91C1C" },
+      { color: "var(--color-rf-vulnerability-level-1)" },
+      { color: "var(--color-rf-vulnerability-level-2)" },
+      { color: "var(--color-rf-vulnerability-level-3)" },
+      { color: "var(--color-rf-vulnerability-level-4)" },
+      { color: "var(--color-rf-vulnerability-level-5)" },
     ],
   },
   score_georisque: {

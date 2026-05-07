@@ -10,6 +10,7 @@ import { CatNatHistory } from "./cat-nat-history";
 import { safeFormatNumber } from "@/utils/format";
 import { EconomicalSituation } from "./economical-situation";
 import { InsuranceCoverage } from "./insurance-coverage";
+import { VulnerabilityFactors } from "./vulnerability-factors";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -67,6 +68,7 @@ export function FeatureDetailPanel({
       <Panel.Content>
         {selectedCommune && (
           <div className="space-y-10 mt-10">
+            <VulnerabilityFactors commune={selectedCommune} />
             <EconomicalSituation selectedCommuneData={selectedCommune} />
             <CatNatHistory communeCode={commune} />
             <InsuranceCoverage selectedCommuneData={selectedCommune} />

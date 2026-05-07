@@ -33,6 +33,13 @@
   --color-rf-button-border: #3d85ff1a;
   --color-rf-button-icon: #3d85ff;
 
+  /* Vulnerability level colors */
+  --color-rf-vulnerability-level-1: #518F83;
+  --color-rf-vulnerability-level-2: #B2A052;
+  --color-rf-vulnerability-level-3: #FFB74B;
+  --color-rf-vulnerability-level-4: #EA580D;
+  --color-rf-vulnerability-level-5: #B91C1C;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -87,6 +94,13 @@
   --color-rf-button-bg: #fafbfd;
   --color-rf-button-border: #3d85ff1a;
   --color-rf-button-icon: #3d85ff;
+
+  /* Vulnerability level colors */
+  --color-rf-vulnerability-level-1: #518F83;
+  --color-rf-vulnerability-level-2: #B2A052;
+  --color-rf-vulnerability-level-3: #FFB74B;
+  --color-rf-vulnerability-level-4: #EA580D;
+  --color-rf-vulnerability-level-5: #B91C1C;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
