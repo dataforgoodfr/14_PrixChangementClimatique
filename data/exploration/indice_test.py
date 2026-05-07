@@ -22,48 +22,18 @@ def _():
     from scipy import stats
     from sklearn.cluster import KMeans
 
-    return (
-        MinMaxScaler,
-        PCA,
-        StandardScaler,
-        duckdb,
-        gpd,
-        mo,
-        np,
-        pd,
-        plt,
-        stats,
-        wkt,
-    )
-
-
-@app.cell
-def _(pd):
-    Sv = pd.read_parquet('Score_vulnerabilite_s3.parquet')
-    return (Sv,)
-
-
-@app.cell
-def _(Sv):
-    Sv.loc[Sv['nom_commune']=='Rigny-la-Nonneuse']
-    return
-
-
-@app.cell
-def _(Sv):
-    Sv.loc[Sv['code_insee']=='10146']
-    return
+    return PCA, StandardScaler, duckdb, gpd, mo, np, pd, plt, stats, wkt
 
 
 @app.cell
 def _(duckdb, wkt):
-    PCC_DUCKDB_FILE = "data/dbt_pipeline/dev.duckdb"
+    PCC_DUCKDB_FILE = "data/exploration/dev.duckdb"
     con = duckdb.connect(database=PCC_DUCKDB_FILE, read_only=True)
 
     resultats_website_par_commune = con.sql("""SELECT	* FROM dev.main.resultats_website_par_commune""").df()
 
     resultats_website_par_commune["geometry"] = resultats_website_par_commune["geometry"].apply(wkt.loads)
-    return (resultats_website_par_commune,)
+    return con, resultats_website_par_commune
 
 
 @app.cell
@@ -87,7 +57,13 @@ def _(gdf):
     return
 
 
-@app.cell
+@app.function
+def clip_minmax(s,q_low,q_high):
+    lo, hi = s.quantile(q_low), s.quantile(q_high)
+    return (s.clip(lo, hi) - lo) / (hi - lo)
+
+
+@app.cell(hide_code=True)
 def _(plt):
     def carte_continue(df,col_color):
         fig = plt.figure(figsize=(20, 10))
@@ -142,7 +118,7 @@ def _(plt):
     return (carte_continue,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(pd, plt):
     def carte_discret(df,col_color):
         fig = plt.figure(figsize=(20, 10))
@@ -208,7 +184,7 @@ def _(pd, plt):
     return (carte_discret,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(maks, np, plt, stats):
     def plot_normalization_comparison(
         gdf,
@@ -292,8 +268,8 @@ def _(maks, np, plt, stats):
 
                         mask = ov_gdf.index()
                         ov_transformed = transformed.loc[maks]
-                    
-                    
+
+
                         # # if score_name not in ov_gdf.columns:
                         # #     continue
                         # ov_raw = ov_gdf[score_name].dropna()
@@ -305,7 +281,7 @@ def _(maks, np, plt, stats):
                         #     continue
                         ov_color = overlay_colors[ov_idx % len(overlay_colors)]
                         ax.hist(ov_transformed, bins=60, color=ov_color, alpha=0.6, edgecolor='none', label=ov_label)
-            
+
                 if overlays:
                     ax.legend(fontsize=6, loc='upper left')
                 ax.set_title(norm_name if row_idx == 0 else '', fontsize=9, fontweight='bold')
@@ -352,13 +328,21 @@ def _(carte_continue, col_selector, gdf):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
-    poids_prevention = mo.ui.slider(0, 1, step=0.1,value=0.2)
+    mo.md(r"""
+    # Score exposition
+    """)
     return
 
 
 @app.cell
+def _(mo):
+    poids_prevention = mo.ui.slider(0, 1, step=0.1,value=0.2)
+    return (poids_prevention,)
+
+
+@app.cell(hide_code=True)
 def _(mo):
     col_selector_secheresse = mo.ui.multiselect(
         options=[
@@ -374,7 +358,7 @@ def _(mo):
     return (col_selector_secheresse,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     col_selector_inondation = mo.ui.multiselect(
         options=[
@@ -390,7 +374,7 @@ def _(mo):
     return (col_selector_inondation,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     colonnes_score_expo = [
     'score_secheresse',
@@ -408,12 +392,6 @@ def _(mo):
 
 
 @app.cell
-def _(col_selector_secheresse):
-    col_selector_secheresse
-    return
-
-
-@app.cell
 def _(PCA, StandardScaler, col_selector_secheresse, gdf):
     selected_cols = col_selector_secheresse.value
     metropole_datas = gdf[~gdf["code_insee"].str.startswith(("97","98"))]
@@ -424,42 +402,10 @@ def _(PCA, StandardScaler, col_selector_secheresse, gdf):
     pca_sec = PCA(n_components=1)
     pca_sec.fit(X_sec_scaled)
 
-    # w1, w2 = pca_sec.explained_variance_ratio_
     scores = pca_sec.transform(X_sec_scaled)
-    # score_unique = w1 * scores[:,0] + w2 * scores[:,1]
 
     metropole_datas['score_secheresse'] = scores
-    return metropole_datas, pca_sec
-
-
-@app.cell
-def _(metropole_datas, pca_sec, pd):
-    selected_cols_ = ['swi_04_d_abs', 'nb_total_arretes_sec', 'indicateur_rga']
-
-    # 1. Ajouter le décile du score
-    metropole_datas['decile_secheresse'] = pd.qcut(
-        metropole_datas['score_secheresse'],
-        q=10,
-        labels=[f'D{i}' for i in range(1, 11)]
-    )
-
-    # 2. Profiling : moyenne des variables originales par décile
-    profil = metropole_datas.groupby('decile_secheresse')[selected_cols_].mean()
-
-    # 3. Ajouter les loadings PCA pour référence
-    loadings = pd.Series(
-        pca_sec.components_[0],
-        index=selected_cols_,
-        name='loading_PC1'
-    )
-    print(loadings)
-    print(profil)
-    return
-
-
-@app.cell
-def _():
-    return
+    return (metropole_datas,)
 
 
 @app.cell
@@ -467,247 +413,83 @@ def _(PCA, StandardScaler, col_selector_inondation, gdf):
     selected_cols_inondation = col_selector_inondation.value
     datas_inondation = gdf[~gdf["code_insee"].str.startswith(("98"))]
     datas_inondation[selected_cols_inondation] = datas_inondation[selected_cols_inondation].fillna(0)
-    # scaler_ino = MinMaxScaler()
 
-
-    # num_std = [c for c in ['rr_50_d_abs','pxcwd_abs','swi_04_d_abs','tx_35_d_abs'] if c in selected_cols_inondation]
-
-    # num_robust = [c for c in ['nb_total_arretes_reco','nb_total_arretes_ino','nb_total_arretes_sec'] if c in selected_cols_inondation]
-
-    # passthrough = [c for c in ['indicateur_rga','indicateur_tri'] if c in selected_cols_inondation]
-
-    # preprocessor = ColumnTransformer(
-    #     transformers=[
-    #         ("std", StandardScaler(), num_std),
-    #         ("robust", StandardScaler(), num_robust),
-    #         ("pass",  StandardScaler(), passthrough)
-    #     ]
-    # )
-
-    # preprocessor = ColumnTransformer(
-    #     transformers=[
-    #         ("std", StandardScaler(), ['rr_50_d_abs']),
-    #         ("robust", RobustScaler(), ['nb_total_arretes_ino']),
-    #         ("passthrough", 'passthrough', ['indicateur_tri'])
-    #     ]
-    # )
     scaler_ino = StandardScaler()
-    # X_ino_scaled = preprocessor.fit_transform(datas_inondation[selected_cols_inondation])
     X_ino_scaled = scaler_ino.fit_transform(datas_inondation[selected_cols_inondation])
 
 
-    pca_ino = PCA(n_components=2)
+    pca_ino = PCA(n_components=1)
     pca_ino.fit(X_ino_scaled)
 
-    # print(pca_sec.explained_variance_ratio_)
-    # print(f"Total : {pca_sec.explained_variance_ratio_.sum():.1%}")
-
-    w1_ino, w2_ino = pca_ino.explained_variance_ratio_
+    # w1_ino, w2_ino = pca_ino.explained_variance_ratio_
     scores_ino = pca_ino.transform(X_ino_scaled)
-    score_unique_ino = w1_ino * scores_ino[:,0] + w2_ino * scores_ino[:,1]
+    # score_unique_ino = w1_ino * scores_ino[:,0] + w2_ino * scores_ino[:,1]
 
-    datas_inondation['score_inondation'] = score_unique_ino
-    return datas_inondation, selected_cols_inondation
+    datas_inondation['score_inondation'] = scores_ino
+    return datas_inondation, pca_ino, selected_cols_inondation
 
 
 @app.cell
-def _(datas_inondation, pca_sec, pd):
-    selected_cols_ino = ['rr_50_d_abs', 'nb_total_arretes_ino',"indicateur_tri"]
-
-    # 1. Ajouter le décile du score
-    datas_inondation['decile_inon'] = pd.qcut(
-        datas_inondation['score_inondation'],
-        q=10,
-        labels=[f'D{i}' for i in range(1, 11)]
-    )
-
-    # 2. Profiling : moyenne des variables originales par décile
-    profil_ino = datas_inondation.groupby('decile_inon')[selected_cols_ino].mean()
-
-    # 3. Ajouter les loadings PCA pour référence
+def _(pca_ino, pd, selected_cols_inondation):
     loadings_ino = pd.Series(
-        pca_sec.components_[0],
-        index=selected_cols_ino,
+        pca_ino.components_[0],
+        index=selected_cols_inondation,
         name='loading_PC1'
     )
     print(loadings_ino)
-    print(profil_ino)
     return
-
-
-@app.cell
-def _():
-    # def clip_minmax(series, lower=5, upper=99):
-    #     p_low  = series.quantile(lower / 100)
-    #     p_high = series.quantile(upper / 100)
-    #     clipped = series.clip(lower=p_low, upper=p_high)
-    #     return (clipped - clipped.min()) / (clipped.max() - clipped.min())
-    return
-
-
-@app.cell
-def _():
-    # gdf_calc = gdf.copy()
-
-    # gdf_calc.loc[metropole_datas.index, "score_secheresse"] = metropole_datas["score_secheresse"]
-
-    # gdf_calc.loc[datas_inondation.index, "score_inondation"] = datas_inondation["score_inondation"].values
-
-    # gdf_calc['score_secheresse_norm'] = clip_minmax(gdf_calc['score_secheresse'])
-    # gdf_calc['score_inondation_norm'] = clip_minmax(gdf_calc['score_inondation'])
-
-    # gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_total_arretes_autre'])
-    # # scaler_sec_robust = StandardScaler()
-    # # scaler_ino_robust = StandardScaler()
-
-    # # sec = scaler_sec_robust.fit_transform(gdf_calc[['score_secheresse']])
-    # # ino = scaler_ino_robust.fit_transform(gdf_calc[['score_inondation']])
-
-    # # gdf_calc['score_secheresse_norm'] = MinMaxScaler().fit_transform(sec)
-    # # gdf_calc['score_inondation_norm'] = MinMaxScaler().fit_transform(ino)
-
-    # p = poids_prevention.value
-
-    # gdf_calc['score_secheresse_net'] = (gdf_calc['score_secheresse_norm'] - p * gdf_calc['pprn_rga']).clip(lower=0)
-    # gdf_calc['score_inondation_net'] = (gdf_calc['score_inondation_norm'] - p * gdf_calc['pprn_ino']).clip(lower=0)
-
-    # gdf_calc['score_climatique_global'] = gdf_calc[
-    #     ['score_secheresse_net','score_inondation_net']
-    # ].mean(axis=1)*0.9+0.1*gdf_calc['score_autres']
-
-    # gdf_calc['score_climatique_global_norm'] = clip_minmax(gdf_calc['score_climatique_global'])
-    return
-
-
-@app.cell
-def _(gdf_calc, mo):
-    col_selector_distrib = mo.ui.multiselect(
-        options=list(gdf_calc.select_dtypes(include='number').columns),
-        value=['score_secheresse', 'score_inondation','part_prime_budget','evolution_prime_assurance','nb_total_arretes_autre','score_climatique_global','swi_04_d_abs', 'nb_total_arretes_sec',"indicateur_rga"],
-        label='Colonnes à visualiser'
-    )
-    col_selector_distrib
-    return (col_selector_distrib,)
 
 
 @app.cell
 def _(gdf_calc, plot_normalization_comparison):
     plot_normalization_comparison(
         gdf_calc,
-        columns=['swi_04_d_abs', 'nb_total_arretes_sec',"indicateur_rga",'score_secheresse'],
+        columns=['rr_50_d_abs', 'indicateur_tri',"score_inondation",'score_secheresse'],
         clip_quantiles=(0.05, 0.99),
         show_log=True,
-    )
-    return
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc["indicateur_tri"]
-    return
-
-
-@app.cell
-def _(gdf_calc, plot_normalization_comparison):
-    plot_normalization_comparison(
-        gdf_calc.loc[gdf_calc['indicateur_tri']>0.0],
-        columns=["indicateur_tri"],
-        clip_quantiles=(0.05, 0.99),
-        show_log=False,
     )
     return
 
 
 @app.cell
 def _():
+    # corr_ino = datas_inondation[selected_cols_inondation + ["score_inondation"]].corr()
+
+    # fig_ino, ax_ino = plt.subplots(figsize=(6,4))
+
+    # cax_ino = ax_ino.imshow(corr_ino, vmin=0, vmax=1)
+    # ax_ino.set_xticks(np.arange(0, len(corr_ino.columns)-0.5, 1))
+    # ax_ino.set_yticks(np.arange(0, len(corr_ino.index)-0.5, 1))
+
+    # ax_ino.set_xticklabels(corr_ino.columns, rotation=45, ha="right")
+    # ax_ino.set_yticklabels(corr_ino.index)
+    # cbar_ino = fig_ino.colorbar(cax_ino, ax=ax_ino)
+    # cbar_ino.set_label("Corrélation Inondation")
+    # plt.show()
     return
 
 
 @app.cell
-def _(col_selector_distrib, gdf_calc, plot_normalization_comparison):
-    plot_normalization_comparison(gdf_calc, col_selector_distrib.value)
-
-    # Avec quantiles custom et log
-    plot_normalization_comparison(
-        gdf_calc,
-        columns=['score_secheresse', 'score_inondation'],
-        clip_quantiles=(0.05, 0.99),
-        show_log=True,
-    )
+def _(poids_prevention):
+    poids_prevention
     return
 
 
 @app.cell
-def _(gdf_calc, plot_normalization_comparison):
-    plot_normalization_comparison(
-        gdf_calc,
-        columns=['score_secheresse', 'score_inondation'],
-        clip_quantiles=(0.01, 0.99),
-        show_log=True,
-    )
-    return
-
-
-@app.cell
-def _(datas_inondation, np, plt, selected_cols_inondation):
-    corr_ino = datas_inondation[selected_cols_inondation + ["score_inondation"]].corr()
-
-    fig_ino, ax_ino = plt.subplots(figsize=(6,4))
-
-    cax_ino = ax_ino.imshow(corr_ino, vmin=0, vmax=1)
-    ax_ino.set_xticks(np.arange(0, len(corr_ino.columns)-0.5, 1))
-    ax_ino.set_yticks(np.arange(0, len(corr_ino.index)-0.5, 1))
-
-    ax_ino.set_xticklabels(corr_ino.columns, rotation=45, ha="right")
-    ax_ino.set_yticklabels(corr_ino.index)
-    cbar_ino = fig_ino.colorbar(cax_ino, ax=ax_ino)
-    cbar_ino.set_label("Corrélation Inondation")
-    plt.show()
-    return
-
-
-@app.cell
-def _(gdf_calc, plot_normalization_comparison):
-    plot_normalization_comparison(
-        gdf_calc,
-        columns=['score_inondation','rr_50_d_abs', 'nb_total_arretes_ino','indicateur_tri'],
-        clip_quantiles=(0.05, 0.99),
-        show_log=True,
-        overlays={
-            'indicateur_tri == 0':  gdf_calc.loc[gdf_calc['indicateur_tri'] == 0],
-            # 'rr_50_d_abs > 2': gdf_calc.loc[gdf_calc['rr_50_d_abs'] > 2],
-                    'nb_total_arretes_ino > 8': gdf_calc.loc[gdf_calc['nb_total_arretes_ino'] > 8],
-
-        }
-    )
-    return
-
-
-@app.function
-def clip_minmax(s,q_low,q_high):
-    lo, hi = s.quantile(q_low), s.quantile(q_high)
-    return (s.clip(lo, hi) - lo) / (hi - lo)
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc
-    return
-
-
-@app.cell
-def _(datas_inondation, gdf, metropole_datas, np):
+def _(datas_inondation, gdf, metropole_datas, np, poids_prevention):
     gdf_calc = gdf.copy()
+
+    poid_pre = poids_prevention.value
     gdf_calc.loc[metropole_datas.index, "score_secheresse"] = metropole_datas["score_secheresse"]
 
     gdf_calc.loc[datas_inondation.index, "score_inondation"] = datas_inondation["score_inondation"].values
 
 
-    gdf_calc['s_norm']  = clip_minmax(gdf_calc['score_secheresse'], q_low=0.5, q_high=0.95)
-    gdf_calc['i_norm']  = clip_minmax(gdf_calc['score_inondation'],  q_low=0.5, q_high=0.95)
+    gdf_calc['s_norm']  = clip_minmax(gdf_calc['score_secheresse'], q_low=0.05, q_high=0.95)
+    gdf_calc['i_norm']  = clip_minmax(gdf_calc['score_inondation'],  q_low=0.05, q_high=0.95)
 
-    gdf_calc['score_secheresse_net'] = (gdf_calc['s_norm'] - 0.2 * gdf_calc['pprn_rga']).clip(lower=0)
-    gdf_calc['score_inondation_net'] = (gdf_calc['i_norm'] - 0.2 * gdf_calc['pprn_ino']).clip(lower=0)
+    gdf_calc['score_secheresse_net'] = (gdf_calc['s_norm'] - poid_pre * gdf_calc['pprn_rga']).clip(lower=0)
+    gdf_calc['score_inondation_net'] = (gdf_calc['i_norm'] - poid_pre * gdf_calc['pprn_ino']).clip(lower=0)
     gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_total_arretes_autre'], q_low=0, q_high=1)
 
     score = np.sqrt(0.45*gdf_calc['score_secheresse_net'] **2 + 0.45*gdf_calc['score_inondation_net']**2+0.1*gdf_calc['score_autres']**2)
@@ -716,43 +498,13 @@ def _(datas_inondation, gdf, metropole_datas, np):
         gdf_calc['score_secheresse_net'].fillna(np.sqrt(0.9*gdf_calc['score_inondation_net']**2+0.1*gdf_calc['score_autres']**2))
     )
 
-    # gdf_calc['score_global_lp'] = ((s_norm**2 + i_norm**2))**(1/2)
-    # gdf_calc['score_global_somme'] = ((s_norm + i_norm)/2)
-
-    # Puis moyenne géométrique retournée
-    # s_inv = 1 - s_norm
-    # i_inv = 1 - i_norm
-    # gdf_calc['score_global'] = 1 - np.sqrt(s_inv * i_inv)
+    gdf_calc['score_exposition'] = gdf_calc['score_global_lp']/(gdf_calc['score_global_lp'].max())
     return (gdf_calc,)
 
 
 @app.cell
-def _(gdf_calc):
-    gdf_calc['s_norm'].var(),gdf_calc['s_norm'].mean()
-    return
-
-
-@app.cell
-def _(gdf_calc):
-
-    gdf_calc['i_norm'].var(),gdf_calc['i_norm'].mean()
-    return
-
-
-@app.cell
 def _():
-    # gdf_calc['score_climatique_global'] = gdf_calc[
-    #     ['score_secheresse_net','score_inondation_net']
-    # ].mean(axis=1)*0.9+0.1*gdf_calc['score_autres']
-
-    # gdf_calc['score_climatique_global_norm'] = clip_minmax(gdf_calc['score_climatique_global'])
-
-    return
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc['score_exposition'] = gdf_calc['score_global_lp']/(gdf_calc['score_global_lp'].max())
+    # gdf_calc['score_global_lp_discret'] = pd.cut(gdf_calc['score_exposition'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
     return
 
 
@@ -763,36 +515,25 @@ def _():
 
 @app.cell
 def _(gdf_calc):
-    gdf_calc['score_exposition'].hist()
-    return
-
-
-@app.cell
-def _(gdf_calc, pd):
-    gdf_calc['score_global_lp_discret'] = pd.cut(gdf_calc['score_exposition'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
+    gdf_calc['score_exposition_int'] = (gdf_calc['score_exposition']*5).clip(0,4).astype('Int64')
     return
 
 
 @app.cell
 def _(gdf_calc):
-    gdf_calc['score_global_lp_discret'].value_counts()
+    gdf_calc['score_exposition_1d'] = (gdf_calc['score_exposition']*5).round(1)
     return
 
 
 @app.cell
-def _(gdf_calc, plot_normalization_comparison):
-    plot_normalization_comparison(
-        gdf_calc,
-        columns=['score_secheresse', 'score_inondation','s_norm','i_norm','score_exposition','score_global_lp'],
-        clip_quantiles=(0.05, 0.95),
-        show_log=True,
-    )
+def _(gdf_calc):
+    gdf_calc['score_exposition_int'].value_counts()
     return
 
 
 @app.cell
 def _(carte_discret, gdf_calc):
-    carte_discret(gdf_calc, 'score_global_lp_discret')
+    carte_discret(gdf_calc, 'score_exposition_int')
     return
 
 
@@ -802,44 +543,11 @@ def _(carte_continue, gdf_calc):
     return
 
 
-@app.cell
-def _():
-    return
-
-
-@app.cell
-def _(np):
-    bins = [0, 0.2, 0.4, 0.6, 0.8, 1]
-    labels = [0, 1, 2, 3, 4]
-
-    def interpolate_score(x):
-        for i in range(len(bins)-1):
-            if bins[i] <= x <= bins[i+1]:
-                # interpolation linéaire dans l’intervalle
-                ratio = (x - bins[i]) / (bins[i+1] - bins[i])
-                return labels[i] + ratio
-        return np.nan
-
-    # gdf_calc['score_vuln_continu'] = gdf_calc['score_global_lp'].apply(interpolate_score).round(1)
-    return
-
-
-@app.cell
-def _(gdf_calc, pd):
-    gdf_calc['score_global_lp_discret'] = pd.cut(gdf_calc['score_global_lp'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
-    gdf_calc['score_global_somme_discret'] = pd.cut(gdf_calc['score_global_somme'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
-    return
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc['score_global_somme_discret'].value_counts()
-    return
-
-
-@app.cell
-def _(gdf_calc):
-    gdf_calc['score_global_lp_discret'].value_counts()
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # Score Assurances
+    """)
     return
 
 
@@ -872,8 +580,19 @@ def _(mo):
 
 @app.cell
 def _(
-    gdf_calc,
     mo,
+    poids_prevention_evolution_prime,
+    poids_prevention_franchise,
+    poids_prevention_prime_budget,
+):
+    mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise])
+    return
+
+
+@app.cell
+def _(
+    gdf_calc,
+    np,
     poids_prevention_evolution_prime,
     poids_prevention_franchise,
     poids_prevention_prime_budget,
@@ -882,278 +601,56 @@ def _(
     pep = poids_prevention_evolution_prime.value
     pf = poids_prevention_franchise.value
     pna = 1 - pep - ppb
-    mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise])
-    gdf_calc['part_arretes_non_reco'] = (gdf_calc['nb_total_arretes'] - gdf_calc['nb_total_arretes_recon'])/gdf_calc['nb_total_arretes']
-    # scaler = StandardScaler()
-    gdf_calc['part_arretes_non_reco'] = gdf_calc['part_arretes_non_reco'].fillna(0)
+
+    # gdf_calc['part_arretes_non_reco'] = (gdf_calc['nb_total_arretes'] - gdf_calc['nb_total_arretes_recon'])/gdf_calc['nb_total_arretes']
+    # gdf_calc['part_arretes_non_reco'] = gdf_calc['part_arretes_non_reco'].fillna(0)
     gdf_calc_assurance  = gdf_calc.copy()
 
-    # 'part_prime_budget', 'evolution_prime_assurance'
-    # 'franchise_norm'
-    gdf_calc_assurance['evolution_prime_assurance_clipped_norm'] = clip_minmax(gdf_calc_assurance['evolution_prime_assurance'],q_low = 0.0,q_high=0.95)
-
-    gdf_calc_assurance['part_prime_budget_clipped_norm'] = clip_minmax(gdf_calc_assurance['part_prime_budget'],q_low = 0.05,q_high=0.95)
-
-
-    gdf_calc_assurance['score_assurance'] = (
-        pep * gdf_calc_assurance['evolution_prime_assurance_clipped_norm'] +
-         ppb* gdf_calc_assurance['part_prime_budget_clipped_norm']
-        + pna * gdf_calc_assurance['part_arretes_non_reco'])
-    gdf_calc_assurance['multiple_franchise_last'] = gdf_calc_assurance['multiple_franchise_last'].fillna(1)
-    gdf_calc_assurance['score_assurance'] += (
-         pf*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
-
-
-    # gdf_calc_assurance['score_assurance_norm'] = clip_minmax(gdf_calc_assurance['score_assurance'],lower=5,upper=99)
-    return gdf_calc_assurance, pep, pf, pna, ppb
-
-
-@app.cell
-def _():
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['evolution_prime_assurance'].max(),gdf_calc_assurance['evolution_prime_assurance'].min()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['evolution_prime_assurance_clip']=1 + gdf_calc_assurance['evolution_prime_assurance'].clip(0)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance.loc[gdf_calc_assurance['evolution_prime_assurance']>0.0]['evolution_prime_assurance'].hist(bins=100)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, np):
     gdf_calc_assurance['evolution_prime_assurance_clip_log'] = np.log1p(gdf_calc_assurance['evolution_prime_assurance'].clip(0))
 
-    gdf_calc_assurance['evolution_prime_assurance_clip_log_'] = np.log1p(gdf_calc_assurance['evolution_prime_assurance_clip']-gdf_calc_assurance['evolution_prime_assurance'].min())
+    gdf_calc_assurance['evolution_prime_assurance_clip_log_standard'] = clip_minmax(gdf_calc_assurance['evolution_prime_assurance_clip_log'],q_low = 0.05,q_high=0.95)
 
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    (gdf_calc_assurance['evolution_prime_assurance_clip']-gdf_calc_assurance['evolution_prime_assurance'].min()).hist(bins=100)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['evolution_prime_assurance'].min()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, np):
-    np.log(gdf_calc_assurance['evolution_prime_assurance_clip']).hist(bins=100)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['evolution_prime_assurance_clip_log'].hist(bins=100)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, np):
-
-    np.log(
-        gdf_calc_assurance.loc[
-            :,
-            'evolution_prime_assurance_clip'
-        ]
-    ).hist(bins=100)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, pep, pna, ppb):
-    gdf_calc_assurance['score_assurance'] = (
-        pep * gdf_calc_assurance['evolution_prime_assurance_clip_log'] +
-         ppb* gdf_calc_assurance['part_prime_budget']
-        + pna * gdf_calc_assurance['part_arretes_non_reco'])
-
-
-
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, pf):
-    gdf_calc_assurance['multiple_franchise_last'] = gdf_calc_assurance['multiple_franchise_last'].fillna(1)
-    gdf_calc_assurance['score_assurance'] += (
-         pf*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
-    return
-
-
-@app.cell
-def _(MinMaxScaler, gdf_calc_assurance):
-    MinMaxScaler().fit_transform(gdf_calc_assurance[['part_arretes_non_reco']])
-    return
-
-
-@app.cell
-def _(MinMaxScaler, gdf_calc_assurance):
-    MinMaxScaler().fit_transform(gdf_calc_assurance[['evolution_prime_assurance_clip_log']])
-    return
-
-
-@app.cell
-def _(MinMaxScaler, gdf_calc_assurance):
-    MinMaxScaler().fit_transform(gdf_calc_assurance[['part_prime_budget']])
-    return
-
-
-@app.cell
-def _():
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    mask = gdf_calc_assurance['evolution_prime_assurance'] < 0.0005
-
-    nb = mask.sum()
-    prop = mask.mean()
-
-    nb, prop
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance.loc[
-        gdf_calc_assurance['evolution_prime_assurance'] < 0.0005
-    ]
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['part_prime_budget']*100
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['part_prime_budget'].mean(), gdf_calc_assurance['part_prime_budget'].median()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['part_prime_budget'].min()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance.loc[gdf_calc_assurance['part_prime_budget']<0]
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['part_prime_budget'].hist(bins=100)
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['part_prime_budget'].median(),gdf_calc_assurance['part_prime_budget'].mean(),gdf_calc_assurance['part_prime_budget'].var()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, plot_normalization_comparison):
-    plot_normalization_comparison(
-        gdf_calc_assurance,
-        columns=['evolution_prime_assurance', 'part_prime_budget','part_arretes_non_reco','evolution_prime_assurance_clip_log','evolution_prime_assurance_clip_log_'],
-        clip_quantiles=(0.0, 0.95),
-        show_log=False,
-    overlays={
-            'evolution_prime_assurance > 0':  gdf_calc_assurance.loc[gdf_calc_assurance['evolution_prime_assurance'] < 0],
-        }
-    )
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, np):
-    gdf_calc_assurance['evolution_prime_assurance_clip_log_standard'] = clip_minmax(gdf_calc_assurance['evolution_prime_assurance_clip_log'],q_low = 0.0,q_high=0.95)
-
-    gdf_calc_assurance['part_prime_budget_standard'] = clip_minmax(gdf_calc_assurance['part_prime_budget'],q_low = 0.0,q_high=0.95)
+    gdf_calc_assurance['part_prime_budget_standard'] = clip_minmax(gdf_calc_assurance['part_prime_budget'],q_low = 0.5,q_high=0.95)
 
 
     gdf_calc_assurance['score_assurance'] = np.sqrt(
-        0.4 * gdf_calc_assurance['evolution_prime_assurance_clip_log_standard']**2 +
-         0.3* gdf_calc_assurance['part_prime_budget']**2
-        + 0.3 * gdf_calc_assurance['part_arretes_non_reco']**2)
+        pep * gdf_calc_assurance['evolution_prime_assurance_clip_log_standard']**2 +
+         ppb* gdf_calc_assurance['part_prime_budget_standard']**2
+        + pna * gdf_calc_assurance['part_arretes_non_reconnus'].fillna(1)**2)
 
     gdf_calc_assurance['multiple_franchise_last'] = gdf_calc_assurance['multiple_franchise_last'].fillna(1)
     gdf_calc_assurance['score_assurance'] += (
-         0.2*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
+         pf*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
 
     gdf_calc_assurance['score_assurance_min_max'] = (gdf_calc_assurance['score_assurance'])/(gdf_calc_assurance['score_assurance'].max())
-    return
+    return (gdf_calc_assurance,)
 
 
 @app.cell
 def _(gdf_calc_assurance):
-    gdf_calc_assurance['score_assurance'].mean()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['score_assurance'].hist()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['score_assurance_min_max'].hist()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance, pd):
-    gdf_calc_assurance['score_assurance_min_max_discret'] = pd.cut(gdf_calc_assurance['score_assurance_min_max'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
+    gdf_calc_assurance['score_assurance_int'] = (gdf_calc_assurance['score_assurance_min_max']*5).astype('Int64').clip(0,4)
+    gdf_calc_assurance['score_assurance_1d'] = (gdf_calc_assurance['score_assurance_min_max']*5).round(1)
 
     return
 
 
 @app.cell
 def _(gdf_calc_assurance):
-    gdf_calc_assurance['score_assurance_min_max_discret'].value_counts()
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance.loc[gdf_calc_assurance['score_assurance_min_max_discret']>1].shape
-    return
-
-
-@app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance.loc[gdf_calc_assurance['score_assurance_min_max_discret']>1].shape
+    gdf_calc_assurance['score_assurance_int'].value_counts()
     return
 
 
 @app.cell
 def _(carte_discret, gdf_calc_assurance):
-    carte_discret(gdf_calc_assurance, 'score_assurance_min_max_discret')
+    carte_discret(gdf_calc_assurance, 'score_assurance_int')
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # Score Economique
+    """)
     return
 
 
@@ -1174,158 +671,114 @@ def _(gdf_calc_assurance, np, poids_prevention_dettes):
 
     gdf_calc_eco['depenses_per_pop'] = gdf_calc_eco['depenses_per_pop'].replace(np.inf,np.nan)
 
-    gdf_calc_eco['ratio_dettes_depenses_neg'] = clip_minmax(- gdf_calc_eco['ratio_dettes_depenses'],q_low = 0.01,q_high=0.99)
+    gdf_calc_eco['ratio_dettes_depenses_neg'] = clip_minmax(- gdf_calc_eco['ratio_dettes_depenses'],q_low = 0.05,q_high=0.95)
 
-    gdf_calc_eco['depenses_per_pop_log'] = np.log1p(gdf_calc_eco['depenses_per_pop']-gdf_calc_eco['depenses_per_pop'].min())
+    x = - gdf_calc_eco['ratio_dettes_depenses']
 
-    gdf_calc_eco['depenses_per_pop_log_clip_high'] = 1- clip_minmax(gdf_calc_eco['depenses_per_pop_log'],q_low = 0.01,q_high=0.734) 
+    xmin = 1
+    xmax = x.quantile(0.9)
+
+    gdf_calc_eco['debt_vuln'] = ((x - xmin) / (xmax - xmin))
+    gdf_calc_eco['debt_vuln'] = gdf_calc_eco['debt_vuln'].clip(0,1)
 
 
-    # gdf_calc_eco['depenses_per_pop_clipped_norm'] = clip_minmax(gdf_calc_eco['depenses_per_pop'],lower=1,upper=90)
+    gdf_calc_eco['budget_vuln'] =np.log1p(gdf_calc_eco['depenses_per_pop'])
+    gdf_calc_eco['budget_vuln_clipmax'] = 1-((gdf_calc_eco['budget_vuln']-np.log1p(gdf_calc_eco['depenses_per_pop'].min()))/(np.log1p(1000)-np.log1p(gdf_calc_eco['depenses_per_pop'].min())))
+    gdf_calc_eco['budget_vuln_clipmax'] = gdf_calc_eco['budget_vuln_clipmax'].clip(0,1)
 
-    # gdf_calc_eco['ratio_dettes_depenses_clipped_norm'] = clip_minmax(gdf_calc_eco['ratio_dettes_depenses_neg'],lower=1,upper=95)
 
 
-    # gdf_calc_eco['depenses_per_pop_norm'] = 1 - gdf_calc_eco['depenses_per_pop_clipped_norm']
-    # # gdf_calc_eco['ratio_dettes_depenses_norm'] = 1 - gdf_calc_eco['ratio_dettes_depenses_clipped_norm']
+    # gdf_calc_eco['depenses_per_pop_log'] = -np.log1p(gdf_calc_eco['depenses_per_pop'])
+    # # gdf_calc_eco['depenses_per_pop_log']  = 1/(gdf_calc_eco['depenses_per_pop'] +0.01)
+    # gdf_calc_eco['depenses_per_pop_log_clip_high']  = clip_minmax(gdf_calc_eco['depenses_per_pop_log'] , 0.05, 0.95)
 
-    # # dette = poids_prevention_dettes.value
-    # # dep = 1 - dette
 
     gdf_calc_eco['score_eco'] = np.sqrt(
         0.5 * gdf_calc_eco['ratio_dettes_depenses_neg']**2 +
-         0.5* gdf_calc_eco['depenses_per_pop_log_clip_high']**2
+         0.5* gdf_calc_eco['budget_vuln_clipmax']**2
     )
 
-    # gdf_calc_eco['score_eco_norm'] = clip_minmax(gdf_calc_eco['score_eco'],lower=5,upper=99)
+    gdf_calc_eco['score_eco_minmax'] = gdf_calc_eco['score_eco']/gdf_calc_eco['score_eco'].max()
     return (gdf_calc_eco,)
 
 
 @app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco['score_eco'].hist()
-    return
-
-
-@app.cell
-def _(gdf_calc_eco, pd):
-    gdf_calc_eco['score_eco_discret'] = pd.cut(gdf_calc_eco['score_eco'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
-
-    return
-
-
-@app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco['score_eco_discret'].value_counts()
-    return
-
-
-@app.cell
 def _(gdf_calc_eco, np):
-    gdf_calc_eco['depenses_per_pop_log'] = np.log1p(gdf_calc_eco['depenses_per_pop']-gdf_calc_eco['depenses_per_pop'].min())
-
-    gdf_calc_eco['depenses_per_pop_log_clip_high'] = 1- clip_minmax(gdf_calc_eco['depenses_per_pop_log'],q_low = 0.01,q_high=0.95) 
-
-    gdf_calc_eco['depenses_per_pop_log_clip_high'] = 1- clip_minmax(gdf_calc_eco['depenses_per_pop_log'],q_low = 0.01,q_high=0.95) 
-    return
-
-
-@app.cell
-def _(gdf_calc_eco, plot_normalization_comparison):
-    plot_normalization_comparison(
-        gdf_calc_eco,
-        columns=['depenses_per_pop','depenses_per_pop_log_clip_high', 'ratio_dettes_depenses_neg','ratio_dettes_depenses','depenses_per_pop_log'],
-        clip_quantiles=(0.05, 0.95),
-        show_log=True,
-    )
+    gdf_calc_eco['score_eco_int'] = np.floor(gdf_calc_eco['score_eco_minmax'] * 5).clip(0, 4).astype('Int64')
     return
 
 
 @app.cell
 def _(gdf_calc_eco):
-    gdf_calc_eco['depenses_per_pop'].median()
+    gdf_calc_eco['score_eco_1d'] = (gdf_calc_eco['score_eco_minmax']*5).round(1)
     return
 
 
 @app.cell
 def _(gdf_calc_eco):
-    gdf_calc_eco['depenses_per_pop'].min(),gdf_calc_eco['depenses_per_pop'].max()
-    return
-
-
-@app.cell
-def _(gdf_calc_eco, np):
-    np.log1p(2000-gdf_calc_eco['depenses_per_pop'].min())
-    return
-
-
-@app.cell
-def _(gdf_calc_eco, np):
-    np.log1p(gdf_calc_eco['depenses_per_pop']-gdf_calc_eco['depenses_per_pop'].min()).hist(bins=1000)
+    gdf_calc_eco['score_eco_int'].value_counts()
     return
 
 
 @app.cell
 def _(gdf_calc_eco):
-    gdf_calc_eco['depenses_per_pop']
+    gdf_calc_eco['score_eco_minmax'].hist()
     return
 
 
 @app.cell
-def _(df):
-    1- 3079 / len(df)
+def _(carte_discret, gdf_calc_eco):
+    carte_discret(gdf_calc_eco, 'score_eco_int')
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # Score Final
+    """)
     return
 
 
 @app.cell
-def _(df):
-    df.loc[df['depenses_per_pop']>1500]
-    return
-
-
-@app.cell
-def _(gdf_calc_eco, pd):
-    df = gdf_calc_eco.copy()
-
-    df['decile'] = pd.qcut(
-        df['depenses_per_pop'],
-        30,  # 10 déciles
-        labels=False
-    )
-
-    df.groupby('decile')['depenses_per_pop'].mean()
-    return (df,)
+def _(mo):
+    poids_prevention_eco = mo.ui.slider(0, 1, step=0.05,value=0.15)
+    poids_prevention_assurance = mo.ui.slider(0, 1, step=0.05,value=0.3)
+    return poids_prevention_assurance, poids_prevention_eco
 
 
 @app.cell
 def _(gdf_calc_eco):
-    gdf_calc_eco.columns
+    gdf_calc_eco['score_assurance_min_max'].var(),gdf_calc_eco['score_exposition'].var()
     return
 
 
 @app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco[['score_eco','score_assurance_min_max','score_global_lp']]
+def _(mo, poids_prevention_assurance, poids_prevention_eco, ppexpo):
+    mo.hstack([poids_prevention_eco, poids_prevention_assurance, ppexpo])
+
     return
 
 
 @app.cell
-def _(gdf_calc_eco, np):
-    gdf_calc_eco['final'] = np.sqrt(0.15*gdf_calc_eco['score_eco']**2+0.45*gdf_calc_eco['score_assurance_min_max']**2+0.4*gdf_calc_eco['score_global_lp']**2)
+def _(gdf_calc_eco, poids_prevention_assurance, poids_prevention_eco):
+    ppeco = poids_prevention_eco.value
+    ppa = poids_prevention_assurance.value
+    ppexpo = 1 - ppeco - ppa
 
-    # gdf_calc_eco['final'] = 0.2*gdf_calc_eco['score_eco']+0.4*gdf_calc_eco['score_assurance_min_max']+0.4*gdf_calc_eco['score_global_lp']
-    return
+    gdf_calc_eco['final'] = (ppeco*gdf_calc_eco['score_eco_minmax']**2+ppa*gdf_calc_eco['score_assurance_min_max']**2+ppexpo*gdf_calc_eco['score_exposition']**2)**(1/2)
 
 
-@app.cell
-def _(gdf_calc_eco):
     gdf_calc_eco['final_min_max'] = (gdf_calc_eco['final']-gdf_calc_eco['final'].min())/(gdf_calc_eco['final'].max()-gdf_calc_eco['final'].min())
-    return
+    gdf_calc_eco['final_min_max']  = clip_minmax(gdf_calc_eco['final_min_max'] ,q_low = 0.05,q_high=1)
+    return (ppexpo,)
 
 
 @app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco['final'].hist()
+def _(gdf_calc_eco, np):
+    gdf_calc_eco['score_final_int'] = np.floor(gdf_calc_eco['final_min_max'] * 5).clip(0, 4).astype('Int64')
+
+    gdf_calc_eco['score_final_1d'] = (gdf_calc_eco['final_min_max']*5).round(1)
     return
 
 
@@ -1336,26 +789,67 @@ def _(gdf_calc_eco):
 
 
 @app.cell
-def _(gdf_calc_eco, pd):
-    gdf_calc_eco['score_final_discret'] = pd.cut(gdf_calc_eco['final_min_max'], bins=[0, 0.2, 0.4, 0.6, 0.8, 1],labels=[0, 1, 2, 3, 4], include_lowest=True)
-
-    return
-
-
-@app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco['score_final_discret'].value_counts()
-    return
-
-
-@app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco.loc[gdf_calc_eco['code_insee'].str.startswith('97')]
-    return
-
-
-@app.cell
 def _():
+    return
+
+
+@app.cell
+def _(gdf_calc_eco):
+    gdf_calc_eco['score_final_int'].value_counts()
+    return
+
+
+@app.cell
+def _(carte_discret, gdf_calc_eco):
+    carte_discret(gdf_calc_eco, 'score_final_int')
+    return
+
+
+@app.cell
+def _(pd):
+    sv = pd.read_parquet('Score_vulnerabilite_s3.parquet')
+    return (sv,)
+
+
+@app.cell
+def _(sv):
+    sv_= sv.rename({'indice_vulnerabilite_niveau':'indice_vulnerabilite_niveau_old'},axis=1)
+    return (sv_,)
+
+
+@app.cell
+def _(GDF_, sv_):
+    INDICES = GDF_.merge(sv_[['code_insee','indice_vulnerabilite_niveau_old']],on='code_insee')
+    return (INDICES,)
+
+
+@app.cell
+def _(INDICES):
+    INDICES.to_parquet('Score_vulnerabilite.parquet')
+    return
+
+
+@app.cell
+def _(GDF):
+    GDF_ = GDF.rename({'score_eco_1d':'score_economique','score_assurance_1d':'score_assurance','score_exposition_1d':'score_exposition','score_final_1d':'indice_vulnerabilite_niveau'},axis=1)
+    return (GDF_,)
+
+
+@app.cell
+def _(gdf_calc_eco):
+    GDF = gdf_calc_eco[['code_insee','departement','region','geo_point_2_d','code_departement','code_region','nom_commune','score_eco_1d','score_assurance_1d','score_exposition_1d','score_final_1d']]
+    return (GDF,)
+
+
+@app.cell
+def _(con):
+    con.execute("""
+    COPY (
+        SELECT * FROM resultats_website_par_commune
+    )
+    TO 'indice_temporaire.parquet'
+    (FORMAT PARQUET);
+    """)
     return
 
 
