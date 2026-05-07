@@ -37,7 +37,7 @@ export interface CommuneFilters {
 export const DEFAULT_FILTERS: CommuneFilters = {};
 
 export const FILTER_BOUNDS = {
-  indice_vulnerabilite_niveau: { min: 1, max: 5 },
+  indice_vulnerabilite_niveau: { min: 0, max: 5 },
   population: { min: 0, max: 30_000 },
   depenses_per_pop: { min: 0, max: 4_000 },
   indicateur_rga: { min: 0, max: 1 },
