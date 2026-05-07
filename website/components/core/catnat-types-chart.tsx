@@ -69,7 +69,13 @@ const TYPE_LABELS: Record<string, string> = {
   Autre: "Autres catastrophes",
 };
 
-export function CatnatTypesChart({ data }: { data: CatnatResponse[] }) {
+export function CatnatTypesChart({
+  data,
+  hideTitle,
+}: {
+  data: CatnatResponse[];
+  hideTitle?: boolean;
+}) {
   const aggregatedData = useMemo(() => {
     const typeCount = data.reduce(
       (acc, event) => {
@@ -104,21 +110,23 @@ export function CatnatTypesChart({ data }: { data: CatnatResponse[] }) {
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Types de catastrophes naturelles identifiées</CardTitle>
-        <CardDescription>
-          Dans les demandes de reconnaissances catastrophes naturelles
-        </CardDescription>
-        <CardAction>
-          <DownloadCsvButton
-            data={csvData}
-            filename="types-catastrophes-naturelles"
-            className="gap-1.5"
-          />
-        </CardAction>
-      </CardHeader>
+      {!hideTitle && (
+        <CardHeader>
+          <CardTitle>Types de catastrophes naturelles identifiées</CardTitle>
+          <CardDescription>
+            Dans les demandes de reconnaissances catastrophes naturelles
+          </CardDescription>
+          <CardAction>
+            <DownloadCsvButton
+              data={csvData}
+              filename="types-catastrophes-naturelles"
+              className="gap-1.5"
+            />
+          </CardAction>
+        </CardHeader>
+      )}
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[250px] w-full">
+        <ChartContainer config={chartConfig} className="h-62.5 w-full">
           <BarChart data={chartData} layout="vertical">
             <CartesianGrid
               strokeDasharray="3 3"

@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { Providers } from "./providers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { FiltersProvider } from "@/components/filters/filter-context";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -24,7 +25,9 @@ export default function RootLayout({
         <Header />
         <Providers>
           <FiltersProvider>
-            <NuqsAdapter>{children}</NuqsAdapter>
+            <NuqsAdapter>
+              <TooltipProvider>{children}</TooltipProvider>
+            </NuqsAdapter>
           </FiltersProvider>
         </Providers>
       </body>

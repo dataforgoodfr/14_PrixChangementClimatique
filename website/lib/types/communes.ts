@@ -14,7 +14,7 @@ export interface Commune {
   score_georisque?: number;
   score_assurance?: number;
   indice_vulnerabilite: number;
-  indice_vulnerabilite_niveau: number;
+  indice_vulnerabilite_niveau?: number;
 
   // TRI / RGA
   indicateur_tri?: number;

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Panel } from "@/components/core/panel";
 import { Button } from "@/components/ui/button";
-import { IndicatorStatCard } from "@/components/core/rf-indicator-stat-card";
 import { Legend } from "@/components/core/rf-legend";
 import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
@@ -55,25 +54,6 @@ const INDICATOR_OPTIONS: {
   { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
 ];
 
-// ─── Filter section heading ───────────────────────────────────────────────────
-
-function FilterSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="mb-1">
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1 px-4">
-        {title}
-      </p>
-      {children}
-    </div>
-  );
-}
-
 // ─── Props ────────────────────────────────────────────────────────────────────
 interface FiltersPanelProps {
   isOpen: boolean;
@@ -106,14 +86,14 @@ export function FiltersPanel({
 
       <Panel.Content>
         {/* Stat cards */}
-        <div className="grid grid-cols-2 gap-2 px-4 pt-4 pb-8 shadow-lg/5">
-          <IndicatorStatCard label="Communes" value="2 252" total="36 529" />
-          <IndicatorStatCard
-            label="Habitants concernés"
-            value="161 343"
-            total="70M"
-          />
-        </div>
+        {/*<div className="grid grid-cols-2 gap-2 px-4 pt-4 pb-8 shadow-lg/5">*/}
+        {/*  <IndicatorStatCard label="Communes" value="2 252" total="36 529" />*/}
+        {/*  <IndicatorStatCard*/}
+        {/*    label="Habitants concernés"*/}
+        {/*    value="161 343"*/}
+        {/*    total="70M"*/}
+        {/*  />*/}
+        {/*</div>*/}
 
         {/* Indicator selector */}
         <div className="px-4 pt-5 pb-8 border-b-2 border-b-neutral-100">

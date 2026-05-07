@@ -3,11 +3,14 @@ import { CatnatResponse } from "@/lib/types/catnat";
 import { CatnatTypesChart } from "@/components/core/catnat-types-chart";
 import { RecognitionRequests } from "./recognition-requests";
 import { SectionTitle } from "./section-title";
+import { CatnatHistoryTimeline } from "./catnat-history-timeline";
 
 export const CatNatHistory = ({
   communeCode,
+  hideTitle,
 }: {
   communeCode: string | null;
+  hideTitle?: boolean;
 }) => {
   const { data: catNatData } = useSWR<CatnatResponse[]>(
     communeCode ? `/api/catnat?code=${communeCode}` : null,
@@ -15,15 +18,18 @@ export const CatNatHistory = ({
   );
 
   return (
-    <div className="p-4 space-y-10">
+    <div className="space-y-10">
       {catNatData?.length ? (
         <>
-          <SectionTitle
-            title="Historique catastrophes naturelles"
-            subTitle="Base de données GASPAR"
-          />
-          <RecognitionRequests data={catNatData} />
-          <CatnatTypesChart data={catNatData} />
+          {!hideTitle && (
+            <SectionTitle
+              title="Historique catastrophes naturelles"
+              subTitle="Base de données GASPAR"
+            />
+          )}
+          <RecognitionRequests hideTitle={hideTitle} data={catNatData} />
+          <CatnatTypesChart hideTitle={hideTitle} data={catNatData} />
+          <CatnatHistoryTimeline data={catNatData} />
         </>
       ) : (
         <p>Chargement en cours...</p>
