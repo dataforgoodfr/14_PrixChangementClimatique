@@ -44,28 +44,36 @@ function buildFillColor(
 ): maplibregl.ExpressionSpecification {
   if (indicator === "indice_vulnerabilite_niveau") {
     return [
-      "step",
-      ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
+      "case",
+      ["==", ["get", "indice_vulnerabilite_niveau"], null],
+      "#555555",
+      ["<", ["get", "indice_vulnerabilite_niveau"], 1],
       "#518F83",
-      2,
+      ["<", ["get", "indice_vulnerabilite_niveau"], 2],
       "#B2A052",
-      3,
+      ["<", ["get", "indice_vulnerabilite_niveau"], 3],
       "#FFB74B",
-      4,
+      ["<", ["get", "indice_vulnerabilite_niveau"], 4],
       "#EA580D",
-      5,
+      ["<=", ["get", "indice_vulnerabilite_niveau"], 5],
       "#B91C1C",
+      "#555555",
     ];
   }
   if (indicator === "score_georisque") {
     return [
-      "interpolate",
-      ["linear"],
-      ["coalesce", ["get", "score_georisque"], 0],
-      0,
-      "#FFF0EE",
-      1,
-      "#7F1D1D",
+      "case",
+      ["==", ["get", "score_georisque"], null],
+      "#555555",
+      [
+        "interpolate",
+        ["linear"],
+        ["get", "score_georisque"],
+        0,
+        "#FFF0EE",
+        1,
+        "#7F1D1D",
+      ],
     ];
   }
   if (indicator === "prevention") {
@@ -86,24 +94,34 @@ function buildFillColor(
   }
   if (indicator === "score_economique") {
     return [
-      "interpolate",
-      ["linear"],
-      ["coalesce", ["get", "score_economique"], 0],
-      0,
-      "#FFF7ED",
-      1,
-      "#7C2D12",
+      "case",
+      ["==", ["get", "score_economique"], null],
+      "#555555",
+      [
+        "interpolate",
+        ["linear"],
+        ["get", "score_economique"],
+        0,
+        "#FFF7ED",
+        1,
+        "#7C2D12",
+      ],
     ];
   }
   // score_assurance
   return [
-    "interpolate",
-    ["linear"],
-    ["coalesce", ["get", "score_assurance"], 0],
-    0,
-    "#FEF2F2",
-    1,
-    "#1E3A5F",
+    "case",
+    ["==", ["get", "score_assurance"], null],
+    "#555555",
+    [
+      "interpolate",
+      ["linear"],
+      ["get", "score_assurance"],
+      0,
+      "#FEF2F2",
+      1,
+      "#1E3A5F",
+    ],
   ];
 }
 
