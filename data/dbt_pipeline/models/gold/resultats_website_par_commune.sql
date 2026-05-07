@@ -101,7 +101,6 @@ SELECT
     i.score_economique,
     i.score_georisque,
     i.score_assurance,
-    i.indice_vulnerabilite,
     i.indice_vulnerabilite_niveau,
 
     tr.indicateur_tri,
