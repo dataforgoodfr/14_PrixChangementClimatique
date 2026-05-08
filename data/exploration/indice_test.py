@@ -33,7 +33,7 @@ def _(duckdb, wkt):
     resultats_website_par_commune = con.sql("""SELECT	* FROM dev.main.resultats_website_par_commune""").df()
 
     resultats_website_par_commune["geometry"] = resultats_website_par_commune["geometry"].apply(wkt.loads)
-    return con, resultats_website_par_commune
+    return (resultats_website_par_commune,)
 
 
 @app.cell
@@ -630,7 +630,6 @@ def _(
 def _(gdf_calc_assurance):
     gdf_calc_assurance['score_assurance_int'] = (gdf_calc_assurance['score_assurance_min_max']*5).astype('Int64').clip(0,4)
     gdf_calc_assurance['score_assurance_1d'] = (gdf_calc_assurance['score_assurance_min_max']*5).round(1)
-
     return
 
 
@@ -756,7 +755,6 @@ def _(gdf_calc_eco):
 @app.cell
 def _(mo, poids_prevention_assurance, poids_prevention_eco, ppexpo):
     mo.hstack([poids_prevention_eco, poids_prevention_assurance, ppexpo])
-
     return
 
 
@@ -806,50 +804,16 @@ def _(carte_discret, gdf_calc_eco):
 
 
 @app.cell
-def _(pd):
-    sv = pd.read_parquet('Score_vulnerabilite_s3.parquet')
-    return (sv,)
+def _():
+    # INDICES = gdf_calc_eco[['code_insee','departement','region','score_eco_1d','score_assurance_1d','score_exposition_1d','score_final_1d']]
+    # INDICES_ = INDICES.rename({'score_eco_1d':'score_economique','score_assurance_1d':'score_assurance','score_exposition_1d':'score_exposition','score_final_1d':'indice_vulnerabilite_niveau'},axis=1)
 
-
-@app.cell
-def _(sv):
-    sv_= sv.rename({'indice_vulnerabilite_niveau':'indice_vulnerabilite_niveau_old'},axis=1)
-    return (sv_,)
-
-
-@app.cell
-def _(GDF_, sv_):
-    INDICES = GDF_.merge(sv_[['code_insee','indice_vulnerabilite_niveau_old']],on='code_insee')
-    return (INDICES,)
-
-
-@app.cell
-def _(INDICES):
-    INDICES.to_parquet('Score_vulnerabilite.parquet')
+    # INDICES_.to_parquet('Score_vulnerabilite.parquet')
     return
 
 
 @app.cell
-def _(GDF):
-    GDF_ = GDF.rename({'score_eco_1d':'score_economique','score_assurance_1d':'score_assurance','score_exposition_1d':'score_exposition','score_final_1d':'indice_vulnerabilite_niveau'},axis=1)
-    return (GDF_,)
-
-
-@app.cell
-def _(gdf_calc_eco):
-    GDF = gdf_calc_eco[['code_insee','departement','region','geo_point_2_d','code_departement','code_region','nom_commune','score_eco_1d','score_assurance_1d','score_exposition_1d','score_final_1d']]
-    return (GDF,)
-
-
-@app.cell
-def _(con):
-    con.execute("""
-    COPY (
-        SELECT * FROM resultats_website_par_commune
-    )
-    TO 'indice_temporaire.parquet'
-    (FORMAT PARQUET);
-    """)
+def _():
     return
 
 
