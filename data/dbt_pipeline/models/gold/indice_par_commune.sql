@@ -7,7 +7,6 @@ SELECT
     s.score_economique,
     s.score_georisque,
     s.score_assurance,
-    s.indice_vulnerabilite,
     s.indice_vulnerabilite_niveau
 FROM {{ ref('opendatasoft_communes') }} AS c
 LEFT JOIN {{ ref('score_temporaire') }} AS s

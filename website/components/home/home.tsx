@@ -1,4 +1,3 @@
-"use-client";
 import FifthSection from "./fifth-section/fifth-section";
 import FirstSection from "./first-section/first-section";
 import FourthSection from "./fourth-section/fourth-section";

@@ -1,4 +1,3 @@
-"use-client";
 import SectionTitle from "./section-title";
 import Image from "next/image";
 

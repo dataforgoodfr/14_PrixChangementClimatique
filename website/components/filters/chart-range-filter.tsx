@@ -59,7 +59,11 @@ export interface ChartRangeFilterProps {
   step?: number;
 }
 
-export function ChartRangeFilter({ title, filterKey, step }: ChartRangeFilterProps) {
+export function ChartRangeFilter({
+  title,
+  filterKey,
+  step,
+}: ChartRangeFilterProps) {
   const bounds = FILTER_BOUNDS[filterKey];
   const { filters, dispatch } = useFilters();
   const [activeRange, setActiveRange] = useState<[number, number]>([

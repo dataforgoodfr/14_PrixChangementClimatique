@@ -1,4 +1,3 @@
-"use-client";
 import SectionTitle from "../section-title";
 import StatCallout from "../statCallout";
 import Map from "./map";
