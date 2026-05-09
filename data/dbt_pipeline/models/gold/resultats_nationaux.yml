@@ -43,7 +43,7 @@ models:
         description: "Somme des primes d'assurances et budget de 2024"
         type: DECIMAL(10,2)
       - name: depenses_per_pop
-        description: "Solde net des dépenses par population sur 2023 (manque la population municipale de 2024)"
+        description: "Dépenses moyennes par habitants sur 2023 (manque la population municipale de 2024)"
         type: DECIMAL(10,2)
       - name: ratio_dettes_depenses
         description: "dettes 2024 par rapport aux dépenses de 2024"

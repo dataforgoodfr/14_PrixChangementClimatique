@@ -66,11 +66,17 @@ dep_pop AS (
             WHEN annee = 2023
                 THEN
                     CASE
-                        WHEN NOT ISFINITE(depenses_per_pop) THEN NULL
-                        ELSE depenses_per_pop
+                        WHEN NOT ISFINITE(depenses) THEN NULL
+                        ELSE depenses
                     END
             ELSE 0
-        END) AS depenses_per_pop
+        END) AS depenses_2023,
+
+        SUM(CASE
+            WHEN annee = 2023
+                THEN population
+            ELSE 0
+        END) AS population_2023
 
     FROM {{ ref('indicateurs_budget') }}
 ),
@@ -109,12 +115,7 @@ SELECT
         / NULLIF(b.depenses_2024, 0) * 100
         AS DECIMAL(10, 2)
     ) AS part_prime_budget,
-    CAST(
-        CASE
-            WHEN NOT ISFINITE(d.depenses_per_pop) THEN NULL
-            ELSE d.depenses_per_pop
-        END AS DECIMAL(10, 2)
-    ) AS depenses_per_pop,
+    CAST(d.depenses_2023 / NULLIF(d.population_2023, 0) AS DECIMAL(10, 2)) AS depenses_per_pop,
     CAST(r.dettes_2024 / NULLIF(b.depenses_2024, 0) AS DECIMAL(10, 5)) AS ratio_dettes_depenses
 
 FROM primes AS p
