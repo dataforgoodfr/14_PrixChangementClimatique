@@ -1,6 +1,6 @@
 export const INDICATOR_VALUES = [
   "indice_vulnerabilite_niveau",
-  "score_georisque",
+  "score_exposition",
   "prevention",
   "score_economique",
   "score_assurance",

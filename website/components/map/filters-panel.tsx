@@ -12,7 +12,7 @@ import { type IndicatorField, DEFAULT_INDICATOR } from "@/lib/types/indicator";
 import { useIndicator } from "@/hooks";
 import {
   IndiceVulnerabiliteNiveauIcon,
-  ScoreGeorisqueIcon,
+  ScoreExpositionIcon,
   PreventionIcon,
   ScoreEconomiqueIcon,
   ScoreAssuranceIcon,
@@ -40,7 +40,7 @@ const INDICATOR_OPTIONS: {
     label: "Vulnérabilité",
     Icon: IndiceVulnerabiliteNiveauIcon,
   },
-  { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
+  { value: "score_exposition", label: "Exposition", Icon: ScoreExpositionIcon },
   {
     value: "prevention",
     label: "Prévention",
