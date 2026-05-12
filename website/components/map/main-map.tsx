@@ -60,15 +60,15 @@ function buildFillColor(
       "#555555",
     ];
   }
-  if (indicator === "score_georisque") {
+  if (indicator === "score_exposition") {
     return [
       "case",
-      ["==", ["get", "score_georisque"], null],
+      ["==", ["get", "score_exposition"], null],
       "#555555",
       [
         "interpolate",
         ["linear"],
-        ["get", "score_georisque"],
+        ["get", "score_exposition"],
         0,
         "#FFF0EE",
         1,

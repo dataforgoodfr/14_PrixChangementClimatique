@@ -97,9 +97,9 @@ SELECT
     c.geometry,
     c.nom_commune,
 
-    -- KPI randoms récupérés depuis la table indices
+    -- scores récupérés depuis la table indices
     i.score_economique,
-    i.score_georisque,
+    i.score_exposition,
     i.score_assurance,
     i.indice_vulnerabilite_niveau,
 

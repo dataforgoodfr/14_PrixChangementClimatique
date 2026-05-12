@@ -12,8 +12,8 @@ models:
       - name: score_economique
         description: "Score économique de la commune"
         type: FLOAT
-      - name: score_georisque
-        description: "Score géorisque de la commune"
+      - name: score_exposition
+        description: "Score d'exposition aux risques climatiques de la commune"
         type: FLOAT
       - name: score_assurance
         description: "Score assurance de la commune"
