@@ -91,6 +91,8 @@ WITH table_pivot_population AS (
 -- DEUXIEME ETAPE : on somme les arrondissements pour Marseille, Paris et Lyon & on filtre les lignes où les populations sont "null"
 population_agregee AS (
     SELECT
+        annee_recensement,
+        annee,
         CASE
             -- Paris (75xxx -> 75000)
             WHEN code_geo LIKE '75%' THEN '75000'
@@ -104,9 +106,6 @@ population_agregee AS (
             -- autres communes inchangées
             ELSE code_geo
         END AS code_geo,
-
-        annee_recensement,
-        annee,
         SUM(population) AS population
     FROM table_pivot_population
     WHERE population IS NOT NULL
