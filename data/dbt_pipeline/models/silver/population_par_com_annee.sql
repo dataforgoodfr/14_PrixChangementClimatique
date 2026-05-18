@@ -88,7 +88,8 @@ WITH table_pivot_population AS (
     FROM {{ ref('population_code_geo') }}
 ),
 
--- DEUXIEME ETAPE : on somme les arrondissements pour Marseille, Paris et Lyon & on filtre les lignes où les populations sont "null"
+-- DEUXIEME ETAPE : on somme les arrondissements pour Marseille, Paris et Lyon
+-- & on filtre les lignes où les populations sont "null"
 population_agregee AS (
     SELECT
         annee_recensement,
