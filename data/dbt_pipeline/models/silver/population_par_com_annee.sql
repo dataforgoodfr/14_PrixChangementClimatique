@@ -86,14 +86,14 @@ WITH table_pivot_population AS (
         2026 AS annee,
         pop_2026 AS population
     FROM {{ ref('population_code_geo') }}
-)
+),
 
 -- DEUXIEME ETAPE : on somme les arrondissements pour Marseille, Paris et Lyon & on filtre les lignes où les populations sont "null"
 population_agregee AS (
     SELECT
         CASE
             -- Paris (75xxx -> 75000)
-            WHEN code_geo LIKE '75%' THEN '75056'
+            WHEN code_geo LIKE '75%' THEN '75000'
 
             -- Lyon (693xx -> 69123)
             WHEN code_geo LIKE '693%' THEN '69123'
@@ -103,7 +103,7 @@ population_agregee AS (
 
             -- autres communes inchangées
             ELSE code_geo
-        END AS code_geo_national,
+        END AS code_geo,
 
         annee_recensement,
         annee,
@@ -112,7 +112,7 @@ population_agregee AS (
     WHERE population IS NOT NULL
     GROUP BY
         CASE
-            WHEN code_geo LIKE '75%' THEN '75056'
+            WHEN code_geo LIKE '75%' THEN '75000'
             WHEN code_geo LIKE '693%' THEN '69123'
             WHEN code_geo LIKE '132%' THEN '13055'
             ELSE code_geo
