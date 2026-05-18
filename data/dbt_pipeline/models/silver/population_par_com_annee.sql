@@ -122,4 +122,4 @@ population_agregee AS (
 )
 
 SELECT *
-FROM population_agregee;
+FROM population_agregee
