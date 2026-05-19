@@ -4,12 +4,12 @@ import { CommuneFilters, RangeFilter } from "./types/filters/filters";
 function rangeExpressions(
   field: string,
   filter: RangeFilter,
-  fallback = 0,
+  exclusiveMax = false,
 ): ExpressionSpecification[] {
-  const get: ExpressionSpecification = ["coalesce", ["get", field], fallback];
+  const get: ExpressionSpecification = ["get", field];
   return [
     [">=", get, filter.min],
-    ["<=", get, filter.max],
+    exclusiveMax ? ["<", get, filter.max] : ["<=", get, filter.max],
   ];
 }
 
@@ -24,7 +24,7 @@ export function buildMaplibreFilter(
       ...rangeExpressions(
         "indice_vulnerabilite_niveau",
         filters.indice_vulnerabilite_niveau,
-        1,
+        filters.indice_vulnerabilite_niveau.max < 5,
       ),
     );
   if (filters.population)
