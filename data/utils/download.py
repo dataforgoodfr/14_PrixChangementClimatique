@@ -97,7 +97,6 @@ def main():
     # Files to download
     files = [
         ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
-        ("https://s3.fr-par.scw.cloud/qppcc-upload/odis.duckdb", "odis.duckdb"),
     ]
 
     # Download each file
