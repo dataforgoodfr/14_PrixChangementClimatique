@@ -94,6 +94,7 @@ population_agregee AS (
     SELECT
         annee_recensement,
         annee,
+        SUM(population)::INTEGER AS population,
         CASE
             -- Paris (75xxx -> 75000)
             WHEN code_geo LIKE '75%' THEN '75000'
@@ -106,8 +107,7 @@ population_agregee AS (
 
             -- autres communes inchangées
             ELSE code_geo
-        END AS code_geo,
-        SUM(population)::INTEGER AS population
+        END AS code_geo
     FROM table_pivot_population
     WHERE population IS NOT NULL
     GROUP BY
