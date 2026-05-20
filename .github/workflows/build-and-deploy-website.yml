@@ -17,12 +17,12 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: "3.12"
 
@@ -31,6 +31,9 @@ jobs:
 
       - name: Install Python dependencies
         run: uv sync
+
+      - name: Install DuckDB spatial extension
+        run: uv run python -c "import duckdb; duckdb.connect().execute('INSTALL spatial')"
 
       - name: Download DuckDB from S3
         run: uv run python data/utils/download.py
