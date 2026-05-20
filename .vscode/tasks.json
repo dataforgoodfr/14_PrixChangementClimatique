@@ -15,9 +15,9 @@
       }
     },
     {
-      "label": "Open DuckDB UI (odis)",
+      "label": "Open DuckDB UI",
       "type": "shell",
-      "command": "uv run python data/utils/launch_ui.py odis.duckdb",
+      "command": "uv run python data/utils/launch_ui.py",
       "group": "none",
       "icon": {
         "id": "database"
