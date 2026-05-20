@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "À propos | Reclaim Finance",
+  title: "À propos | Assurer ma ville",
   description:
     "En savoir plus sur Reclaim Finance et notre mission de lutte contre le changement climatique.",
 };

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SectionTitle from "@/components/home/section-title";
 
 export const metadata: Metadata = {
-  title: "Méthodologie | Reclaim Finance",
+  title: "Méthodologie | Assurer ma ville",
   description:
     "Découvrez la méthodologie d'analyse des risques climatiques utilisée par Reclaim Finance.",
 };
