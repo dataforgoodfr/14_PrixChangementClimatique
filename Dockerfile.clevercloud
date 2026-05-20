@@ -1,0 +1,6 @@
+ARG IMAGE_TAG=latest
+FROM ghcr.io/dataforgoodfr/14_prixchangementclimatique:${IMAGE_TAG}
+
+ENV PORT=8080
+EXPOSE 8080
+CMD ["node", "server.js"]
