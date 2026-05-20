@@ -55,6 +55,7 @@ def export_geojson():
     print(f"  (intermediate file: {GEOJSON_PATH})")
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+    duckdb.connect().execute("INSTALL spatial")
     conn = duckdb.connect(str(DUCKDB_PATH), read_only=True)
     conn.execute("LOAD spatial")
     conn.execute(f"""
