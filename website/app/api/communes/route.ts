@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   if (!isValidCodeCommune(code)) {
     return NextResponse.json(
       {
-        error: "Code commune invalide : code INSEE à 5 chiffres attendu",
+        error: "Code commune invalide : code INSEE à 5 chiffres ou format Corse (2Axxx/2Bxxx) attendu",
       },
       { status: 400 },
     );

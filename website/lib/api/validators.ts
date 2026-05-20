@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-const CODE_COMMUNE_REGEX = /^\d{5}$/;
+const CODE_COMMUNE_REGEX = /^(\d{5}|2[AB]\d{3})$/i;
 
 export function getCommuneCodeFromUrl(request: NextRequest) {
   const { searchParams } = new URL(request.url);
