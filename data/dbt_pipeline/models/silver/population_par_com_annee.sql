@@ -107,7 +107,7 @@ population_agregee AS (
             -- autres communes inchangées
             ELSE code_geo
         END AS code_geo,
-        SUM(population) AS population
+        SUM(population)::INTEGER AS population
     FROM table_pivot_population
     WHERE population IS NOT NULL
     GROUP BY
