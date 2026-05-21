@@ -120,6 +120,6 @@ SELECT
     score_inondation_net,
     (score_secheresse_net + score_inondation_net) / 2.0 * 0.9
     + 0.1 * score_autres_norm
-        AS score_climatique
+        AS score_exposition
 
 FROM final

@@ -1,9 +1,9 @@
 version: 1
 
 models:
-  - name: score_climatique
+  - name: score_exposition
     description: >
-      Gold layer: Score climatique par commune, constuit sur les indicateurs catnat, pprn, exposition aux tri et rga, et scenario pluie 2050
+      Gold layer: Score d'exposition aux risques climatiques par commune, constuit sur les indicateurs catnat, pprn, exposition aux tri et rga, et scenario pluie 2050
        Scores intermédiaires sécheresse + inondation
       Sources :
       - Gold layer : pprn, ccr_total,
@@ -24,6 +24,6 @@ models:
       - name: score_inondation_net
         description: "Score inondation de la commune avant normalisation"
         type: FLOAT
-      - name: score_climatique
-        description: "Score climatique"
+      - name: score_exposition
+        description: "Score d'exposition aux risques climatiques"
         type: FLOAT
