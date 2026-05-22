@@ -23,9 +23,10 @@ def _():
     from sklearn.cluster import KMeans
     import seaborn as sns
     import matplotlib.colors as mcolors
+    from datetime import datetime
 
 
-    return MinMaxScaler, duckdb, gpd, mo, np, pd, plt, stats, wkt
+    return MinMaxScaler, datetime, duckdb, gpd, mo, np, pd, plt, stats, wkt
 
 
 @app.cell
@@ -790,12 +791,21 @@ def _(poids_prevention):
 
 
 @app.cell
-def _():
+def _(gdf_calc):
+    gdf_calc
     return
 
 
 @app.cell
-def _(datas_inondation, gdf, metropole_datas, np, poids_prevention):
+def _(
+    datas_inondation,
+    datetime,
+    gdf,
+    metropole_datas,
+    np,
+    pd,
+    poids_prevention,
+):
     gdf_calc = gdf.copy()
 
     poid_pre = poids_prevention.value
@@ -803,12 +813,31 @@ def _(datas_inondation, gdf, metropole_datas, np, poids_prevention):
 
     gdf_calc.loc[datas_inondation.index, "score_inondation"] = datas_inondation["score_inondation"].values
 
+    current_year = datetime.now().year
+
+    gdf_calc['score_secheresse_net'] = (
+        gdf_calc['score_secheresse']
+        - np.where(
+            current_year - pd.to_datetime(gdf_calc['date_approbation_rga']).dt.year < 10,
+            poid_pre,
+            poid_pre / 2
+        ) * gdf_calc['pprn_rga']
+    ).clip(lower=0)
+
+    gdf_calc['score_inondation_net'] = (
+        gdf_calc['score_inondation']
+        - np.where(
+            current_year - pd.to_datetime(gdf_calc['date_approbation_ino']).dt.year < 10,
+            poid_pre,
+            poid_pre / 2
+        ) * gdf_calc['pprn_ino']
+    ).clip(lower=0)
 
     # gdf_calc['s_norm']  = clip_minmax(gdf_calc['score_secheresse'], q_low=0.05, q_high=0.95)
     # gdf_calc['i_norm']  = clip_minmax(gdf_calc['score_inondation'],  q_low=0.05, q_high=0.95)
 
-    gdf_calc['score_secheresse_net'] = (gdf_calc['score_secheresse'] - poid_pre * gdf_calc['pprn_rga']).clip(lower=0)
-    gdf_calc['score_inondation_net'] = (gdf_calc['score_inondation'] - poid_pre * gdf_calc['pprn_ino']).clip(lower=0)
+    # gdf_calc['score_secheresse_net'] = (gdf_calc['score_secheresse'] - poid_pre * gdf_calc['pprn_rga']).clip(lower=0)
+    # gdf_calc['score_inondation_net'] = (gdf_calc['score_inondation'] - poid_pre * gdf_calc['pprn_ino']).clip(lower=0)
     gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_total_arretes_autre'], q_low=0, q_high=0.999)
 
 
@@ -859,8 +888,8 @@ def _(datas_inondation, gdf, metropole_datas, np, poids_prevention):
     # )
 
     score_principal = np.maximum(
-        gdf_calc['score_secheresse_net'],
-        gdf_calc['score_inondation_net'].fillna(0)
+        gdf_calc['score_secheresse_net'].fillna(0),
+        gdf_calc['score_inondation_net']
     )
     # gdf_calc['score_global_lp'] = np.sqrt(
     #     0.7*score_principal**2 +                        
@@ -885,6 +914,11 @@ def _(datas_inondation, gdf, metropole_datas, np, poids_prevention):
 
     gdf_calc['score_exposition'] = gdf_calc['score_global_lp'] 
     return (gdf_calc,)
+
+
+@app.cell
+def _():
+    return
 
 
 @app.cell
@@ -914,6 +948,11 @@ def _(gdf_calc):
 @app.cell
 def _(gdf_calc):
     gdf_calc['score_exposition_1d'] = (gdf_calc['score_exposition']*5).round(1)
+    return
+
+
+@app.cell
+def _():
     return
 
 
@@ -991,9 +1030,9 @@ def _(gdf_calc, np):
     gdf_calc_assurance['part_arretes_non_reconnus_clip']  = clip_minmax(gdf_calc_assurance['part_arretes_non_reconnus'],q_low = 0.0,q_high=1)
 
     gdf_calc_assurance['evolution_prime_assurance_clip'] = gdf_calc_assurance['evolution_prime_assurance'].clip(-1)
-    x_min = -0.2
+    x_min = 0
     # gdf_calc_assurance['evolution_prime_assurance'].quantile(0.05) #0
-    x_max = 2.3
+    x_max = 1.5
     # np.expm1(np.log1p(x_min)+(np.log1p(gdf_calc_assurance['evolution_prime_assurance'].median())-np.log1p(x_min))/0.2)
     # 0.144
     gdf_calc_assurance['indice_prime'] = ((np.log1p(gdf_calc_assurance['evolution_prime_assurance_clip']) - np.log1p(x_min)) / (np.log1p(x_max) - np.log1p(x_min))).clip(0, 1)
