@@ -379,12 +379,12 @@ def _(np, plt):
         if score_color:
             df[score_color] = df[score_color].fillna(-1)
         score_colors = {-1:'#A9A9A9',0: '#2ecc71', 1: '#a8d44b', 2: '#f1c40f', 3: '#e67e22', 4: '#e74c3c'}
-    
+
         fig, ax = plt.subplots(figsize=(12, 6))
         mask = df[[colonne_variable, colonne_var_stand]].dropna().index
         data_stand = df.loc[mask, colonne_var_stand]
         data_brut  = df.loc[mask, colonne_variable]  
-    
+
         if score_color is not None:
             score_data = df.loc[mask, score_color].fillna(-1).astype(int)
             counts_total, edges = np.histogram(data_stand, bins=50)
@@ -408,9 +408,9 @@ def _(np, plt):
         # ax_dettes.axvline(0.1, color='green',  linestyle='--', linewidth=2, label=f'score 0.1')
         ax.axvline(data_stand.median(), color='orange', linewidth=2, label=f'Médiane indice ({data_stand .median():.2f})')
         ax.axvline(np.mean(data_stand), color='red', linewidth=2, linestyle='--', label='Moyenne' )
-        ax.set_xlabel("Indice")
+        ax.set_xlabel(f"Indice {colonne_var_stand}")
         ax.set_ylabel("Fréquence")
-        ax.set_title(f"Distribution de l'indice {colonne_variable}")
+        ax.set_title(f"Distribution de l'indice {colonne_var_stand}")
         ax.legend(fontsize=8)
         ax.set_ylim((0,8000))
         ax2 = ax.twiny()
@@ -523,6 +523,11 @@ def _(mo):
 
 
 @app.cell
+def _():
+    return
+
+
+@app.cell
 def _(MinMaxScaler, col_selector_secheresse, gdf, np):
     selected_cols = col_selector_secheresse.value  
     # doit contenir ['swi_04_d_abs', 'indicateur_rga', 'nb_total_arretes_sec']
@@ -530,21 +535,7 @@ def _(MinMaxScaler, col_selector_secheresse, gdf, np):
     metropole_datas = gdf[~gdf["code_insee"].str.startswith(("97","98"))].copy()
     metropole_datas[selected_cols] = metropole_datas[selected_cols].fillna(0)
 
-
-    # Standardisation individuelle
-    # scaler_sec = StandardScaler()
-    # X_sec_scaled = pd.DataFrame(
-    #     scaler_sec.fit_transform(metropole_datas[selected_cols]),
-    #     columns=selected_cols,
-    #     index=metropole_datas.index)
-
-    # # Terme d'interaction SWI × RGA
-    # X_sec_scaled['swi_x_rga'] = X_sec_scaled['swi_04_d_abs'] * X_sec_scaled['indicateur_rga']
-
-    # # Re-standardisation du terme d'interaction
-    # X_sec_scaled['swi_x_rga'] = StandardScaler().fit_transform(X_sec_scaled[['swi_x_rga']])
-
-    metropole_datas['swi_04_d_abs_indice'] = clip_minmax(metropole_datas['swi_04_d_abs'],q_low=0,q_high=1)
+    metropole_datas['swi_04_d_abs_indice'] = clip_minmax(metropole_datas['swi_04_d_abs'],q_low=0,q_high=0.99)
     metropole_datas['indicateur_rga_indice'] = clip_minmax(metropole_datas['indicateur_rga'],q_low=0,q_high=0.99)
     metropole_datas['swi_x_rga'] = metropole_datas['swi_04_d_abs_indice'] * metropole_datas['indicateur_rga_indice']
     metropole_datas['swi_x_rga_indice'] = clip_minmax(metropole_datas['swi_x_rga'],q_low=0,q_high=0.99)
@@ -574,8 +565,17 @@ def _(MinMaxScaler, col_selector_secheresse, gdf, np):
         .clip(0, 4)
         .astype('Int64')
     )
+    return metropole_datas, w_arretes, w_swi_rga
 
-    return (metropole_datas,)
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
+def _():
+    return
 
 
 @app.cell
@@ -603,8 +603,36 @@ def _(metropole_datas, np, plot_variable):
 
 
 @app.cell
+def _(carte_continue, metropole_datas):
+    carte_continue(metropole_datas, 'score_secheresse')
+    return
+
+
+@app.cell
 def _(carte_discret, metropole_datas):
     carte_discret(metropole_datas, 'score_secheresse_int')
+    return
+
+
+@app.cell
+def _(metropole_datas, w_arretes, w_swi_rga):
+    metropole_datas['contrib_swi_rga'] = (w_swi_rga * metropole_datas['swi_x_rga_indice']**2) / metropole_datas['score_secheresse']**2
+    metropole_datas['contrib_arretes'] = (w_arretes * metropole_datas['nb_total_arretes_sec_indice']**2) / metropole_datas['score_secheresse']**2
+    return
+
+
+@app.cell
+def _(metropole_datas):
+    print(metropole_datas[['contrib_swi_rga', 'contrib_arretes']].mean())
+    return
+
+
+@app.cell
+def _(metropole_datas, plt):
+    metropole_datas[['contrib_swi_rga', 'contrib_arretes']].plot(kind='box')
+    plt.title('Distribution des contributions au score sécheresse')
+    plt.ylabel('Part dans le score²')
+    plt.show()
     return
 
 
@@ -678,6 +706,13 @@ def _(selected_cols_inondation):
 
 
 @app.cell
+def _():
+
+
+    return
+
+
+@app.cell
 def _(MinMaxScaler, col_selector_inondation, gdf, np):
     selected_cols_inondation = col_selector_inondation.value
     datas_inondation = gdf[~gdf["code_insee"].str.startswith(("98"))]
@@ -686,22 +721,23 @@ def _(MinMaxScaler, col_selector_inondation, gdf, np):
 
     datas_inondation['rr_50_d_abs_indice'] = clip_minmax(datas_inondation['rr_50_d_abs'],q_low=0,q_high=0.99)
     datas_inondation['indicateur_tri_indice'] = clip_minmax(datas_inondation['indicateur_tri'],q_low=0,q_high=0.99)
-    datas_inondation['rr_50_x_tri'] = datas_inondation['rr_50_d_abs_indice'] * datas_inondation['indicateur_tri_indice']
-    datas_inondation['rr_50_x_tri_indice'] = clip_minmax(datas_inondation['rr_50_x_tri'],q_low=0,q_high=0.99)
-    datas_inondation['rr_50_x_tri_indice_int'] = (
-        np.floor(datas_inondation['rr_50_x_tri_indice'] * 5)
-        .clip(0, 4)
-        .astype('Int64')
-    )
+    # datas_inondation['rr_50_x_tri'] = datas_inondation['rr_50_d_abs_indice'] * datas_inondation['indicateur_tri_indice']
+    # datas_inondation['rr_50_x_tri_indice'] = clip_minmax(datas_inondation['rr_50_x_tri'],q_low=0,q_high=0.99)
+    # datas_inondation['rr_50_x_tri_indice_int'] = (
+    #     np.floor(datas_inondation['rr_50_x_tri_indice'] * 5)
+    #     .clip(0, 4)
+    #     .astype('Int64')
+    # )
 
     datas_inondation['nb_total_arretes_ino_indice'] = clip_minmax(datas_inondation['nb_total_arretes_ino'],q_low=0,q_high=0.99)
 
     # # Score final (poids à ajuster selon vos choix)
-    w_rr50_tri = 0.4
-    w_arretes_ino = 0.6
+    w_rr50 = 0.3
+    w_arretes_ino = 0.5
+    w_indicateur_tri = 0.2
 
-    datas_inondation['score_inondation'] = np.sqrt(
-        w_rr50_tri * datas_inondation['rr_50_x_tri_indice']**2 +
+    datas_inondation['score_inondation'] = np.sqrt(w_indicateur_tri * datas_inondation['indicateur_tri_indice']**2 +
+        w_rr50 * datas_inondation['rr_50_d_abs_indice']**2 +
         w_arretes_ino * datas_inondation['nb_total_arretes_ino_indice']**2
     )
 
@@ -714,13 +750,12 @@ def _(MinMaxScaler, col_selector_inondation, gdf, np):
         .clip(0, 4)
         .astype('Int64')
     )
-
     return datas_inondation, selected_cols_inondation
 
 
 @app.cell
 def _(datas_inondation, np, plot_variable):
-    plot_variable(datas_inondation, 'indicateur_tri','rr_50_x_tri_indice', 'score_inondation_int',np.array([0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]))
+    plot_variable(datas_inondation, 'indicateur_tri','indicateur_tri_indice', 'score_inondation_int',np.array([0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]))
     return
 
 
@@ -737,6 +772,12 @@ def _(datas_inondation, np, plot_variable):
 
 
 @app.cell
+def _(carte_continue, datas_inondation):
+    carte_continue(datas_inondation, 'score_inondation')
+    return
+
+
+@app.cell
 def _(carte_discret, datas_inondation):
     carte_discret(datas_inondation, 'score_inondation_int')
     return
@@ -745,6 +786,11 @@ def _(carte_discret, datas_inondation):
 @app.cell
 def _(poids_prevention):
     poids_prevention
+    return
+
+
+@app.cell
+def _():
     return
 
 
@@ -763,22 +809,94 @@ def _(datas_inondation, gdf, metropole_datas, np, poids_prevention):
 
     gdf_calc['score_secheresse_net'] = (gdf_calc['score_secheresse'] - poid_pre * gdf_calc['pprn_rga']).clip(lower=0)
     gdf_calc['score_inondation_net'] = (gdf_calc['score_inondation'] - poid_pre * gdf_calc['pprn_ino']).clip(lower=0)
-    gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_total_arretes_autre'], q_low=0, q_high=1)
+    gdf_calc['score_autres'] = clip_minmax(gdf_calc['nb_total_arretes_autre'], q_low=0, q_high=0.999)
+
+
+
+    # score= np.sqrt((score_principal**2 * 0.9 + gdf_calc['score_autres']**2 * 0.1))
+
+    # score_expo = np.maximum(
+    #     np.maximum(
+    #         gdf_calc['score_secheresse_net'],
+    #         gdf_calc['score_inondation_net']
+    #     ),
+    #     np.sqrt(0.45*gdf_calc['score_secheresse_net']**2 + 0.45*gdf_calc['score_inondation_net']**2 + 0.1*gdf_calc['score_autres']**2)
+    # )
+    # score_expo = np.sqrt(0.45*gdf_calc['score_secheresse_net']**2 + 0.45*gdf_calc['score_inondation_net']**2 + 0.1*gdf_calc['score_autres']**2)
+    # # score_expo= np.sqrt((score_principal**2 * 0.9 + gdf_calc['score_autres']**2 * 0.1))
+    # # score = np.sqrt(1*gdf_calc['score_secheresse_net'] **2 + 1*gdf_calc['score_inondation_net']**2+0.2*gdf_calc['score_autres']**2)
+
+    # # gdf_calc['score_global_lp'] = np.maximum(
+    # #     gdf_calc['score_inondation_net'],
+    # #     score_expo.fillna(
+    # #         gdf_calc['score_secheresse_net'].fillna(
+    # #             np.sqrt(0.9*gdf_calc['score_inondation_net']**2 + 0.1*gdf_calc['score_autres']**2)
+    # #         )
+    # #     )
+    # # )
+    # gdf_calc['score_global_lp'] = score_expo.fillna(
+    #             np.sqrt(0.9*gdf_calc['score_inondation_net']**2 + 0.1*gdf_calc['score_autres']**2))
+    # # gdf_calc['score_global_lp'] = np.maximum(
+    # #     gdf_calc['score_secheresse_net'].fillna(0),
+    # #     gdf_calc['score_inondation_net'],gdf_calc['score_autres']
+    # # )
+    # # gdf_calc['score_global_lp'] = clip_minmax(gdf_calc['score_global_lp'], q_low=0, q_high=1)
+    # gdf_calc['score_exposition'] = gdf_calc['score_global_lp']/(gdf_calc['score_global_lp'].max())
+
+
+    # 1. Score brut agrégé
+    score_agrege = np.sqrt(
+        0.4*gdf_calc['score_secheresse_net']**2 + 
+        0.4*gdf_calc['score_inondation_net']**2 + 
+        0.2*gdf_calc['score_autres']**2
+    ).fillna(
+        np.sqrt(0.8*gdf_calc['score_inondation_net']**2 + 0.2*gdf_calc['score_autres']**2)
+    )
+
+    # score_principal = np.maximum(
+    #     gdf_calc['score_secheresse_net'].fillna(0),
+    #     gdf_calc['score_inondation_net'],gdf_calc['score_autres']
+    # )
 
     score_principal = np.maximum(
         gdf_calc['score_secheresse_net'],
-        gdf_calc['score_inondation_net']
+        gdf_calc['score_inondation_net'].fillna(0)
     )
+    # gdf_calc['score_global_lp'] = np.sqrt(
+    #     0.7*score_principal**2 +                        
+    #     0.2*gdf_calc['score_secheresse_net'].fillna(0)**2 +  
+    #     0.2*gdf_calc['score_inondation_net'].fillna(0)**2 +  
+    #     0.2*gdf_calc['score_autres'].fillna(0)**2            
+    # )
 
-    score= np.sqrt((score_principal**2 * 0.9 + gdf_calc['score_autres']**2 * 0.1))
-    # score = np.sqrt(0.45*gdf_calc['score_secheresse_net'] **2 + 0.45*gdf_calc['score_inondation_net']**2+0.1*gdf_calc['score_autres']**2)
+    # # 3. On prend le max entre les deux AVANT normalisation
+    # # gdf_calc['score_global_lp'] = np.maximum(score_expo, plancher)
 
-    gdf_calc['score_global_lp'] = score.fillna(
-        gdf_calc['score_secheresse_net'].fillna(np.sqrt(0.9*gdf_calc['score_inondation_net']**2+0.1*gdf_calc['score_autres']**2))
+    # # 4. Normalisation une seule fois à la fin
+    # gdf_calc['score_exposition'] = gdf_calc['score_global_lp'] / gdf_calc['score_global_lp'].max()
+
+
+    gdf_calc['score_global_lp'] = np.maximum(
+        score_agrege,
+        score_principal  
     )
+    # gdf_calc['score_global_lp'] = score_principal
+    # gdf_calc['score_exposition'] = gdf_calc['score_global_lp'] / gdf_calc['score_global_lp'].max()
 
-    gdf_calc['score_exposition'] = gdf_calc['score_global_lp']/(gdf_calc['score_global_lp'].max())
+    gdf_calc['score_exposition'] = gdf_calc['score_global_lp'] 
     return (gdf_calc,)
+
+
+@app.cell
+def _(gdf_calc):
+    gdf_calc['score_exposition_int'].value_counts()
+    return
+
+
+@app.cell
+def _(gdf_calc, np, plot_variable):
+    plot_variable(gdf_calc, 'nb_total_arretes_autre','score_global_lp', None,np.array([0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]))
+    return
 
 
 @app.cell
@@ -801,7 +919,7 @@ def _(gdf_calc):
 
 @app.cell
 def _(gdf_calc):
-    gdf_calc['score_exposition_int'].value_counts()
+    gdf_calc.loc[gdf_calc['code_insee'].str.startswith('974')]
     return
 
 
@@ -812,8 +930,13 @@ def _(carte_discret, gdf_calc):
 
 
 @app.cell
+def _():
+    return
+
+
+@app.cell
 def _(carte_continue, gdf_calc):
-    carte_continue(gdf_calc, 'score_exposition')
+    carte_continue(gdf_calc, 'score_autres')
     return
 
 
@@ -853,6 +976,11 @@ def _(mo):
 
 
 @app.cell
+def _():
+    return
+
+
+@app.cell
 def _(gdf_calc, np):
     gdf_calc_assurance = gdf_calc.copy()
 
@@ -865,8 +993,9 @@ def _(gdf_calc, np):
     gdf_calc_assurance['evolution_prime_assurance_clip'] = gdf_calc_assurance['evolution_prime_assurance'].clip(-1)
     x_min = -0.2
     # gdf_calc_assurance['evolution_prime_assurance'].quantile(0.05) #0
-    x_max = np.expm1(np.log1p(x_min)+(np.log1p(0.144)-np.log1p(x_min))/0.3)
-
+    x_max = 2.3
+    # np.expm1(np.log1p(x_min)+(np.log1p(gdf_calc_assurance['evolution_prime_assurance'].median())-np.log1p(x_min))/0.2)
+    # 0.144
     gdf_calc_assurance['indice_prime'] = ((np.log1p(gdf_calc_assurance['evolution_prime_assurance_clip']) - np.log1p(x_min)) / (np.log1p(x_max) - np.log1p(x_min))).clip(0, 1)
     return (gdf_calc_assurance,)
 
@@ -906,26 +1035,39 @@ def _(
     #      pf*((gdf_calc_assurance['multiple_franchise_last']-1))/ (5 - 1))
 
     gdf_calc_assurance['score_assurance_min_max'] = (gdf_calc_assurance['score_assurance'])/(gdf_calc_assurance['score_assurance'].max())
-    return pep, pf, pna, ppb
+    gdf_calc_assurance['score_assurance_int'] = (gdf_calc_assurance['score_assurance_min_max']*5).astype('Int64').clip(0,4)
+    gdf_calc_assurance['score_assurance_1d'] = (gdf_calc_assurance['score_assurance_min_max']*5).round(1)
+    return pna, ppb
+
+
+@app.cell
+def _(gdf_calc_assurance):
+    gdf_calc_assurance['evolution_prime_assurance'].median()
+    return
 
 
 @app.cell(hide_code=True)
-def _(gdf_calc_assurance, pep, pf, pna, ppb):
-    poids = {'indice_prime': pep, 
-             'part_prime_budget_standard': ppb, 
-             'part_arretes_non_reconnus_clip': pna, 
-             'multiple_franchise_last_indice': pf}
+def _():
+    # poids = {'indice_prime': pep, 
+    #          'part_prime_budget_standard': ppb, 
+    #          'part_arretes_non_reconnus_clip': pna, 
+    #          'multiple_franchise_last_indice': pf}
 
-    df_contrib = gdf_calc_assurance.copy()
-    df_contrib['part_arretes_non_reconnus_clip'] = df_contrib['part_arretes_non_reconnus_clip'].fillna(1)
+    # df_contrib = gdf_calc_assurance.copy()
+    # df_contrib['part_arretes_non_reconnus_clip'] = df_contrib['part_arretes_non_reconnus_clip'].fillna(1)
 
-    score_sq = df_contrib['score_assurance_min_max'] ** 2  # = p1*x1² + p2*x2² + ...
+    # score_sq = df_contrib['score_assurance_min_max'] ** 2  # = p1*x1² + p2*x2² + ...
 
-    for var, p in poids.items():
-        df_contrib[f'contrib_{var}'] = (p * df_contrib[var]**2) / score_sq
+    # for var, p in poids.items():
+    #     df_contrib[f'contrib_{var}'] = (p * df_contrib[var]**2) / score_sq
 
-    contrib_cols = [f'contrib_{v}' for v in poids]
-    print(df_contrib[contrib_cols].mean().sort_values(ascending=False))
+    # contrib_cols = [f'contrib_{v}' for v in poids]
+    # print(df_contrib[contrib_cols].mean().sort_values(ascending=False))
+    return
+
+
+@app.cell
+def _():
     return
 
 
@@ -954,9 +1096,7 @@ def _(gdf_calc_assurance, np, plot_variable):
 
 
 @app.cell
-def _(gdf_calc_assurance):
-    gdf_calc_assurance['score_assurance_int'] = (gdf_calc_assurance['score_assurance_min_max']*5).astype('Int64').clip(0,4)
-    gdf_calc_assurance['score_assurance_1d'] = (gdf_calc_assurance['score_assurance_min_max']*5).round(1)
+def _():
     return
 
 
@@ -989,6 +1129,11 @@ def _(mo):
 @app.cell
 def _(mo, poids_prevention_dettes, ppbh):
     mo.hstack([poids_prevention_dettes,ppbh])
+    return
+
+
+@app.cell
+def _():
     return
 
 
@@ -1059,6 +1204,11 @@ def _(gdf_calc_eco, np, plot_variable):
 
 
 @app.cell
+def _():
+    return
+
+
+@app.cell
 def _(gdf_calc_eco, np, plot_variable):
     plot_variable(gdf_calc_eco, 'ratio_dettes_depenses','debt_indice', 'score_eco_int',np.array([0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]))
     return
@@ -1073,6 +1223,12 @@ def _(carte_continue, gdf_calc_eco):
 @app.cell
 def _(carte_continue, gdf_calc_eco):
     carte_continue(gdf_calc_eco, 'depenses_per_pop_indice')
+    return
+
+
+@app.cell
+def _(gdf_calc_eco, np, plot_variable):
+    plot_variable(gdf_calc_eco, 'score_eco_int','score_eco', 'score_eco_int',np.array([0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]))
     return
 
 
@@ -1151,36 +1307,30 @@ def _(mo):
 
 
 @app.cell
-def _(gdf_calc_eco):
-    gdf_calc_eco['score_assurance_min_max'].var(),gdf_calc_eco['score_exposition'].var()
-    return
-
-
-@app.cell
 def _(mo, poids_prevention_assurance, poids_prevention_eco, ppexpo):
     mo.hstack([poids_prevention_eco, poids_prevention_assurance, ppexpo])
     return
 
 
 @app.cell
-def _():
-    # ppeco = poids_prevention_eco.value
-    # ppa = poids_prevention_assurance.value
-    # ppexpo = 1 - ppeco - ppa
+def _(gdf_calc_eco, poids_prevention_assurance, poids_prevention_eco):
+    ppeco = poids_prevention_eco.value
+    ppa = poids_prevention_assurance.value
+    ppexpo = 1 - ppeco - ppa
 
-    # gdf_calc_eco['final'] = (ppeco*gdf_calc_eco['score_eco_minmax']**2+ppa*gdf_calc_eco['score_assurance_min_max']**2+ppexpo*gdf_calc_eco['score_exposition']**2)**(1/2)
+    gdf_calc_eco['score_final'] = (ppeco*gdf_calc_eco['score_eco_minmax']**2+ppa*gdf_calc_eco['score_assurance_min_max']**2+ppexpo*gdf_calc_eco['score_exposition']**2)**(1/2)
 
-
+    gdf_calc_eco['score_final'] =  clip_minmax(gdf_calc_eco['score_final'] ,q_low = 0,q_high=1)
     # gdf_calc_eco['final_min_max'] = (gdf_calc_eco['final']-gdf_calc_eco['final'].min())/(gdf_calc_eco['final'].max()-gdf_calc_eco['final'].min())
     # gdf_calc_eco['final_min_max']  = clip_minmax(gdf_calc_eco['final_min_max'] ,q_low = 0.05,q_high=1)
-    return
+    return (ppexpo,)
 
 
 @app.cell
-def _():
-    # gdf_calc_eco['score_final_int'] = np.floor(gdf_calc_eco['final_min_max'] * 5).clip(0, 4).astype('Int64')
+def _(gdf_calc_eco, np):
+    gdf_calc_eco['score_final_int'] = np.floor(gdf_calc_eco['score_final'] * 5).clip(0, 4).astype('Int64')
 
-    # gdf_calc_eco['score_final_1d'] = (gdf_calc_eco['final_min_max']*5).round(1)
+    gdf_calc_eco['score_final_1d'] = (gdf_calc_eco['score_final']*5).round(1)
     return
 
 
@@ -1192,6 +1342,18 @@ def _():
 
 @app.cell
 def _():
+
+    variables = ['indicateur_rga','swi_04_d_abs','nb_total_arretes_sec',"indicateur_tri","nb_total_arretes_ino","rr_50_d_abs",'nb_total_arretes_autre','pprn_rga','pprn_ino','multiple_franchise_last','part_prime_budget','part_arretes_non_reconnus','evolution_prime_assurance','ratio_dettes_depenses','depenses_per_pop']
+    sous_score = ['score_secheresse_net','score_inondation_net','score_autres','score_exposition','score_assurance_min_max','score_eco_minmax']
+    score = ['score_final','score_final_1d']
+
+    colonne_all_score = variables + sous_score + score
+    return colonne_all_score, score, sous_score
+
+
+@app.cell
+def _(colonne_all_score, gdf_calc_eco):
+    gdf_calc_eco[['code_insee','departement','region','code_departement']+colonne_all_score]
     return
 
 
@@ -1202,8 +1364,8 @@ def _(gdf_calc_eco):
 
 
 @app.cell
-def _():
-    # carte_discret(gdf_calc_eco, 'score_final_int')
+def _(carte_discret, gdf_calc_eco):
+    carte_discret(gdf_calc_eco, 'score_final_int')
     return
 
 
@@ -1217,7 +1379,103 @@ def _():
 
 
 @app.cell
+def _(mo):
+    search_insee = mo.ui.text(placeholder="Code INSEE...", label="Filtrer par code INSEE")
+    search_col = mo.ui.text(placeholder="score, assurance...", label="Filtrer les colonnes")
+    indice_score = mo.ui.slider(0,4, value=4, label="Score")
+
+    mo.hstack([search_insee, search_col, indice_score])
+    return search_col, search_insee
+
+
+@app.cell
+def _(colonne_all_score, gdf_calc_eco, search_col, search_insee):
+    # --- Filtrage des lignes et colonnes ---
+    df = gdf_calc_eco[colonne_all_score + ['code_insee']].copy()
+
+    # Filtre lignes
+    mask = df['code_insee'].astype(str).str.contains(search_insee.value, case=False)
+    df_filtered = df[mask]
+
+    # Filtre colonnes
+    if search_col.value:
+        cols_match = ['code_insee'] + [c for c in colonne_all_score if search_col.value.lower() in c.lower()]
+    else:
+        cols_match = ['code_insee'] + colonne_all_score
+
+    df_filtered = df_filtered[cols_match]
+    return (df_filtered,)
+
+
+@app.cell
 def _():
+    return
+
+
+@app.cell
+def _(df_filtered):
+    df_filtered
+    return
+
+
+@app.cell
+def _(df_filtered, mo, score, sous_score, tableau):
+    # --- Coloration ---
+
+    # Gradient sur les sous-scores [0,1]
+    sous_score_present = [c for c in sous_score if c in df_filtered.columns]
+
+    # Mapping variable brute -> indice pour la coloration
+    var_to_indice = {
+        'evolution_prime_assurance': 'indice_prime',
+        'part_prime_budget': 'indice_prime_budget',
+        'part_arretes_non_reconnus': 'indice_arretes_nr',
+        'multiple_franchise_last': 'indice_franchise',
+        'swi_04_d_abs': 'swi_04_d_abs_indice',
+        'indicateur_rga': 'indicateur_rga_indice',
+        'nb_total_arretes_sec': 'nb_total_arretes_sec_indice',
+        # compléter selon vos indices disponibles
+    }
+
+    def color_by_indice(col_name, df_source):
+        """Retourne une série de couleurs basées sur l'indice associé à la variable brute."""
+        indice_col = var_to_indice.get(col_name)
+        if indice_col and indice_col in df_source.columns:
+            return df_source[indice_col]
+        return None
+
+    styled = df_filtered.style
+
+    # Gradient sous-scores
+    if sous_score_present:
+        styled = styled.background_gradient(
+            subset=sous_score_present, 
+            cmap='RdYlGn_r', 
+            vmin=0, vmax=1
+        )
+
+    # Gradient score final
+    score_present = [c for c in score if c in df_filtered.columns]
+    if score_present:
+        styled = styled.background_gradient(
+            subset=score_present,
+            cmap='RdYlGn_r',
+            vmin=0, vmax=1
+        )
+
+    # Gradient variables brutes via leur indice
+    for var, indice in var_to_indice.items():
+        if var in df_filtered.columns and indice in tableau.columns:
+            # Normalise les couleurs sur l'indice mais affiche la valeur brute
+            indice_values = tableau.loc[df_filtered.index, indice]
+            styled = styled.background_gradient(
+                subset=[var],
+                gmap=indice_values,
+                cmap='RdYlGn_r',
+                vmin=0, vmax=1
+            )
+
+    mo.ui.table(df_filtered)  # ou styled si vous préférez le styling pandas
     return
 
 
