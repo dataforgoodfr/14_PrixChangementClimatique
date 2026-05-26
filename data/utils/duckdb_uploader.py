@@ -1,7 +1,8 @@
-from s3_connector import get_s3_client, send_large_file_to_s3
-from pathlib import Path
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
+from s3_connector import get_s3_client, send_large_file_to_s3
 
 SCRIPT_DIR = Path(__file__).parent
 REPO_ROOT = SCRIPT_DIR.parent.parent

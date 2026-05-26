@@ -5,15 +5,17 @@ Extracts all tables from the `main_gold` schema of dev.duckdb and copies
 them into the `main` schema of website.duckdb. Used by the website build
 pipeline before Docker image creation.
 """
-import duckdb
-import os
+
 import logging
+import os
 from pathlib import Path
+
+import duckdb
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(message)s",
-    datefmt="%H:%M:%S"
+    datefmt="%H:%M:%S",
 )
 log = logging.getLogger(__name__)
 
@@ -27,7 +29,7 @@ FILES = {
     "website": "website.duckdb",
 }
 
-DEV_PATH     = DATA_DIR / FILES["dev"]
+DEV_PATH = DATA_DIR / FILES["dev"]
 WEBSITE_PATH = DATA_DIR / FILES["website"]
 
 
@@ -40,6 +42,7 @@ def db_size(path: str) -> str:
             return f"{size:.1f} {unit}"
         size /= 1024
     return f"{size:.1f} TB"
+
 
 if WEBSITE_PATH.exists():
     WEBSITE_PATH.unlink()
