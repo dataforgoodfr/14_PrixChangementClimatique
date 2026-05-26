@@ -142,6 +142,21 @@ SELECT
     p.prime_assurance_2024 / b.depenses AS part_prime_budget,
     (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) AS evolution_prime_assurance
 
+    ROUND(PERCENT_RANK() OVER (ORDER BY p.prime_assurance_2024 / b.depenses DESC) * 100) 
+        AS rank_part_prime_budget,
+
+    ROUND(PERCENT_RANK() OVER (ORDER BY (p.prime_assurance_2024 - p.prime_assurance_2020) / NULLIF(p.prime_assurance_2020, 0) DESC) * 100) 
+        AS rank_evolution_prime,
+
+    ROUND(PERCENT_RANK() OVER (ORDER BY t.part_arretes_non_reconnus DESC) * 100) 
+        AS rank_part_arretes_non_reconnus,
+
+    ROUND(PERCENT_RANK() OVER (ORDER BY b.ratio_dettes_depenses ASC) * 100) 
+        AS rank_ratio_dettes_depenses,
+
+    ROUND(PERCENT_RANK() OVER (ORDER BY b.depenses_per_pop ASC) * 100) 
+        AS rank_depenses_per_pop,
+
 FROM {{ ref('opendatasoft_communes') }} AS c
 
 LEFT JOIN {{ ref('scenario_2050') }} AS r
