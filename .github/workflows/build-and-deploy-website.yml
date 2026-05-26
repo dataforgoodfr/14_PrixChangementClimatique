@@ -38,6 +38,9 @@ jobs:
       - name: Download DuckDB from S3
         run: uv run python data/utils/download.py
 
+      - name: Trim website.duckdb from dev.duckdb
+        run: uv run python data/utils/trim_website_db.py
+
       - name: Generate PMTiles
         run: uv run python data/utils/build_pmtiles.py
 

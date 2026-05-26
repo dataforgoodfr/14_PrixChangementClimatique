@@ -1,4 +1,4 @@
-name: update-dev-duckdb
+name: upload-databases
 
 on:
   push:
@@ -53,7 +53,7 @@ jobs:
           cd data/dbt_pipeline
           uv run dbt deps
 
-      - name: Run dbt (create duckdb.dev)
+      - name: Run dbt (create dev.duckdb)
         run: |
           cd data/dbt_pipeline
           uv run dbt run

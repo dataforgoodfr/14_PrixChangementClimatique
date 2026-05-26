@@ -65,7 +65,7 @@ def _read_etag(marker: Path, key: str) -> str | None:
     try:
         for line in marker.read_text().splitlines():
             if line.startswith(f"{key}:"):
-                return line[len(key) + 1:].strip()
+                return line[len(key) + 1 :].strip()
     except OSError:
         pass
     return None
@@ -99,7 +99,6 @@ def main():
         ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
     ]
 
-    # Download each file
     success_count = 0
     marker = exploration_dir / ".downloaded"
 
@@ -120,7 +119,9 @@ def main():
                 _write_etag(marker, etag_key, remote_etag)
             success_count += 1
 
-    print(f"\nTéléchargements terminés ! ({success_count}/{len(files)} réussi(s) ou ignoré(s))")
+    print(
+        f"\nTéléchargements terminés ! ({success_count}/{len(files)} réussi(s) ou ignoré(s))"
+    )
     sys.exit(0 if success_count == len(files) else 1)
 
 

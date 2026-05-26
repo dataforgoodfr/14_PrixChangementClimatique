@@ -4,7 +4,7 @@ import path from "path";
 
 const dbPath =
   process.env.DUCKDB_PATH ??
-  path.join(process.cwd(), "../data/exploration/dev.duckdb");
+  path.join(process.cwd(), "../data/exploration/website.duckdb");
 
 if (!fs.existsSync(dbPath)) {
   throw new Error(
