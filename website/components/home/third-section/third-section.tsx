@@ -1,4 +1,3 @@
-"use-client";
 import SectionTitle from "../section-title";
 import StatCallout from "../statCallout";
 import { Info } from "lucide-react";
@@ -12,35 +11,52 @@ const ThirdSection: React.FC = () => {
           highlightVariant="primary"
           topLine={[
             {
-              parts: [{ text: "Des " }, { text: "communes", bold: true }],
+              parts: [{ text: "Des " }, { text: "dispositifs", bold: true }],
             },
           ]}
           bottomLine={[
             {
               highlight: true,
               parts: [
-                { text: "pas toutes " },
-                { text: "préparées", bold: true },
+                { text: "de prévention " },
+                { text: "insuffisants", bold: true },
               ],
             },
           ]}
         />
 
         <StatCallout
-          value={"75%"}
-          title={{ text: "Des", highlight: "communes" }}
+          value={"64%"}
+          title={{ text: "des", highlight: "communes" }}
           subtitle={
-            <p>
-              ayant été reconnues au moins une fois en état de catastrophes
-              naturelles depuis 1982 n’ont pas mis en place de plan de
-              prévention des risques naturels prévisibles (
-              <span className="inline-flex items-center gap-[4px] align-middle">
-                PPRN
-                <Info size={14} className="inline-block" />
-              </span>
-              ). A l’échelle nationale, près de X communes (X %) sur les X en
-              France disposent d’un PPRN.
-            </p>
+            <>
+              <p>
+                ayant été reconnues au moins une fois en état de catastrophe
+                naturelle depuis 1982 ne bénéficient pas d’un Plan de prévention
+                des risques naturels (
+                <span className="inline-flex items-center gap-[4px] align-middle">
+                  PPRN
+                  <Info size={14} className="inline-block" />
+                </span>
+                ). La mise en place de ce dispositif relève des compétences de
+                l&apos;État.{" "}
+              </p>
+              <p>
+                <span className="inline-block">
+                  A l&apos;échelle nationale,
+                </span>{" "}
+                près de 12600 communes disposent d’un Plan de prévention des
+                risques naturels (
+                <span className="inline-flex items-center gap-[4px] align-middle">
+                  PPRN
+                  <Info size={14} className="inline-block" />
+                </span>
+                ). Pourtant depuis 1982, plus de 17000 communes ont été
+                reconnues au moins 5 fois en état de catastrophe naturelle. De
+                plus, la moitié des PPR inondations actifs datent de plus de 10
+                ans.
+              </p>
+            </>
           }
           variant="secondary"
         />

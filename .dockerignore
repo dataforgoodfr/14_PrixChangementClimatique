@@ -12,17 +12,13 @@
 website/node_modules/
 website/.next/
 
-# Re-created during build
-**/*.geojsonl
-**/*.geojson
-**/*.pmtiles
-
 # Secrets
 .env
 .env.*
 
 # Not needed for the Docker build
+**/*.geojsonl
+**/*.geojson
 .cache/
-data/exploration/
 data/dbt_pipeline/
 **/*.ipynb

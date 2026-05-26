@@ -1,4 +1,3 @@
-"use-client";
 import SectionTitle from "./section-title";
 import Image from "next/image";
 
@@ -13,7 +12,7 @@ const SecondSection: React.FC = () => {
               highlight: true,
               parts: [
                 { text: "Une exposition " },
-                { text: "inégales", bold: false },
+                { text: "inégale", bold: false },
               ],
             },
           ]}
@@ -21,22 +20,29 @@ const SecondSection: React.FC = () => {
             {
               parts: [
                 { text: "aux " },
-                { text: "catastrophes naturelles", bold: true },
+                { text: "évènements climatiques extrêmes", bold: true },
               ],
             },
           ]}
         />
         <h3 className="text-[14px] lg-[24px]">
-          Certaines communes sont bien plus <br className="lg:hidden" />
-          exposées que d&apos;autres
+          Le dérèglement climatique s&apos;accélère et l&apos;augmentation des
+          émissions anthropiques de gaz à effet de serre entraîne une hausse de
+          la fréquence et de l&apos;intensité des évènements climatiques
+          extrêmes. C&apos;est donc un nombre croissant de communes qui sont
+          sinistrées chaque année, avec une hausse de X% du nombre
+          d&apos;arrêtés cat-nat délivrés sur la période 2010-2024 par rapport
+          aux 15 années précédentes. Un des principaux risques derrière cette
+          tendance est celui lié aux RGA.
         </h3>
       </div>
       <div className="relative w-full aspect-[1440/960]">
         <Image
-          src="/home-orders-increase-map.svg"
+          src="/home-orders-increase-map.png"
           alt="Augmentation des arrêtés"
           fill
           className="object-contain"
+          unoptimized
         />
       </div>
     </div>

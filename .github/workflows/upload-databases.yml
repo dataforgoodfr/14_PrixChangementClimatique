@@ -58,14 +58,9 @@ jobs:
           cd data/dbt_pipeline
           uv run dbt run
 
-      - name: Create website.duckdb
-        run: |
-          uv run python data/utils/trim_website_db.py
-
-      - name: Upload dev and website databases to bucket root
+      - name: Upload dev.duckdb to bucket root
         run: |
           uv run python data/utils/duckdb_uploader.py
-          uv run python data/utils/duckdb_uploader.py --website
 
       - name: Notify new dbt models
         run: |

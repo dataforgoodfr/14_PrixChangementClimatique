@@ -12,15 +12,12 @@ models:
       - name: score_economique
         description: "Score économique de la commune"
         type: FLOAT
-      - name: score_georisque
-        description: "Score géorisque de la commune"
+      - name: score_exposition
+        description: "Score d'exposition aux risques climatiques de la commune"
         type: FLOAT
       - name: score_assurance
         description: "Score assurance de la commune"
         type: FLOAT
-      - name: indice_vulnerabilite
-        description: "Indice de vulnérabilité de la commune"
-        type: FLOAT
       - name: indice_vulnerabilite_niveau
-        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
-        type: INT
+        description: "Indice de vulnérabilité de la commune par niveau entre 0 et 5 avec 1 décimale"
+        type: FLOAT

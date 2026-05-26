@@ -3,10 +3,10 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Map,
-  NavigationControl,
   Popup,
   Layer,
   Source,
+  AttributionControl,
   type ViewStateChangeEvent,
   type MapRef,
   type ViewState,
@@ -21,8 +21,14 @@ import {
   SearchCommuneResult,
 } from "@/components/core/rf-commune-searchbox";
 import { useQueryState } from "nuqs";
+import { type IndicatorField } from "@/lib/types/indicator";
+import { useIndicator } from "@/hooks";
 import useSWR from "swr";
 import { Commune } from "@/lib/types/communes";
+import { ComparisonPanel } from "@/components/map/comparison-panel";
+import { useFilters } from "../filters/filter-context";
+import MapZoneSelector from "@/components/map/map-zone-selector";
+import { INITIAL_VIEW_STATE } from "@/components/map/map-constants";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
 
@@ -33,7 +39,97 @@ const COMMUNES_SOURCE_ID = "communes-source";
 
 // ─── Map Layers: Communes ──────────────
 
+function buildFillColor(
+  indicator: IndicatorField,
+): maplibregl.ExpressionSpecification {
+  if (indicator === "indice_vulnerabilite_niveau") {
+    return [
+      "case",
+      ["==", ["get", "indice_vulnerabilite_niveau"], null],
+      "#555555",
+      ["<", ["get", "indice_vulnerabilite_niveau"], 1],
+      "#518F83",
+      ["<", ["get", "indice_vulnerabilite_niveau"], 2],
+      "#B2A052",
+      ["<", ["get", "indice_vulnerabilite_niveau"], 3],
+      "#FFB74B",
+      ["<", ["get", "indice_vulnerabilite_niveau"], 4],
+      "#EA580D",
+      ["<=", ["get", "indice_vulnerabilite_niveau"], 5],
+      "#B91C1C",
+      "#555555",
+    ];
+  }
+  if (indicator === "score_exposition") {
+    return [
+      "case",
+      ["==", ["get", "score_exposition"], null],
+      "#555555",
+      [
+        "interpolate",
+        ["linear"],
+        ["get", "score_exposition"],
+        0,
+        "#FFF0EE",
+        1,
+        "#7F1D1D",
+      ],
+    ];
+  }
+  if (indicator === "prevention") {
+    return [
+      "case",
+      [
+        "all",
+        ["==", ["get", "pprn_rga"], true],
+        ["==", ["get", "pprn_ino"], true],
+      ],
+      "#032E15",
+      ["==", ["get", "pprn_rga"], true],
+      "#A66000",
+      ["==", ["get", "pprn_ino"], true],
+      "#075985",
+      "#D8D8D0",
+    ];
+  }
+  if (indicator === "score_economique") {
+    return [
+      "case",
+      ["==", ["get", "score_economique"], null],
+      "#555555",
+      [
+        "interpolate",
+        ["linear"],
+        ["get", "score_economique"],
+        0,
+        "#FFF7ED",
+        1,
+        "#7C2D12",
+      ],
+    ];
+  }
+  // score_assurance
+  return [
+    "case",
+    ["==", ["get", "score_assurance"], null],
+    "#555555",
+    [
+      "interpolate",
+      ["linear"],
+      ["get", "score_assurance"],
+      0,
+      "#FEF2F2",
+      1,
+      "#1E3A5F",
+    ],
+  ];
+}
+
 function CommunesLayer() {
+  const [indicator] = useIndicator();
+
+  const { maplibreFilter } = useFilters();
+
   return (
     <Source
       id={COMMUNES_SOURCE_ID}
@@ -45,21 +141,11 @@ function CommunesLayer() {
         id={COMMUNES_LAYER_ID}
         type="fill"
         source-layer="communes"
+        filter={maplibreFilter}
         paint={{
-          "fill-color": [
-            "step",
-            ["coalesce", ["get", "indice_vulnerabilite_niveau"], 0],
-            "#518F83",
-            2,
-            "#B2A052",
-            3,
-            "#FFB74B",
-            4,
-            "#EA580D",
-            5,
-            "#B91C1C",
-          ],
+          "fill-color": buildFillColor(indicator),
           "fill-opacity": 0.7,
+          "fill-outline-color": "transparent",
         }}
       />
       <Layer
@@ -86,28 +172,19 @@ function CommunesLayer() {
     </Source>
   );
 }
+// ─── Map Attribution: Custom ──────────────
 
-// ─── Initial state ────────────────────────────────────────────────────────────
-
-/** Initial is set to display all the France Métropolitaine
- * (TODO: add rapid navigation to DROMs) */
-export const INITIAL_VIEW_STATE: ViewState = {
-  longitude: 2.3522,
-  latitude: 46.5,
-  zoom: 5,
-  bearing: 0,
-  pitch: 0,
-  padding: { top: 0, bottom: 0, left: 0, right: 0 },
-};
+const CustomMapAttributions: string[] = [
+  `<a href="https://reclaimfinance.org/site/">Reclaim Finance</a>`,
+  `<a href="https://dataforgood.fr/">Data for Good</a>`,
+];
 
 // ─── Map Canvas: Here is the main map canvas component that renders the map and handles interactions.  ──────────────
 
 function MapCanvas({
-  isFiltersPanelOpen,
   setCommune,
   onMapLoaded,
 }: {
-  isFiltersPanelOpen: boolean;
   setCommune: (value: string | null) => void;
   onMapLoaded: (map: ReturnType<MapRef["getMap"]>) => void;
 }) {
@@ -174,13 +251,12 @@ function MapCanvas({
       onClick={handleClick}
       onMouseEnter={handleCursorEnter}
       onLoad={() => onMapLoaded(mapRef.current!.getMap())}
+      attributionControl={false}
     >
-      <NavigationControl
-        position="top-right"
-        style={{
-          marginTop: "72px",
-          marginRight: `${isFiltersPanelOpen ? "376px" : "16px"}`,
-        }}
+      <AttributionControl
+        position="bottom-left"
+        customAttribution={CustomMapAttributions}
+        compact={true}
       />
       <CommunesLayer />
       {hoverInfo && (
@@ -198,9 +274,11 @@ function MapCanvas({
 }
 
 function MainMap() {
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [map, setMap] = useState<ReturnType<MapRef["getMap"]>>();
   const [commune, setCommune] = useQueryState("commune");
+  const [compare] = useQueryState("comparaison");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [isComparisonPanelOpen, setComparisonPanelOpen] = useState(!!compare);
+  const [map, setMap] = useState<ReturnType<MapRef["getMap"]>>();
 
   const { data } = useSWR<Commune>(
     commune ? `/api/communes?code=${commune}` : null,
@@ -232,29 +310,41 @@ function MainMap() {
   return (
     <div className="relative h-[calc(100dvh-4rem)] overflow-hidden">
       {/* Map wrapper and canvas that fills the full area */}
-      <MapCanvas
-        isFiltersPanelOpen={filtersOpen}
-        setCommune={setCommune}
-        onMapLoaded={setMap}
+      <MapCanvas setCommune={setCommune} onMapLoaded={setMap} />
+
+      {!isComparisonPanelOpen && (
+        <div className="absolute top-8 left-4">
+          <RFCommuneSearchBox
+            filterValue={selectedCommune?.nom_commune}
+            onAddressFilter={selectCommune}
+            onCompare={() => setComparisonPanelOpen(true)}
+            placeholder="Rechercher une commune par son nom"
+            className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
+          />
+        </div>
+      )}
+
+      {/* Left: commune detail panel */}
+      <FeatureDetailPanel
+        selectedCommune={isComparisonPanelOpen ? null : selectedCommune}
       />
 
-      <div className="absolute top-8 left-4">
-        <RFCommuneSearchBox
-          filterValue={selectedCommune?.nom_commune}
-          onAddressFilter={selectCommune}
-          className="w-100 z-40 max-w-[calc(100dvw-5rem)]"
-        />
-      </div>
-
-      {/* Left: commune detail panel – reads selectedFeature from context */}
-      <FeatureDetailPanel selectedCommune={selectedCommune} />
+      {/* Left: comparison panel */}
+      <ComparisonPanel
+        isOpen={isComparisonPanelOpen}
+        onClose={() => setComparisonPanelOpen(false)}
+        selectedCommune={selectedCommune}
+      />
 
       {/* Right: filter panel – toggle button rendered via Panel.Controls */}
       <FiltersPanel
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
         onToggle={() => setFiltersOpen((v) => !v)}
+        map={map}
       />
+
+      <MapZoneSelector map={map} />
     </div>
   );
 }

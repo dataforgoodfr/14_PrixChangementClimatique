@@ -8,7 +8,7 @@ const mobileStats = [
   },
   {
     id: 2,
-    caption: "Dont Sècheresse (Retrait gonflement des argiles)",
+    caption: "Dont sécheresses (retrait-gonflement des argiles)",
     url: "/home-droughts-stats.svg",
     alt: "Sécheresse statistiques",
   },
@@ -24,7 +24,7 @@ const desktopStats = [
   {
     id: 1,
     caption:
-      "Evolution du nombre d'évènements ayant donné lieu à une reconnaissance d'état de catastrophe naturelle",
+      "Évolution du nombre d'évènements ayant donné lieu à une reconnaissance d'état de catastrophe naturelle entre 1982 et 2025.",
     url: "/home-natural-disaster-stats.svg",
     alt: "Reconnaissance d'état de catastrophe naturelle statistiques",
   },
@@ -36,7 +36,7 @@ const desktopStats = [
   },
   {
     id: 3,
-    caption: "Dont Sècheresse (Retrait gonflement des argiles)",
+    caption: "Dont sécheresses (retrait-gonflement des argiles)",
     url: "/home-droughts-stats-desktop.svg",
     alt: "Sécheresse statistiques",
   },

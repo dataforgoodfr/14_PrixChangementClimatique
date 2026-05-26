@@ -45,6 +45,16 @@ uv run data/example_script.py
 
 Le site web peut être construit et lancé via Docker.
 
+Prérequis — préparer les fichiers injectés dans l'image :
+
+```bash
+# 1. Télécharger la base DuckDB depuis S3
+uv run python data/utils/download.py
+
+# 2. Générer les tuiles vectorielles PMTiles
+uv run python data/utils/build_pmtiles.py
+```
+
 Build (depuis la racine du projet) :
 
 ```bash
@@ -54,7 +64,7 @@ docker build -t pcc-website .
 Lancer le container :
 
 ```bash
-docker run -p 3000:3000 pcc-website
+docker run --rm -p 3000:3000 pcc-website
 ```
 
 Puis ouvrir http://localhost:3000.

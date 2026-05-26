@@ -99,6 +99,18 @@ import {
 } from "@/components/core/rf-commune-searchbox";
 import { useState } from "react";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
+import { IndicatorStatCard } from "@/components/core/rf-indicator-stat-card";
+import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
+import { Legend } from "@/components/core/rf-legend";
+import { type IndicatorField } from "@/lib/types/indicator";
+import {
+  IndiceVulnerabiliteNiveauIcon,
+  ScoreExpositionIcon,
+  PreventionIcon,
+  ScoreEconomiqueIcon,
+  ScoreAssuranceIcon,
+  type IconComponent,
+} from "@/components/icons";
 import { RfRecognitionRequestChart } from "@/components/core/rf-recognition-request-chart";
 import { Separator } from "@/components/ui/separator";
 import { StatCard } from "@/components/core/stat-card";
@@ -113,6 +125,9 @@ export function ComponentExample() {
       <MapExample />
       <CommuneSearchBoxExample />
       <VulnerabilityIndexExample />
+      <IndicatorStatCardExample />
+      <IndicatorSelectorExample />
+      <LegendExample />
       <RecognitionRequestExample />
       <CatnatTypesChartExample />
     </ExampleWrapper>
@@ -583,6 +598,70 @@ function VulnerabilityIndexExample() {
       <div className="w-70">
         <RfVulnerabilityIndex value={2.5} />
       </div>
+    </Example>
+  );
+}
+
+function IndicatorStatCardExample() {
+  return (
+    <Example title="IndicatorStatCard" className="gap-4">
+      <div className="grid grid-cols-2 gap-2 w-full">
+        <IndicatorStatCard label="Communes" value="2 252" total="36 529" />
+        <IndicatorStatCard
+          label="Habitants concernés"
+          value="161 343"
+          total="70M"
+        />
+      </div>
+    </Example>
+  );
+}
+
+const INDICATOR_DEMO_OPTIONS: {
+  value: IndicatorField;
+  label: string;
+  Icon: IconComponent;
+}[] = [
+  {
+    value: "indice_vulnerabilite_niveau",
+    label: "Vulnérabilité",
+    Icon: IndiceVulnerabiliteNiveauIcon,
+  },
+  { value: "score_exposition", label: "Exposition", Icon: ScoreExpositionIcon },
+  { value: "prevention", label: "Prévention", Icon: PreventionIcon },
+  {
+    value: "score_economique",
+    label: "Situation économique",
+    Icon: ScoreEconomiqueIcon,
+  },
+  { value: "score_assurance", label: "Assurance", Icon: ScoreAssuranceIcon },
+];
+
+function IndicatorSelectorExample() {
+  const [activeIndicator, setActiveIndicator] = useState<IndicatorField>(
+    "indice_vulnerabilite_niveau",
+  );
+  return (
+    <Example title="IndicatorSelector">
+      <div className="grid grid-cols-5 gap-2 w-full">
+        {INDICATOR_DEMO_OPTIONS.map(({ value, label, Icon }) => (
+          <IndicatorSelector
+            key={value}
+            label={label}
+            icon={Icon}
+            active={activeIndicator === value}
+            onClick={() => setActiveIndicator(value)}
+          />
+        ))}
+      </div>
+    </Example>
+  );
+}
+
+function LegendExample() {
+  return (
+    <Example title="Legend" className="items-center justify-center gap-4">
+      <Legend />
     </Example>
   );
 }

@@ -1,23 +1,9 @@
 """
-Build a trimmed version of website.duckdb from dev.duckdb.
+Build a trimmed website.duckdb from dev.duckdb (data/exploration/).
 
-This script extracts all tables from the `main_gold` schema of dev.duckdb
-and copies them into the `main` schema of website.duckdb.
-
-Workflow:
-- Remove existing website.duckdb if it exists
-- Create a new DuckDB database for website
-- Attach dev.duckdb in read-only mode
-- Copy each table from dev.main_gold into website.main
-- Print copied tables and final database sizes
-
-Source:
-    dev.duckdb (schema: main_gold)
-
-Destination:
-    website.duckdb (schema: main)
-
-
+Extracts all tables from the `main_gold` schema of dev.duckdb and copies
+them into the `main` schema of website.duckdb. Used by the website build
+pipeline before Docker image creation.
 """
 import duckdb
 import os
@@ -34,7 +20,7 @@ log = logging.getLogger(__name__)
 SCRIPT_DIR = Path(__file__).parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 
-DATA_DIR = REPO_ROOT / "data" / "dbt_pipeline"
+DATA_DIR = REPO_ROOT / "data" / "exploration"
 
 FILES = {
     "dev": "dev.duckdb",

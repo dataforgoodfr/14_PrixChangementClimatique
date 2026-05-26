@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { formatNumber } from "@/utils/format";
 
 export interface StatCardProps {
   title: string;
@@ -8,6 +9,7 @@ export interface StatCardProps {
   unit?: string;
   comparisonText?: string;
   className?: string;
+  variationPercentage?: number;
 }
 
 interface VariationResult {
@@ -15,49 +17,37 @@ interface VariationResult {
   color: string;
 }
 
-const numberFormatter = new Intl.NumberFormat("fr-FR");
-
 const getVariationColor = (value: number): string => {
   if (value > 0) return "bg-green-50 text-green-600";
   if (value < 0) return "bg-red-50 text-red-600";
   return "bg-gray-50 text-gray-600";
 };
 
-const getVariation = (
-  current: number,
-  previous?: number,
-): VariationResult | null => {
-  if (previous === undefined || previous === 0) return null;
-
-  const percent = ((current - previous) / previous) * 100;
-  const rounded = Math.round(percent);
+const getVariation = (variation?: number): VariationResult | null => {
+  if (!variation) return null;
 
   return {
-    formatted: `${rounded > 0 ? "+" : ""}${rounded}%`,
-    color: getVariationColor(rounded),
+    formatted: `${variation > 0 ? "+" : ""}${variation}%`.replace(".", ","),
+    color: getVariationColor(variation),
   };
-};
-
-const formatNumber = (value: number): string => {
-  return numberFormatter.format(value);
 };
 
 export function StatCard({
   title,
   currentValue,
-  previousValue,
   unit = "",
   comparisonText,
   className,
+  variationPercentage,
 }: StatCardProps) {
-  const variation = getVariation(currentValue, previousValue);
+  const variation = getVariation(variationPercentage);
 
   const formattedValue = `${formatNumber(currentValue)}${unit ? ` ${unit}` : ""}`;
 
   return (
     <Card
       className={cn(
-        "flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm",
+        "flex h-full flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm",
         className,
       )}
     >
@@ -65,7 +55,7 @@ export function StatCard({
         {title}
       </h3>
 
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col items-start justify-between gap-1">
         <p className="text-4xl font-bold text-gray-900">{formattedValue}</p>
 
         {variation && (

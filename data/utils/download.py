@@ -1,20 +1,5 @@
 #!/usr/bin/env python
-"""Download DuckDB database files from S3.
-
-Usage:
-    python download.py
-        -> downloads dev, odis, and website databases (default)
-
-    python download.py --select website
-        -> downloads only the specified database (website, dev, or odis)
-
-Features:
-- Downloads files from S3 URLs
-- Supports partial download resume prevention via ETag checking
-- Skips download if local file is already up to date
-- Stores ETags in a local marker file (.downloaded)
-"""
-
+"""Download DuckDB database files from S3."""
 
 import sys
 from pathlib import Path
@@ -101,14 +86,6 @@ def _write_etag(marker: Path, key: str, etag: str) -> None:
     marker.write_text("\n".join(lines) + "\n")
 
 
-def _get_selection() -> list[str]:
-    if "--select" in sys.argv:
-        idx = sys.argv.index("--select")
-        if idx + 1 < len(sys.argv):
-            return [sys.argv[idx + 1]]
-    return ["website", "dev", "odis"]
-
-
 def main():
     # Get the project root (2 levels up from this script)
     project_root = Path(__file__).parent.parent.parent
@@ -117,15 +94,10 @@ def main():
     # Ensure the exploration directory exists
     exploration_dir.mkdir(parents=True, exist_ok=True)
 
-    FILES = {
-        "dev": ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
-        "odis": ("https://s3.fr-par.scw.cloud/qppcc-upload/odis.duckdb", "odis.duckdb"),
-        "website": ("https://s3.fr-par.scw.cloud/qppcc-upload/website.duckdb", "website.duckdb"),
-    }
-
-    selection = _get_selection()
-
-    files = [FILES[k] for k in selection if k in FILES]
+    # Files to download
+    files = [
+        ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
+    ]
 
     success_count = 0
     marker = exploration_dir / ".downloaded"

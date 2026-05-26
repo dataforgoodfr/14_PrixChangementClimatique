@@ -1,10 +1,10 @@
-"use-client";
 import FifthSection from "./fifth-section/fifth-section";
 import FirstSection from "./first-section/first-section";
 import FourthSection from "./fourth-section/fourth-section";
 import Hero from "./hero";
 import SecondSection from "./second-section";
 import ThirdSection from "./third-section/third-section";
+import ContactSection from "./contact-section";
 
 const Home: React.FC = () => {
   return (
@@ -17,6 +17,7 @@ const Home: React.FC = () => {
         <FourthSection />
         <FifthSection />
       </div>
+      <ContactSection />
     </div>
   );
 };

@@ -4,9 +4,12 @@ import { Panel } from "@/components/core/panel";
 import { RfVulnerabilityIndex } from "@/components/core/rf-vulnerability-index";
 import { MapPinIcon, UserIcon } from "lucide-react";
 import { useQueryState } from "nuqs";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Commune } from "@/lib/types/communes";
 import { CatNatHistory } from "./cat-nat-history";
+import { safeFormatNumber } from "@/utils/format";
+import { EconomicalSituation } from "./economical-situation";
+import { InsuranceCoverage } from "./insurance-coverage";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -18,6 +21,10 @@ export function FeatureDetailPanel({
   const onClose = useCallback(() => {
     setCommune(null);
   }, [setCommune]);
+
+  useEffect(() => {
+    console.log("selected commune", selectedCommune);
+  }, [selectedCommune]);
 
   return (
     <Panel
@@ -44,23 +51,38 @@ export function FeatureDetailPanel({
           <Panel.Subtitle>
             <span className="flex gap-2 pt-2">
               <UserIcon className="inline-block size-6" />
-              <span>xxx habitants</span>
+              <span>
+                {safeFormatNumber(selectedCommune?.population)} habitants
+              </span>
             </span>
           </Panel.Subtitle>
         </div>
-        {selectedCommune?.indice_vulnerabilite && (
+        {selectedCommune?.indice_vulnerabilite_niveau && (
           <RfVulnerabilityIndex
-            className="block w-full md:absolute md:w-70 md:h-60 right-8 top-8"
-            value={Math.round(selectedCommune.indice_vulnerabilite * 50) / 10}
+            className="hidden md:block absolute w-70 h-60 right-8 top-8"
+            value={selectedCommune.indice_vulnerabilite_niveau}
+            mode="continuous"
           />
         )}
       </Panel.Header>
 
       <Panel.Content>
-        <CatNatHistory
-          communeCode={commune}
-          selectedCommuneData={selectedCommune}
-        />
+        {selectedCommune && (
+          <div className="space-y-10 p-4">
+            {selectedCommune?.indice_vulnerabilite_niveau && (
+              <div className="px-4">
+                <RfVulnerabilityIndex
+                  className="block md:hidden mx-4"
+                  value={selectedCommune.indice_vulnerabilite_niveau}
+                  mode="continuous"
+                />
+              </div>
+            )}
+            <EconomicalSituation selectedCommuneData={selectedCommune} />
+            <CatNatHistory communeCode={commune} />
+            <InsuranceCoverage selectedCommuneData={selectedCommune} />
+          </div>
+        )}
       </Panel.Content>
     </Panel>
   );
