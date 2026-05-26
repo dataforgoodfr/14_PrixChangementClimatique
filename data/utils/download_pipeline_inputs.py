@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-"""Download all pipeline_inputs files from S3-compatible bucket."""
+"""Download all pipeline_inputs files from Clever Cloud Cellar."""
 
 import json
-import os
 import sys
 from pathlib import Path
 from typing import List
@@ -10,36 +9,49 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 import boto3
+from botocore.client import Config
+from botocore import UNSIGNED
+
 from tqdm import tqdm
 
-tracker_file = "data_version_tracker.json"
+
+TRACKER_FILE = "data_version_tracker.json"
+
+BUCKET_NAME = "assurermaville"
+BUCKET_BASE_URL = (
+    "https://assurermaville.cellar-c2.services.clever-cloud.com"
+)
+ENDPOINT_URL = "https://cellar-c2.services.clever-cloud.com"
+
+PREFIX = "pipeline_inputs/"
 
 
-def get_tracker_file(tracker_file_path) -> dict:
-    # Charger le tracker existant ou créer un dict vide
-    if os.path.exists(tracker_file_path):
-        with open(tracker_file_path, "r") as f:
-            tracker = json.load(f)
-    else:
-        tracker = {}  # dictionnaire avec des éléments key : ETag pour traquer les versions des fichiers locaux
-    return tracker
+def get_tracker_file(tracker_file_path: Path) -> dict:
+    """Load tracker file or return empty dict."""
+
+    if tracker_file_path.exists():
+        with open(tracker_file_path, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+    return {}
 
 
 def download_file(url: str, destination: Path) -> bool:
-    """Download a file from URL to destination path with progress."""
-    print(f"Téléchargement de {url} vers {destination}...")
+    """Download a file with progress bar."""
+
+    print(f"Downloading {url} → {destination}")
 
     try:
-        # Open URL and get file size
-        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req) as response:
+        request = Request(
+            url,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+
+        with urlopen(request) as response:
             total_size = int(response.headers.get("content-length", 0))
 
-            # Download in chunks with progress
-            chunk_size = 8192  # 8KB chunks
-
             with (
-                open(destination, "wb") as f,
+                open(destination, "wb") as file,
                 tqdm(
                     total=total_size,
                     unit="B",
@@ -49,135 +61,183 @@ def download_file(url: str, destination: Path) -> bool:
                 ) as progress_bar,
             ):
                 while True:
-                    chunk = response.read(chunk_size)
+                    chunk = response.read(8192)
+
                     if not chunk:
                         break
-                    f.write(chunk)
+
+                    file.write(chunk)
                     progress_bar.update(len(chunk))
 
-        print(f"✅ Téléchargement réussi : {destination}")
+        print(f"✅ Download completed: {destination}")
         return True
-    except Exception as e:
-        print(f"❌ Échec du téléchargement pour {url}: {e}")
-        # Clean up partial download
+
+    except Exception as error:
+        print(f"❌ Download failed for {url}: {error}")
+
         if destination.exists():
             destination.unlink()
+
         return False
 
 
-def list_s3_objects_anonymous(bucket_name: str, prefix: str, endpoint_url: str) -> dict:
-    """
-    Liste tous les objets sous un préfixe dans un bucket S3 public compatible
-    et retourne une liste de dictionnaires avec 'Key' et 'ETag'.
-    Aucun accès authentifié requis (anonyme).
-    """
-    # Client S3 authentifié
-    s3 = boto3.client(
+def list_remote_objects(bucket_name: str, prefix: str) -> dict:
+    """List public objects from Clever Cloud Cellar."""
+
+    s3_client = boto3.client(
         "s3",
-        endpoint_url=endpoint_url,
-        aws_access_key_id=os.environ.get("S3_ACCESS_KEY"),
-        aws_secret_access_key=os.environ.get("S3_SECRET_ACCESS_KEY"),
-        region_name=os.environ.get("S3_REGION", "fr-par"),
+        region_name="default",
+        endpoint_url=ENDPOINT_URL,
+        config=Config(signature_version=UNSIGNED),
     )
-    objects = {}  # dictionnaire clé - ETag
+
+    objects = {}
     continuation_token = None
 
     while True:
-        params = {"Bucket": bucket_name, "Prefix": prefix, "MaxKeys": 1000}
+        params = {
+            "Bucket": bucket_name,
+            "Prefix": prefix,
+            "MaxKeys": 1000,
+        }
+
         if continuation_token:
             params["ContinuationToken"] = continuation_token
 
-        # Liste les objets
-        response = s3.list_objects_v2(**params)
+        response = s3_client.list_objects_v2(**params)
 
-        # Extraire Key + ETag
         for obj in response.get("Contents", []):
             objects[obj["Key"]] = obj["ETag"].strip('"')
 
-        # Pagination
         if response.get("IsTruncated"):
-            continuation_token = response.get("NextContinuationToken")
-            if not continuation_token:
-                break
+            continuation_token = response.get(
+                "NextContinuationToken"
+            )
         else:
             break
 
     return objects
 
 
-def server_pipeline_inputs(bucket_name: str, prefix: str, endpoint_url) -> dict:
-    server_files_tracker = {}  # dictionnaire avec des éléments key : ETag pour traquer les versions des fichiers remote sur le S3
-    for key, etag in list_s3_objects_anonymous(
-        bucket_name, prefix, endpoint_url
+def server_pipeline_inputs(bucket_name: str, prefix: str) -> dict:
+    """Return remote files with ETags."""
+
+    server_files_tracker = {}
+
+    for key, etag in list_remote_objects(
+        bucket_name,
+        prefix,
     ).items():
+
         if not key or key.endswith("/"):
             continue
-        if prefix and key.startswith(prefix):
-            key_relative = key[len(prefix) :].lstrip("/")
-        else:
-            key_relative = key
-        server_files_tracker[key_relative] = etag
+
+        relative_key = key.removeprefix(prefix).lstrip("/")
+
+        server_files_tracker[relative_key] = etag
+
     return server_files_tracker
 
 
 def list_local_files(root: Path) -> List[str]:
-    """Return relative file paths (posix) under root."""
+    """Return local relative file paths."""
+
     if not root.exists():
         return []
+
     return sorted(
-        p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file()
     )
 
 
 def main():
-    # Get the project root (2 levels up from this script)
-    project_root = Path(__file__).parent.parent.parent
-    pipeline_inputs_dir = project_root / "data" / "dbt_pipeline" / "pipeline_inputs"
 
-    # Ensure the destination directory exists
-    pipeline_inputs_dir.mkdir(parents=True, exist_ok=True)
+    project_root = Path(__file__).resolve().parents[2]
 
-    local_tracker = get_tracker_file(pipeline_inputs_dir / tracker_file)
+    pipeline_inputs_dir = (
+        project_root
+        / "data"
+        / "dbt_pipeline"
+        / "pipeline_inputs"
+    )
 
-    existing_files = set(list_local_files(pipeline_inputs_dir))
+    pipeline_inputs_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
 
-    bucket_base_url = "https://s3.fr-par.scw.cloud/qppcc-upload"
-    bucket_name = "qppcc-upload"
-    endpoint_url = "https://s3.fr-par.scw.cloud/"
-    prefix = "pipeline_inputs/"
+    local_tracker = get_tracker_file(
+        pipeline_inputs_dir / TRACKER_FILE
+    )
 
-    server_files_tracker = server_pipeline_inputs(bucket_name, prefix, endpoint_url)
+    existing_files = set(
+        list_local_files(pipeline_inputs_dir)
+    )
+
+    server_files_tracker = server_pipeline_inputs(
+        BUCKET_NAME,
+        PREFIX,
+    )
+
     if not server_files_tracker:
-        print("Aucun fichier trouvé dans pipeline_inputs.")
+        print("No files found in pipeline_inputs.")
         sys.exit(1)
 
-    # Download each file
     success_count = 0
-    for relative_path in server_files_tracker.keys():
-        if relative_path in existing_files:
-            if server_files_tracker[relative_path] == local_tracker.get(relative_path):
-                print(f"⏭️  Déjà présent, ignoré : {relative_path}")
-                success_count += 1
-                continue
-            else:
-                print(f"🔄️  Fichier modifié : {relative_path}")
 
-        url = f"{bucket_base_url}/{prefix}{quote(relative_path)}"
-        destination = pipeline_inputs_dir / relative_path
-        destination.parent.mkdir(parents=True, exist_ok=True)
+    for relative_path, remote_etag in (
+        server_files_tracker.items()
+    ):
+
+        if (
+            relative_path in existing_files
+            and remote_etag == local_tracker.get(relative_path)
+        ):
+            print(f"⏭️ Already up to date: {relative_path}")
+            success_count += 1
+            continue
+
+        url = (
+            f"{BUCKET_BASE_URL}/"
+            f"{PREFIX}{quote(relative_path)}"
+        )
+
+        destination = (
+            pipeline_inputs_dir / relative_path
+        )
+
+        destination.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
         if download_file(url, destination):
-            local_tracker[relative_path] = server_files_tracker[relative_path]
+            local_tracker[relative_path] = remote_etag
             success_count += 1
 
     print(
-        f"\nTéléchargements terminés ! ({success_count}/{len(server_files_tracker)} réussi(s))"
+        f"\nDownloads completed "
+        f"({success_count}/{len(server_files_tracker)})"
     )
-    # 3️⃣ Sérialiser le tracker final en JSON
-    with open(pipeline_inputs_dir / tracker_file, "w") as f:
-        json.dump(local_tracker, f, indent=2)
-    print(f"Contrôle des sources de données enregistré : {tracker_file}")
-    # Exit with error code if any download failed
-    sys.exit(0 if success_count == len(server_files_tracker) else 1)
+
+    with open(
+        pipeline_inputs_dir / TRACKER_FILE,
+        "w",
+        encoding="utf-8",
+    ) as file:
+        json.dump(local_tracker, file, indent=2)
+
+    print(
+        f"Tracker file updated: {TRACKER_FILE}"
+    )
+
+    sys.exit(
+        0
+        if success_count == len(server_files_tracker)
+        else 1
+    )
 
 
 if __name__ == "__main__":
