@@ -1004,9 +1004,9 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    poids_prevention_prime_budget = mo.ui.slider(0, 1, step=0.1,value=0.4,label='prime/budget')
-    poids_prevention_evolution_prime = mo.ui.slider(0, 1, step=0.1,value=0.3,label='evolution prime')
-    poids_prevention_franchise = mo.ui.slider(0, 1, step=0.05,value=0.2,label='franchise')
+    poids_prevention_prime_budget = mo.ui.slider(0, 1, step=0.1,value=0.2,label='prime/budget')
+    poids_prevention_evolution_prime = mo.ui.slider(0, 1, step=0.1,value=0.5,label='evolution prime')
+    poids_prevention_franchise = mo.ui.slider(0, 1, step=0.05,value=0.1,label='franchise')
     return (
         poids_prevention_evolution_prime,
         poids_prevention_franchise,
@@ -1015,7 +1015,8 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(gdf_calc_assurance):
+    gdf_calc_assurance['multiple_franchise_last']
     return
 
 
@@ -1023,7 +1024,7 @@ def _():
 def _(gdf_calc, np):
     gdf_calc_assurance = gdf_calc.copy()
 
-    gdf_calc_assurance['multiple_franchise_last_indice'] = (((gdf_calc_assurance['multiple_franchise_last'].fillna(0)))/ (4))
+    gdf_calc_assurance['multiple_franchise_last_indice'] = (((gdf_calc_assurance['multiple_franchise_last'].fillna(0)))/ (5))
 
     gdf_calc_assurance['part_prime_budget_standard'] = clip_minmax(gdf_calc_assurance['part_prime_budget'],q_low = 0.01,q_high=0.99)
 
@@ -1130,12 +1131,7 @@ def _(gdf_calc_assurance, np, plot_variable):
 
 @app.cell
 def _(gdf_calc_assurance, np, plot_variable):
-    plot_variable(gdf_calc_assurance, 'multiple_franchise_last','multiple_franchise_last_indice', 'score_assurance_int',np.array([0,0.25,0.5,0.75,1]))
-    return
-
-
-@app.cell
-def _():
+    plot_variable(gdf_calc_assurance, 'multiple_franchise_last','multiple_franchise_last_indice', 'score_assurance_int',np.array([0,0.2,0.4,0.6,0.8,1]))
     return
 
 
@@ -1278,7 +1274,8 @@ def _(carte_discret, gdf_calc_eco):
 
 
 @app.cell
-def _():
+def _(gdf_calc_eco):
+    gdf_calc_eco['score_eco_int'].value_counts()
     return
 
 
@@ -1340,8 +1337,8 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    poids_prevention_eco = mo.ui.slider(0, 1, step=0.05,value=0.15)
-    poids_prevention_assurance = mo.ui.slider(0, 1, step=0.05,value=0.3)
+    poids_prevention_eco = mo.ui.slider(0, 1, step=0.05,value=0.1)
+    poids_prevention_assurance = mo.ui.slider(0, 1, step=0.05,value=0.4)
     return poids_prevention_assurance, poids_prevention_eco
 
 
@@ -1452,8 +1449,7 @@ def _():
 
 
 @app.cell
-def _(df_filtered):
-    df_filtered
+def _():
     return
 
 
