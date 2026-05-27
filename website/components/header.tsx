@@ -9,6 +9,7 @@ import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useScrollDirection } from "@/hooks/use-scroll-direction";
 
 const NAV_LINKS = [
   { href: "/", label: "Accueil" },
@@ -20,13 +21,20 @@ const NAV_LINKS = [
 export function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isHeaderVisible = useScrollDirection();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200">
+    <header
+      className={cn(
+        "sticky top-0 z-50 h-16 bg-white border-b border-gray-200 transition-transform duration-300",
+        "md:translate-y-0",
+        !isHeaderVisible && "-translate-y-full",
+      )}
+    >
       <div className="h-full flex items-center justify-between px-8 gap-6 relative">
         <Link href="/" className="shrink-0 flex items-center gap-3">
           <Image
@@ -108,7 +116,7 @@ export function Header() {
         <li>
           <RFButton
             path="/#contact"
-            title="Nous contacter"
+            title="Agissez pour protéger votre commune"
             onClick={toggleMenu}
           />
         </li>
