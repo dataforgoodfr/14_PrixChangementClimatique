@@ -23,12 +23,18 @@ models:
         columns: true
     silver:
       +schema: silver
-      +materialized: table
+      +materialized: view
       +persist_docs:
         relation: true
         columns: true
     gold:
       +schema: gold
+      +materialized: view
+      +persist_docs:
+        relation: true
+        columns: true
+    serving:
+      +schema: serving
       +materialized: table
       +persist_docs:
         relation: true
