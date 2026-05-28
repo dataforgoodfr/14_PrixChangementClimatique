@@ -56,7 +56,7 @@ export function RfFranchiseChart({ value, size }: RfFranchiseProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Franchise légale Cat-Nat</CardTitle>
+        <CardTitle>Franchise légale catastrophe naturelle</CardTitle>
       </CardHeader>
       <CardContent>
         <div
@@ -100,10 +100,11 @@ export function RfFranchiseChart({ value, size }: RfFranchiseProps) {
           </div>
           <Separator orientation="vertical" className="hidden md:block" />
           <div className="w-full text-muted-foreground">
-            La franchise légale Cat Nat est la part des dommages restant à la
-            charge de l’assuré après indemnisation, fixée de manière uniforme
-            par l’État.Elle peut être majorée (multipliée) dans les communes où
-            les catastrophes naturelles se répètent en l’absence de mesures de
+            La franchise légale catastrophe naturelle est la part des dommages
+            restant à la charge de l’assuré après indemnisation, fixée de
+            manière uniforme par l’État en fonction du type de risque naturel.
+            Elle peut être majorée (multipliée) dans les communes où les
+            catastrophes naturelles se répètent et en l’absence de mesures de
             prévention suffisantes, afin d’inciter à une meilleure gestion des
             risques.
           </div>

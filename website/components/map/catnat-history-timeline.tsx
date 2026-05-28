@@ -7,7 +7,7 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { CatnatResponse } from "@/lib/types/catnat";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -65,13 +65,8 @@ const formatDate = (dateStr: string): string => {
 export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
   const historyByDecades = useMemo(() => groupByDecade(data), [data]);
   const [expandedDecades, setExpandedDecades] = useState<Set<string>>(
-    () => new Set(historyByDecades.map((d) => d.label)),
+    () => new Set(),
   );
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setExpandedDecades(new Set(historyByDecades.map((d) => d.label)));
-  }, [historyByDecades]);
 
   const oldestYear = useMemo(() => {
     return Math.min(...data.map((item) => parseInt(item.annee_debut)));

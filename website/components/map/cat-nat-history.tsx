@@ -23,7 +23,7 @@ export const CatNatHistory = ({
         <>
           {!hideTitle && (
             <SectionTitle
-              title="Historique catastrophes naturelles"
+              title="Exposition aux catastrophes naturelles"
               subTitle="Base de données GASPAR"
             />
           )}

@@ -153,10 +153,10 @@ export function ComparisonPanel({
               subTitle="Base de données GASPAR"
               className="col-span-3"
             />
-            <SectionSubtitle title="Demandes de reconnaissances de catastrophes naturelles" />
+            <SectionSubtitle title="Demandes de reconnaissance de l’état de catastrophe naturelle" />
             <CatNatHistory hideTitle communeCode={selectedCommune.code_insee} />
             <CatNatHistory hideTitle communeCode={comparedCommune.code_insee} />
-            <SectionSubtitle title="Couverture d'assurance" />
+            <SectionSubtitle title="Conditions d’assurance" />
             <InsuranceEvolutionChart data={selectedCommune} />
             <InsuranceEvolutionChart data={comparedCommune} />
             <div />

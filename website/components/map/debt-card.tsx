@@ -6,8 +6,9 @@ export function DebtCard({ commune }: { commune: Commune }) {
   return (
     <StatCard
       title="TAUX D'ENDETTEMENT"
-      currentValue={Math.round(commune.ratio_dettes_depenses * 10) / 10}
+      currentValue={Math.round(commune.ratio_dettes_depenses * 100 * -1)}
       unit="%"
+      tooltip="Le taux d'endettement permet d'évaluer la dette d'une commune en fonction de son budget de fonctionnement annuel"
     />
   );
 }
