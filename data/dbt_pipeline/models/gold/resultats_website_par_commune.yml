@@ -163,4 +163,6 @@ models:
         data_type: float
       - name: rank_depenses_per_pop
         description: Pourcentage de communes françaises disposant d'un budget par habitant plus faible.
+      - name: taux_endettement
+        description: "Taux d'endettement de la commune : ratio dettes/dépenses 2024, exprimé en pourcentage (signe inversé pour obtenir une valeur positive)"
         data_type: float

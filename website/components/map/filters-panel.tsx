@@ -165,9 +165,9 @@ export function FiltersPanel({
                 step={100}
               />
               <ChartRangeFilter
-                title="Ratio dettes / dépenses"
-                filterKey={FilterRangeKey.RATIO_DETTES_DEPENSES}
-                step={0.1}
+                title="Taux d'endettement (%)"
+                filterKey={FilterRangeKey.TAUX_ENDETTEMENT}
+                step={1}
               />
               <ChartRangeFilter
                 title="Impôts locaux (€)"
