@@ -149,3 +149,6 @@ models:
       - name: part_impots_locaux
         description: Part des impots locaux sur le budget total de la commune en 2024
         data_type: float
+      - name: taux_endettement
+        description: "Taux d'endettement de la commune : ratio dettes/dépenses 2024, exprimé en pourcentage (signe inversé pour obtenir une valeur positive)"
+        data_type: float

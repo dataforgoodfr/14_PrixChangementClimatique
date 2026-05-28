@@ -52,11 +52,11 @@ export function buildMaplibreFilter(
     all.push(["==", ["get", "pprn_ino"], filters.pprn_ino]);
 
   // --- Situation économique ---
-  if (filters.ratio_dettes_depenses)
+  if (filters.taux_endettement)
     all.push(
       ...rangeExpressions(
-        "ratio_dettes_depenses",
-        filters.ratio_dettes_depenses,
+        "taux_endettement",
+        filters.taux_endettement,
       ),
     );
   if (filters.impots_locaux)
