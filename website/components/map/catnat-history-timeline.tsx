@@ -119,7 +119,7 @@ export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
 
               <button
                 onClick={() => toggleDecade(decade.label)}
-                className="flex items-center gap-4 w-full text-left hover:opacity-80 transition-opacity"
+                className="flex items-center gap-4 w-full text-left cursor-pointer hover:opacity-80 transition-opacity"
               >
                 <div className="relative flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full border border-rf-green-dark bg-rf-green-dark">
                   <XIcon
