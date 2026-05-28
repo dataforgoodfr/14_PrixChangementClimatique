@@ -149,3 +149,6 @@ models:
       - name: part_impots_locaux
         description: Part des impots locaux sur le budget total de la commune en 2024
         data_type: float
+      - name: ratio_dettes_depenses_percent
+        description: dettes/depenses de la derniere année 2024 en valeur absolue et en pourcentage
+        data_type: float

@@ -113,29 +113,30 @@ SELECT
 
     b.ratio_dettes_depenses,
     b.depenses_per_pop,
-
     t.nb_total_arretes_recon,
+
     t.nb_total_arretes,
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
     t.nb_total_arretes_autre,
     t.multiple_franchise_last,
     t.part_arretes_non_reconnus,
-
     p.prime_assurance_2024,
+
     p.prime_assurance_2023,
     p.prime_assurance_2022,
     p.prime_assurance_2021,
     p.prime_assurance_2020,
-
     pr.date_approbation_rga,
+
     pr.date_approbation_ino,
     pop.population,
     i_loc.impots_locaux,
-
     i_loc.impots_locaux_evolution,
 
     i_loc.part_impots_locaux,
+
+    b.ratio_dettes_depenses * -100 AS ratio_dettes_depenses_percent,
     pr.pprn_rga IS TRUE AS pprn_rga,
 
     pr.pprn_ino IS TRUE AS pprn_ino,
