@@ -136,7 +136,7 @@ SELECT
 
     i_loc.part_impots_locaux,
 
-    b.ratio_dettes_depenses * -100 AS ratio_dettes_depenses_percent,
+    ROUND(b.ratio_dettes_depenses * -100, 1) AS taux_endettement,
     pr.pprn_rga IS TRUE AS pprn_rga,
 
     pr.pprn_ino IS TRUE AS pprn_ino,

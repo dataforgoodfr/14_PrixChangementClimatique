@@ -23,7 +23,7 @@ export interface CommuneFilters {
   pprn_ino?: ToggleFilter;
 
   // --- Situation économique ---
-  ratio_dettes_depenses?: RangeFilter;
+  taux_endettement?: RangeFilter;
   impots_locaux?: RangeFilter;
   impots_locaux_evolution?: RangeFilter;
 
@@ -43,7 +43,7 @@ export const FILTER_BOUNDS = {
   indicateur_rga: { min: 0, max: 1 },
   indicateur_tri: { min: 0, max: 1 },
   nb_total_arretes_recon: { min: 0, max: 65 },
-  ratio_dettes_depenses: { min: -5, max: 1 },
+  taux_endettement: { min: -100, max: 500 },
   impots_locaux: { min: 0, max: 25_000_000 },
   impots_locaux_evolution: { min: -1, max: 3 },
   prime_assurance_2024: { min: 0, max: 200_000 },
