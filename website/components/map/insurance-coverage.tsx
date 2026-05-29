@@ -11,8 +11,8 @@ export const InsuranceCoverage = ({
   return (
     <div className="space-y-10">
       <SectionTitle
-        title="Couverture d'assurances"
-        subTitle="Base de données GASPAR"
+        title="Conditions d’assurance"
+        subTitle="Balance comptable des communes mise à disposition par le Ministère de l’Economie et des Finances"
       />
       <InsuranceEvolutionChart data={selectedCommuneData} />
       {selectedCommuneData.multiple_franchise_last && (

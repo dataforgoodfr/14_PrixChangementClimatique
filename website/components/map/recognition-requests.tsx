@@ -40,10 +40,10 @@ export const RecognitionRequests = ({
       {!hideTitle && (
         <CardHeader>
           <CardTitle>
-            Demandes de reconnaissances de catastrophes naturelles
+            Demandes de reconnaissance de l’état de catastrophe naturelle
           </CardTitle>
           <CardDescription>
-            Reconnues par la commission interministérielle - Depuis 1982
+            Auprès de la commission interministérielle - Depuis 1982
           </CardDescription>
           <CardAction>
             <DownloadCsvButton

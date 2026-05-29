@@ -9,6 +9,7 @@ export function BudgetCard({ commune }: { commune: Commune }) {
       title="BUDGET PAR HABITANT"
       currentValue={Math.round(commune.depenses_per_pop)}
       unit="€"
+      tooltip="Le budget par habitant est calculé à partir du budget de fonctionnement annuel des communes, divisé par le nombre d'habitants"
     />
   );
 }

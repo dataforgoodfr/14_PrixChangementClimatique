@@ -162,14 +162,16 @@ export function FiltersPanel({
                 />
               </div>
               <ChartRangeFilter
-                title="Dépenses par habitant (€)"
+                title="Budget par habitant (€)"
                 filterKey={FilterRangeKey.DEPENSES_PER_POP}
                 step={100}
+                caption="Le budget par habitant est calculé à partir du budget de fonctionnement annuel des communes, divisé par le nombre d’habitants”"
               />
               <ChartRangeFilter
-                title="Taux d'endettement (%)"
+                title="Taux d’endettement (%)"
                 filterKey={FilterRangeKey.TAUX_ENDETTEMENT}
                 step={1}
+                caption="Le taux d’endettement permet d’évaluer la dette d’une commune en fonction de son budget de fonctionnement annuel"
               />
               <ChartRangeFilter
                 title="Impôts locaux (€)"
