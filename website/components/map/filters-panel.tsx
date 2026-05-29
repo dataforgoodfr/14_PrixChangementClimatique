@@ -72,10 +72,12 @@ export function FiltersPanel({
 }: FiltersPanelProps) {
   const [indicator, setIndicator] = useIndicator();
   const [filtersOpen, setFiltersOpen] = useState(true);
+  const [resetKey, setResetKey] = useState(0);
   const { dispatch } = useFilters();
 
   function handleReset() {
     dispatch({ type: FilterActionType.RESET });
+    setResetKey((k) => k + 1);
   }
 
   return (
@@ -127,7 +129,7 @@ export function FiltersPanel({
             )}
           </button>
           {filtersOpen && (
-            <div className="py-2 text-sm text-gray-400">
+            <div key={resetKey} className="py-2 text-sm text-gray-400">
               <VulnerabiliteRangeFilter />
               <ChartRangeFilter
                 title="Nombre d'habitants"
@@ -201,7 +203,12 @@ export function FiltersPanel({
 
       <Panel.Footer>
         <Panel.Actions>
-          <Button variant="secondary" size="lg" onClick={handleReset}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="w-full cursor-pointer"
+            onClick={handleReset}
+          >
             Effacer les filtres
           </Button>
         </Panel.Actions>
