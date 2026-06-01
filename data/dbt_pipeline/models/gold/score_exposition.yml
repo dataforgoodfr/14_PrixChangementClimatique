@@ -3,8 +3,10 @@ version: 1
 models:
   - name: score_exposition
     description: >
-      Gold layer: Score d'exposition aux risques climatiques par commune, constuit sur les indicateurs catnat, pprn, exposition aux tri et rga, et scenario pluie 2050
-       Scores intermédiaires sécheresse + inondation
+      Gold layer: Score d'exposition aux risques climatiques par commune
+       Construit sur les indicateurs catnat, pprn, exposition aux tri et rga, et scenario pluie 2050
+       Scores intermédiaires sécheresse + inondation + autres risques naturels
+       Indices intermédiaires SWI, RR 2050, TRI, RGA, arrêtés catnat
       Sources :
       - Gold layer : pprn, ccr_total,
       - Silver layer : scenario_2050, indicateurs_tri_rga_bats_par_com
@@ -12,30 +14,36 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
-      - name: score_secheresse_net
-        description: "Score sécheresse de la commune après normalisation et correction pprn"
-        type: FLOAT
-      - name: score_inondation_net
-        description: "Score inondation de la commune après normalisation et correction pprn"
-        type: FLOAT
       - name: score_exposition
         description: "Score d'exposition aux risques climatiques"
         type: FLOAT
-      - name: swi_indice
-        description: "TODO"
-      - name: score_inondation
-        description: "Score inondation de la commune après normalisation et avant correction pprn"
       - name: score_secheresse
+        description: "Score sécheresse de la commune après normalisation et correction pprn"
+        type: FLOAT
+      - name: score_inondation
+        description: "Score inondation de la commune après normalisation et correction pprn"
+        type: FLOAT
+      - name: score_secheresse_non_corrige
         description: "Score sécheresse de la commune après normalisation et avant correction pprn"
-      - name: score_autres
+      - name: score_autres_risques_nat
         description: "Score d'exposition de la commune aux risques naturels autres que sécheresse et inondation"
-      - name: score_ino_raw
+      - name: score_inondation_brut
         description: "Score inondation de la commune avant normalisation et correction pprn"
-      - name: rga_indice
-        description: "TODO"
-      - name: swi_x_rga_indice
-        description: "TODO"
-      - name: arr_sec_indice
-        description: "TODO"
-      - name: score_sec_raw
+      - name: score_inondation_non_corrige
+        description: "Score inondation de la commune après normalisation et avant correction pprn"
+      - name: score_secheresse_brut
         description: "Score sécheresse de la commune avant normalisation et correction pprn"
+      - name: rga_indice
+        description: "Indicateur de vulnérabilité au Retrait-Gonflement des Argiles (RGA) défini en silver (valeur indicée)"
+      - name: swi_indice
+        description: "Nombre de jours où SWI < 0.4 (valeur indicée)"
+      - name: swi_x_rga_indice
+        description: "Produit des valeurs indicées de SWI et RGA normalisé par un clip + min max scaler"
+      - name: arr_sec_indice
+        description: "Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat sécheresse par commune (valeur indicée)"
+      - name: arr_ino_indice
+        description: "Cumulé du nombre d'arrêtés enregistrés impliquant spécifiquement une catnat inondation par commune (valeur indicée)"
+      - name: tri_indice
+        description: "Indicateur de vulnérabilité aux TRI défini en silver (valeur indicée)"
+      - name: rr_50_indice
+        description: "Nombre de jours de pluie ≥ 50 mm par an (valeur indicée)"

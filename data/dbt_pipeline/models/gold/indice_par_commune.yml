@@ -3,12 +3,21 @@ version: 1
 models:
   - name: indice_par_commune
     description: >
-      Gold layer: Table des scores et indices par commune .
+      Gold layer: Table des scores et indices de vulnérabilité par commune
+       Reprise des sous-scores : exposition, assurance et économique + inondation, secheresse et autres risques naturels
       Source: Bronze layer (opendatasoft_communes) + silver layer + gold layer
     columns:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
+      - name: indice_vulnerabilite_label
+        description: "TODO"
+      - name: indice_vulnerabilite
+        description: "Indice de vulnérabilité de la commune entre 0 et 1"
+        type: FLOAT
+      - name: indice_vulnerabilite_niveau
+        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
+        type: INT
       - name: score_economique
         description: "Score économique de la commune"
         type: FLOAT
@@ -18,39 +27,9 @@ models:
       - name: score_assurance
         description: "Score assurance de la commune"
         type: FLOAT
-      - name: indice_vulnerabilite
-        description: "Indice de vulnérabilité de la commune entre 0 et 1"
-        type: FLOAT
-      - name: indice_vulnerabilite_niveau
-        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
-        type: INT
-      - name: franchise_indice
-        description: "TODO"
-      - name: score_inondation
-        description: "TODO"
-      - name: code_departement
-        description: "TODO"
-      - name: score_secheresse_net
-        description: "TODO"
-      - name: depenses_per_pop_indice
-        description: "TODO"
-      - name: debt_indice
-        description: "TODO"
-      - name: code_region
-        description: "TODO"
-      - name: score_inondation_net
-        description: "TODO"
-      - name: prime_budget_indice
-        description: "TODO"
       - name: score_secheresse
-        description: "TODO"
-      - name: part_arretes_non_reco
-        description: "TODO"
-      - name: score_autres
-        description: "TODO"
-      - name: indice_vulnerabilite_label
-        description: "TODO"
-      - name: nom_commune
-        description: "TODO"
-      - name: indice_prime
-        description: "TODO"
+        description: "Score sécheresse de la commune après correction pprn"
+      - name: score_inondation
+        description: "Score inondation de la commune après correction pprn"
+      - name: score_autres_risques_nat
+        description: "Score d'exposition de la commune aux risques naturels autres que sécheresse et inondation"

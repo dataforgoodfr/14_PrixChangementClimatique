@@ -3,10 +3,13 @@ version: 2
 models:
   - name: resultats_website_par_commune
     description: >
-      Gold layer: Table des résultats website par commune avec KPI.
+      Serving layer: Table des résultats website par commune avec indicateurs calculé en gold layers.
       Cette table contient toutes les données administratives et géographiques des communes françaises
       enrichies avec des indicateurs métier.
-      Source: Bronze layer (opendatasoft_communes) avec transformation et ajout de KPI.
+      Source:
+      - Bronze layer : données administratives et géographiques communes
+      - Silver layer : valeurs consolidées
+      - Gold layer : indicateurs et scores calculés
     columns:
       - name: code_insee
         description: "Code INSEE de la commune (5 caractères) appelé code_geo en bronze"
@@ -40,6 +43,12 @@ models:
         type: FLOAT
       - name: score_assurance
         description: "Score assurance de la commune"
+        type: FLOAT
+      - name: score_inondation
+        description: "Score inondation de la commune"
+        type: FLOAT
+      - name: score_secheresse
+        description: "Score sécheresse de la commune"
         type: FLOAT
       - name: indice_vulnerabilite_niveau
         description: "Indice de vulnérabilité de la commune par niveau entre 0 et 5 avec 1 décimale"

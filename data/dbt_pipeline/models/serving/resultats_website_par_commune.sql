@@ -17,6 +17,8 @@ SELECT
     i.score_economique,
     i.score_exposition,
     i.score_assurance,
+    i.score_secheresse,
+    i.score_inondation,
     i.indice_vulnerabilite_niveau,
 
     tr.indicateur_tri,
@@ -29,16 +31,16 @@ SELECT
 
     b.ratio_dettes_depenses,
     b.depenses_per_pop,
-    t.nb_total_arretes_recon,
 
+    t.nb_total_arretes_recon,
     t.nb_total_arretes,
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
     t.nb_total_arretes_autre,
     t.multiple_franchise_last,
     t.part_arretes_non_reconnus,
-    p.prime_assurance_2024,
 
+    p.prime_assurance_2024,
     p.prime_assurance_2023,
     p.prime_assurance_2022,
     p.prime_assurance_2021,
@@ -47,7 +49,6 @@ SELECT
     p.evolution_prime_assurance,
 
     pr.date_approbation_rga,
-
     pr.date_approbation_ino,
 
     pop.population,

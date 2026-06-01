@@ -1,7 +1,8 @@
 -- indice_par_commune.sql
 -- Score final :
---   score_final_raw = sqrt(0.1·eco² + 0.4·assurance² + 0.5·exposition²)
---   indice_vulnerabilite = score_final_raw / max(score_final_raw)   [Marimo : clip_minmax(q=0,1) = /max car min≈0]
+--   indice_vulnerabilite_brut = sqrt(0.1·eco² + 0.4·assurance² + 0.5·exposition²)
+--   indice_vulnerabilite = indice_vulnerabilite_brut / max(indice_vulnerabilite_brut)
+--   [Marimo : clip_minmax(q=0,1) = /max car min≈0]
 --   indice sur 5 = floor(indice * 5).clip(0,4) + 1   [1-indexé]
 
 WITH combined AS (
@@ -13,16 +14,7 @@ WITH combined AS (
 
         ex.score_secheresse,
         ex.score_inondation,
-        ex.score_secheresse_net,
-
-        ex.score_inondation_net,
-        ex.score_autres,
-        a.indice_prime,
-        a.prime_budget_indice,
-        a.part_arretes_non_reco,
-        a.franchise_indice,
-        e.debt_indice,
-        e.depenses_per_pop_indice,
+        ex.score_autres_risques_nat,
         ex.score_exposition,
         a.score_assurance,
         e.score_economique
@@ -40,15 +32,15 @@ scores_bruts AS (
             0.1 * power(score_economique, 2)
             + 0.4 * power(score_assurance, 2)
             + 0.5 * power(score_exposition, 2)
-        ) AS score_final_raw
+        ) AS indice_vulnerabilite_brut
     FROM combined
 ),
 
 -- ── MinMaxScaler final (Marimo : clip_minmax(q_low=0, q_high=1) = min-max standard) ──
 minmax_final AS (
     SELECT
-        min(score_final_raw) AS min_val,
-        max(score_final_raw) AS max_val
+        min(indice_vulnerabilite_brut) AS min_val,
+        max(indice_vulnerabilite_brut) AS max_val
     FROM scores_bruts
 ),
 
@@ -57,32 +49,21 @@ normalized AS (
         s.*,
         CASE
             WHEN p.max_val = p.min_val THEN 0
-            ELSE (s.score_final_raw - p.min_val) / (p.max_val - p.min_val)
+            ELSE (s.indice_vulnerabilite_brut - p.min_val) / (p.max_val - p.min_val)
         END AS indice_vulnerabilite
     FROM scores_bruts AS s
     CROSS JOIN minmax_final AS p
 )
 
 SELECT
-    code_geo,
-    nom_commune,
-    code_departement,
-    code_region,
+    normalized.code_geo,
 
-    score_exposition,
-    score_assurance,
-    score_economique,
-    score_secheresse,
-    score_inondation,
-    score_secheresse_net,
-    score_inondation_net,
-    score_autres,
-    indice_prime,
-    prime_budget_indice,
-    part_arretes_non_reco,
-    franchise_indice,
-    debt_indice,
-    depenses_per_pop_indice,
+    round(score_economique, 3) AS score_economique,
+    round(score_exposition, 3) AS score_exposition,
+    round(score_assurance, 3) AS score_assurance,
+    round(score_secheresse, 3) AS score_secheresse,
+    round(score_inondation, 3) AS score_inondation,
+    round(score_autres_risques_nat, 3) AS score_autres_risques_nat,
 
     round(indice_vulnerabilite::numeric, 4) AS indice_vulnerabilite,
     -- 1-indexé [1-5]

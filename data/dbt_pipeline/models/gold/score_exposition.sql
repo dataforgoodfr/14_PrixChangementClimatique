@@ -169,7 +169,7 @@ clipped AS (
                 ))
         END AS arr_ino_indice,
 
-        -- autres
+        -- autres risques naturels
         CASE
             WHEN pa.p_999_autre = pa.p_0_autre THEN 0
             ELSE
@@ -178,7 +178,7 @@ clipped AS (
                     (greatest(pa.p_0_autre, least(pa.p_999_autre, s.nb_total_arretes_autre)) - pa.p_0_autre)
                     / (pa.p_999_autre - pa.p_0_autre)
                 ))
-        END AS score_autres
+        END AS score_autres_risques_nat
 
     FROM source AS s
     CROSS JOIN pct_sec_bruts AS ps
@@ -203,7 +203,7 @@ scores_bruts AS (
                 ))
         END AS swi_x_rga_indice,
 
-        -- score_sec_raw = sqrt(0.5 * swi_x_rga_indice² + 0.5 * arr_sec²)
+        -- score_secheresse_brut = sqrt(0.5 * swi_x_rga_indice² + 0.5 * arr_sec²)
         sqrt(
             0.5 * power(
                 CASE
@@ -217,14 +217,14 @@ scores_bruts AS (
                 END, 2
             )
             + 0.5 * power(c.arr_sec_indice, 2)
-        ) AS score_sec_raw,
+        ) AS score_secheresse_brut,
 
-        -- score_ino_raw = sqrt(0.2*tri² + 0.3*rr50² + 0.5*arr_ino²)
+        -- score_inondation_brut = sqrt(0.2*tri² + 0.3*rr50² + 0.5*arr_ino²)
         sqrt(
             0.2 * power(c.tri_indice, 2)
             + 0.3 * power(c.rr_50_indice, 2)
             + 0.5 * power(c.arr_ino_indice, 2)
-        ) AS score_ino_raw
+        ) AS score_inondation_brut
 
     FROM clipped AS c
     CROSS JOIN pct_swi_x_rga AS px
@@ -233,8 +233,8 @@ scores_bruts AS (
 -- ── MinMaxScaler sécheresse fitté sur métropole ──────────────────────────────
 minmax_sec AS (
     SELECT
-        min(score_sec_raw) AS min_val,
-        max(score_sec_raw) AS max_val
+        min(score_secheresse_brut) AS min_val,
+        max(score_secheresse_brut) AS max_val
     FROM scores_bruts
     WHERE
         code_geo NOT LIKE '97%'
@@ -244,8 +244,8 @@ minmax_sec AS (
 -- ── MinMaxScaler inondation fitté sur hors 98* ───────────────────────────────
 minmax_ino AS (
     SELECT
-        min(score_ino_raw) AS min_val,
-        max(score_ino_raw) AS max_val
+        min(score_inondation_brut) AS min_val,
+        max(score_inondation_brut) AS max_val
     FROM scores_bruts
     WHERE code_geo NOT LIKE '98%'
 ),
@@ -256,14 +256,14 @@ normalized AS (
         CASE
             WHEN s.code_geo LIKE '97%' OR s.code_geo LIKE '98%' THEN NULL
             WHEN ms.max_val = ms.min_val THEN 0
-            ELSE (s.score_sec_raw - ms.min_val) / (ms.max_val - ms.min_val)
-        END AS score_secheresse,
+            ELSE (s.score_secheresse_brut - ms.min_val) / (ms.max_val - ms.min_val)
+        END AS score_secheresse_non_corrige,
 
         CASE
             WHEN s.code_geo LIKE '98%' THEN NULL
             WHEN mi.max_val = mi.min_val THEN 0
-            ELSE (s.score_ino_raw - mi.min_val) / (mi.max_val - mi.min_val)
-        END AS score_inondation
+            ELSE (s.score_inondation_brut - mi.min_val) / (mi.max_val - mi.min_val)
+        END AS score_inondation_non_corrige
 
     FROM scores_bruts AS s
     CROSS JOIN minmax_sec AS ms
@@ -274,11 +274,11 @@ net AS (
     SELECT
         *,
         CASE
-            WHEN score_secheresse IS NULL THEN NULL
+            WHEN score_secheresse_non_corrige IS NULL THEN NULL
             ELSE
                 greatest(
                     0.0,
-                    score_secheresse
+                    score_secheresse_non_corrige
                     - CASE
                         WHEN
                             date_approbation_rga IS NOT NULL
@@ -289,14 +289,14 @@ net AS (
                     END
                     * coalesce(pprn_rga, 0)
                 )
-        END AS score_secheresse_net,
+        END AS score_secheresse,
 
         CASE
-            WHEN score_inondation IS NULL THEN NULL
+            WHEN score_inondation_non_corrige IS NULL THEN NULL
             ELSE
                 greatest(
                     0.0,
-                    score_inondation
+                    score_inondation_non_corrige
                     - CASE
                         WHEN
                             date_approbation_ino IS NOT NULL
@@ -307,7 +307,7 @@ net AS (
                     END
                     * coalesce(pprn_ino, 0)
                 )
-        END AS score_inondation_net
+        END AS score_inondation
 
     FROM normalized
 ),
@@ -315,31 +315,34 @@ net AS (
 final AS (
     SELECT
         code_geo,
-        score_sec_raw,
+        score_secheresse_brut,
+        score_secheresse_non_corrige,
         score_secheresse,
-        score_secheresse_net,
         swi_indice,
         rga_indice,
+        tri_indice,
+        rr_50_indice,
         swi_x_rga_indice,
         arr_sec_indice,
-        score_ino_raw,
+        arr_ino_indice,
+        score_inondation_brut,
+        score_inondation_non_corrige,
         score_inondation,
-        score_inondation_net,
-        score_autres,
+        score_autres_risques_nat,
 
         CASE
-            WHEN score_secheresse_net IS NULL
-                THEN sqrt(0.8 * power(score_inondation_net, 2) + 0.2 * power(score_autres, 2))
+            WHEN score_secheresse IS NULL
+                THEN sqrt(0.8 * power(score_inondation, 2) + 0.2 * power(score_autres_risques_nat, 2))
             ELSE sqrt(
-                0.4 * power(score_secheresse_net, 2)
-                + 0.4 * power(score_inondation_net, 2)
-                + 0.2 * power(score_autres, 2)
+                0.4 * power(score_secheresse, 2)
+                + 0.4 * power(score_inondation, 2)
+                + 0.2 * power(score_autres_risques_nat, 2)
             )
         END AS score_agrege,
 
         greatest(
-            coalesce(score_secheresse_net, 0),
-            coalesce(score_inondation_net, 0)
+            coalesce(score_secheresse, 0),
+            coalesce(score_inondation, 0)
         ) AS score_principal
 
     FROM net
@@ -347,16 +350,20 @@ final AS (
 
 SELECT
     code_geo,
-    score_sec_raw,
     score_secheresse,
-    score_secheresse_net,
+    score_inondation,
+    score_autres_risques_nat,
+    score_secheresse_brut,
+    score_secheresse_non_corrige,
+    score_inondation_brut,
+    score_inondation_non_corrige,
     swi_indice,
     rga_indice,
     swi_x_rga_indice,
+    tri_indice,
+    rr_50_indice,
     arr_sec_indice,
-    score_ino_raw,
-    score_inondation,
-    score_inondation_net,
-    score_autres,
+    arr_ino_indice,
     greatest(score_agrege, score_principal) AS score_exposition
+
 FROM final
