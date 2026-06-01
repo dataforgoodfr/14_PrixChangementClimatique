@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: resultats_nationaux
+    description: >
+      Gold layer: Table des résultats nationaux avec valeurs RANDOM sur les scores et indice de vulnérabilité.
+      Source: Bronze layer (donnees_financieres_ofgl) Silver layer (primes_par_communes) + valeurs RANDOM
+    columns:
+      - name: score_economique_moy
+        description: "score economique national moyen"
+        type: DECIMAL(3,2)
+      - name: score_georisque_moy
+        description: "score géorisque national moyen"
+        type: DECIMAL(3,2)
+      - name: score_assurance_moy
+        description: "score assurance national moyen"
+        type: DECIMAL(3,2)
+      - name: indice_vulnerabilite_moy
+        description: "indice de vulnérabilité national moyen"
+        type: DECIMAL(3,2)
+      - name: indice_vulnerabilite_niveau
+        description: "niveau d'indice de vulnérabilité"
+        type: INT
+      - name: part_communes_vulnerables
+        description: "à partir de quel score une commune est vulnérable"
+        type: DECIMAL(3,2)
+      - name: primes_assurances_2024
+        description: "Total national des primes d'assurances en 2024"
+        type: DECIMAL(15,2)
+      - name: primes_assurances_2020
+        description: "Total national des primes d'assurances en 2020"
+        type: DECIMAL(15,2)
+      - name: impots_locaux_2024
+        description: "Total national des impots locaux en 2024"
+        type: DECIMAL(15,2)
+      - name: impots_locaux_2020
+        description: "Total national des impots locaux en 2020"
+        type: DECIMAL(15,2)
+      - name: evolution_prime_assurance
+        description: "Evolution des primes entre 2020 et 2024"
+        type: DECIMAL(10,2)
+      - name: part_prime_budget
+        description: "Somme des primes d'assurances et budget de 2024"
+        type: DECIMAL(10,2)
+      - name: depenses_per_pop
+        description: "Dépenses moyennes par habitants sur 2023 (manque la population municipale de 2024)"
+        type: DECIMAL(10,2)
+      - name: ratio_dettes_depenses
+        description: "dettes 2024 par rapport aux dépenses de 2024"
+        type: DECIMAL(10,5)
