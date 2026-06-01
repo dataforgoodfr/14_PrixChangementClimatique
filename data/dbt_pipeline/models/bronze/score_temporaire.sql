@@ -1,1 +1,1 @@
-SELECT * FROM 'pipeline_inputs/Score_vulnerabilite.parquet'
+SELECT * FROM 'pipeline_inputs/score_vulnerabilite_0531.parquet'

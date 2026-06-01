@@ -9,12 +9,14 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
-      - name: ratio_dettes_norm
-        description: dettes/depenses de la derniere année 2024 (valeur normalisée)
-        data_type: DOUBLE
-      - name: depenses_per_pop_norm
-        description: Solde net pour le type de compte "depenses" par population municipale de 2023 (valeur normalisée)
-        data_type: DOUBLE
       - name: score_economique
         description: "Score économique commune"
         type: FLOAT
+      - name: debt_indice
+        description: "TODO"
+      - name: score_eco_raw
+        description: "TODO"
+      - name: max_val
+        description: "TODO"
+      - name: depenses_per_pop_indice
+        description: "TODO"

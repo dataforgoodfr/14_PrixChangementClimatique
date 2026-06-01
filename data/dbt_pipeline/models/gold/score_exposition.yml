@@ -12,18 +12,30 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
-      - name: score_secheresse_norm
-        description: "Score sécheresse de la commune"
-        type: FLOAT
-      - name: score_inondation_norm
-        description: "Score inondation de la commune"
-        type: FLOAT
       - name: score_secheresse_net
-        description: "Score sécheresse de la commune avant normalisation"
+        description: "Score sécheresse de la commune après normalisation et correction pprn"
         type: FLOAT
       - name: score_inondation_net
-        description: "Score inondation de la commune avant normalisation"
+        description: "Score inondation de la commune après normalisation et correction pprn"
         type: FLOAT
       - name: score_exposition
         description: "Score d'exposition aux risques climatiques"
         type: FLOAT
+      - name: swi_indice
+        description: "TODO"
+      - name: score_inondation
+        description: "Score inondation de la commune après normalisation et avant correction pprn"
+      - name: score_secheresse
+        description: "Score sécheresse de la commune après normalisation et avant correction pprn"
+      - name: score_autres
+        description: "Score d'exposition de la commune aux risques naturels autres que sécheresse et inondation"
+      - name: score_ino_raw
+        description: "Score inondation de la commune avant normalisation et correction pprn"
+      - name: rga_indice
+        description: "TODO"
+      - name: swi_x_rga_indice
+        description: "TODO"
+      - name: arr_sec_indice
+        description: "TODO"
+      - name: score_sec_raw
+        description: "Score sécheresse de la commune avant normalisation et correction pprn"

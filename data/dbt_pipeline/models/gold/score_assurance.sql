@@ -1,55 +1,111 @@
+-- score_assurance.sql
+-- Reproduit fidèlement le calcul Marimo :
+--   - indice_prime               = log1p(clip(x, -1)) / log1p(1.5), clip(0,1)
+--   - prime_budget_indice        = clip_minmax(part_prime_budget, p1, p99)
+--   - part_arretes_non_reco      = ratio non reconnus ∈ [0,1] (1 si aucun arrêté)
+--   - franchise_indice           = multiple_franchise_last / 5
+--
+--   score_assurance_raw = sqrt(0.5·prime² + 0.2·budget² + 0.2·arretes_nr² + 0.1·franchise²)
+--   score_assurance     = score_assurance_raw / max(score_assurance_raw)   [Marimo : /max]
+
 WITH source AS (
     SELECT
-
         c.code_geo,
         ccr.nb_total_arretes,
         ccr.nb_total_arretes_recon,
         p.part_prime_budget,
         p.evolution_prime_assurance,
         ccr.multiple_franchise_last
-
     FROM {{ ref('opendatasoft_communes') }} AS c
     LEFT JOIN {{ ref('ccr_totals') }} AS ccr ON c.code_geo = ccr.code_geo
     LEFT JOIN {{ ref('prime') }} AS p ON c.code_geo = p.code_geo
 ),
 
-prep AS (
+-- ── Percentiles pour clip_minmax(part_prime_budget, p1, p99) ────────────────
+percentiles AS (
     SELECT
-        code_geo,
-        least(coalesce(part_prime_budget, 0), {{ var('cap_ppb') }}) AS part_prime_budget_clipped,
-        least(coalesce(evolution_prime_assurance, 0), {{ var('cap_epa') }}) AS evolution_prime_clipped,
-        coalesce(multiple_franchise_last, 1) AS multiple_franchise_last,
-        CASE
-            WHEN coalesce(nb_total_arretes, 0) = 0 THEN 0
-            ELSE
-                (coalesce(nb_total_arretes, 0) - coalesce(nb_total_arretes_recon, 0))
-                / nullif(nb_total_arretes::float, 0)
-        END AS part_arretes_non_reco
+        percentile_cont(0.01) WITHIN GROUP (ORDER BY part_prime_budget) AS p_01_ppb,
+        percentile_cont(0.99) WITHIN GROUP (ORDER BY part_prime_budget) AS p_99_ppb
     FROM source
+    WHERE part_prime_budget IS NOT NULL
 ),
 
-final AS (
+prep AS (
     SELECT
-        code_geo,
+        s.code_geo,
 
-        (part_prime_budget_clipped - {{ var('min_ppb') }})
-        / ({{ var('max_ppb') }} - {{ var('min_ppb') }}) AS part_prime_budget_norm,
-        (evolution_prime_clipped - {{ var('min_epa') }})
-        / ({{ var('max_epa') }} - {{ var('min_epa') }}) AS evolution_prime_norm,
-        (multiple_franchise_last - 1.0) / 4.0 AS franchise_norm,
-        part_arretes_non_reco,
+        -- part_arretes_non_reconnus
+        CASE
+            WHEN coalesce(s.nb_total_arretes, 0) = 0 THEN 1.0
+            ELSE least(1.0, greatest(
+                0.0,
+                (coalesce(s.nb_total_arretes, 0) - coalesce(s.nb_total_arretes_recon, 0))
+                / nullif(s.nb_total_arretes::numeric, 0)
+            ))
+        END AS part_arretes_non_reco,
 
-        {{ var('poids_evolution_prime') }}
-        * (evolution_prime_clipped - {{ var('min_epa') }})
-        / ({{ var('max_epa') }} - {{ var('min_epa') }})
-        + {{ var('poids_prime_budget') }}
-        * (part_prime_budget_clipped - {{ var('min_ppb') }})
-        / ({{ var('max_ppb') }} - {{ var('min_ppb') }})
-        + (1 - {{ var('poids_evolution_prime') }} - {{ var('poids_prime_budget') }}) * part_arretes_non_reco
-        + {{ var('poids_franchise') }} * (multiple_franchise_last - 1.0) / 4.0
-            AS score_assurance
+        -- indice_prime : x <= -1 → 0 (log1p(-1) = -inf → clip → 0 en Python)
+        -- NULL si pas de donnée prime (pas de fillna dans le Marimo)
+        CASE
+            WHEN s.evolution_prime_assurance IS NULL THEN NULL
+            WHEN s.evolution_prime_assurance <= -1.0 THEN 0.0
+            ELSE least(1.0, greatest(
+                0.0,
+                ln(1.0 + s.evolution_prime_assurance)
+                / ln(1.0 + 1.5)
+            ))
+        END AS indice_prime,
 
+        -- prime_budget_indice : clip_minmax(p1, p99)
+        CASE
+            WHEN s.part_prime_budget IS NULL THEN NULL
+            WHEN p.p_99_ppb = p.p_01_ppb THEN 0
+            ELSE least(1.0, greatest(
+                0.0,
+                (
+                    greatest(p.p_01_ppb, least(p.p_99_ppb, s.part_prime_budget))
+                    - p.p_01_ppb
+                )
+                / (p.p_99_ppb - p.p_01_ppb)
+            ))
+        END AS prime_budget_indice,
+
+        -- franchise_indice : multiple / 5
+        coalesce(s.multiple_franchise_last, 0.0) / 5.0 AS franchise_indice
+
+    FROM source AS s
+    CROSS JOIN percentiles AS p
+),
+
+scores_bruts AS (
+    SELECT
+        *,
+        sqrt(
+            0.5 * power(indice_prime, 2)
+            + 0.2 * power(prime_budget_indice, 2)
+            + 0.2 * power(part_arretes_non_reco, 2)
+            + 0.1 * power(franchise_indice, 2)
+        ) AS score_assurance_raw
     FROM prep
+),
+
+-- ── Rescaling /max (Marimo : score / score.max()) ────────────────────────────
+max_params AS (
+    SELECT max(score_assurance_raw) AS max_val
+    FROM scores_bruts
 )
 
-SELECT * FROM final
+SELECT
+    s.code_geo,
+    s.indice_prime,
+    s.prime_budget_indice,
+    s.part_arretes_non_reco,
+    s.franchise_indice,
+
+    CASE
+        WHEN p.max_val = 0 THEN 0
+        ELSE s.score_assurance_raw / p.max_val
+    END AS score_assurance
+
+FROM scores_bruts AS s
+CROSS JOIN max_params AS p

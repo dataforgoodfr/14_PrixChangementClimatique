@@ -9,18 +9,15 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
-      - name: part_prime_budget_norm
-        description: "Primes assurances sur dépenses 2024 (valeur normalisée)"
-        type: FLOAT
-      - name: evolution_prime_norm
-        description: "Evolution des primes assurance entre 2020 et 2024 (valeur normalisée)"
-        type: INTEGER
-      - name: franchise_norm
-        description: "Multiplicateur de la franchise par commune de la derniere année (valeur normalisée)"
-        type: INTEGER
       - name: score_assurance
         description: "Score assurance de la commune"
         type: FLOAT
       - name: part_arretes_non_reco
         description: part d'arrêtés non reconnus sur le nombre total d'arrêtés par commune
         data_type: FLOAT
+      - name: indice_prime
+        description: "Evolution des primes assurance entre 2020 et 2024 (valeur indicée)"
+      - name: franchise_indice
+        description: "Multiplicateur de la franchise par commune de la derniere année (valeur indicée)"
+      - name: prime_budget_indice
+        description: "Primes assurances sur dépenses 2024 (valeur indicée)"

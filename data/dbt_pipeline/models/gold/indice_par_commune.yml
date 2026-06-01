@@ -24,15 +24,33 @@ models:
       - name: indice_vulnerabilite_niveau
         description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
         type: INT
-      - name: niveau_exposition
-        description: "Niveau d'exposition aux risques climatique de la commune"
-        type: FLOAT
-      - name: indice_vulnerabilite_niveau_combinatoire
-        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5 - technique combinatoire"
-        type: FLOAT
-      - name: niveau_eco
-        description: "Niveau economique de la commune"
-        type: FLOAT
-      - name: niveau_assurance
-        description: "Niveau assurance de la commune"
-        type: FLOAT
+      - name: franchise_indice
+        description: "TODO"
+      - name: score_inondation
+        description: "TODO"
+      - name: code_departement
+        description: "TODO"
+      - name: score_secheresse_net
+        description: "TODO"
+      - name: depenses_per_pop_indice
+        description: "TODO"
+      - name: debt_indice
+        description: "TODO"
+      - name: code_region
+        description: "TODO"
+      - name: score_inondation_net
+        description: "TODO"
+      - name: prime_budget_indice
+        description: "TODO"
+      - name: score_secheresse
+        description: "TODO"
+      - name: part_arretes_non_reco
+        description: "TODO"
+      - name: score_autres
+        description: "TODO"
+      - name: indice_vulnerabilite_label
+        description: "TODO"
+      - name: nom_commune
+        description: "TODO"
+      - name: indice_prime
+        description: "TODO"
