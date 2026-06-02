@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Panel } from "@/components/core/panel";
 import { Button } from "@/components/ui/button";
-import { Legend } from "@/components/core/rf-legend";
+
 import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
 import type { Map as MaplibreMap } from "maplibre-gl";
@@ -228,7 +228,6 @@ export function FiltersPanel({
           </Button>
           <MapZoomControl map={map} />
         </div>
-        <Legend />
       </Panel.Controls>
     </Panel>
   );
