@@ -25,7 +25,7 @@ send_file_to_s3(
     s3_filepath,
     replace=False
 )
-    Upload a local file to the Clever Cloud S3 bucket.
+    Upload a local file to the Clever Cloud S3 bucket and make it public.
 
     Parameters
     ----------
@@ -146,7 +146,13 @@ def send_file_to_s3(
         ContentLength=len(data),
     )
 
-    print("Upload completed ✅")
+    s3_client.put_object_acl(
+        Bucket=BUCKET_NAME,
+        Key=s3_filepath,
+        ACL="public-read",
+    )
+
+    print("Upload completed and file is public ✅")
 
 
 if __name__ == "__main__":

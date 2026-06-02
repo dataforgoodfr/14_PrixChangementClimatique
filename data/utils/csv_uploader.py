@@ -17,6 +17,7 @@ Behavior:
     - The file will be uploaded to:
         s3://<CLEVER_PCC_BUCKET>/pipeline_inputs/<filename>
     - Existing files with identical name will be overwritten
+    - The file will be made public
 
 Requires the following environment variables to be set to use the S3 connector:
 - CLEVER_TOKEN
