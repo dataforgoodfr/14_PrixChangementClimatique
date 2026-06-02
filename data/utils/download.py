@@ -1,5 +1,14 @@
 #!/usr/bin/env python
-"""Download DuckDB database files from S3."""
+
+"""
+Download DuckDB database files for local analysis.
+
+Files are stored in `data/exploration/` and are downloaded only
+when the remote ETag differs from the local one.
+
+No idenfication is needed to download the file.
+"""
+
 
 import sys
 from pathlib import Path
