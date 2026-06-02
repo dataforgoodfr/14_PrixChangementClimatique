@@ -16,11 +16,6 @@ _Download dependencies :_
 uv run dbt deps
 ```
 
-_Lancer le seed :_
-```bash
-uv run dbt seed
-```
-
 _Lancer le dbt (run sans tests) :_
 ```bash
 uv run dbt run
@@ -107,7 +102,7 @@ Important : si vous n'avez pas encore les clés, demandez les sur un des canaux 
 Pour uploader le fichier vous pouvez :
 
 1/ Le faire à la main, en utilisant l'outil de votre choix. Si vous n'avez jamais fait de telles opérations, nous conseillons l'outil cyberduck qui permet de la réaliser facilement, avec une interface. Il faudra créer une nouvelle connection en choisissant bien le format "(Amazon) s3".
-Uploader le fichier dans le bucket `qppcc-upload`, dans le dossier /pipeline_inputs de ce bucket.
+Uploader le fichier dans le bucket `assurermaville`, dans le dossier /pipeline_inputs de ce bucket.
 
 ou
 
@@ -121,11 +116,11 @@ uv run python data/utils/csv_uploader.py mon_fichier.csv
 
 Vous aurez besoin de créer les clés d'accès au s3 et de les ajouter dans un fichier .env à la racine du projet, avec les variables d'environnement suivantes :
 ```
-S3_ACCESS_KEY_ID = la clé projet récupérée
-3_SECRET_ACCESS_KEY = la clé secrète projet récupérée
-S3_ENDPOINT_URL = "https://s3.fr-par.scw.cloud"
-S3_REGION = "fr-par"
-S3_PCC_BUCKET = "qppcc-upload"
+CLEVER_TOKEN = la clé projet récupérée
+CLEVER_SECRET = la clé secrète projet récupérée
+CLEVER_ENDPOINT_URL= "https://cellar-c2.services.clever-cloud.com"
+CLEVER_PCC_BUCKET = "assurermaville"
+CLEVER_REGION = "default"
 ```
 
 - Etape 2 : rendre ce fichier public si vous avez chargé le fichier à la main.
