@@ -39,20 +39,6 @@ const IntroSection: React.FC = () => {
     <div className="flex flex-col gap-[40px] w-full px-[16px] lg:px-[104px] pt-[40px] pb-[72px]">
       {/* Titre + description */}
       <div className="flex flex-col gap-[20px]">
-        <SectionTitle
-          highlightVariant="secondary"
-          topLine={[
-            {
-              parts: [{ text: "Titre" }],
-            },
-          ]}
-          bottomLine={[
-            {
-              highlight: true,
-              parts: [{ text: "Sous-titre", bold: true }],
-            },
-          ]}
-        />
         <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#7C7AA1] font-[400]">
           <span className="mx-1 text-rf-green-light font-[700]">
             Le territoire français subit depuis plusieurs années la hausse de la
