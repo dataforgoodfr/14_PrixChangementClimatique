@@ -21,43 +21,42 @@ SELECT
     i.score_inondation,
     i.indice_vulnerabilite_niveau,
 
-    tr.indicateur_tri,
-    tr.indicateur_rga,
-
     r.swi_04_d_abs,
     r.rr_50_d_abs,
+
     r.pxcwd_abs,
     r.tx_35_d_abs,
-
-    b.ratio_dettes_depenses,
-    b.depenses_per_pop,
-
     t.nb_total_arretes_recon,
     t.nb_total_arretes,
+
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
+
     t.nb_total_arretes_autre,
     t.multiple_franchise_last,
-    t.part_arretes_non_reconnus,
-
-    p.prime_assurance_2024,
-    p.prime_assurance_2023,
-    p.prime_assurance_2022,
-    p.prime_assurance_2021,
-    p.prime_assurance_2020,
-    p.part_prime_budget,
-    p.evolution_prime_assurance,
-
     pr.date_approbation_rga,
     pr.date_approbation_ino,
-
     pop.population,
-
     i_loc.impots_locaux,
-    i_loc.impots_locaux_evolution,
-    i_loc.part_impots_locaux,
+    ROUND(tr.indicateur_tri, 2) AS indicateur_tri,
 
+    ROUND(tr.indicateur_rga, 2) AS indicateur_rga,
     ROUND(b.ratio_dettes_depenses * -100, 1) AS taux_endettement,
+    ROUND(b.depenses_per_pop, 0) AS depenses_per_pop,
+    ROUND(t.part_arretes_non_reconnus, 2) AS part_arretes_non_reconnus,
+    ROUND(p.prime_assurance_2024, 2) AS prime_assurance_2024,
+    ROUND(p.prime_assurance_2023, 2) AS prime_assurance_2023,
+    ROUND(p.prime_assurance_2022, 2) AS prime_assurance_2022,
+
+    ROUND(p.prime_assurance_2021, 2) AS prime_assurance_2021,
+    ROUND(p.prime_assurance_2020, 2) AS prime_assurance_2020,
+
+    ROUND(p.part_prime_budget, 2) AS part_prime_budget,
+
+    ROUND(p.evolution_prime_assurance, 2) AS evolution_prime_assurance,
+    ROUND(i_loc.impots_locaux_evolution, 2) AS impots_locaux_evolution,
+    ROUND(i_loc.part_impots_locaux, 3) AS part_impots_locaux,
+
     pr.pprn_rga IS TRUE AS pprn_rga,
     pr.pprn_ino IS TRUE AS pprn_ino
 

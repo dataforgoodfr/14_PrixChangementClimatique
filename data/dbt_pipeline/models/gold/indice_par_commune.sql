@@ -50,7 +50,7 @@ normalized AS (
         CASE
             WHEN p.max_val = p.min_val THEN 0
             ELSE (s.indice_vulnerabilite_brut - p.min_val) / (p.max_val - p.min_val)
-        END AS indice_vulnerabilite
+        END AS _indice_vulnerabilite
     FROM scores_bruts AS s
     CROSS JOIN minmax_final AS p
 )
@@ -58,26 +58,16 @@ normalized AS (
 SELECT
     normalized.code_geo,
 
-    round(score_economique, 3) AS score_economique,
-    round(score_exposition, 3) AS score_exposition,
-    round(score_assurance, 3) AS score_assurance,
-    round(score_secheresse, 3) AS score_secheresse,
-    round(score_inondation, 3) AS score_inondation,
-    round(score_autres_risques_nat, 3) AS score_autres_risques_nat,
+    round(score_economique, 2) AS score_economique,
+    round(score_exposition, 2) AS score_exposition,
+    round(score_assurance, 2) AS score_assurance,
+    round(score_secheresse, 2) AS score_secheresse,
+    round(score_inondation, 2) AS score_inondation,
+    round(score_autres_risques_nat, 2) AS score_autres_risques_nat,
 
-    round(indice_vulnerabilite::numeric, 4) AS indice_vulnerabilite,
+    round(_indice_vulnerabilite::numeric, 2) AS indice_vulnerabilite,
+
     -- 1-indexé [1-5]
-    least(5, greatest(
-        1,
-        floor(indice_vulnerabilite * 5)::int + 1
-    )) AS indice_vulnerabilite_niveau,
-
-    CASE least(5, greatest(1, floor(indice_vulnerabilite * 5)::int + 1))
-        WHEN 1 THEN 'Très faible'
-        WHEN 2 THEN 'Faible'
-        WHEN 3 THEN 'Modéré'
-        WHEN 4 THEN 'Élevé'
-        WHEN 5 THEN 'Très élevé'
-    END AS indice_vulnerabilite_label
+    round((_indice_vulnerabilite * 5)::numeric, 1) AS indice_vulnerabilite_niveau
 
 FROM normalized
