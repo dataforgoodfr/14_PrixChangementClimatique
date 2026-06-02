@@ -1,5 +1,14 @@
 #!/usr/bin/env python
-"""Download all pipeline_inputs files from Clever Cloud Cellar."""
+
+"""
+Download all pipeline input files from Clever Cloud Cellar.
+
+Files are stored in `data/dbt_pipeline/pipeline_inputs/`.
+Downloads are skipped when the remote ETag matches the value
+stored in the local tracker file.
+
+No idenfication is needed to download the files.
+"""
 
 import json
 import sys
