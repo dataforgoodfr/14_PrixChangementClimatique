@@ -1,7 +1,7 @@
 """
 Build a trimmed website.duckdb from dev.duckdb (data/exploration/).
 
-Extracts all tables from the `main_gold` schema of dev.duckdb and copies
+Extracts all tables from the `main_serving` schema of dev.duckdb and copies
 them into the `main` schema of website.duckdb. Used by the website build
 pipeline before Docker image creation.
 """
@@ -54,17 +54,17 @@ con.execute("CREATE SCHEMA IF NOT EXISTS main")
 
 tables = con.execute("""
     SELECT table_name FROM information_schema.tables
-    WHERE table_schema = 'main_gold'
+    WHERE table_schema = 'main_serving'
     AND table_catalog = 'dev'
 """).fetchall()
 
-log.info(f"{len(tables)} tables gold trouvées dans dev.duckdb")
+log.info(f"{len(tables)} tables 'serving' trouvées dans dev.duckdb")
 
 for (table_name,) in tables:
-    rows = con.execute(f"SELECT COUNT(*) FROM dev.main_gold.{table_name}").fetchone()[0]
+    rows = con.execute(f"SELECT COUNT(*) FROM dev.main_serving.{table_name}").fetchone()[0]
     con.execute(f"""
         CREATE OR REPLACE TABLE main.{table_name}
-        AS SELECT * FROM dev.main_gold.{table_name}
+        AS SELECT * FROM dev.main_serving.{table_name}
     """)
     log.info(f"  ✅ main.{table_name} ({rows:,} lignes)")
 
