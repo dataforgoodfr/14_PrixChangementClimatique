@@ -1,125 +1,89 @@
 -- CODE POUR COLONNES IMPOTS 2024 ET 2020
 WITH impots AS (
     SELECT
-        SUM(CASE
-            WHEN annee = 2024 AND agregat LIKE 'Impôts locaux'
-                THEN montant
-            ELSE 0
-        END) AS impots_locaux_2024,
+        SUM(impots_locaux_2024) AS impots_locaux_2024,
 
-        SUM(CASE
-            WHEN annee = 2020 AND agregat LIKE 'Impôts locaux'
-                THEN montant
-            ELSE 0
-        END) AS impots_locaux_2020
+        SUM(impots_locaux_2020) AS impots_locaux_2020
 
-    FROM {{ ref('donnees_financieres_ofgl') }}
+    FROM {{ ref('kpi_impots') }}
 ),
 
--- CODE ASSURANCES 2024 et 2020
+-- CODE ASSURANCES 2024 et 2020; MEDIANE EVOLUTION PRIME ASSURANCE; MEDIANE PART PRIME BUDGET 2024
 primes AS (
     SELECT
-        SUM(CASE
-            WHEN annee = 2024
-                THEN prime_assurance
-            ELSE 0
-        END) AS primes_assurances_2024,
+        SUM(prime_assurance_2024) AS primes_assurances_2024,
 
-        SUM(CASE
-            WHEN annee = 2020
-                THEN prime_assurance
-            ELSE 0
-        END) AS primes_assurances_2020
+        SUM(prime_assurance_2020) AS primes_assurances_2020,
 
-    FROM {{ ref('primes_par_communes') }}
+        MEDIAN(evolution_prime_assurance) AS evolution_prime_assurance,
+
+        MEDIAN(part_prime_budget_2024) AS part_prime_budget_2024
+
+    FROM {{ ref('prime') }}
 ),
 
--- EVOLUTION PRIME ASSURANCE
-
-evol_prime AS (
+-- MEDIANE DEPENSES PAR POPULATION ANNEE 2023, MEDIANE RATIO DETTES DEPENSE
+budget AS (
     SELECT
-        (primes_assurances_2024 - primes_assurances_2020)
-        / NULLIF(primes_assurances_2020, 0)
-        * 100 AS evolution_prime_assurance
+        MEDIAN(depenses_per_pop) AS depenses_per_pop,
 
-    FROM primes
+        MEDIAN(ratio_dettes_depenses) AS ratio_dettes_depenses
+
+
+    FROM {{ ref('budget_last') }}
 ),
 
--- PART PRIME BUDGET 2024
 
-prime_budget AS (
+-- MEDIANE MULTIPLE FRANCHISE
+multi_franchise AS (
     SELECT
-        SUM(CASE
-            WHEN annee = 2024
-                THEN depenses
-            ELSE 0
-        END) AS depenses_2024
+        MEDIAN(multiple_franchise_last) AS multiple_franchise
 
-    FROM {{ ref('indicateurs_budget') }}
+    FROM {{ ref('ccr_totals') }}   
 ),
 
--- DEPENSES PAR POPULATION ANNEE 2023
+-- MEDIANE PART ARRETES NON RECONNUS; INDICE VULNERABILITE NIVEAU; CALCUL PART COMMUNES VULNERABLES; MEDIANE DES SCORES ECONOMIQUE, EXPOSITION ET ASSURANCE
 
-dep_pop AS (
+commune AS (
     SELECT
-        SUM(CASE
-            WHEN annee = 2023
-                THEN
-                    CASE
-                        WHEN NOT ISFINITE(depenses_per_pop) THEN NULL
-                        ELSE depenses_per_pop
-                    END
-            ELSE 0
-        END) AS depenses_per_pop
+        MEDIAN(part_arretes_non_reco) AS part_arretes_non_reconnus,
 
-    FROM {{ ref('indicateurs_budget') }}
-),
+        MEDIAN(indice_vulnerabilite_niveau) AS indice_vulnerabilite_niveau,
 
--- RATIO DETTES DEPENSE
+        COUNT(*) FILTER (
+            WHERE indice_vulnerabilite_niveau >= 2
+        ) * 1.0 / COUNT(*) AS part_communes_vulnerables,
 
-ratio_dette_dep AS (
-    SELECT
-        SUM(CASE
-            WHEN annee = 2024
-                THEN dettes
-            ELSE 0
-        END) AS dettes_2024
+        MEDIAN(score_economique) AS score_economique,
 
-    FROM {{ ref('indicateurs_budget') }}
+        MEDIAN(score_exposition) AS score_exposition,
+
+        MEDIAN(score_assurance) AS score_assurance
+
+    FROM {{ ref('indice_par_commune') }}
 )
 
--- CODE COLONNES RANDOM
 
 SELECT
 
-    CAST(RANDOM() AS DECIMAL(3, 2)) AS score_economique_moy,
-    CAST(RANDOM() AS DECIMAL(3, 2)) AS score_georisque_moy,
-    CAST(RANDOM() AS DECIMAL(3, 2)) AS score_assurance_moy,
-    CAST(RANDOM() AS DECIMAL(3, 2)) AS indice_vulnerabilite_moy,
-    CAST(RANDOM() AS INT) AS indice_vulnerabilite_niveau,
-    CAST(RANDOM() AS DECIMAL(3, 2)) AS part_communes_vulnerables,
-
+    CAST(c.score_economique AS DECIMAL(3, 2)) AS score_economique,
+    CAST(c.score_exposition AS DECIMAL(3, 2)) AS score_exposition,
+    CAST(c.score_assurance AS DECIMAL(3, 2)) AS score_assurance,
+    CAST(c.indice_vulnerabilite_niveau AS INT) AS indice_vulnerabilite_niveau,
+    CAST(c.part_communes_vulnerables AS DECIMAL(10, 2)) AS part_communes_vulnerables,
+    CAST(c.part_arretes_non_reconnus AS DECIMAL (10, 2)) AS part_arretes_non_reconnus,
+    CAST(m.multiple_franchise AS DECIMAL (10, 2)) AS multiple_franchise,
     CAST(p.primes_assurances_2024 AS DECIMAL(15, 2)) AS primes_assurances_2024,
     CAST(p.primes_assurances_2020 AS DECIMAL(15, 2)) AS primes_assurances_2020,
     CAST(i.impots_locaux_2024 AS DECIMAL(15, 2)) AS impots_locaux_2024,
     CAST(i.impots_locaux_2020 AS DECIMAL(15, 2)) AS impots_locaux_2020,
-    CAST(e.evolution_prime_assurance AS DECIMAL(10, 2)) AS evolution_prime_assurance,
-    CAST(
-        p.primes_assurances_2024
-        / NULLIF(b.depenses_2024, 0) * 100
-        AS DECIMAL(10, 2)
-    ) AS part_prime_budget,
-    CAST(
-        CASE
-            WHEN NOT ISFINITE(d.depenses_per_pop) THEN NULL
-            ELSE d.depenses_per_pop
-        END AS DECIMAL(10, 2)
-    ) AS depenses_per_pop,
-    CAST(r.dettes_2024 / NULLIF(b.depenses_2024, 0) AS DECIMAL(10, 5)) AS ratio_dettes_depenses
+    CAST(p.evolution_prime_assurance AS DECIMAL(10, 2)) AS evolution_prime_assurance,
+    CAST(p.part_prime_budget_2024 AS DECIMAL(10, 2)) AS part_prime_budget,
+    CAST(b.depenses_per_pop AS DECIMAL(10, 2)) AS depenses_per_pop,
+    CAST(b.ratio_dettes_depenses AS DECIMAL(10, 5)) AS ratio_dettes_depenses
 
 FROM primes AS p
 CROSS JOIN impots AS i
-CROSS JOIN evol_prime AS e
-CROSS JOIN prime_budget AS b
-CROSS JOIN dep_pop AS d
-CROSS JOIN ratio_dette_dep AS r
+CROSS JOIN budget AS b
+CROSS JOIN multi_franchise AS m
+CROSS JOIN commune AS c
