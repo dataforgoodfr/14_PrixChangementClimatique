@@ -29,20 +29,20 @@ budget AS (
 
         MEDIAN(ratio_dettes_depenses) AS ratio_dettes_depenses
 
-
     FROM {{ ref('budget_last') }}
 ),
 
-
 -- MEDIANE MULTIPLE FRANCHISE
 multi_franchise AS (
-    SELECT
-        MEDIAN(multiple_franchise_last) AS multiple_franchise
+    SELECT MEDIAN(multiple_franchise_last) AS multiple_franchise
 
-    FROM {{ ref('ccr_totals') }}   
+    FROM {{ ref('ccr_totals') }}
 ),
 
--- MEDIANE PART ARRETES NON RECONNUS; INDICE VULNERABILITE NIVEAU; CALCUL PART COMMUNES VULNERABLES; MEDIANE DES SCORES ECONOMIQUE, EXPOSITION ET ASSURANCE
+-- MEDIANE PART ARRETES NON RECONNUS
+-- INDICE VULNERABILITE NIVEAU
+-- CALCUL PART COMMUNES VULNERABLES
+-- MEDIANE DES SCORES ECONOMIQUE, EXPOSITION ET ASSURANCE
 
 commune AS (
     SELECT
@@ -63,7 +63,6 @@ commune AS (
     FROM {{ ref('indice_par_commune') }}
 )
 
-
 SELECT
 
     CAST(c.score_economique AS DECIMAL(3, 2)) AS score_economique,
@@ -71,8 +70,8 @@ SELECT
     CAST(c.score_assurance AS DECIMAL(3, 2)) AS score_assurance,
     CAST(c.indice_vulnerabilite_niveau AS INT) AS indice_vulnerabilite_niveau,
     CAST(c.part_communes_vulnerables AS DECIMAL(10, 2)) AS part_communes_vulnerables,
-    CAST(c.part_arretes_non_reconnus AS DECIMAL (10, 2)) AS part_arretes_non_reconnus,
-    CAST(m.multiple_franchise AS DECIMAL (10, 2)) AS multiple_franchise,
+    CAST(c.part_arretes_non_reconnus AS DECIMAL(10, 2)) AS part_arretes_non_reconnus,
+    CAST(m.multiple_franchise AS DECIMAL(10, 2)) AS multiple_franchise,
     CAST(p.primes_assurances_2024 AS DECIMAL(15, 2)) AS primes_assurances_2024,
     CAST(p.primes_assurances_2020 AS DECIMAL(15, 2)) AS primes_assurances_2020,
     CAST(i.impots_locaux_2024 AS DECIMAL(15, 2)) AS impots_locaux_2024,
