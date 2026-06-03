@@ -96,16 +96,85 @@ SELECT
     ROUND(p.part_prime_budget_2020, 2) AS part_prime_budget_2020,
 
     -- Rang de la commune pour texte explicatif
-    ROUND(PERCENT_RANK() OVER (ORDER BY p.part_prime_budget_2024 DESC) * 100)
-        AS rank_part_prime_budget,
-    ROUND(PERCENT_RANK() OVER (ORDER BY p.evolution_prime_assurance DESC) * 100)
-        AS rank_evolution_prime,
-    ROUND(PERCENT_RANK() OVER (ORDER BY t.part_arretes_non_reconnus DESC) * 100)
-        AS rank_part_arretes_non_reconnus,
-    ROUND(PERCENT_RANK() OVER (ORDER BY b.ratio_dettes_depenses ASC) * 100)
-        AS rank_ratio_dettes_depenses,
-    ROUND(PERCENT_RANK() OVER (ORDER BY b.depenses_per_pop ASC) * 100)
-        AS rank_depenses_per_pop
+    CASE
+        WHEN p.part_prime_budget_2024 IS NULL THEN NULL
+        ELSE ROUND(
+            (
+                RANK() OVER (
+                    ORDER BY p.part_prime_budget_2024 DESC
+                ) - 1
+            ) * 100.0
+            /
+            NULLIF(
+                COUNT(p.part_prime_budget_2024) OVER () - 1,
+                0
+            )
+        )
+    END AS rank_part_prime_budget,
+
+    CASE
+        WHEN p.evolution_prime_assurance IS NULL THEN NULL
+        ELSE ROUND(
+            (
+                RANK() OVER (
+                    ORDER BY p.evolution_prime_assurance DESC
+                ) - 1
+            ) * 100.0
+            /
+            NULLIF(
+                COUNT(p.evolution_prime_assurance) OVER () - 1,
+                0
+            )
+        )
+    END AS rank_evolution_prime,
+
+    CASE
+        WHEN t.part_arretes_non_reconnus IS NULL THEN NULL
+        ELSE ROUND(
+            (
+                RANK() OVER (
+                    ORDER BY t.part_arretes_non_reconnus DESC
+                ) - 1
+            ) * 100.0
+            /
+            NULLIF(
+                COUNT(t.part_arretes_non_reconnus) OVER () - 1,
+                0
+            )
+        )
+    END AS rank_part_arretes_non_reconnus,
+
+    CASE
+        WHEN b.ratio_dettes_depenses IS NULL THEN NULL
+        ELSE ROUND(
+            (
+                RANK() OVER (
+                    ORDER BY b.ratio_dettes_depenses ASC
+                ) - 1
+            ) * 100.0
+            /
+            NULLIF(
+                COUNT(b.ratio_dettes_depenses) OVER () - 1,
+                0
+            )
+        )
+    END AS rank_ratio_dettes_depenses,
+
+    CASE
+        WHEN b.depenses_per_pop IS NULL THEN NULL
+        ELSE ROUND(
+            (
+                RANK() OVER (
+                    ORDER BY b.depenses_per_pop ASC
+                ) - 1
+            ) * 100.0
+            /
+            NULLIF(
+                COUNT(b.depenses_per_pop) OVER () - 1,
+                0
+            )
+        )
+    END AS rank_depenses_per_pop
 
 FROM {{ ref('opendatasoft_communes') }} AS c
 
