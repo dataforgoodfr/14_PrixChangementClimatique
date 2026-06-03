@@ -323,10 +323,13 @@ scores_bruts AS (
     CROSS JOIN pct_swi_x_rga AS px
 ),
 
+-- ── Normalisation min-max des scores bruts sur leur périmètre de calibration ─
+
 minmax_sec AS (
     SELECT
+        min(score_secheresse_brut) AS min_val,
+        max(score_secheresse_brut) AS max_val
 
-    -- ── Normalisation min-max des scores bruts sur leur périmètre de calibration ─
     FROM scores_bruts
     WHERE
         code_geo NOT LIKE '97%'
