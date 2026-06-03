@@ -1,3 +1,22 @@
+/*
+prime.sql
+
+Construit un historique des primes d’assurance par commune et calcule
+des indicateurs de tension assurantielle entre 2020 et 2024 utilisés
+pour le calcul sur score assurance et les affichés sur le site.
+
+Le modèle pivote les données annuelles puis les combine avec les données
+budgétaires pour mesurer le poids des primes dans les finances locales.
+
+Sources :
+    - Silver :primes_par_communes
+    - Gold : budget_last
+
+Granularité :
+     - 1 ligne par code_geo
+
+*/
+
 WITH primes_pivot AS (
     SELECT
         p.code_geo,

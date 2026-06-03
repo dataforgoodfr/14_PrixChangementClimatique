@@ -1,12 +1,39 @@
 -- score_assurance.sql
--- Reproduit fidèlement le calcul Marimo :
---   - indice_prime               = log1p(clip(x, -1)) / log1p(1.5), clip(0,1)
---   - prime_budget_indice        = clip_minmax(part_prime_budget, p1, p99)
---   - part_arretes_non_reco      = ratio non reconnus ∈ [0,1] (1 si aucun arrêté)
---   - franchise_indice           = multiple_franchise_last / 5
 --
---   score_assurance_raw = sqrt(0.5·prime² + 0.2·budget² + 0.2·arretes_nr² + 0.1·franchise²)
---   score_assurance     = score_assurance_raw / max(score_assurance_raw)   [Marimo : /max]
+-- Calcule le score de vulnérabilité assurantielle de chaque commune sur [0, 1].
+-- Un score élevé indique une commune dont les habitants subissent des conditions
+-- d'assurance dégradées : primes en forte hausse, budget contraint, arrêtés non
+-- reconnus, ou franchises majorées.
+--
+-- ── Composantes du score ─────────────────────────────────────────────────────
+--
+-- 1. indice_prime (poids 0.5)
+--    Mesure la hausse de la prime d'assurance MRH entre la première et la
+--    dernière année disponible. La normalisation est logarithmique pour
+--    compresser les très fortes hausses :
+--      indice = clip(ln(1 + evolution) / ln(1 + 1.5), 0, 1)
+--    Une baisse de 100% ou plus (evolution ≤ -1) donne un indice de 0.
+--    Une hausse de 150% ou plus donne un indice de 1.
+--
+-- 2. prime_budget_indice (poids 0.2)
+--    Part de la prime dans le budget des ménages, normalisée par écrêtage
+--    inter-percentile [p1, p99] pour neutraliser les valeurs aberrantes.
+--
+-- 3. part_arretes_non_reco (poids 0.2)
+--    Part des arrêtés de catastrophe naturelle déposés mais non reconnus par
+--    l'État, sur le total des arrêtés. Vaut 1 si la commune n'a déposé aucun
+--    arrêté (absence d'historique = incertitude maximale).
+--
+-- 4. franchise_indice (poids 0.1)
+--    Multiple de franchise appliqué lors du dernier sinistre, normalisé sur [0, 1]
+--    par division par 5 (valeur maximale observée).
+--    Une franchise absente (NULL) est traitée comme un multiple de 0.
+--
+-- ── Agrégation et normalisation ──────────────────────────────────────────────
+--    score_raw = sqrt(0.5·prime² + 0.2·budget² + 0.2·arretes_nr² + 0.1·franchise²)
+--    score_assurance = score_raw / max(score_raw)
+--    → ramène le score dans [0, 1] en fixant à 1 la commune la plus exposée.
+--    Les communes sans données de prime ou de budget ont un score NULL.
 
 WITH source AS (
     SELECT
@@ -21,7 +48,7 @@ WITH source AS (
     LEFT JOIN {{ ref('prime') }} AS p ON c.code_geo = p.code_geo
 ),
 
--- ── Percentiles pour clip_minmax(part_prime_budget, p1, p99) ────────────────
+-- ── Bornes de normalisation de la part prime/budget ─────────────────────────
 percentiles AS (
     SELECT
         percentile_cont(0.01) WITHIN GROUP (ORDER BY part_prime_budget) AS p_01_ppb,
@@ -34,7 +61,8 @@ prep AS (
     SELECT
         s.code_geo,
 
-        -- part_arretes_non_reconnus
+        -- Part des arrêtés non reconnus ∈ [0, 1]
+        -- 1 si aucun arrêté déposé (absence d'historique = incertitude maximale)
         CASE
             WHEN coalesce(s.nb_total_arretes, 0) = 0 THEN 1.0
             ELSE least(1.0, greatest(
@@ -44,8 +72,9 @@ prep AS (
             ))
         END AS part_arretes_non_reco,
 
-        -- indice_prime : x <= -1 → 0 (log1p(-1) = -inf → clip → 0 en Python)
-        -- NULL si pas de donnée prime (pas de fillna dans le Marimo)
+        -- Indice prime : normalisation log de l'évolution de la prime
+        -- Une évolution ≤ -1 (baisse totale) donne 0 ; ≥ +150% donne 1
+        -- NULL si aucune donnée de prime disponible
         CASE
             WHEN s.evolution_prime_assurance IS NULL THEN NULL
             WHEN s.evolution_prime_assurance <= -1.0 THEN 0.0
@@ -56,7 +85,8 @@ prep AS (
             ))
         END AS indice_prime,
 
-        -- prime_budget_indice : clip_minmax(p1, p99)
+        -- Indice part prime/budget : écrêtage inter-percentile [p1, p99]
+        -- NULL si aucune donnée disponible
         CASE
             WHEN s.part_prime_budget IS NULL THEN NULL
             WHEN p.p_99_ppb = p.p_01_ppb THEN 0
@@ -70,7 +100,8 @@ prep AS (
             ))
         END AS prime_budget_indice,
 
-        -- franchise_indice : multiple / 5
+        -- Indice franchise : multiple / 5
+        -- NULL traité comme 0 (absence de franchise majorée)
         coalesce(s.multiple_franchise_last, 0.0) / 5.0 AS franchise_indice
 
     FROM source AS s
@@ -89,7 +120,7 @@ scores_bruts AS (
     FROM prep
 ),
 
--- ── Rescaling /max (Marimo : score / score.max()) ────────────────────────────
+-- ── Normalisation par le maximum ─────────────────────────────────────────────
 max_params AS (
     SELECT max(score_assurance_raw) AS max_val
     FROM scores_bruts

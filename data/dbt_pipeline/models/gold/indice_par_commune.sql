@@ -1,9 +1,67 @@
--- indice_par_commune.sql
--- Score final :
---   indice_vulnerabilite_brut = sqrt(0.1·eco² + 0.4·assurance² + 0.5·exposition²)
---   indice_vulnerabilite = indice_vulnerabilite_brut / max(indice_vulnerabilite_brut)
---   [Marimo : clip_minmax(q=0,1) = /max car min≈0]
---   indice sur 5 = floor(indice * 5).clip(0,4) + 1   [1-indexé]
+/*
+indice_par_commune.sql
+
+Calcule l'indice de vulnérabilité par commune, par un score sur [0, 1],
+puis le projette sur une échelle [0, 5] avec une décimale (indice_vulnerabilite_niveau).
+
+───────────────────────────────────────────────────────────────────────────────
+Dimensions et pondérations
+
+score_exposition (poids 0,5)
+    Exposition aux aléas climatiques :
+    sécheresse, inondation, autres aléas, après réduction PPRN
+    → voir score_exposition.sql
+
+score_assurance (poids 0,4)
+    Conditions assurantielles dégradées :
+    évolution des primes, part dans le budget, arrêtés non reconnus, franchise
+    → voir score_assurance.sql
+
+score_economique (poids 0,1)
+    Capacité financière de la commune :
+    endettement et niveau de dépenses par habitant
+    → voir score_economique.sql
+
+───────────────────────────────────────────────────────────────────────────────
+Agrégation
+
+indice_vulnerabilite_brut =
+    sqrt(
+        0.5 * exposition² +
+        0.4 * assurance² +
+        0.1 * economique²
+    )
+
+L’agrégation quadratique (norme L2 pondérée) accentue les situations où
+plusieurs vulnérabilités coexistent, par rapport à une moyenne simple.
+
+───────────────────────────────────────────────────────────────────────────────
+Normalisation finale
+
+indice_vulnerabilite =
+    (indice_vulnerabilite_brut - min) / (max - min)
+    → normalisation min-max sur l’ensemble des communes
+    → résultat dans [0, 1]
+
+indice_vulnerabilite_niveau =
+    round(indice_vulnerabilite * 5, 1)
+    → projection sur une échelle lisible [0, 5]
+
+───────────────────────────────────────────────────────────────────────────────
+
+Sources :
+    - Bronze :
+        - opendatasoft_communes
+    - Gold :
+        - score_exposition
+        - score_assurance
+        - score_economique
+
+Granularité :
+    - une ligne par commune (code_geo)
+
+*/
+
 
 WITH combined AS (
     SELECT
@@ -36,7 +94,7 @@ scores_bruts AS (
     FROM combined
 ),
 
--- ── MinMaxScaler final (Marimo : clip_minmax(q_low=0, q_high=1) = min-max standard) ──
+-- ── Normalisation min-max ─────────────────────────────────────────────────────
 minmax_final AS (
     SELECT
         min(indice_vulnerabilite_brut) AS min_val,

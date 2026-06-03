@@ -1,9 +1,99 @@
--- score_exposition.sql
--- Fidèle au Marimo :
---   clip_minmax(s, q_low, q_high) = (clip(s, p_low, p_high) - p_low) / (p_high - p_low)
---   avec q_low=0 → p_low = min(s)  [= 0 pour les variables coalesce'd à 0, sauf swi_x_rga]
---   score_secheresse : MinMaxScaler fitté sur métropole (hors 97*, 98*)
---   score_inondation : MinMaxScaler fitté sur hors 98*
+/*
+    score_exposition.sql
+
+    Calcule le score d'exposition climatique de chaque commune sur [0, 1].
+
+    Le score combine les expositions à la sécheresse, aux inondations
+    et à d'autres aléas climatiques.
+
+    Normalisation des variables brutes pour limiter l'influence des valeurs
+    extrêmes :
+        indice = (clip(x, p0, p99) - p0) / (p99 - p0)
+
+    où :
+        - p0 correspond au minimum observé ;
+        - p99 correspond au 99e percentile.
+
+
+    Périmètres de calibration :
+
+        - Sécheresse : métropole uniquement (hors codes 97* et 98*)
+        - Inondation : France entière hors codes 98*
+        - Autres aléas : France entière
+
+    Score sécheresse :
+
+        Composantes :
+            - swi_indice : indice d'humidité des sols (SWI)
+            - rga_indice : exposition au retrait-gonflement des argiles
+            - swi_x_rga_indice : interaction entre sécheresse et sols argileux
+            - arr_sec_indice : historique des arrêtés sécheresse
+
+        score_sec_raw =
+            sqrt(
+                0.5 * swi_x_rga² +
+                0.5 * arr_sec²
+            )
+
+        Le score est ensuite normalisé sur la métropole afin d'obtenir
+        score_secheresse ∈ [0, 1].
+
+    Score inondation :
+
+        Composantes :
+            - tri_indice : présence dans un TRI
+            - rr50_indice : intensité des précipitations extrêmes
+            - arr_ino_indice : historique des arrêtés inondation
+
+        score_ino_raw =
+            sqrt(
+                0.2 * tri² +
+                0.3 * rr50² +
+                0.5 * arr_ino²
+            )
+
+        Le score est ensuite normalisé sur la France hors codes 98*
+        afin d'obtenir score_inondation ∈ [0, 1].
+
+    Réduction liée aux PPRN :
+
+        Les communes couvertes par un Plan de Prévention des Risques
+        Naturels approuvé bénéficient d'une réduction du score :
+
+            - PPRN approuvé depuis moins de 10 ans :
+                réduction = 0.2 * pprn
+
+            - PPRN approuvé depuis plus de 10 ans :
+                réduction = 0.1 * pprn
+
+        Le score corrigé est borné à 0.
+        Un PPRN NULL est traité comme absent.
+
+    Agrégation finale :
+
+        score_agrege =
+            sqrt(
+                0.4 * score_secheresse² +
+                0.4 * score_inondation² +
+                0.2 * score_autres_aleas²
+            )
+
+        Si score_secheresse est NULL :
+
+            score_agrege =
+                sqrt(
+                    0.8 * score_inondation² +
+                    0.2 * score_autres_aleas²
+                )
+
+        score_principal =
+            max(score_secheresse, score_inondation)
+
+        score_exposition =
+            max(score_agrege, score_principal)
+
+*/
+
 
 WITH source AS (
     SELECT
@@ -26,9 +116,7 @@ WITH source AS (
     LEFT JOIN {{ ref('indicateurs_tri_rga_bats_par_com') }} AS i ON c.code_geo = i.code_geo
 ),
 
--- ── Étape 1 : percentiles des variables brutes (métropole) ───────────────────
--- q_low=0 → p0 = min = 0 car toutes ces variables sont coalesce'd à 0
--- q_high=0.99 → p99
+-- ── Bornes de normalisation — sécheresse (métropole) ────────────────────────
 pct_sec_bruts AS (
     SELECT
         percentile_cont(0.0) WITHIN GROUP (ORDER BY swi_04_d_abs) AS p_0_swi,
@@ -43,8 +131,7 @@ pct_sec_bruts AS (
         AND code_geo NOT LIKE '98%'
 ),
 
--- ── Étape 2 : calcul des indices swi et rga sur métropole ────────────────────
--- clip_minmax(x, 0, 0.99) avec p0=0 → x / p99  (clippé dans [0,1])
+-- ── Indices swi et rga sur métropole — nécessaires pour borner leur produit ──
 indices_sec_metro AS (
     SELECT
         CASE
@@ -72,8 +159,9 @@ indices_sec_metro AS (
         AND s.code_geo NOT LIKE '98%'
 ),
 
--- ── Étape 3 : p0 et p99 du produit swi×rga sur métropole ────────────────────
--- Le produit peut avoir un min > 0, donc p0 = min(produit) ≠ 0
+-- ── Bornes de normalisation du produit swi×rga (métropole) ──────────────────
+-- Le produit de deux indices normalisés peut avoir un minimum > 0,
+-- d'où le calcul explicite de p0 sur la distribution du produit.
 pct_swi_x_rga AS (
     SELECT
         percentile_cont(0.0) WITHIN GROUP (ORDER BY swi_indice * rga_indice) AS p_0,
@@ -81,7 +169,7 @@ pct_swi_x_rga AS (
     FROM indices_sec_metro
 ),
 
--- ── Percentiles inondation : fitté sur tout sauf 98* ────────────────────────
+-- ── Bornes de normalisation — inondation (France hors 98*) ──────────────────
 pct_ino AS (
     SELECT
         percentile_cont(0.0) WITHIN GROUP (ORDER BY rr_50_d_abs) AS p_0_rr_50,
@@ -94,7 +182,8 @@ pct_ino AS (
     WHERE code_geo NOT LIKE '98%'
 ),
 
--- ── Percentiles autres : France entière ─────────────────────────────────────
+-- ── Bornes de normalisation — autres aléas (France entière) ─────────────────
+-- Percentile 99.9 pour lisser les communes avec un très grand nombre d'arrêtés.
 pct_autre AS (
     SELECT
         percentile_cont(0.0) WITHIN GROUP (ORDER BY nb_total_arretes_autre) AS p_0_autre,
@@ -102,12 +191,12 @@ pct_autre AS (
     FROM source
 ),
 
--- ── Étape 4 : indices de chaque variable (toutes communes) ──────────────────
+-- ── Normalisation de chaque variable brute sur [0, 1] ───────────────────────
 clipped AS (
     SELECT
         s.*,
 
-        -- sécheresse : clip_minmax(x, 0, p99) = x/p99  car min=0
+        -- indice SWI (sécherese des sols)
         CASE
             WHEN ps.p_99_swi = ps.p_0_swi THEN 0
             ELSE
@@ -118,6 +207,7 @@ clipped AS (
                 ))
         END AS swi_indice,
 
+        -- indice RGA
         CASE
             WHEN ps.p_99_rga = ps.p_0_rga THEN 0
             ELSE
@@ -128,6 +218,7 @@ clipped AS (
                 ))
         END AS rga_indice,
 
+        -- indice arrêtés sécheresse
         CASE
             WHEN ps.p_99_arr_sec = ps.p_0_arr_sec THEN 0
             ELSE
@@ -138,7 +229,7 @@ clipped AS (
                 ))
         END AS arr_sec_indice,
 
-        -- inondation
+        -- indice RR 50 (pluie)
         CASE
             WHEN pi.p_99_rr_50 = pi.p_0_rr_50 THEN 0
             ELSE
@@ -149,6 +240,7 @@ clipped AS (
                 ))
         END AS rr_50_indice,
 
+        -- indice TRI
         CASE
             WHEN pi.p_99_tri = pi.p_0_tri THEN 0
             ELSE
@@ -159,6 +251,7 @@ clipped AS (
                 ))
         END AS tri_indice,
 
+        -- indice arrêtés inondation
         CASE
             WHEN pi.p_99_arr_ino = pi.p_0_arr_ino THEN 0
             ELSE
@@ -169,7 +262,7 @@ clipped AS (
                 ))
         END AS arr_ino_indice,
 
-        -- autres risques naturels
+        -- indice autres risques naturels
         CASE
             WHEN pa.p_999_autre = pa.p_0_autre THEN 0
             ELSE
@@ -186,13 +279,13 @@ clipped AS (
     CROSS JOIN pct_autre AS pa
 ),
 
--- ── Étape 5 : swi_x_rga_indice = clip_minmax(swi×rga, p0, p99) ─────────────
--- p0 = min du produit sur métropole (peut être > 0)
+-- ── Scores bruts avant normalisation finale ──────────────────────────────────
 scores_bruts AS (
     SELECT
         c.*,
 
-        -- swi_x_rga_indice
+        -- Interaction sécheresse : produit swi×rga re-normalisé
+        -- capture les communes cumulant aridité et sols argileux
         CASE
             WHEN px.p_99 = px.p_0 THEN 0
             ELSE
@@ -230,18 +323,16 @@ scores_bruts AS (
     CROSS JOIN pct_swi_x_rga AS px
 ),
 
--- ── MinMaxScaler sécheresse fitté sur métropole ──────────────────────────────
 minmax_sec AS (
     SELECT
-        min(score_secheresse_brut) AS min_val,
-        max(score_secheresse_brut) AS max_val
+
+    -- ── Normalisation min-max des scores bruts sur leur périmètre de calibration ─
     FROM scores_bruts
     WHERE
         code_geo NOT LIKE '97%'
         AND code_geo NOT LIKE '98%'
 ),
 
--- ── MinMaxScaler inondation fitté sur hors 98* ───────────────────────────────
 minmax_ino AS (
     SELECT
         min(score_inondation_brut) AS min_val,

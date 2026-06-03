@@ -1,9 +1,39 @@
--- resultats_par_commune.sql
--- Gold layer: Résultats enrichis par commune avec KPI
--- Source: Bronze layer communes +  KPI gold + scores gold
--- Description: Contient les données communes nécessaires pour le site web
+/*
+resultats_website_par_commune.sql
+
+Table d’exposition (Serving layer) construite pour alimenter le site web.
+
+Elle regroupe, par commune, l’ensemble des données calculées et des données
+sources que l'on souhaite afficher
+
+───────────────────────────────────────────────────────────────────────────────
+Sources :
+
+    - Bronze :
+        - opendatasoft_communes
+
+    - Silver :
+        - scenario_2050
+        - indicateurs_tri_rga_bats_par_com
+        - population_par_com_annee
+
+    - Gold :
+        - budget_last
+        - Golccr_totals
+        - prime
+        - pprn
+        - indice_par_commune
+        - kpi_impots
+
+
+Granularité :
+    - 1 ligne par commune (code INSEE)
+
+*/
 
 SELECT
+
+    -- Dimensions géographiques (source : opendatasoft_communes)
     c.code_geo AS code_insee,
     c.nom_departement AS departement,
     c.nom_region AS region,
@@ -12,8 +42,9 @@ SELECT
     c.code_region,
     c.geometry,
     c.nom_commune,
+    pop.population,
 
-    -- KPI récupérés depuis la table indice_par_commune
+    -- Scores synthétiques (Gold KPI)
     i.score_economique,
     i.score_exposition,
     i.score_assurance,
@@ -21,44 +52,44 @@ SELECT
     i.score_inondation,
     i.indice_vulnerabilite_niveau,
 
+    -- Indicateurs climatiques et scénarios
     r.swi_04_d_abs,
     r.rr_50_d_abs,
-
     r.pxcwd_abs,
     r.tx_35_d_abs,
+
+    -- Indicateurs arrêtés
     t.nb_total_arretes_recon,
     t.nb_total_arretes,
-
     t.nb_total_arretes_ino,
     t.nb_total_arretes_sec,
-
     t.nb_total_arretes_autre,
-    t.multiple_franchise_last,
     pr.date_approbation_rga,
-    pr.date_approbation_ino,
-    pop.population,
-    i_loc.impots_locaux,
-    ROUND(tr.indicateur_tri, 2) AS indicateur_tri,
 
-    ROUND(tr.indicateur_rga, 2) AS indicateur_rga,
-    ROUND(b.ratio_dettes_depenses * -100, 1) AS taux_endettement,
-    ROUND(b.depenses_per_pop, 0) AS depenses_per_pop,
+    -- Indicateurs de risques naturels
+    pr.date_approbation_ino,
+    i_loc.impots_locaux,
+    t.multiple_franchise_last,
     ROUND(t.part_arretes_non_reconnus, 2) AS part_arretes_non_reconnus,
+    ROUND(tr.indicateur_tri, 2) AS indicateur_tri,
+    ROUND(tr.indicateur_rga, 2) AS indicateur_rga,
+
+    -- Indicateurs économiques
+    pr.pprn_rga IS TRUE AS pprn_rga,
+    pr.pprn_ino IS TRUE AS pprn_ino,
+    ROUND(i_loc.impots_locaux_evolution, 2) AS impots_locaux_evolution,
+    ROUND(i_loc.part_impots_locaux, 3) AS part_impots_locaux,
+    ROUND(b.ratio_dettes_depenses * -100, 1) AS taux_endettement,
+
+    -- Indicateurs assurantiels
+    ROUND(b.depenses_per_pop, 0) AS depenses_per_pop,
     ROUND(p.prime_assurance_2024, 2) AS prime_assurance_2024,
     ROUND(p.prime_assurance_2023, 2) AS prime_assurance_2023,
     ROUND(p.prime_assurance_2022, 2) AS prime_assurance_2022,
-
     ROUND(p.prime_assurance_2021, 2) AS prime_assurance_2021,
     ROUND(p.prime_assurance_2020, 2) AS prime_assurance_2020,
-
-    ROUND(p.part_prime_budget, 2) AS part_prime_budget,
-
     ROUND(p.evolution_prime_assurance, 2) AS evolution_prime_assurance,
-    ROUND(i_loc.impots_locaux_evolution, 2) AS impots_locaux_evolution,
-    ROUND(i_loc.part_impots_locaux, 3) AS part_impots_locaux,
-
-    pr.pprn_rga IS TRUE AS pprn_rga,
-    pr.pprn_ino IS TRUE AS pprn_ino
+    ROUND(p.part_prime_budget, 2) AS part_prime_budget
 
 FROM {{ ref('opendatasoft_communes') }} AS c
 

@@ -1,3 +1,16 @@
+/*
+    kpi_impots.sql
+
+    Calcule les indicateurs financiers relatifs aux impôts locaux affichés
+    sur le site.
+
+    Source :
+        - Bronze : donnees_financieres_ofgl
+
+    Granularité :
+        - 1 ligne par code_geo
+*/
+
 SELECT
     code_geo,
     SUM(CASE WHEN annee = 2024 AND agregat = 'Impôts locaux' THEN montant ELSE 0 END) AS impots_locaux,

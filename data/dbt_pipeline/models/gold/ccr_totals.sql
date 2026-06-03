@@ -1,3 +1,16 @@
+/*
+    ccr_totals.sql
+
+    Agrège les statistiques d’arrêtés de catastrophe naturelle par commune utiles
+    au calcul des scores assurance et exposition et affichés sur le site.
+
+    Source :
+        - Silver : ccr_stats
+
+    Agrégation :
+        - granularité finale : 1 ligne par code_geo
+*/
+
 SELECT
     code_geo,
     SUM(nb_arrete_recon)::INTEGER AS nb_total_arretes_recon,
