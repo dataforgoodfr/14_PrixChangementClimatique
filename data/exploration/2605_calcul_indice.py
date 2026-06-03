@@ -21,20 +21,20 @@ def _(mo):
 
     ## Plan
 
-    1. [Chargement des données](#chargement)
-    2. [Fonctions utilitaires](#utilitaires)
-    3. [Score d'exposition climatique](#exposition)
+    1. Chargement des données
+    2. Fonctions utilitaires
+    3. Score d'exposition climatique
        - 3a. Score sécheresse
        - 3b. Score inondation
-       - 3c. Agrégation exposition + correction prévention (PPRN)
-    4. [Score assurantiel](#assurance)
-    5. [Score économique](#economique)
-    6. [Indice de vulnérabilité final](#final)
-    7. [Export Parquet](#export)
+       - 3c. Agrégation + correction prévention (PPRN)
+    4. Score assurantiel
+    5. Score économique
+    6. Indice de vulnérabilité final
+    7. Export Parquet
 
     > **Convention de normalisation** : tous les indices intermédiaires sont dans **[0, 1]**.
     > Le score final est agrégé par norme euclidienne pondérée puis normalisé en [0, 1].
-    > Les niveaux discrets (0 → 4) sont obtenus par `floor(score × 5).clip(0, 4)`.
+    > `indice_vulnerabilite_niveau` est un arrondi à 0.1 de `indice_vulnerabilite × 5`.
     """)
     return
 
@@ -50,6 +50,9 @@ def _(mo):
 
     La géométrie est reprojetée en **Lambert-93 (EPSG:2154)** pour les cartes métropolisées,
     puis simplifiée à 100 m pour alléger le rendu.
+
+    Les colonnes d'arrêtés sont nulles pour les communes sans événement recensé : elles sont
+    ramenées à 0 (absence de sinistre = valeur nulle dans la source).
     """)
     return
 
@@ -64,15 +67,116 @@ def _():
     import marimo as mo
     import numpy as np
     from datetime import datetime
+    from sklearn.preprocessing import MinMaxScaler
 
-    return datetime, duckdb, gpd, mo, np, pd, plt, wkt
+    return MinMaxScaler, datetime, duckdb, gpd, mo, np, pd, plt, wkt
 
 
 @app.cell
-def _(duckdb, wkt):
-    PCC_DUCKDB_FILE = "dev.duckdb"
+def _():
+    result_request = """
+
+    SELECT
+
+        -- Dimensions géographiques (source : opendatasoft_communes)
+        c.code_geo AS code_insee,
+        c.nom_departement AS departement,
+        c.nom_region AS region,
+        c.geo_point_2_d,
+        c.code_departement,
+        c.code_region,
+        c.geometry,
+        c.nom_commune,
+        pop.population,
+
+        -- Scores synthétiques (Gold KPI)
+        i.score_economique,
+        i.score_exposition,
+        i.score_assurance,
+        i.score_secheresse,
+        i.score_inondation,
+        i.indice_vulnerabilite_niveau,
+
+        -- Indicateurs climatiques et scénarios
+        r.swi_04_d_abs,
+        r.rr_50_d_abs,
+        r.pxcwd_abs,
+        r.tx_35_d_abs,
+
+        -- Indicateurs arrêtés
+        t.nb_total_arretes_recon,
+        t.nb_total_arretes,
+        t.nb_total_arretes_ino,
+        t.nb_total_arretes_sec,
+        t.nb_total_arretes_autre,
+        pr.date_approbation_rga,
+
+        -- Indicateurs de risques naturels
+        pr.date_approbation_ino,
+        i_loc.impots_locaux,
+        t.multiple_franchise_last,
+        t.part_arretes_non_reconnus,
+        tr.indicateur_tri,
+        tr.indicateur_rga,
+
+        -- Indicateurs économiques
+        pr.pprn_rga IS TRUE AS pprn_rga,
+        pr.pprn_ino IS TRUE AS pprn_ino,
+        i_loc.impots_locaux_evolution,
+        i_loc.part_impots_locaux,
+        b.ratio_dettes_depenses,
+
+        -- Indicateurs assurantiels
+        b.depenses_per_pop,
+        p.prime_assurance_2024,
+        p.prime_assurance_2023,
+        p.prime_assurance_2022,
+        p.prime_assurance_2021,
+        p.prime_assurance_2020,
+        p.evolution_prime_assurance,
+        p.part_prime_budget
+
+    FROM dev.main_bronze.opendatasoft_communes AS c
+
+    LEFT JOIN dev.main_silver.scenario_2050 AS r
+        ON c.code_geo = r.code_geo
+
+    LEFT JOIN dev.main_silver.indicateurs_tri_rga_bats_par_com AS tr
+        ON c.code_geo = tr.code_geo
+
+    LEFT JOIN dev.main_silver.population_par_com_annee AS pop
+        ON
+            c.code_geo = pop.code_geo
+            AND pop.annee_recensement = 2023
+
+    LEFT JOIN dev.main_gold.budget_last AS b
+        ON c.code_geo = b.code_geo
+
+    LEFT JOIN dev.main_gold.ccr_totals AS t
+        ON c.code_geo = t.code_geo
+
+    LEFT JOIN dev.main_gold.prime AS p
+        ON c.code_geo = p.code_geo
+
+    LEFT JOIN dev.main_gold.pprn AS pr
+        ON c.code_geo = pr.code_geo
+
+    LEFT JOIN dev.main_gold.indice_par_commune AS i
+        ON c.code_geo = i.code_geo
+
+    LEFT JOIN dev.main_gold.kpi_impots AS i_loc
+        ON c.code_geo = i_loc.code_geo;
+
+
+    """
+    return (result_request,)
+
+
+@app.cell
+def _(duckdb, result_request, wkt):
+    PCC_DUCKDB_FILE = "..\dbt_pipeline\dev.duckdb"
     con = duckdb.connect(database=PCC_DUCKDB_FILE, read_only=True)
-    resultats_website_par_commune = con.sql("""SELECT * FROM dev.main_serving.resultats_website_par_commune""").df()
+    resultats_website_par_commune = con.sql(result_request).df()
     con.close()
     resultats_website_par_commune["geometry"] = resultats_website_par_commune["geometry"].apply(wkt.loads)
     return (resultats_website_par_commune,)
@@ -89,7 +193,6 @@ def _(gpd, resultats_website_par_commune):
 
 @app.cell
 def _(gdf):
-    # Les colonnes d'arrêtés sont nulles pour les communes sans événement : on les passe à 0.
     gdf[["nb_total_arretes_recon", "nb_total_arretes", "nb_total_arretes_ino",
          "nb_total_arretes_sec", "nb_total_arretes_autre"]] = gdf[[
         "nb_total_arretes_recon", "nb_total_arretes", "nb_total_arretes_ino",
@@ -256,7 +359,13 @@ def _(mo):
     Le score d'exposition agrège deux sous-scores (sécheresse et inondation) et une composante
     « autres aléas », puis applique une **décote de prévention** pour les communes couvertes
     par un PPRN approuvé récemment.
+    """)
+    return
 
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     ### 3a. Score sécheresse
 
     Construit à partir de deux composantes :
@@ -269,28 +378,7 @@ def _(mo):
 
     Formule : `score_secheresse = MinMax( √(0.5 × swi_x_rga² + 0.5 × arretes_sec²) )`
 
-    ### 3b. Score inondation
-
-    Trois composantes :
-
-    - **`rr_50_d_abs_indice`** (30 %) : nombre de jours avec précipitations > 50 mm/j — signal climatique.
-    - **`indicateur_tri_indice`** (20 %) : présence dans un Territoire à Risque Important d'inondation.
-    - **`nb_total_arretes_ino_indice`** (50 %) : arrêtés CatNat inondation, sinistralité historique.
-
-    Formule : `score_inondation = MinMax( √(0.2×tri² + 0.3×rr50² + 0.5×arretes_ino²) )`
-
-    > Le score inondation couvre aussi les DROM (hors COM, code 98).
-
-    ### 3c. Agrégation et correction prévention
-
-    La **décote PPRN** réduit le score brut en fonction de l'existence et de la récence
-    du Plan de Prévention des Risques Naturels :
-    - PPRN approuvé depuis < 10 ans → décote pleine (`poids_prevention`)
-    - PPRN approuvé depuis ≥ 10 ans → décote réduite de moitié
-
-    Le score d'exposition final est le **maximum** entre :
-    - la norme euclidienne pondérée (40 % sec + 40 % ino + 20 % autres)
-    - le maximum des deux scores nets (plancher pour éviter de diluer un risque dominant)
+    > Périmètre : métropole uniquement (codes INSEE hors 97x/98x).
     """)
     return
 
@@ -302,23 +390,20 @@ def _(mo):
         value=['swi_04_d_abs', 'nb_total_arretes_sec', "indicateur_rga"],
         label="Variables score sécheresse"
     )
-    col_selector_inondation = mo.ui.multiselect(
-        options=['pxcwd_abs', 'rr_50_d_abs', 'nb_total_arretes_ino', 'nb_total_arretes_recon', 'indicateur_tri'],
-        value=['rr_50_d_abs', 'nb_total_arretes_ino', "indicateur_tri"],
-        label="Variables score inondation"
-    )
-    poids_prevention = mo.ui.slider(0, 1, step=0.1, value=0.2, label="Poids prévention PPRN")
-    mo.hstack([col_selector_secheresse, col_selector_inondation, poids_prevention])
-    return col_selector_inondation, col_selector_secheresse, poids_prevention
+    return (col_selector_secheresse,)
 
 
 @app.cell
-def _(col_selector_secheresse, gdf, np):
-    from sklearn.preprocessing import MinMaxScaler
+def _(col_selector_secheresse):
+    col_selector_secheresse
+    return
 
-    selected_cols = col_selector_secheresse.value
+
+@app.cell
+def _(MinMaxScaler, col_selector_secheresse, gdf, np):
+    selected_cols_sec = col_selector_secheresse.value
     metropole_datas = gdf[~gdf["code_insee"].str.startswith(("97", "98"))].copy()
-    metropole_datas[selected_cols] = metropole_datas[selected_cols].fillna(0)
+    metropole_datas[selected_cols_sec] = metropole_datas[selected_cols_sec].fillna(0)
 
     # Normalisation individuelle des deux composantes
     metropole_datas['swi_04_d_abs_indice'] = clip_minmax(metropole_datas['swi_04_d_abs'], q_low=0, q_high=0.99)
@@ -330,12 +415,9 @@ def _(col_selector_secheresse, gdf, np):
 
     metropole_datas['nb_total_arretes_sec_indice'] = clip_minmax(metropole_datas['nb_total_arretes_sec'], q_low=0, q_high=0.99)
 
-    w_swi_rga = 0.5
-    w_arretes = 0.5
-
     metropole_datas['score_secheresse_brut'] = np.sqrt(
-        w_swi_rga * metropole_datas['swi_x_rga_indice'] ** 2 +
-        w_arretes * metropole_datas['nb_total_arretes_sec_indice'] ** 2
+        0.5 * metropole_datas['swi_x_rga_indice'] ** 2 +
+        0.5 * metropole_datas['nb_total_arretes_sec_indice'] ** 2
     )
     metropole_datas['score_secheresse'] = MinMaxScaler().fit_transform(
         metropole_datas[['score_secheresse_brut']]
@@ -347,37 +429,88 @@ def _(col_selector_secheresse, gdf, np):
 
 
 @app.cell
-def _(carte_continue, carte_discret, metropole_datas, np, plot_variable):
-    plot_variable(metropole_datas, 'nb_total_arretes_sec', 'nb_total_arretes_sec_indice', 'score_secheresse_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(metropole_datas, 'indicateur_rga', 'indicateur_rga_indice', 'score_secheresse_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(metropole_datas, 'swi_04_d_abs', 'swi_04_d_abs_indice', 'score_secheresse_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    carte_continue(metropole_datas, 'score_secheresse')
-    carte_discret(metropole_datas, 'score_secheresse_int')
+def _(metropole_datas, np, plot_variable):
+    plot_variable(metropole_datas, 'nb_total_arretes_sec', 'nb_total_arretes_sec_indice',
+                  'score_secheresse_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
     return
 
 
 @app.cell
-def _(col_selector_inondation, gdf, np):
-    from sklearn.preprocessing import MinMaxScaler as MMS2
+def _(metropole_datas, np, plot_variable):
+    plot_variable(metropole_datas, 'indicateur_rga', 'indicateur_rga_indice',
+                  'score_secheresse_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
 
-    selected_cols_inondation = col_selector_inondation.value
+
+@app.cell
+def _(metropole_datas, np, plot_variable):
+    plot_variable(metropole_datas, 'swi_04_d_abs', 'swi_04_d_abs_indice',
+                  'score_secheresse_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(carte_continue, metropole_datas):
+    carte_continue(metropole_datas, 'score_secheresse')
+    return
+
+
+@app.cell
+def _(carte_discret, metropole_datas):
+    carte_discret(metropole_datas, 'score_secheresse_int')
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### 3b. Score inondation
+
+    Trois composantes :
+
+    - **`rr_50_d_abs_indice`** (30 %) : nombre de jours avec précipitations > 50 mm/j — signal climatique.
+    - **`indicateur_tri_indice`** (20 %) : présence dans un Territoire à Risque Important d'inondation.
+    - **`nb_total_arretes_ino_indice`** (50 %) : arrêtés CatNat inondation, sinistralité historique.
+
+    Formule : `score_inondation = MinMax( √(0.2×tri² + 0.3×rr50² + 0.5×arretes_ino²) )`
+
+    > Périmètre : France entière hors COM (codes INSEE hors 98x), DROM inclus.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    col_selector_inondation = mo.ui.multiselect(
+        options=['pxcwd_abs', 'rr_50_d_abs', 'nb_total_arretes_ino', 'nb_total_arretes_recon', 'indicateur_tri'],
+        value=['rr_50_d_abs', 'nb_total_arretes_ino', "indicateur_tri"],
+        label="Variables score inondation"
+    )
+    return (col_selector_inondation,)
+
+
+@app.cell
+def _(col_selector_inondation):
+    col_selector_inondation
+    return
+
+
+@app.cell
+def _(MinMaxScaler, col_selector_inondation, gdf, np):
+    selected_cols_ino = col_selector_inondation.value
     datas_inondation = gdf[~gdf["code_insee"].str.startswith(("98"))].copy()
-    datas_inondation[selected_cols_inondation] = datas_inondation[selected_cols_inondation].fillna(0)
+    datas_inondation[selected_cols_ino] = datas_inondation[selected_cols_ino].fillna(0)
 
     datas_inondation['rr_50_d_abs_indice'] = clip_minmax(datas_inondation['rr_50_d_abs'], q_low=0, q_high=0.99)
     datas_inondation['indicateur_tri_indice'] = clip_minmax(datas_inondation['indicateur_tri'], q_low=0, q_high=0.99)
     datas_inondation['nb_total_arretes_ino_indice'] = clip_minmax(datas_inondation['nb_total_arretes_ino'], q_low=0, q_high=0.99)
 
-    w_rr50 = 0.3
-    w_arretes_ino = 0.5
-    w_indicateur_tri = 0.2
-
     datas_inondation['score_inondation_brut'] = np.sqrt(
-        w_indicateur_tri * datas_inondation['indicateur_tri_indice'] ** 2 +
-        w_rr50 * datas_inondation['rr_50_d_abs_indice'] ** 2 +
-        w_arretes_ino * datas_inondation['nb_total_arretes_ino_indice'] ** 2
+        0.2 * datas_inondation['indicateur_tri_indice'] ** 2 +
+        0.3 * datas_inondation['rr_50_d_abs_indice'] ** 2 +
+        0.5 * datas_inondation['nb_total_arretes_ino_indice'] ** 2
     )
-    datas_inondation['score_inondation'] = MMS2().fit_transform(
+    datas_inondation['score_inondation'] = MinMaxScaler().fit_transform(
         datas_inondation[['score_inondation_brut']]
     )
     datas_inondation['score_inondation_int'] = (
@@ -387,12 +520,67 @@ def _(col_selector_inondation, gdf, np):
 
 
 @app.cell
-def _(carte_continue, carte_discret, datas_inondation, np, plot_variable):
-    plot_variable(datas_inondation, 'indicateur_tri', 'indicateur_tri_indice', 'score_inondation_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(datas_inondation, 'rr_50_d_abs', 'rr_50_d_abs_indice', 'score_inondation_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(datas_inondation, 'nb_total_arretes_ino', 'nb_total_arretes_ino_indice', 'score_inondation_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+def _(datas_inondation, np, plot_variable):
+    plot_variable(datas_inondation, 'indicateur_tri', 'indicateur_tri_indice',
+                  'score_inondation_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(datas_inondation, np, plot_variable):
+    plot_variable(datas_inondation, 'rr_50_d_abs', 'rr_50_d_abs_indice',
+                  'score_inondation_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(datas_inondation, np, plot_variable):
+    plot_variable(datas_inondation, 'nb_total_arretes_ino', 'nb_total_arretes_ino_indice',
+                  'score_inondation_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(carte_continue, datas_inondation):
     carte_continue(datas_inondation, 'score_inondation')
+    return
+
+
+@app.cell
+def _(carte_discret, datas_inondation):
     carte_discret(datas_inondation, 'score_inondation_int')
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### 3c. Agrégation et correction prévention (PPRN)
+
+    La **décote PPRN** réduit le score brut en fonction de l'existence et de la récence
+    du Plan de Prévention des Risques Naturels :
+    - PPRN approuvé depuis < 10 ans → décote pleine (`poids_prevention`)
+    - PPRN approuvé depuis ≥ 10 ans → décote réduite de moitié
+
+    Le score d'exposition final est le **maximum** entre :
+    - la norme euclidienne pondérée : `√(0.4×sec² + 0.4×ino² + 0.2×autres²)`
+    - le maximum des deux scores nets (plancher pour ne pas diluer un risque dominant)
+
+    Le fallback inondation seule (`√(0.8×ino² + 0.2×autres²)`) s'applique
+    aux communes hors métropole pour lesquelles le score sécheresse est absent.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    poids_prevention = mo.ui.slider(0, 1, step=0.1, value=0.2, label="Poids prévention PPRN")
+    return (poids_prevention,)
+
+
+@app.cell
+def _(poids_prevention):
+    poids_prevention
     return
 
 
@@ -448,10 +636,8 @@ def _(
         gdf_calc['score_inondation_net']
     )
 
-    gdf_calc['score_global_lp'] = np.maximum(score_agrege, score_principal)
-    gdf_calc['score_exposition'] = gdf_calc['score_global_lp']
+    gdf_calc['score_exposition'] = np.maximum(score_agrege, score_principal)
     gdf_calc['score_exposition_int'] = (gdf_calc['score_exposition'] * 5).clip(0, 4).astype('Int64')
-    gdf_calc['score_exposition_1d'] = (gdf_calc['score_exposition'] * 5).round(1)
     return (gdf_calc,)
 
 
@@ -474,7 +660,7 @@ def _(mo):
     | `evolution_prime_assurance` | `indice_prime` (log) | 50 % | Hausse de prime = signal de renchérissement du risque |
     | `part_prime_budget` | `part_prime_budget_standard` | 20 % | Effort financier relatif des ménages |
     | `part_arretes_non_reconnus` | `part_arretes_non_reconnus_clip` | 20 % | Sinistres non couverts → reste à charge |
-    | `multiple_franchise_last` | `multiple_franchise_last_indice` | 10 % | Franchise × 5 max → sur-exposition aux petits sinistres |
+    | `multiple_franchise_last` | `multiple_franchise_last_indice` | 10 % | Franchise / 5 max → sur-exposition aux petits sinistres |
 
     **Normalisation de la prime** : transformation log pour comprimer les hausses extrêmes,
     bornée à +150 % (`x_max = 1.5`). Une évolution nulle donne un indice de 0 ; +150 % donne 1.
@@ -486,16 +672,31 @@ def _(mo):
 
 
 @app.cell
-def _(gdf_calc, mo, np):
-    poids_prevention_prime_budget = mo.ui.slider(0, 1, step=0.1, value=0.2, label='prime/budget')
-    poids_prevention_evolution_prime = mo.ui.slider(0, 1, step=0.1, value=0.5, label='evolution prime')
-    poids_prevention_franchise = mo.ui.slider(0, 1, step=0.05, value=0.1, label='franchise')
-    mo.hstack([poids_prevention_prime_budget, poids_prevention_evolution_prime, poids_prevention_franchise])
+def _(mo):
+    poids_prime_budget = mo.ui.slider(0, 1, step=0.1, value=0.2, label='prime/budget')
+    poids_evolution_prime = mo.ui.slider(0, 1, step=0.1, value=0.5, label='evolution prime')
+    poids_franchise = mo.ui.slider(0, 1, step=0.05, value=0.1, label='franchise')
+    return poids_evolution_prime, poids_franchise, poids_prime_budget
 
+
+@app.cell
+def _(mo, poids_evolution_prime, poids_franchise, poids_prime_budget):
+    mo.hstack([poids_prime_budget, poids_evolution_prime, poids_franchise])
+    return
+
+
+@app.cell
+def _(gdf_calc, np):
     gdf_calc_assurance = gdf_calc.copy()
-    gdf_calc_assurance['multiple_franchise_last_indice'] = (gdf_calc_assurance['multiple_franchise_last'].fillna(0)) / 5
-    gdf_calc_assurance['part_prime_budget_standard'] = clip_minmax(gdf_calc_assurance['part_prime_budget'], q_low=0.01, q_high=0.99)
-    gdf_calc_assurance['part_arretes_non_reconnus_clip'] = clip_minmax(gdf_calc_assurance['part_arretes_non_reconnus'], q_low=0.0, q_high=1)
+    gdf_calc_assurance['multiple_franchise_last_indice'] = (
+        gdf_calc_assurance['multiple_franchise_last'].fillna(0)
+    ) / 5
+    gdf_calc_assurance['part_prime_budget_standard'] = clip_minmax(
+        gdf_calc_assurance['part_prime_budget'], q_low=0.01, q_high=0.99
+    )
+    gdf_calc_assurance['part_arretes_non_reconnus_clip'] = clip_minmax(
+        gdf_calc_assurance['part_arretes_non_reconnus'], q_low=0.0, q_high=1
+    )
     gdf_calc_assurance['evolution_prime_assurance_clip'] = gdf_calc_assurance['evolution_prime_assurance'].clip(-1)
 
     # Transformation log pour comprimer les hausses extrêmes, bornée à +150 %
@@ -505,29 +706,51 @@ def _(gdf_calc, mo, np):
         (np.log1p(x_max_prime) - np.log1p(x_min_prime))
     ).clip(0, 1)
 
-    ppb_a = 0.2
-    pep_a = 0.5
-    pf_a = 0.1
-    pna_a = 0.2
-
     gdf_calc_assurance['score_assurance'] = np.sqrt(
-        pep_a * gdf_calc_assurance['indice_prime'] ** 2 +
-        ppb_a * gdf_calc_assurance['part_prime_budget_standard'] ** 2 +
-        pna_a * gdf_calc_assurance['part_arretes_non_reconnus_clip'].fillna(1) ** 2 +
-        pf_a * gdf_calc_assurance['multiple_franchise_last_indice'] ** 2
+        0.5 * gdf_calc_assurance['indice_prime'] ** 2 +
+        0.2 * gdf_calc_assurance['part_prime_budget_standard'] ** 2 +
+        0.2 * gdf_calc_assurance['part_arretes_non_reconnus_clip'].fillna(1) ** 2 +
+        0.1 * gdf_calc_assurance['multiple_franchise_last_indice'] ** 2
     )
-    gdf_calc_assurance['score_assurance_min_max'] = gdf_calc_assurance['score_assurance'] / gdf_calc_assurance['score_assurance'].max()
-    gdf_calc_assurance['score_assurance_int'] = (gdf_calc_assurance['score_assurance_min_max'] * 5).astype('Int64').clip(0, 4)
-    gdf_calc_assurance['score_assurance_1d'] = (gdf_calc_assurance['score_assurance_min_max'] * 5).round(1)
+    gdf_calc_assurance['score_assurance_min_max'] = (
+        gdf_calc_assurance['score_assurance'] / gdf_calc_assurance['score_assurance'].max()
+    )
+    gdf_calc_assurance['score_assurance_int'] = (
+        gdf_calc_assurance['score_assurance_min_max'] * 5
+    ).astype('Int64').clip(0, 4)
     return (gdf_calc_assurance,)
 
 
 @app.cell
-def _(carte_discret, gdf_calc_assurance, np, plot_variable):
-    plot_variable(gdf_calc_assurance, 'evolution_prime_assurance', 'indice_prime', 'score_assurance_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(gdf_calc_assurance, 'part_prime_budget', 'part_prime_budget_standard', 'score_assurance_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(gdf_calc_assurance, 'part_arretes_non_reconnus', 'part_arretes_non_reconnus_clip', 'score_assurance_int', np.array([0, 0.2, 0.4, 0.6, 0.8, 1]))
-    plot_variable(gdf_calc_assurance, 'multiple_franchise_last', 'multiple_franchise_last_indice', 'score_assurance_int', np.array([0, 0.2, 0.4, 0.6, 0.8, 1]))
+def _(gdf_calc_assurance, np, plot_variable):
+    plot_variable(gdf_calc_assurance, 'evolution_prime_assurance', 'indice_prime',
+                  'score_assurance_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(gdf_calc_assurance, np, plot_variable):
+    plot_variable(gdf_calc_assurance, 'part_prime_budget', 'part_prime_budget_standard',
+                  'score_assurance_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(gdf_calc_assurance, np, plot_variable):
+    plot_variable(gdf_calc_assurance, 'part_arretes_non_reconnus', 'part_arretes_non_reconnus_clip',
+                  'score_assurance_int', np.array([0, 0.2, 0.4, 0.6, 0.8, 1]))
+    return
+
+
+@app.cell
+def _(gdf_calc_assurance, np, plot_variable):
+    plot_variable(gdf_calc_assurance, 'multiple_franchise_last', 'multiple_franchise_last_indice',
+                  'score_assurance_int', np.array([0, 0.2, 0.4, 0.6, 0.8, 1]))
+    return
+
+
+@app.cell
+def _(carte_discret, gdf_calc_assurance):
     carte_discret(gdf_calc_assurance, 'score_assurance_int')
     return
 
@@ -559,22 +782,26 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    poids_prevention_dettes = mo.ui.slider(0, 1, step=0.1, value=0.5, label='poids dettes')
-
-    mo.hstack([poids_prevention_dettes])
-
-    return (poids_prevention_dettes,)
+    poids_dettes = mo.ui.slider(0, 1, step=0.1, value=0.5, label='poids dettes')
+    return (poids_dettes,)
 
 
 @app.cell
-def _(gdf_calc_assurance, np, poids_prevention_dettes):
-    ppd = poids_prevention_dettes.value
+def _(poids_dettes):
+    poids_dettes
+    return
+
+
+@app.cell
+def _(gdf_calc_assurance, np, poids_dettes):
+    ppd = poids_dettes.value
     ppbh = 1 - ppd
 
     gdf_calc_eco = gdf_calc_assurance.copy()
 
     # Indice dettes : ratio négatif → vulnérabilité, borné à 5× la médiane
-    xmin_dette, xmax_dette = 0, -gdf_calc_eco['ratio_dettes_depenses'].median() / 0.2
+    xmin_dette = 0
+    xmax_dette = -gdf_calc_eco['ratio_dettes_depenses'].median() / 0.2
     gdf_calc_eco['debt_indice'] = (
         (-gdf_calc_eco['ratio_dettes_depenses'] - xmin_dette) / (xmax_dette - xmin_dette)
     ).clip(0, 1)
@@ -596,14 +823,25 @@ def _(gdf_calc_assurance, np, poids_prevention_dettes):
     )
     gdf_calc_eco['score_eco_minmax'] = gdf_calc_eco['score_eco'] / gdf_calc_eco['score_eco'].max()
     gdf_calc_eco['score_eco_int'] = np.floor(gdf_calc_eco['score_eco_minmax'] * 5).clip(0, 4).astype('Int64')
-    gdf_calc_eco['score_eco_1d'] = (gdf_calc_eco['score_eco_minmax'] * 5).round(1)
     return (gdf_calc_eco,)
 
 
 @app.cell
-def _(carte_discret, gdf_calc_eco, np, plot_variable):
-    plot_variable(gdf_calc_eco, 'depenses_per_pop', 'depenses_per_pop_indice', 'score_eco_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
-    plot_variable(gdf_calc_eco, 'ratio_dettes_depenses', 'debt_indice', 'score_eco_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+def _(gdf_calc_eco, np, plot_variable):
+    plot_variable(gdf_calc_eco, 'depenses_per_pop', 'depenses_per_pop_indice',
+                  'score_eco_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(gdf_calc_eco, np, plot_variable):
+    plot_variable(gdf_calc_eco, 'ratio_dettes_depenses', 'debt_indice',
+                  'score_eco_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
+    return
+
+
+@app.cell
+def _(carte_discret, gdf_calc_eco):
     carte_discret(gdf_calc_eco, 'score_eco_int')
     return
 
@@ -624,7 +862,8 @@ def _(mo):
     Le score brut est ensuite normalisé par `clip_minmax(q_low=0, q_high=1)`
     pour obtenir l'**indice de vulnérabilité** dans [0, 1].
 
-    Le **niveau discret** (0 → 4) est calculé par `floor(indice × 5).clip(0, 4)`.
+    `indice_vulnerabilite_niveau` est le résultat arrondi à 0.1 de `indice × 5`,
+    ce qui donne une échelle continue de 0.0 à 5.0 en pas de 0.1.
 
     > **Poids par défaut** : exposition 50 %, assurance 40 %, économique 10 %.
     > Ces poids peuvent être ajustés via les sliders ci-dessous.
@@ -634,43 +873,22 @@ def _(mo):
 
 @app.cell
 def _(mo):
-    poids_prevention_eco = mo.ui.slider(0, 1, step=0.05, value=0.1, label='poids eco')
-    poids_prevention_assurance = mo.ui.slider(0, 1, step=0.05, value=0.4, label='poids assurance')
-
-    mo.hstack([poids_prevention_eco, poids_prevention_assurance])
-    return poids_prevention_assurance, poids_prevention_eco
+    poids_eco = mo.ui.slider(0, 1, step=0.05, value=0.1, label='poids eco')
+    poids_assurance = mo.ui.slider(0, 1, step=0.05, value=0.4, label='poids assurance')
+    return poids_assurance, poids_eco
 
 
 @app.cell
-def _(poids_prevention_assurance, poids_prevention_eco):
-
-    ppeco = poids_prevention_eco.value
-    ppa = poids_prevention_assurance.value
-    ppexpo = 1 - ppeco - ppa
-    ppexpo
-    return ppa, ppeco, ppexpo
-
-
-@app.cell
-def _(gdf_calc_eco, np, ppa, ppeco, ppexpo):
-    gdf_calc_eco['score_final_brut'] = (
-        ppeco * gdf_calc_eco['score_eco_minmax'] ** 2 +
-        ppa * gdf_calc_eco['score_assurance_min_max'] ** 2 +
-        ppexpo * gdf_calc_eco['score_exposition'] ** 2
-    ) ** (1 / 2)
-
-    gdf_calc_eco['score_final'] = clip_minmax(gdf_calc_eco['score_final_brut'], q_low=0, q_high=1)
-    gdf_calc_eco['score_final_int'] = np.floor(gdf_calc_eco['score_final'] * 5).clip(0, 4).astype('Int64')
-    gdf_calc_eco['score_final_1d'] = (gdf_calc_eco['score_final'] * 5).round(1)
-
-    # Alias sémantiques pour l'export
-    gdf_calc_eco['indice_vulnerabilite'] = gdf_calc_eco['score_final']
-    gdf_calc_eco['indice_vulnerabilite_niveau'] = gdf_calc_eco['score_final_int']
+def _(mo, poids_assurance, poids_eco):
+    mo.hstack([poids_eco, poids_assurance])
     return
 
 
 @app.cell
-def _(gdf_calc_eco, np, ppa, ppeco, ppexpo):
+def _(gdf_calc_eco, poids_assurance, poids_eco):
+    ppeco = poids_eco.value
+    ppa = poids_assurance.value
+    ppexpo = 1 - ppeco - ppa
 
     gdf_calc_eco['score_final_brut'] = (
         ppeco * gdf_calc_eco['score_eco_minmax'] ** 2 +
@@ -678,19 +896,19 @@ def _(gdf_calc_eco, np, ppa, ppeco, ppexpo):
         ppexpo * gdf_calc_eco['score_exposition'] ** 2
     ) ** (1 / 2)
 
-    gdf_calc_eco['score_final'] = clip_minmax(gdf_calc_eco['score_final_brut'], q_low=0, q_high=1)
-    gdf_calc_eco['score_final_int'] = np.floor(gdf_calc_eco['score_final'] * 5).clip(0, 4).astype('Int64')
-    gdf_calc_eco['score_final_1d'] = (gdf_calc_eco['score_final'] * 5).round(1)
+    gdf_calc_eco['indice_vulnerabilite'] = clip_minmax(gdf_calc_eco['score_final_brut'], q_low=0, q_high=1)
 
-    # Alias sémantiques pour l'export
-    gdf_calc_eco['indice_vulnerabilite'] = gdf_calc_eco['score_final']
-    gdf_calc_eco['indice_vulnerabilite_niveau'] = gdf_calc_eco['score_final_int']
+    # Niveau continu arrondi à 0.1, échelle 0.0 → 5.0
+    gdf_calc_eco['indice_vulnerabilite_niveau'] = (gdf_calc_eco['indice_vulnerabilite'] * 5).round(1)
     return
 
 
 @app.cell
 def _(carte_discret, gdf_calc_eco):
-    carte_discret(gdf_calc_eco, 'score_final_int')
+    # Discrétisation temporaire en entier pour la carte (0-4)
+    import numpy as _np
+    gdf_calc_eco['_indice_int'] = _np.floor(gdf_calc_eco['indice_vulnerabilite'] * 5).clip(0, 4).astype('Int64')
+    carte_discret(gdf_calc_eco, '_indice_int')
     return
 
 
@@ -705,7 +923,7 @@ def _(mo):
     |---------|-------------|-------|
     | `code_insee` | Identifiant commune | — |
     | `indice_vulnerabilite` | Score composite continu | [0, 1] |
-    | `indice_vulnerabilite_niveau` | Niveau discret | 0 → 4 |
+    | `indice_vulnerabilite_niveau` | Niveau continu arrondi à 0.1 | [0.0, 5.0] |
     | `score_economique` | Dimension fragilité financière commune | [0, 1] |
     | `score_exposition` | Dimension exposition aux aléas climatiques | [0, 1] |
     | `score_assurance` | Dimension pression assurantielle | [0, 1] |
