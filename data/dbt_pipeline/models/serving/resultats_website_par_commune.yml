@@ -158,3 +158,18 @@ models:
       - name: taux_endettement
         description: "Taux d'endettement de la commune : ratio dettes/dépenses 2024, exprimé en pourcentage (signe inversé pour obtenir une valeur positive)"
         data_type: float
+      - name: rank_part_prime_budget
+        description: Pourcentage de communes françaises ayant une part de primes d'assurance dans le budget plus élevée.
+        data_type: float
+      - name: rank_evolution_prime
+        description: Pourcentage de communes françaises ayant subi une hausse de primes d'assurance plus forte entre 2020 et 2024.
+        data_type: float
+      - name: rank_part_arretes_non_reconnus
+        description: Pourcentage de communes françaises ayant un taux de non-reconnaissance Cat-Nat plus élevé.
+        data_type: float
+      - name: rank_ratio_dettes_depenses
+        description: Pourcentage de communes françaises plus endettées.
+        data_type: float
+      - name: rank_depenses_per_pop
+        description: Pourcentage de communes françaises disposant d'un budget par habitant plus faible.
+        data_type: float
