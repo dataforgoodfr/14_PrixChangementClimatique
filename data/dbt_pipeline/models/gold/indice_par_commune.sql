@@ -124,8 +124,6 @@ SELECT
     round(score_autres_risques_nat, 2) AS score_autres_risques_nat,
 
     round(_indice_vulnerabilite::numeric, 2) AS indice_vulnerabilite,
-
-    -- 1-indexé [1-5]
-    round((_indice_vulnerabilite * 5)::numeric, 1) AS indice_vulnerabilite_niveau
+    round((_indice_vulnerabilite * 5), 1) AS indice_vulnerabilite_niveau
 
 FROM normalized
