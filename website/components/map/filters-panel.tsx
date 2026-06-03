@@ -195,7 +195,7 @@ export function FiltersPanel({
               />
               <ChartRangeFilter
                 title="Part des primes dans le budget"
-                filterKey={FilterRangeKey.PART_PRIME_BUDGET}
+                filterKey={FilterRangeKey.PART_PRIME_BUDGET_2024}
                 step={0.001}
               />
             </div>
