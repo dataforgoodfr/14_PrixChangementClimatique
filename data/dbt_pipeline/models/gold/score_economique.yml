@@ -13,10 +13,8 @@ models:
         description: "Score économique commune"
         type: FLOAT
       - name: debt_indice
-        description: "TODO"
+        description: "Dettes de la commune (valeur indicée)"
       - name: score_eco_raw
-        description: "TODO"
-      - name: max_val
-        description: "TODO"
+        description: "Score économique de la commune avant clip - min-max"
       - name: depenses_per_pop_indice
-        description: "TODO"
+        description: "Depenses par habitant dans la commune (valeur indicée)"

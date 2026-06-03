@@ -65,9 +65,6 @@ models:
       - name: date_approbation_rga
         description: Date d'approbation du PPRN RGA
         data_type: datetime
-      - name: ratio_dettes_depenses
-        description: dettes/depenses de la derniere année 2024
-        data_type: double
       - name: depenses_per_pop
         description: Solde net pour le type de compte "depenses" par population municipale de 2023
         data_type: double

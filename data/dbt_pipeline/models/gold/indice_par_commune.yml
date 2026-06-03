@@ -10,14 +10,12 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
-      - name: indice_vulnerabilite_label
-        description: "TODO"
       - name: indice_vulnerabilite
         description: "Indice de vulnérabilité de la commune entre 0 et 1"
         type: FLOAT
       - name: indice_vulnerabilite_niveau
-        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5"
-        type: INT
+        description: "Indice de vulnérabilité de la commune par niveau entre 1 et 5 arrondi avec 1 décimale"
+        type: FLOAT
       - name: score_economique
         description: "Score économique de la commune"
         type: FLOAT
