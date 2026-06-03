@@ -55,6 +55,6 @@ export interface Commune {
 
   // Population & ratios
   population?: number;
-  part_prime_budget?: number;
+  part_prime_budget_2024?: number;
   evolution_prime_assurance?: number;
 }
