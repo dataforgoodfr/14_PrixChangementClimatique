@@ -46,7 +46,15 @@ SELECT
         AS evolution_prime_assurance,
 
     pp.prime_assurance_2024 / NULLIF(b.depenses, 0)
-        AS part_prime_budget
+        AS part_prime_budget_2024,
+    pp.prime_assurance_2023 / NULLIF(b.depenses, 0)
+        AS part_prime_budget_2023,
+    pp.prime_assurance_2022 / NULLIF(b.depenses, 0)
+        AS part_prime_budget_2022,
+    pp.prime_assurance_2021 / NULLIF(b.depenses, 0)
+        AS part_prime_budget_2021,
+    pp.prime_assurance_2020 / NULLIF(b.depenses, 0)
+        AS part_prime_budget_2020
 
 FROM primes_pivot AS pp
 LEFT JOIN {{ ref('budget_last') }} AS b

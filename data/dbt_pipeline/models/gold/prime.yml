@@ -27,6 +27,18 @@ models:
       - name: evolution_prime_assurance
         description: Evolution des primes assurance entre 2020 et 2024
         data_type: FLOAT
-      - name: part_prime_budget
+      - name: part_prime_budget_2024
+        description: Primes assurances sur dépenses 2024
+        data_type: FLOAT
+      - name: part_prime_budget_2023
+        description: Primes assurances sur dépenses 2024
+        data_type: FLOAT
+      - name: part_prime_budget_2022
+        description: Primes assurances sur dépenses 2024
+        data_type: FLOAT
+      - name: part_prime_budget_2021
+        description: Primes assurances sur dépenses 2024
+        data_type: FLOAT
+      - name: part_prime_budget_2020
         description: Primes assurances sur dépenses 2024
         data_type: FLOAT

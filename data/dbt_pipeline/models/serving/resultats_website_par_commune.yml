@@ -98,8 +98,20 @@ models:
       - name: evolution_prime_assurance
         description: Evolution des primes entre 2020 et 2024
         data_type: float
-      - name: part_prime_budget
+      - name: part_prime_budget_2024
         description: Primes sur dépense 2024
+        data_type: float
+      - name: part_prime_budget_2023
+        description: Primes sur dépense 2023
+        data_type: float
+      - name: part_prime_budget_2022
+        description: Primes sur dépense 2022
+        data_type: float
+      - name: part_prime_budget_2021
+        description: Primes sur dépense 2021
+        data_type: float
+      - name: part_prime_budget_2020
+        description: Primes sur dépense 2020
         data_type: float
       - name: geo_point_2_d
         description: "Point géographique central de la commune (coordonnées lat/lon en JSON)"

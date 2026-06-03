@@ -40,7 +40,7 @@ WITH source AS (
         c.code_geo,
         ccr.nb_total_arretes,
         ccr.nb_total_arretes_recon,
-        p.part_prime_budget,
+        p.part_prime_budget_2024,
         p.evolution_prime_assurance,
         ccr.multiple_franchise_last
     FROM {{ ref('opendatasoft_communes') }} AS c
@@ -51,10 +51,10 @@ WITH source AS (
 -- ── Bornes de normalisation de la part prime/budget ─────────────────────────
 percentiles AS (
     SELECT
-        percentile_cont(0.01) WITHIN GROUP (ORDER BY part_prime_budget) AS p_01_ppb,
-        percentile_cont(0.99) WITHIN GROUP (ORDER BY part_prime_budget) AS p_99_ppb
+        percentile_cont(0.01) WITHIN GROUP (ORDER BY part_prime_budget_2024) AS p_01_ppb,
+        percentile_cont(0.99) WITHIN GROUP (ORDER BY part_prime_budget_2024) AS p_99_ppb
     FROM source
-    WHERE part_prime_budget IS NOT NULL
+    WHERE part_prime_budget_2024 IS NOT NULL
 ),
 
 prep AS (
@@ -88,12 +88,12 @@ prep AS (
         -- Indice part prime/budget : écrêtage inter-percentile [p1, p99]
         -- NULL si aucune donnée disponible
         CASE
-            WHEN s.part_prime_budget IS NULL THEN NULL
+            WHEN s.part_prime_budget_2024 IS NULL THEN NULL
             WHEN p.p_99_ppb = p.p_01_ppb THEN 0
             ELSE least(1.0, greatest(
                 0.0,
                 (
-                    greatest(p.p_01_ppb, least(p.p_99_ppb, s.part_prime_budget))
+                    greatest(p.p_01_ppb, least(p.p_99_ppb, s.part_prime_budget_2024))
                     - p.p_01_ppb
                 )
                 / (p.p_99_ppb - p.p_01_ppb)

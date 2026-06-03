@@ -134,7 +134,7 @@ def _():
         p.prime_assurance_2021,
         p.prime_assurance_2020,
         p.evolution_prime_assurance,
-        p.part_prime_budget
+        p.part_prime_budget_2024
 
     FROM dev.main_bronze.opendatasoft_communes AS c
 
@@ -658,7 +658,7 @@ def _(mo):
     | Variable | Indice | Poids | Logique |
     |----------|--------|-------|---------|
     | `evolution_prime_assurance` | `indice_prime` (log) | 50 % | Hausse de prime = signal de renchérissement du risque |
-    | `part_prime_budget` | `part_prime_budget_standard` | 20 % | Effort financier relatif des ménages |
+    | `part_prime_budget_2024` | `part_prime_budget_standard` | 20 % | Effort financier relatif des ménages |
     | `part_arretes_non_reconnus` | `part_arretes_non_reconnus_clip` | 20 % | Sinistres non couverts → reste à charge |
     | `multiple_franchise_last` | `multiple_franchise_last_indice` | 10 % | Franchise / 5 max → sur-exposition aux petits sinistres |
 
@@ -692,7 +692,7 @@ def _(gdf_calc, np):
         gdf_calc_assurance['multiple_franchise_last'].fillna(0)
     ) / 5
     gdf_calc_assurance['part_prime_budget_standard'] = clip_minmax(
-        gdf_calc_assurance['part_prime_budget'], q_low=0.01, q_high=0.99
+        gdf_calc_assurance['part_prime_budget_2024'], q_low=0.01, q_high=0.99
     )
     gdf_calc_assurance['part_arretes_non_reconnus_clip'] = clip_minmax(
         gdf_calc_assurance['part_arretes_non_reconnus'], q_low=0.0, q_high=1
@@ -730,7 +730,7 @@ def _(gdf_calc_assurance, np, plot_variable):
 
 @app.cell
 def _(gdf_calc_assurance, np, plot_variable):
-    plot_variable(gdf_calc_assurance, 'part_prime_budget', 'part_prime_budget_standard',
+    plot_variable(gdf_calc_assurance, 'part_prime_budget_2024', 'part_prime_budget_standard',
                   'score_assurance_int', np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]))
     return
 
