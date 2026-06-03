@@ -2,35 +2,42 @@ import SectionTitle from "./section-title";
 import { RFButton } from "@/components/core/rf-button";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import {
+  VulnerabiliteIcon,
+  ExpositionIcon,
+  PreventionIcon,
+  EconomiqueIcon,
+  AssuranceIcon,
+  type IconComponent,
+} from "@/components/icons";
 
 type DimensionItem = {
   label: string;
-  src: string;
+  icon: IconComponent;
   active?: boolean;
 };
 
 const dimensions: DimensionItem[] = [
   {
     label: "Vulnérabilité",
-    src: "/vulnerabilite.png",
+    icon: VulnerabiliteIcon,
     active: true,
   },
   {
     label: "Exposition",
-    src: "/exposition.png",
+    icon: ExpositionIcon,
   },
   {
     label: "Prévention",
-    src: "/prevention.png",
+    icon: PreventionIcon,
   },
   {
     label: "Situation\néconomique",
-    src: "/assurance.png",
+    icon: EconomiqueIcon,
   },
   {
     label: "Assurance",
-    src: "/situation-economique.png",
+    icon: AssuranceIcon,
   },
 ];
 
@@ -68,13 +75,13 @@ const IntroSection: React.FC = () => {
                 dim.active ? "border-rf-green-dark" : "border-[#E0DFF0]",
               )}
             >
-              <Image
-                src={dim.src}
-                alt={dim.label}
-                width={56}
-                height={56}
-                className="w-9 h-9 lg:w-12 lg:h-12 object-contain"
-                unoptimized
+              <dim.icon
+                color={
+                  dim.active
+                    ? "var(--color-rf-green-light)"
+                    : "var(--color-rf-gray-light)"
+                }
+                className="w-9 h-9 lg:w-12 lg:h-12"
               />
             </div>
             <span
