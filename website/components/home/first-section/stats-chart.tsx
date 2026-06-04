@@ -22,7 +22,7 @@ function getYearTicks(data: DataPoint[], count = 7): number[] {
 const YearsScale = ({ data }: { data: DataPoint[] }) => {
   const ticks = getYearTicks(data);
   return (
-    <div className="w-full max-w-[700px] lg:max-w-[1200px]">
+    <div className="w-full">
       <div className="flex justify-between font-bold text-xs lg:text-sm text-gray-700">
         {ticks.map((year) => (
           <span key={year}>{year}</span>
@@ -46,7 +46,6 @@ const StatsChart: React.FC<Props> = ({
           <span className="text-[16px] lg:text-[24px]">{caption}</span>
         </div>
       </div>
-      {annotation && <div className="text-right">{annotation}</div>}
       <div className="w-full flex flex-col gap-[8px]">
         <div className="w-full">
           <WarmingStripes data={data} colors={colors} unit={unit} />

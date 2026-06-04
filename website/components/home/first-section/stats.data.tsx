@@ -237,7 +237,7 @@ const recognitionAnnotation = (
 const desktopStats = [
   {
     id: 1,
-    caption: "CatNat",
+    caption: "Tous type d'évènements",
     data: catnatData,
     colors: COLORS_CATNAT,
     unit: "événements",
@@ -245,7 +245,7 @@ const desktopStats = [
   },
   {
     id: 2,
-    caption: "Dont inondations",
+    caption: "Inondations",
     data: floodsData,
     colors: COLORS_FLOODS,
     unit: "événements",
@@ -253,7 +253,7 @@ const desktopStats = [
   },
   {
     id: 3,
-    caption: "Dont sécheresses",
+    caption: "Sécheresses",
     data: droughtsData,
     colors: COLORS_DROUGHTS,
     unit: "événements",
@@ -261,7 +261,7 @@ const desktopStats = [
   },
   {
     id: 4,
-    caption: "Taux de Reconnaissance",
+    caption: "Taux de reconnaissance",
     data: recognitionData,
     colors: COLORS_RECOGNITION,
     unit: "%",
