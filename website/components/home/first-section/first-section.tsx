@@ -1,7 +1,7 @@
 import SectionTitle from "../section-title";
 import StatCallout from "../statCallout";
 import StatsChartList from "./stats-chart-list";
-import { mobileStats, desktopStats } from "./stats.data";
+import { desktopStats } from "./stats.data";
 
 const FirstSection: React.FC = () => {
   return (
@@ -34,12 +34,14 @@ const FirstSection: React.FC = () => {
         />
       </div>
 
-      <div className="lg:hidden">
-        <StatsChartList items={mobileStats} />
-      </div>
-
-      <div className="hidden lg:block">
+      <div className="block">
+        <div className="flex flex-col gap-[4px] text-center text-[21px] font-[600]">
+          Evolution des Catastrophes Naturelles en France (1982-2025)
+        </div>
         <StatsChartList items={desktopStats} />
+        <div className="text-right text-[12px] pt-[20px]">
+          Source: CCR (Caisse Centrale de Réassurance)
+        </div>
       </div>
     </div>
   );
