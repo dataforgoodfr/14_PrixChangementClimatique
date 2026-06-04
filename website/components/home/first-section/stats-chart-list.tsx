@@ -1,10 +1,14 @@
+import type { ReactNode } from "react";
 import StatsChart from "./stats-chart";
+import type { DataPoint } from "./warming-stripes";
 
 type Stats = {
   id: number;
   caption: string;
-  url: string;
-  alt: string;
+  data: DataPoint[];
+  colors: string[];
+  unit?: string;
+  annotation?: ReactNode;
 };
 
 type Props = {
@@ -18,8 +22,10 @@ const StatsChartList: React.FC<Props> = ({ items }) => {
         <StatsChart
           key={item.id}
           caption={item.caption}
-          url={item.url}
-          alt={item.alt}
+          data={item.data}
+          colors={item.colors}
+          unit={item.unit}
+          annotation={item.annotation}
         />
       ))}
     </div>
