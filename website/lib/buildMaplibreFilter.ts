@@ -53,12 +53,7 @@ export function buildMaplibreFilter(
 
   // --- Situation économique ---
   if (filters.taux_endettement)
-    all.push(
-      ...rangeExpressions(
-        "taux_endettement",
-        filters.taux_endettement,
-      ),
-    );
+    all.push(...rangeExpressions("taux_endettement", filters.taux_endettement));
   if (filters.impots_locaux)
     all.push(...rangeExpressions("impots_locaux", filters.impots_locaux));
   if (filters.impots_locaux_evolution)
@@ -83,7 +78,10 @@ export function buildMaplibreFilter(
     );
   if (filters.part_prime_budget_2024)
     all.push(
-      ...rangeExpressions("part_prime_budget_2024", filters.part_prime_budget_2024),
+      ...rangeExpressions(
+        "part_prime_budget_2024",
+        filters.part_prime_budget_2024,
+      ),
     );
 
   return all.length === 0 ? ["literal", true] : ["all", ...all];

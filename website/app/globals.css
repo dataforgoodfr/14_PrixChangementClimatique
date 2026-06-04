@@ -34,11 +34,11 @@
   --color-rf-button-icon: #3d85ff;
 
   /* Vulnerability level colors */
-  --color-rf-vulnerability-level-1: #518F83;
-  --color-rf-vulnerability-level-2: #B2A052;
-  --color-rf-vulnerability-level-3: #FFB74B;
-  --color-rf-vulnerability-level-4: #EA580D;
-  --color-rf-vulnerability-level-5: #B91C1C;
+  --color-rf-vulnerability-level-1: #518f83;
+  --color-rf-vulnerability-level-2: #b2a052;
+  --color-rf-vulnerability-level-3: #ffb74b;
+  --color-rf-vulnerability-level-4: #ea580d;
+  --color-rf-vulnerability-level-5: #b91c1c;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -96,11 +96,11 @@
   --color-rf-button-icon: #3d85ff;
 
   /* Vulnerability level colors */
-  --color-rf-vulnerability-level-1: #518F83;
-  --color-rf-vulnerability-level-2: #B2A052;
-  --color-rf-vulnerability-level-3: #FFB74B;
-  --color-rf-vulnerability-level-4: #EA580D;
-  --color-rf-vulnerability-level-5: #B91C1C;
+  --color-rf-vulnerability-level-1: #518f83;
+  --color-rf-vulnerability-level-2: #b2a052;
+  --color-rf-vulnerability-level-3: #ffb74b;
+  --color-rf-vulnerability-level-4: #ea580d;
+  --color-rf-vulnerability-level-5: #b91c1c;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.13 0.028 261.692);
