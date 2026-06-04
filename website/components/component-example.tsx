@@ -105,7 +105,7 @@ import { Legend } from "@/components/core/rf-legend";
 import { type IndicatorField } from "@/lib/types/indicator";
 import {
   IndiceVulnerabiliteNiveauIcon,
-  ScoreGeorisqueIcon,
+  ScoreExpositionIcon,
   PreventionIcon,
   ScoreEconomiqueIcon,
   ScoreAssuranceIcon,
@@ -627,7 +627,7 @@ const INDICATOR_DEMO_OPTIONS: {
     label: "Vulnérabilité",
     Icon: IndiceVulnerabiliteNiveauIcon,
   },
-  { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
+  { value: "score_exposition", label: "Exposition", Icon: ScoreExpositionIcon },
   { value: "prevention", label: "Prévention", Icon: PreventionIcon },
   {
     value: "score_economique",

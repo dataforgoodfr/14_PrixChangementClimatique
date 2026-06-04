@@ -1,0 +1,20 @@
+version: 1
+
+models:
+  - name: score_economique
+    description: >
+      Gold layer: Score économique par commune construit sur dettes et dépenses par habitant
+      Source: Gold layer : budget_last
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: score_economique
+        description: "Score économique commune"
+        type: FLOAT
+      - name: debt_indice
+        description: "Dettes de la commune (valeur indicée)"
+      - name: score_eco_raw
+        description: "Score économique de la commune avant clip - min-max"
+      - name: depenses_per_pop_indice
+        description: "Depenses par habitant dans la commune (valeur indicée)"

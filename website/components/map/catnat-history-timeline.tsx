@@ -7,7 +7,7 @@ import {
   CardAction,
 } from "@/components/ui/card";
 import { CatnatResponse } from "@/lib/types/catnat";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
 import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -57,13 +57,8 @@ const groupByDecade = (data: CatnatResponse[]): DecadeGroup[] => {
 export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
   const historyByDecades = useMemo(() => groupByDecade(data), [data]);
   const [expandedDecades, setExpandedDecades] = useState<Set<string>>(
-    () => new Set(historyByDecades.map((d) => d.label)),
+    () => new Set(),
   );
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setExpandedDecades(new Set(historyByDecades.map((d) => d.label)));
-  }, [historyByDecades]);
 
   const oldestYear = useMemo(() => {
     return Math.min(...data.map((item) => parseInt(item.annee_debut)));
@@ -116,7 +111,7 @@ export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
 
               <button
                 onClick={() => toggleDecade(decade.label)}
-                className="flex items-center gap-4 w-full text-left hover:opacity-80 transition-opacity"
+                className="flex items-center gap-4 w-full text-left cursor-pointer hover:opacity-80 transition-opacity"
               >
                 <div className="relative flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full border border-rf-green-dark bg-rf-green-dark">
                   <XIcon

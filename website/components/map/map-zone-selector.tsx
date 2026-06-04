@@ -150,7 +150,13 @@ const DROMS = [
   },
 ];
 
-export default function MapZoneSelector({ map }: { map?: MaplibreMap }) {
+export default function MapZoneSelector({
+  map,
+  isFiltersOpen,
+}: {
+  map?: MaplibreMap;
+  isFiltersOpen?: boolean;
+}) {
   const [commune] = useQueryState("commune");
   const [selectedZone, setSelectedZone] = useState<number>(
     commune ? ZONE_NOZONE : ZONE_METROPOLE,
@@ -168,7 +174,14 @@ export default function MapZoneSelector({ map }: { map?: MaplibreMap }) {
   };
 
   return (
-    <div className="absolute top-50 right-4">
+    <div
+      className={cn(
+        "absolute top-50 transition-[right] duration-300 ease-in-out",
+        isFiltersOpen
+          ? "hidden sm:block sm:right-[calc(400px_+_1rem)]"
+          : "right-4",
+      )}
+    >
       <div className="rounded-lg bg-white shadow-md overflow-hidden">
         <ButtonGroup orientation="vertical" className="w-full">
           {DROMS.map(({ id, tooltip, svg }, index) => {

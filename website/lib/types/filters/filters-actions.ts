@@ -15,12 +15,12 @@ export enum FilterRangeKey {
   INDICATEUR_RGA = "indicateur_rga",
   INDICATEUR_TRI = "indicateur_tri",
   NB_TOTAL_ARRETES_RECON = "nb_total_arretes_recon",
-  RATIO_DETTES_DEPENSES = "ratio_dettes_depenses",
+  TAUX_ENDETTEMENT = "taux_endettement",
   IMPOTS_LOCAUX = "impots_locaux",
   IMPOTS_LOCAUX_EVOLUTION = "impots_locaux_evolution",
   PRIME_ASSURANCE_2024 = "prime_assurance_2024",
   EVOLUTION_PRIME_ASSURANCE = "evolution_prime_assurance",
-  PART_PRIME_BUDGET = "part_prime_budget",
+  PART_PRIME_BUDGET_2024 = "part_prime_budget_2024",
 }
 
 export enum FilterToggleKey {

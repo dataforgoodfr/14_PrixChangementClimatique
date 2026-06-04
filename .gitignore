@@ -166,9 +166,8 @@ cython_debug/
 # Duckdb launch file for debug
 data/dbt_pipeline/launch_data_ui.py
 
-# Local files containing exploration data
-dev.duckdb
-odis.duckdb
+# Databases stored on the s3 bucket
+*.duckdb
 
 # AI stuff
 CLAUDE.md

@@ -18,7 +18,14 @@ import {
   Tooltip,
 } from "recharts";
 import { DownloadCsvButton } from "@/components/core/download-csv-button";
+import { Info } from "lucide-react";
 import { useMemo } from "react";
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { formatCurrency } from "@/utils/format";
 
 const chartConfig = {
@@ -98,7 +105,7 @@ export function InsuranceEvolutionChart({
     return (
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Evolution des dépenses d&apos;assurance</CardTitle>
+          <CardTitle>Évolution des dépenses d’assurance multirisque</CardTitle>
           <CardDescription>Aucune donnée disponible</CardDescription>
         </CardHeader>
       </Card>
@@ -113,7 +120,23 @@ export function InsuranceEvolutionChart({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Evolution des dépenses d&apos;assurance</CardTitle>
+        <CardTitle className="flex items-center gap-1.5">
+          Evolution des dépenses d&apos;assurance
+          <TooltipProvider>
+            <UITooltip>
+              <TooltipTrigger asChild>
+                <Info className="size-3.5 shrink-0 cursor-pointer text-gray-400" />
+              </TooltipTrigger>
+              <TooltipContent>
+                Les dépenses d&apos;assurance multirisque d&apos;une commune
+                représentent les coût des contrats d&apos;assurance souscrits
+                par celle-ci pour protéger ses biens (bâtiments, véhicules)
+                contre les dégâts matériaux (évènements climatiques extrêmes,
+                etc.)
+              </TooltipContent>
+            </UITooltip>
+          </TooltipProvider>
+        </CardTitle>
         <CardDescription>Depuis {chartData[0].year}</CardDescription>
         <CardAction>
           <DownloadCsvButton

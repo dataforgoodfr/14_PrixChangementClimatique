@@ -112,9 +112,10 @@ export function CatnatTypesChart({
     <Card className="w-full">
       {!hideTitle && (
         <CardHeader>
-          <CardTitle>Types de catastrophes naturelles identifiées</CardTitle>
+          <CardTitle>Types de catastrophe naturelle</CardTitle>
           <CardDescription>
-            Dans les demandes de reconnaissances catastrophes naturelles
+            Dans les demandes de reconnaissance de l’état de catastrophe
+            naturelle
           </CardDescription>
           <CardAction>
             <DownloadCsvButton

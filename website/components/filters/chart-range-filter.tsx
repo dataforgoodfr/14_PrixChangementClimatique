@@ -57,9 +57,15 @@ export interface ChartRangeFilterProps {
   title: string;
   filterKey: FilterRangeKey;
   step?: number;
+  caption?: string;
 }
 
-export function ChartRangeFilter({ title, filterKey, step }: ChartRangeFilterProps) {
+export function ChartRangeFilter({
+  title,
+  filterKey,
+  step,
+  caption,
+}: ChartRangeFilterProps) {
   const bounds = FILTER_BOUNDS[filterKey];
   const { filters, dispatch } = useFilters();
   const [activeRange, setActiveRange] = useState<[number, number]>([
@@ -98,7 +104,7 @@ export function ChartRangeFilter({ title, filterKey, step }: ChartRangeFilterPro
 
   return (
     <div>
-      <FilterHeader title={title} />
+      <FilterHeader title={title} caption={caption} />
 
       {/* We disable this for now because we don't have the data for the chart */}
       {/*<ChartContainer config={CHART_CONFIG} className="h-16 w-full">*/}

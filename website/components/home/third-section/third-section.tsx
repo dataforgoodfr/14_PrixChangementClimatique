@@ -39,10 +39,12 @@ const ThirdSection: React.FC = () => {
                   <Info size={14} className="inline-block" />
                 </span>
                 ). La mise en place de ce dispositif relève des compétences de
-                l'État.{" "}
+                l&apos;État.{" "}
               </p>
               <p>
-                <span className="inline-block">A l'échelle nationale,</span>{" "}
+                <span className="inline-block">
+                  A l&apos;échelle nationale,
+                </span>{" "}
                 près de 12600 communes disposent d’un Plan de prévention des
                 risques naturels (
                 <span className="inline-flex items-center gap-[4px] align-middle">

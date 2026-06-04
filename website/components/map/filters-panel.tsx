@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Panel } from "@/components/core/panel";
 import { Button } from "@/components/ui/button";
-import { Legend } from "@/components/core/rf-legend";
+
 import { IndicatorSelector } from "@/components/core/rf-indicator-selector";
 import { MapZoomControl } from "@/components/core/rf-map-zoom-control";
 import type { Map as MaplibreMap } from "maplibre-gl";
@@ -12,7 +12,7 @@ import { type IndicatorField, DEFAULT_INDICATOR } from "@/lib/types/indicator";
 import { useIndicator } from "@/hooks";
 import {
   IndiceVulnerabiliteNiveauIcon,
-  ScoreGeorisqueIcon,
+  ScoreExpositionIcon,
   PreventionIcon,
   ScoreEconomiqueIcon,
   ScoreAssuranceIcon,
@@ -40,7 +40,7 @@ const INDICATOR_OPTIONS: {
     label: "Vulnérabilité",
     Icon: IndiceVulnerabiliteNiveauIcon,
   },
-  { value: "score_georisque", label: "Exposition", Icon: ScoreGeorisqueIcon },
+  { value: "score_exposition", label: "Exposition", Icon: ScoreExpositionIcon },
   {
     value: "prevention",
     label: "Prévention",
@@ -72,10 +72,12 @@ export function FiltersPanel({
 }: FiltersPanelProps) {
   const [indicator, setIndicator] = useIndicator();
   const [filtersOpen, setFiltersOpen] = useState(true);
+  const [resetKey, setResetKey] = useState(0);
   const { dispatch } = useFilters();
 
   function handleReset() {
     dispatch({ type: FilterActionType.RESET });
+    setResetKey((k) => k + 1);
   }
 
   return (
@@ -127,7 +129,7 @@ export function FiltersPanel({
             )}
           </button>
           {filtersOpen && (
-            <div className="py-2 text-sm text-gray-400">
+            <div key={resetKey} className="py-2 text-sm text-gray-400">
               <VulnerabiliteRangeFilter />
               <ChartRangeFilter
                 title="Nombre d'habitants"
@@ -160,14 +162,16 @@ export function FiltersPanel({
                 />
               </div>
               <ChartRangeFilter
-                title="Dépenses par habitant (€)"
+                title="Budget par habitant (€)"
                 filterKey={FilterRangeKey.DEPENSES_PER_POP}
                 step={100}
+                caption="Le budget par habitant est calculé à partir du budget de fonctionnement annuel des communes, divisé par le nombre d’habitants”"
               />
               <ChartRangeFilter
-                title="Ratio dettes / dépenses"
-                filterKey={FilterRangeKey.RATIO_DETTES_DEPENSES}
-                step={0.1}
+                title="Taux d’endettement (%)"
+                filterKey={FilterRangeKey.TAUX_ENDETTEMENT}
+                step={1}
+                caption="Le taux d’endettement permet d’évaluer la dette d’une commune en fonction de son budget de fonctionnement annuel"
               />
               <ChartRangeFilter
                 title="Impôts locaux (€)"
@@ -191,7 +195,7 @@ export function FiltersPanel({
               />
               <ChartRangeFilter
                 title="Part des primes dans le budget"
-                filterKey={FilterRangeKey.PART_PRIME_BUDGET}
+                filterKey={FilterRangeKey.PART_PRIME_BUDGET_2024}
                 step={0.001}
               />
             </div>
@@ -201,7 +205,12 @@ export function FiltersPanel({
 
       <Panel.Footer>
         <Panel.Actions>
-          <Button variant="secondary" size="lg" onClick={handleReset}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="w-full cursor-pointer"
+            onClick={handleReset}
+          >
             Effacer les filtres
           </Button>
         </Panel.Actions>
@@ -219,7 +228,6 @@ export function FiltersPanel({
           </Button>
           <MapZoomControl map={map} />
         </div>
-        <Legend />
       </Panel.Controls>
     </Panel>
   );

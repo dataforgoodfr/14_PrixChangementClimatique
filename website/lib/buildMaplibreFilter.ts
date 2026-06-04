@@ -4,12 +4,12 @@ import { CommuneFilters, RangeFilter } from "./types/filters/filters";
 function rangeExpressions(
   field: string,
   filter: RangeFilter,
-  fallback = 0,
+  exclusiveMax = false,
 ): ExpressionSpecification[] {
-  const get: ExpressionSpecification = ["coalesce", ["get", field], fallback];
+  const get: ExpressionSpecification = ["get", field];
   return [
     [">=", get, filter.min],
-    ["<=", get, filter.max],
+    exclusiveMax ? ["<", get, filter.max] : ["<=", get, filter.max],
   ];
 }
 
@@ -24,7 +24,7 @@ export function buildMaplibreFilter(
       ...rangeExpressions(
         "indice_vulnerabilite_niveau",
         filters.indice_vulnerabilite_niveau,
-        1,
+        filters.indice_vulnerabilite_niveau.max < 5,
       ),
     );
   if (filters.population)
@@ -52,11 +52,11 @@ export function buildMaplibreFilter(
     all.push(["==", ["get", "pprn_ino"], filters.pprn_ino]);
 
   // --- Situation économique ---
-  if (filters.ratio_dettes_depenses)
+  if (filters.taux_endettement)
     all.push(
       ...rangeExpressions(
-        "ratio_dettes_depenses",
-        filters.ratio_dettes_depenses,
+        "taux_endettement",
+        filters.taux_endettement,
       ),
     );
   if (filters.impots_locaux)
@@ -81,9 +81,9 @@ export function buildMaplibreFilter(
         filters.evolution_prime_assurance,
       ),
     );
-  if (filters.part_prime_budget)
+  if (filters.part_prime_budget_2024)
     all.push(
-      ...rangeExpressions("part_prime_budget", filters.part_prime_budget),
+      ...rangeExpressions("part_prime_budget_2024", filters.part_prime_budget_2024),
     );
 
   return all.length === 0 ? ["literal", true] : ["all", ...all];

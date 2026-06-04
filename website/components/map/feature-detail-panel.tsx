@@ -60,9 +60,9 @@ export function FeatureDetailPanel({
         </div>
         {selectedCommune?.indice_vulnerabilite_niveau && (
           <RfVulnerabilityIndex
-            className="hidden md:block absolute w-70 h-60 right-8 top-8"
+            className="hidden md:block absolute w-70 right-8 top-8"
             value={selectedCommune.indice_vulnerabilite_niveau}
-            mode="discrete"
+            mode="continuous"
           />
         )}
       </Panel.Header>
@@ -76,7 +76,7 @@ export function FeatureDetailPanel({
                 <RfVulnerabilityIndex
                   className="block md:hidden"
                   value={selectedCommune.indice_vulnerabilite_niveau}
-                  mode="discrete"
+                  mode="continuous"
                 />
               )}
               <EconomicalSituation selectedCommuneData={selectedCommune} />

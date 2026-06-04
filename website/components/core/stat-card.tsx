@@ -1,6 +1,13 @@
 import { Card } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { formatNumber } from "@/utils/format";
+import { Info } from "lucide-react";
 
 export interface StatCardProps {
   title: string;
@@ -10,6 +17,7 @@ export interface StatCardProps {
   comparisonText?: string;
   className?: string;
   variationPercentage?: number;
+  tooltip?: string;
 }
 
 interface VariationResult {
@@ -39,6 +47,7 @@ export function StatCard({
   comparisonText,
   className,
   variationPercentage,
+  tooltip,
 }: StatCardProps) {
   const variation = getVariation(variationPercentage);
 
@@ -51,9 +60,21 @@ export function StatCard({
         className,
       )}
     >
-      <h3 className="text-sm font-medium uppercase tracking-wide text-gray-400">
-        {title}
-      </h3>
+      <div className="flex items-center gap-1.5">
+        <h3 className="text-sm font-medium uppercase tracking-wide text-gray-400">
+          {title}
+        </h3>
+        {tooltip && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="size-3.5 shrink-0 cursor-pointer text-gray-400" />
+              </TooltipTrigger>
+              <TooltipContent>{tooltip}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
 
       <div className="flex flex-col items-start justify-between gap-1">
         <p className="text-4xl font-bold text-gray-900">{formattedValue}</p>

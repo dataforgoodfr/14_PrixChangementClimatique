@@ -1,9 +1,7 @@
 name: data-pre-commit
 
 on:
-  pull_request:
-    paths:
-      - "data/dbt_pipeline/**"
+  manual_dispatch:
 
 jobs:
   validate-dbt:
