@@ -96,8 +96,8 @@ population_agregee AS (
         annee,
         SUM(population)::INTEGER AS population,
         CASE
-            -- Paris (75xxx -> 75000)
-            WHEN code_geo LIKE '75%' THEN '75000'
+            -- Paris (75xxx -> 75056)
+            WHEN code_geo LIKE '75%' THEN '75056'
 
             -- Lyon (693xx -> 69123)
             WHEN code_geo LIKE '693%' THEN '69123'
@@ -112,7 +112,7 @@ population_agregee AS (
     WHERE population IS NOT NULL
     GROUP BY
         CASE
-            WHEN code_geo LIKE '75%' THEN '75000'
+            WHEN code_geo LIKE '75%' THEN '75056'
             WHEN code_geo LIKE '693%' THEN '69123'
             WHEN code_geo LIKE '132%' THEN '13055'
             ELSE code_geo

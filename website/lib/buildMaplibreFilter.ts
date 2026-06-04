@@ -81,9 +81,9 @@ export function buildMaplibreFilter(
         filters.evolution_prime_assurance,
       ),
     );
-  if (filters.part_prime_budget)
+  if (filters.part_prime_budget_2024)
     all.push(
-      ...rangeExpressions("part_prime_budget", filters.part_prime_budget),
+      ...rangeExpressions("part_prime_budget_2024", filters.part_prime_budget_2024),
     );
 
   return all.length === 0 ? ["literal", true] : ["all", ...all];

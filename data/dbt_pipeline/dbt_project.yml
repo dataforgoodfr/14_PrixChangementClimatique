@@ -33,6 +33,12 @@ models:
       +persist_docs:
         relation: true
         columns: true
+    serving:
+      +schema: serving
+      +materialized: table
+      +persist_docs:
+        relation: true
+        columns: true
 
 # Loading duckdb extension for geo data
 on-run-start:

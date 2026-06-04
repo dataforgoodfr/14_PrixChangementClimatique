@@ -13,6 +13,8 @@ export interface Commune {
   score_economique?: number;
   score_exposition?: number;
   score_assurance?: number;
+  score_inondation?: number;
+  score_secheresse?: number;
   indice_vulnerabilite_niveau?: number;
 
   // TRI / RGA
@@ -26,7 +28,6 @@ export interface Commune {
   tx_35_d_abs?: number;
 
   // Budget
-  ratio_dettes_depenses?: number;
   taux_endettement?: number;
   depenses_per_pop: number;
   part_impots_locaux?: number;
@@ -46,6 +47,11 @@ export interface Commune {
   prime_assurance_2022?: number;
   prime_assurance_2021?: number;
   prime_assurance_2020?: number;
+  rank_part_prime_budget?: number;
+  rank_evolution_prime?: number;
+  rank_part_arretes_non_reconnus?: number;
+  rank_ratio_dettes_depenses?: number;
+  rank_depenses_per_pop?: number;
 
   // PPRN
   pprn_rga?: boolean;
@@ -55,6 +61,10 @@ export interface Commune {
 
   // Population & ratios
   population?: number;
-  part_prime_budget?: number;
+  part_prime_budget_2024?: number;
+  part_prime_budget_2023?: number;
+  part_prime_budget_2022?: number;
+  part_prime_budget_2021?: number;
+  part_prime_budget_2020?: number;
   evolution_prime_assurance?: number;
 }
