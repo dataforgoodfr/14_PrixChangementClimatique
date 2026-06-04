@@ -62,7 +62,7 @@ def export_geojson():
             SELECT
                 * EXCLUDE (geometry),
                 ST_GeomFromText(geometry) AS geometry
-            FROM resultats_website_par_commune
+            FROM main_serving.resultats_website_par_commune
         )
         TO '{GEOJSON_PATH}' (FORMAT GDAL, DRIVER 'GeoJSONSeq')
     """)
