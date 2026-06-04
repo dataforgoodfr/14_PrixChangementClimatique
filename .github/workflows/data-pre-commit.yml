@@ -1,7 +1,7 @@
 name: data-pre-commit
 
 on:
-  manual_dispatch:
+  workflow_dispatch:
 
 jobs:
   validate-dbt:
