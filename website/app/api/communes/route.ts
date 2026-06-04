@@ -10,7 +10,8 @@ export async function GET(request: NextRequest) {
   if (!isValidCodeCommune(code)) {
     return NextResponse.json(
       {
-        error: "Code commune invalide : code INSEE à 5 chiffres ou format Corse (2Axxx/2Bxxx) attendu",
+        error:
+          "Code commune invalide : code INSEE à 5 chiffres ou format Corse (2Axxx/2Bxxx) attendu",
       },
       { status: 400 },
     );
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   return withDuckDb(async (connection) => {
     const reader = await connection.runAndReadAll(
-      "SELECT * EXCLUDE (geometry) FROM resultats_website_par_commune WHERE code_insee = $1",
+      "SELECT * EXCLUDE (geometry) FROM main_serving.resultats_website_par_commune WHERE code_insee = $1",
       [code],
     );
     const rows = reader.getRowObjectsJson();

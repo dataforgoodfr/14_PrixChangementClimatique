@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   return withDuckDb(async (connection) => {
     const query = `
       SELECT *
-      FROM catnat_historique
+      FROM main_serving.catnat_historique
       WHERE code_insee = $1
       ORDER BY date_debut DESC
     `;

@@ -50,7 +50,7 @@ if WEBSITE_PATH.exists():
 
 con = duckdb.connect(WEBSITE_PATH)
 con.execute(f"ATTACH '{DEV_PATH}' AS dev (READ_ONLY)")
-con.execute("CREATE SCHEMA IF NOT EXISTS main")
+con.execute("CREATE SCHEMA IF NOT EXISTS main_serving")
 
 tables = con.execute("""
     SELECT table_name FROM information_schema.tables
@@ -61,12 +61,14 @@ tables = con.execute("""
 log.info(f"{len(tables)} tables 'serving' trouvées dans dev.duckdb")
 
 for (table_name,) in tables:
-    rows = con.execute(f"SELECT COUNT(*) FROM dev.main_serving.{table_name}").fetchone()[0]
+    rows = con.execute(
+        f"SELECT COUNT(*) FROM dev.main_serving.{table_name}"
+    ).fetchone()[0]
     con.execute(f"""
-        CREATE OR REPLACE TABLE main.{table_name}
+        CREATE OR REPLACE TABLE main_serving.{table_name}
         AS SELECT * FROM dev.main_serving.{table_name}
     """)
-    log.info(f"  ✅ main.{table_name} ({rows:,} lignes)")
+    log.info(f"  ✅ {table_name} ({rows:,} lignes)")
 
 con.close()
 

@@ -10,6 +10,7 @@ import { CatNatHistory } from "./cat-nat-history";
 import { safeFormatNumber } from "@/utils/format";
 import { EconomicalSituation } from "./economical-situation";
 import { InsuranceCoverage } from "./insurance-coverage";
+import { VulnerabilityFactors } from "./vulnerability-factors";
 
 export function FeatureDetailPanel({
   selectedCommune,
@@ -68,19 +69,20 @@ export function FeatureDetailPanel({
 
       <Panel.Content>
         {selectedCommune && (
-          <div className="space-y-10 p-4">
-            {selectedCommune?.indice_vulnerabilite_niveau && (
-              <div className="px-4">
+          <div className="space-y-10 mt-10">
+            <VulnerabilityFactors commune={selectedCommune} />
+            <div className="space-y-10 p-4">
+              {selectedCommune?.indice_vulnerabilite_niveau && (
                 <RfVulnerabilityIndex
-                  className="block md:hidden mx-4"
+                  className="block md:hidden"
                   value={selectedCommune.indice_vulnerabilite_niveau}
                   mode="continuous"
                 />
-              </div>
-            )}
-            <EconomicalSituation selectedCommuneData={selectedCommune} />
-            <CatNatHistory communeCode={commune} />
-            <InsuranceCoverage selectedCommuneData={selectedCommune} />
+              )}
+              <EconomicalSituation selectedCommuneData={selectedCommune} />
+              <CatNatHistory communeCode={commune} />
+              <InsuranceCoverage selectedCommuneData={selectedCommune} />
+            </div>
           </div>
         )}
       </Panel.Content>
