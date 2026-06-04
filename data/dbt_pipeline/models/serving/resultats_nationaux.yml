@@ -15,18 +15,15 @@ models:
       - name: score_assurance_moy
         description: "score assurance national moyen"
         type: DECIMAL(3,2)
+      - name: indice_vulnerabilite_moy
+        description: "indice de vulnérabilité national moyen"
+        type: DECIMAL(3,2)
       - name: indice_vulnerabilite_niveau
         description: "niveau d'indice de vulnérabilité"
         type: INT
       - name: part_communes_vulnerables
         description: "à partir de quel score une commune est vulnérable"
         type: DECIMAL(3,2)
-      - name: part_arretes_non_reconnus
-        description: "Médiane nationale de la part des arrêtés non reconnus"
-        type: DECIMAL(10,2)
-      - name: multiple_franchise
-        description: "Médiane nationale du multiplicateur de la franchise par commune de la derniere année (le maximum a été pris à chaque fois)"
-        type: DECIMAL(10,2)
       - name: primes_assurances_2024
         description: "Total national des primes d'assurances en 2024"
         type: DECIMAL(15,2)
@@ -42,7 +39,7 @@ models:
       - name: evolution_prime_assurance
         description: "Evolution des primes entre 2020 et 2024"
         type: DECIMAL(10,2)
-      - name: part_prime_budget_2024
+      - name: part_prime_budget
         description: "Somme des primes d'assurances et budget de 2024"
         type: DECIMAL(10,2)
       - name: depenses_per_pop
