@@ -55,7 +55,7 @@ const IntroSection: React.FC = () => {
           Les communes françaises sont en première ligne et voient naître de
           nouvelles difficultés, notamment pour s’assurer contre ces phénomènes.
           Pour mieux comprendre la vulnérabilité des communes française, Reclaim
-          Finance et Data4good ont développé un{" "}
+          Finance et Data For Good ont développé un{" "}
           <span className="font-[700]">indice de vulnérabilité</span> reposant
           sur quatre facteurs: Exposition aux évènements climatiques extrêmes,
           prévention des risques, situation économique et dépenses d’assurance.
