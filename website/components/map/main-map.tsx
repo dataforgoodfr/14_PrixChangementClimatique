@@ -28,6 +28,8 @@ import { Commune } from "@/lib/types/communes";
 import { ComparisonPanel } from "@/components/map/comparison-panel";
 import { useFilters } from "../filters/filter-context";
 import MapZoneSelector from "@/components/map/map-zone-selector";
+import { Legend } from "@/components/core/rf-legend";
+import { cn } from "@/lib/utils";
 import { INITIAL_VIEW_STATE } from "@/components/map/map-constants";
 
 // ─── Map constants (same as map-pmtile.tsx) ───────────────────────────────────
@@ -344,7 +346,18 @@ function MainMap() {
         map={map}
       />
 
-      <MapZoneSelector map={map} />
+      <MapZoneSelector map={map} isFiltersOpen={filtersOpen} />
+
+      <div
+        className={cn(
+          "absolute bottom-10 w-75 transition-[right] duration-300 ease-in-out",
+          filtersOpen
+            ? "hidden sm:block sm:right-[calc(400px_+_1rem)]"
+            : "right-18",
+        )}
+      >
+        <Legend />
+      </div>
     </div>
   );
 }
