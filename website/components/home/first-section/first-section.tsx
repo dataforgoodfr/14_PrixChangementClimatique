@@ -36,8 +36,8 @@ const FirstSection: React.FC = () => {
 
       <div className="block">
         <div className="flex flex-col gap-[4px] text-center text-[21px] font-[600] pb-12">
-          Evolution du nombre d'évènements ayant donné lieu à une reconnaissance
-          d'état de catastrophe naturelle (1984-2025)
+          Evolution du nombre d&apos;évènements ayant donné lieu à une
+          reconnaissance d&apos;état de catastrophe naturelle (1984-2025)
         </div>
         <StatsChartList items={desktopStats} />
         <div className="text-right text-[12px] pt-[20px]">
