@@ -19,20 +19,25 @@ export const CatNatHistory = ({
 
   return (
     <div className="space-y-10">
-      {catNatData?.length ? (
+      {!hideTitle && (
+        <SectionTitle
+          title="Exposition aux catastrophes naturelles"
+          subTitle="Base de données GASPAR"
+        />
+      )}
+      {catNatData === undefined ? (
+        <p>Chargement en cours...</p>
+      ) : catNatData.length === 0 ? (
+        <p>
+          Aucune donnée d&apos;exposition aux catastrophes naturelles disponible
+          pour cette commune.
+        </p>
+      ) : (
         <>
-          {!hideTitle && (
-            <SectionTitle
-              title="Exposition aux catastrophes naturelles"
-              subTitle="Base de données GASPAR"
-            />
-          )}
           <RecognitionRequests hideTitle={hideTitle} data={catNatData} />
           <CatnatTypesChart hideTitle={hideTitle} data={catNatData} />
           <CatnatHistoryTimeline data={catNatData} />
         </>
-      ) : (
-        <p>Chargement en cours...</p>
       )}
     </div>
   );
