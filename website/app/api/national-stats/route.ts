@@ -4,7 +4,7 @@ import { withDuckDb } from "@/lib/api/duckdb-handler";
 export async function GET() {
   return withDuckDb(async (connection) => {
     const reader = await connection.runAndReadAll(
-      "SELECT * FROM resultats_nationaux LIMIT 1",
+      "SELECT * FROM main_serving.resultats_nationaux LIMIT 1",
     );
     const rows = reader.getRowObjectsJson();
 
