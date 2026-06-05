@@ -20,8 +20,8 @@ Behavior:
     - The file will be made public
 
 Requires the following environment variables to be set to use the S3 connector:
-- CLEVER_TOKEN
-- CLEVER_SECRET
+- CLEVER_S3_TOKEN
+- CLEVER_S3_SECRET
 - CLEVER_ENDPOINT_URL
 - CLEVER_PCC_BUCKET
 - CLEVER_REGION

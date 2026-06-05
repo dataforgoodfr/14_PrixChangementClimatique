@@ -68,8 +68,8 @@ ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
 
 load_dotenv(ENV_PATH)
 
-ACCESS_KEY = os.getenv("CLEVER_TOKEN")
-SECRET_KEY = os.getenv("CLEVER_SECRET")
+ACCESS_KEY = os.getenv("CLEVER_S3_TOKEN")
+SECRET_KEY = os.getenv("CLEVER_S3_SECRET")
 ENDPOINT_URL = os.getenv("CLEVER_ENDPOINT_URL")
 REGION_NAME = os.getenv('CLEVER_REGION')
 BUCKET_NAME = os.getenv("CLEVER_PCC_BUCKET")
