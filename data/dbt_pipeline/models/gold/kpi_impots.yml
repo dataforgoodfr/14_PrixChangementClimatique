@@ -9,7 +9,7 @@ models:
       - name: code_geo
         description: "Code INSEE de la commune (5 caractères)"
         type: STRING
-      - name: impots_locaux
+      - name: impots_locaux_2024
         description: Somme des impots locaux pour 2024 (Source OFGL)
         data_type: float
       - name: impots_locaux_evolution
@@ -17,4 +17,7 @@ models:
         data_type: float
       - name: part_impots_locaux
         description: Part des impots locaux sur le budget total de la commune en 2024
+        data_type: float
+      - name: impots_locaux_2020
+        description: Somme des impots locaux pour 2024 (Source OFGL)
         data_type: float

@@ -68,7 +68,7 @@ SELECT
 
     -- Indicateurs de risques naturels
     pr.date_approbation_ino,
-    i_loc.impots_locaux,
+    i_loc.impots_locaux_2024,
     t.multiple_franchise_last,
     ROUND(t.part_arretes_non_reconnus, 2) AS part_arretes_non_reconnus,
     ROUND(tr.indicateur_tri, 2) AS indicateur_tri,
