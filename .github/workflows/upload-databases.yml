@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      S3_ACCESS_KEY: ${{ secrets.CLEVER_TOKEN }}
-      S3_SECRET_ACCESS_KEY: ${{ secrets.CLEVER_SECRET }}
-      S3_REGION: ${{ vars.CLEVER_REGION }}
-      S3_ENDPOINT_URL: ${{ vars.CLEVER_ENDPOINT_URL }}
-      S3_PCC_BUCKET: ${{ vars.CLEVER_PCC_BUCKET }}
+      CLEVER_TOKEN: ${{ secrets.CLEVER_TOKEN }}
+      CLEVER_SECRET: ${{ secrets.CLEVER_SECRET }}
+      CLEVER_REGION: ${{ vars.CLEVER_REGION }}
+      CLEVER_ENDPOINT_URL: ${{ vars.CLEVER_ENDPOINT_URL }}
+      CLEVER_PCC_BUCKET: ${{ vars.CLEVER_PCC_BUCKET }}
 
     steps:
       - name: Checkout repo
