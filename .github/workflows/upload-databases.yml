@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      CLEVER_TOKEN: ${{ secrets.CLEVER_TOKEN }}
-      CLEVER_SECRET: ${{ secrets.CLEVER_SECRET }}
+      CLEVER_S3_TOKEN: ${{ secrets.CLEVER_S3_TOKEN }}
+      CLEVER_S3_SECRET: ${{ secrets.CLEVER_S3_SECRET }}
       CLEVER_REGION: ${{ vars.CLEVER_REGION }}
       CLEVER_ENDPOINT_URL: ${{ vars.CLEVER_ENDPOINT_URL }}
       CLEVER_PCC_BUCKET: ${{ vars.CLEVER_PCC_BUCKET }}
