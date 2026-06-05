@@ -26,13 +26,6 @@ REGION_NAME = os.getenv('CLEVER_REGION')
 BUCKET_NAME = os.getenv("CLEVER_PCC_BUCKET")
 
 
-print("ACCESS_KEY =", ACCESS_KEY is not None)
-print("SECRET_KEY =", SECRET_KEY is not None)
-print("ENDPOINT_URL =", ENDPOINT_URL is not None)
-print("REGION_NAME =", REGION_NAME is not None)
-print("BUCKET_NAME =", BUCKET_NAME is not None)
-
-
 prefix = ""  # vide si tout le bucket
 
 

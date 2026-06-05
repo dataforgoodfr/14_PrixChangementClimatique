@@ -21,14 +21,6 @@ jobs:
       CLEVER_PCC_BUCKET: ${{ vars.CLEVER_PCC_BUCKET }}
 
     steps:
-      - name: Debug environment
-        run: |
-          echo "TOKEN_PRESENT=$([[ -n \"$CLEVER_S3_TOKEN\" ]] && echo yes || echo no)"
-          echo "SECRET_PRESENT=$([[ -n \"$CLEVER_S3_SECRET\" ]] && echo yes || echo no)"
-          echo "REGION_PRESENT=$([[ -n \"$CLEVER_REGION\" ]] && echo yes || echo no)"
-          echo "ENDPOINT_PRESENT=$([[ -n \"$CLEVER_ENDPOINT_URL\" ]] && echo yes || echo no)"
-          echo "BUCKET_PRESENT=$([[ -n \"$CLEVER_PCC_BUCKET\" ]] && echo yes || echo no)"
-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
