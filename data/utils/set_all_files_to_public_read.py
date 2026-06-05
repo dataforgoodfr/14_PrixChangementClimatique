@@ -1,29 +1,45 @@
+#!/usr/bin/env python
+
 """
-Ce programme rend tous les fichiers du bucket accessibles (en lecture) à tous.
+This script will set all files in the Clever Cloud S3 bucket to public read
+
+Requires the following environment variables to be set:
+- CLEVER_TOKEN
+- CLEVER_SECRET
+- CLEVER_ENDPOINT_URL
+- CLEVER_PCC_BUCKET
+- CLEVER_REGION
 """
 
 import os
-
+from dotenv import load_dotenv
+from pathlib import Path
 import boto3
 
-access_key = os.environ["S3_ACCESS_KEY"]
-secret_key = os.environ["S3_SECRET_ACCESS_KEY"]
+ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
+
+load_dotenv(ENV_PATH)
+ACCESS_KEY = os.getenv("CLEVER_TOKEN")
+SECRET_KEY = os.getenv("CLEVER_SECRET")
+ENDPOINT_URL = os.getenv("CLEVER_ENDPOINT_URL")
+REGION_NAME = os.getenv('CLEVER_REGION')
+BUCKET_NAME = os.getenv("CLEVER_PCC_BUCKET")
+
+prefix = ""  # vide si tout le bucket
+
 
 s3 = boto3.client(
     "s3",
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key,
-    endpoint_url="https://s3.fr-par.scw.cloud",
-    region_name="fr-par",
+    aws_access_key_id=ACCESS_KEY,
+    aws_secret_access_key=SECRET_KEY,
+    endpoint_url=ENDPOINT_URL,
+    region_name=REGION_NAME,
 )
 
-bucket_name = "qppcc-upload"
-prefix = ""  # vide si tout le bucket
-
 # Liste tous les objets
-objects = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+objects = s3.list_objects_v2(Bucket=BUCKET_NAME, Prefix=prefix)
 
 for obj in objects.get("Contents", []):
     key = obj["Key"]
-    s3.put_object_acl(Bucket=bucket_name, Key=key, ACL="public-read")
+    s3.put_object_acl(Bucket=BUCKET_NAME, Key=key, ACL="public-read")
     print(f"{key} est maintenant public")
