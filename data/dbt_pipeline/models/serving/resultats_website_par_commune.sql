@@ -89,11 +89,11 @@ SELECT
     ROUND(p.prime_assurance_2021, 2) AS prime_assurance_2021,
     ROUND(p.prime_assurance_2020, 2) AS prime_assurance_2020,
     ROUND(p.evolution_prime_assurance, 2) AS evolution_prime_assurance,
-    ROUND(p.part_prime_budget_2024, 2) AS part_prime_budget_2024,
-    ROUND(p.part_prime_budget_2023, 2) AS part_prime_budget_2023,
-    ROUND(p.part_prime_budget_2022, 2) AS part_prime_budget_2022,
-    ROUND(p.part_prime_budget_2021, 2) AS part_prime_budget_2021,
-    ROUND(p.part_prime_budget_2020, 2) AS part_prime_budget_2020,
+    ROUND(p.part_prime_budget_2024, 3) AS part_prime_budget_2024,
+    ROUND(p.part_prime_budget_2023, 3) AS part_prime_budget_2023,
+    ROUND(p.part_prime_budget_2022, 3) AS part_prime_budget_2022,
+    ROUND(p.part_prime_budget_2021, 3) AS part_prime_budget_2021,
+    ROUND(p.part_prime_budget_2020, 3) AS part_prime_budget_2020,
 
     -- Rang de la commune pour texte explicatif
     CASE
