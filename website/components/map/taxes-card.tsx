@@ -24,8 +24,8 @@ const formatCurrencyAmount = (
 };
 
 export function TaxesCard({ commune }: { commune: Commune }) {
-  const localTaxes = commune.impots_locaux
-    ? formatCurrencyAmount(commune.impots_locaux)
+  const localTaxes = commune.impots_locaux_2024
+    ? formatCurrencyAmount(commune.impots_locaux_2024)
     : null;
   if (!localTaxes) return <div />;
   return (

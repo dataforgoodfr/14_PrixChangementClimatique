@@ -175,7 +175,7 @@ export function FiltersPanel({
               />
               <ChartRangeFilter
                 title="Impôts locaux (€)"
-                filterKey={FilterRangeKey.IMPOTS_LOCAUX}
+                filterKey={FilterRangeKey.IMPOTS_LOCAUX_2024}
                 step={100_000}
               />
               <ChartRangeFilter
