@@ -16,7 +16,7 @@ export enum FilterRangeKey {
   INDICATEUR_TRI = "indicateur_tri",
   NB_TOTAL_ARRETES_RECON = "nb_total_arretes_recon",
   TAUX_ENDETTEMENT = "taux_endettement",
-  IMPOTS_LOCAUX = "impots_locaux",
+  IMPOTS_LOCAUX_2024 = "impots_locaux_2024",
   IMPOTS_LOCAUX_EVOLUTION = "impots_locaux_evolution",
   PRIME_ASSURANCE_2024 = "prime_assurance_2024",
   EVOLUTION_PRIME_ASSURANCE = "evolution_prime_assurance",
