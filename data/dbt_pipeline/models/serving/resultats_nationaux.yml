@@ -3,51 +3,51 @@ version: 2
 models:
   - name: resultats_nationaux
     description: >
-      Gold layer: Table des résultats nationaux avec valeurs RANDOM sur les scores et indice de vulnérabilité.
-      Source: Bronze layer (donnees_financieres_ofgl) Silver layer (primes_par_communes) + valeurs RANDOM
+      Serving layer: Table des résultats nationaux.
+      Source: Gold layer avec indicateurs et scores calculés
     columns:
-      - name: score_economique
+      - name: score_economique_median
         description: "score economique national médian"
         type: DECIMAL(3,2)
-      - name: score_exposition
+      - name: score_exposition_median
         description: "score exposition national médian"
         type: DECIMAL(3,2)
-      - name: score_assurance
+      - name: score_assurance_median
         description: "score assurance national médian"
         type: DECIMAL(3,2)
-      - name: indice_vulnerabilite_niveau
+      - name: indice_vulnerabilite_niveau_median
         description: "niveau d'indice de vulnérabilité médian"
         type: INT
       - name: part_communes_vulnerables
         description: "à partir de quel score une commune est vulnérable"
         type: DECIMAL(3,2)
-      - name: multiple_franchise
+      - name: multiple_franchise_mediane
         description: "Médiane nationale du multiplicateur franchise"
         type: DECIMAL(10,2)
-      - name: part_arretes_non_reconnus
+      - name: part_arretes_non_reconnus_median
         description: "Médiane nationale de la part des arrêtés non reconnus"
         type: DECIMAL(10,2)
-      - name: primes_assurances_2024
+      - name: primes_assurances_2024_somme
         description: "Total national des primes d'assurances en 2024"
         type: DECIMAL(15,2)
-      - name: primes_assurances_2020
+      - name: primes_assurances_2020_somme
         description: "Total national des primes d'assurances en 2020"
         type: DECIMAL(15,2)
-      - name: impots_locaux_2024
+      - name: impots_locaux_2024_somme
         description: "Total national des impots locaux en 2024"
         type: DECIMAL(15,2)
-      - name: impots_locaux_2020
+      - name: impots_locaux_2020_somme
         description: "Total national des impots locaux en 2020"
         type: DECIMAL(15,2)
-      - name: evolution_prime_assurance
+      - name: evolution_prime_assurance_mediane
         description: "Evolution des primes entre 2020 et 2024"
         type: DECIMAL(10,2)
-      - name: part_prime_budget
+      - name: part_prime_budget_mediane
         description: "Somme des primes d'assurances et budget de 2024"
         type: DECIMAL(10,2)
-      - name: depenses_per_pop
+      - name: depenses_per_pop_mediane
         description: "Solde net des dépenses par population sur 2023 (manque la population municipale de 2024)"
         type: DECIMAL(10,2)
-      - name: ratio_dettes_depenses
+      - name: ratio_dettes_depenses_median
         description: "dettes 2024 par rapport aux dépenses de 2024"
         type: DECIMAL(10,5)

@@ -69,21 +69,21 @@ commune AS (
 
 SELECT
 
-    CAST(c.score_economique AS DECIMAL(3, 2)) AS score_economique,
-    CAST(c.score_exposition AS DECIMAL(3, 2)) AS score_exposition,
-    CAST(c.score_assurance AS DECIMAL(3, 2)) AS score_assurance,
-    CAST(c.indice_vulnerabilite_niveau AS INT) AS indice_vulnerabilite_niveau,
+    CAST(c.score_economique AS DECIMAL(3, 2)) AS score_economique_median,
+    CAST(c.score_exposition AS DECIMAL(3, 2)) AS score_exposition_median,
+    CAST(c.score_assurance AS DECIMAL(3, 2)) AS score_assurance_median,
+    CAST(c.indice_vulnerabilite_niveau AS INT) AS indice_vulnerabilite_niveau_median,
     CAST(c.part_communes_vulnerables AS DECIMAL(10, 2)) AS part_communes_vulnerables,
-    CAST(m.part_arretes_non_reconnus AS DECIMAL(10, 2)) AS part_arretes_non_reconnus,
-    CAST(m.multiple_franchise AS DECIMAL(10, 2)) AS multiple_franchise,
-    CAST(p.primes_assurances_2024 AS DECIMAL(15, 2)) AS primes_assurances_2024,
-    CAST(p.primes_assurances_2020 AS DECIMAL(15, 2)) AS primes_assurances_2020,
-    CAST(i.impots_locaux_2024 AS DECIMAL(15, 2)) AS impots_locaux_2024,
-    CAST(i.impots_locaux_2020 AS DECIMAL(15, 2)) AS impots_locaux_2020,
-    CAST(p.evolution_prime_assurance AS DECIMAL(10, 2)) AS evolution_prime_assurance,
-    CAST(p.part_prime_budget_2024 AS DECIMAL(10, 2)) AS part_prime_budget,
-    CAST(b.depenses_per_pop AS DECIMAL(10, 2)) AS depenses_per_pop,
-    CAST(b.ratio_dettes_depenses AS DECIMAL(10, 5)) AS ratio_dettes_depenses
+    CAST(m.multiple_franchise AS DECIMAL(10, 2)) AS multiple_franchise_mediane,
+    CAST(m.part_arretes_non_reconnus AS DECIMAL(10, 2)) AS part_arretes_non_reconnus_median,
+    CAST(p.primes_assurances_2024 AS DECIMAL(15, 2)) AS primes_assurances_2024_somme,
+    CAST(p.primes_assurances_2020 AS DECIMAL(15, 2)) AS primes_assurances_2020_somme,
+    CAST(i.impots_locaux_2024 AS DECIMAL(15, 2)) AS impots_locaux_2024_somme,
+    CAST(i.impots_locaux_2020 AS DECIMAL(15, 2)) AS impots_locaux_2020_somme,
+    CAST(p.evolution_prime_assurance AS DECIMAL(10, 2)) AS evolution_prime_assurance_mediane,
+    CAST(p.part_prime_budget_2024 AS DECIMAL(10, 2)) AS part_prime_budget_mediane,
+    CAST(b.depenses_per_pop AS DECIMAL(10, 2)) AS depenses_per_pop_mediane,
+    CAST(b.ratio_dettes_depenses AS DECIMAL(10, 5)) AS ratio_dettes_depenses_median
 
 FROM primes AS p
 CROSS JOIN impots AS i
