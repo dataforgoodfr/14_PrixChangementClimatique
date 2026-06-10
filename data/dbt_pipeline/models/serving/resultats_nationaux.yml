@@ -48,6 +48,6 @@ models:
       - name: depenses_per_pop_mediane
         description: "Solde net des dépenses par population sur 2023 (manque la population municipale de 2024)"
         type: DECIMAL(10,2)
-      - name: ratio_dettes_depenses_mediane
+      - name: taux_endettement_mediane
         description: "dettes 2024 par rapport aux dépenses de 2024"
         type: DECIMAL(10,2)
