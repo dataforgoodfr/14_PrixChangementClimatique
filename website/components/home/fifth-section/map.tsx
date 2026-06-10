@@ -4,12 +4,10 @@ const Map: React.FC = () => {
   return (
     <div className="flex flex-col gap-[16px] w-full min-width-[550px] lg:max-w-[500px]">
       <div className="flex flex-col gap-[4px] text-center ">
-        <p className="text-[14px] md:text-[21px] font-[600]">
+        <p className="text-2xl font-bold">
           Variations des dépenses d’assurance multirisque par commune
         </p>
-        <p className="text-[12px] md:text-[16px] text-rf-gray/80">
-          Période 2020 - 2024
-        </p>
+        <p className="text-rf-gray/80">Période 2020 - 2024</p>
       </div>
       <div className="flex gap-[20px]">
         <Image

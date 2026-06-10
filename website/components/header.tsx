@@ -44,7 +44,7 @@ export function Header() {
             height={40}
             className="h-10 w-auto"
           />
-          <span className="hidden lg:block text-sm font-semibold text-rf-gray">
+          <span className="hidden lg:block font-bold text-rf-gray">
             Assurer ma ville
           </span>
         </Link>
@@ -56,7 +56,7 @@ export function Header() {
               <Link
                 key={href}
                 href={href}
-                className={`text-sm pb-1 border-b-2 transition-colors ${
+                className={`pb-1 border-b-2 transition-colors ${
                   isActive
                     ? "font-semibold text-rf-green-dark border-rf-lime"
                     : "font-normal text-rf-gray border-transparent hover:text-rf-green-dark"
@@ -69,10 +69,7 @@ export function Header() {
         </nav>
 
         <div className="hidden md:block shrink-0">
-          <RFButton
-            path="/#contact"
-            title="Agissez pour protéger votre commune"
-          />
+          <RFButton path="/#contact" title="J’agis pour protéger ma commune" />
         </div>
         <Button
           type="button"
@@ -102,9 +99,9 @@ export function Header() {
               <Link
                 href={href}
                 onClick={toggleMenu}
-                className={`text-sm pb-1 border-b-2 transition-colors ${
+                className={`pb-1 border-b-2 transition-colors ${
                   isActive
-                    ? "font-semibold text-rf-green-dark border-rf-lime"
+                    ? "font-bold text-rf-green-dark border-rf-lime"
                     : "font-normal text-rf-gray border-transparent hover:text-rf-green-dark"
                 }`}
               >
@@ -116,7 +113,7 @@ export function Header() {
         <li>
           <RFButton
             path="/#contact"
-            title="Agissez pour protéger votre commune"
+            title="J’agis pour protéger ma commune"
             onClick={toggleMenu}
           />
         </li>

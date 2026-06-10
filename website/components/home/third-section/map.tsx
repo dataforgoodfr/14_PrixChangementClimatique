@@ -5,11 +5,11 @@ const Map: React.FC = () => {
   return (
     <div className="flex flex-col gap-[16px] w-full min-width-[550px]">
       <div className="flex flex-col gap-[4px] text-center ">
-        <p className="text-[14px] md:text-[21px] font-[600] text-white">
+        <p className="text-2xl font-bold text-white">
           Exposition du territoire métropolitain au risque retrait-gonflement
           des argiles (RGA)
         </p>
-        <p className="text-[12px] md:text-[16px] text-white/70">
+        <p className=" text-white/70">
           Corrélation spatiale avec l&apos;existence d&apos;un PPRN
         </p>
       </div>

@@ -27,7 +27,7 @@ const FourthSection: React.FC = () => {
             },
           ]}
         />
-        <p className="text-[14px] md:text-[20px] lg:text-[24px] text-[#7C7AA1] font-[400]">
+        <p className="text-lg text-[#7C7AA1]">
           Face au changement climatique, toutes les communes ne sont pas égales,
           et celles qui possèdent un petit budget sont les premières à avoir des
           difficultés à financer la réparation des dommages et la prévention des

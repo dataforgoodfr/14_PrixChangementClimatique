@@ -25,7 +25,7 @@ const SecondSection: React.FC = () => {
             },
           ]}
         />
-        <h3 className="text-[14px] lg-[24px]">
+        <h3 className="text-lg">
           Le dérèglement climatique s&apos;accélère et l&apos;augmentation des
           émissions anthropiques de gaz à effet de serre entraîne une hausse de
           la fréquence et de l&apos;intensité des évènements climatiques

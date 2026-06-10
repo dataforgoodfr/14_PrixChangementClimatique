@@ -29,7 +29,7 @@ const Hero: React.FC = () => {
 
       <div className="relative flex flex-col max-w-[800px] md:items-start m-auto lg:mx-0">
         <div className="flex flex-col gap-[24px] lg:gap-[56px] relative z-10">
-          <h1 className="text-[28px] md:text-[40px]  lg:text-[64px] tracking-[-0.034em] text-rf-green-dark font-[700] leading-[100%]">
+          <h1 className="text-4xl  lg:text-6xl tracking-[-0.034em] text-rf-green-dark font-bold leading-[100%]">
             Les communes françaises <br /> face aux évènements <br />
             climatiques extrêmes
           </h1>
@@ -70,7 +70,7 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="relative mt-5 lg:max-w-[550px] lg:mt-[25px]">
-            <h2 className="text-[18px] tracking-[-0.034em] font-[700] leading-[100%] text-rf-green-dark md:text-[26px] lg:text-[30px]">
+            <h2 className="text-3xl tracking-[-0.034em] font-bold leading-[100%] text-rf-green-dark">
               Pourquoi une
               <span className="mx-1 text-rf-green-light">
                 cartographie de vulnérabilité
