@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Map: React.FC = () => {
   return (
-    <div className="flex flex-col gap-[16px] w-full min-width-[550px] lg:max-w-[500px]">
+    <div className="flex flex-col gap-[16px] w-full min-width-[550px]">
       <div className="flex flex-col gap-[4px] text-center ">
         <p className="text-2xl font-bold">
           Variations des dépenses d’assurance multirisque par commune

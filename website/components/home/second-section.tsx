@@ -25,16 +25,29 @@ const SecondSection: React.FC = () => {
             },
           ]}
         />
-        <h3 className="text-lg">
-          Le dérèglement climatique s&apos;accélère et l&apos;augmentation des
-          émissions anthropiques de gaz à effet de serre entraîne une hausse de
-          la fréquence et de l&apos;intensité des évènements climatiques
-          extrêmes. C&apos;est donc un nombre croissant de communes qui sont
-          sinistrées chaque année, avec une hausse de X% du nombre
-          d&apos;arrêtés cat-nat délivrés sur la période 2010-2024 par rapport
-          aux 15 années précédentes. Un des principaux risques derrière cette
-          tendance est celui lié aux RGA.
+        <h3 className="text-lg text-left">
+          L’Europe se réchauffe 2 fois plus vite que la moyenne mondiale, et la
+          France ne fait pas exception. Pourtant, certains territoires sont plus
+          touchés que d’autres.
         </h3>
+        <h3 className="text-lg text-left">
+          Les communes françaises de l’hexagone sont particulièrement exposées
+          au risque de retrait-gonflement des argiles. Selon le nouveau zonage
+          publié en janvier 2026, 55 % du territoire est classé en exposition
+          moyenne ou forte, particulièrement en Occitanie, en
+          Provence-Alpes-Côte d’Azur ou encore dans le Centre-Val-de-Loire. Les
+          territoires dits d’outre-mer sont à l’inverse de plus en confrontés à
+          l’augmentation de la fréquence des vents cycloniques.
+        </h3>
+      </div>
+      <div className="flex flex-col gap-[16px] w-full">
+        <div className="flex flex-col gap-[4px] text-center ">
+          <p className="text-2xl font-bold">
+            Augmentation de la fréquence annuelle de reconnaissance de l’état de
+            catastrophe naturelle
+          </p>
+          <p className="text-rf-gray/80">Période avant 2010 / après 2010 </p>
+        </div>
       </div>
       <div className="relative w-full aspect-[1440/960]">
         <Image
