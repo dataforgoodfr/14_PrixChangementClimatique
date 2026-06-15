@@ -54,8 +54,8 @@ export function buildMaplibreFilter(
   // --- Situation économique ---
   if (filters.taux_endettement)
     all.push(...rangeExpressions("taux_endettement", filters.taux_endettement));
-  if (filters.impots_locaux)
-    all.push(...rangeExpressions("impots_locaux", filters.impots_locaux));
+  if (filters.impots_locaux_2024)
+    all.push(...rangeExpressions("impots_locaux_2024", filters.impots_locaux_2024));
   if (filters.impots_locaux_evolution)
     all.push(
       ...rangeExpressions(

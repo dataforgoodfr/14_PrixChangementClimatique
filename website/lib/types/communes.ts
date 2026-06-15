@@ -32,7 +32,7 @@ export interface Commune {
   depenses_per_pop: number;
   part_impots_locaux?: number;
   impots_locaux_evolution?: number;
-  impots_locaux?: number;
+  impots_locaux_2024?: number;
 
   // CCR
   nb_total_arretes_recon?: number;
