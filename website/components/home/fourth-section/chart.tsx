@@ -1,5 +1,4 @@
 import Caption from "./caption";
-import { Info } from "lucide-react";
 import ChartContent from "./chart-content";
 
 const FourthSection: React.FC = () => {
@@ -10,9 +9,6 @@ const FourthSection: React.FC = () => {
           Répartition de la part des dépenses d&apos;assurance dans le budget
           des communes en 2024
         </p>
-        <div className="flex gap-[4px] text-rf-gray italic">
-          Depuis 2020 <Info size={14} />
-        </div>
       </div>
 
       <ChartContent />

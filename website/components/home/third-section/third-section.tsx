@@ -2,6 +2,12 @@ import SectionTitle from "../section-title";
 import StatCallout from "../statCallout";
 import { Info } from "lucide-react";
 import Map from "./map";
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const ThirdSection: React.FC = () => {
   return (
@@ -30,31 +36,53 @@ const ThirdSection: React.FC = () => {
           title={{ text: "des", highlight: "communes" }}
           subtitle={
             <>
-              <p>
-                ayant été reconnues au moins une fois en état de catastrophe
-                naturelle depuis 1982 ne bénéficient pas d’un Plan de prévention
-                des risques naturels (
-                <span className="inline-flex items-center gap-[4px] align-middle">
-                  PPRN
-                  <Info size={14} className="inline-block" />
-                </span>
-                ). La mise en place de ce dispositif relève des compétences de
-                l&apos;État.{" "}
-              </p>
-              <p>
-                <span className="inline-block">
-                  A l&apos;échelle nationale,
-                </span>{" "}
-                près de 12600 communes disposent d’un Plan de prévention des
+              <p className="pb-4">
+                C’est la part des communes ayant été reconnues au moins une fois
+                en état de catastrophe naturelle depuis 1982, pour laquelle
+                l’État n’a toujours pas mis en place de Plan de prévention des
                 risques naturels (
                 <span className="inline-flex items-center gap-[4px] align-middle">
                   PPRN
-                  <Info size={14} className="inline-block" />
+                  <TooltipProvider>
+                    <UITooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="size-3.5 shrink-0 cursor-pointer text-gray-400" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Il s'agit d'un document réalisé par les services de
+                        l'État et élaboré sous la responsabilité du préfet. Les
+                        PPRN sont élaborés sur des communes qui présentent une
+                        vulnérabilité importante vis-à-vis des risques. L'objet
+                        du PPRN est d'identifier les risques prévisibles qui
+                        constituent une menace pour la population et les biens,
+                        de délimiter les zones exposées directement ou
+                        indirectement à ces risques, d'y réglementer
+                        l'utilisation des sols et de déterminer les mesures de
+                        construction applicables. Pour en savoir plus, lire la
+                        plaquette d’information.
+                      </TooltipContent>
+                    </UITooltip>
+                  </TooltipProvider>
                 </span>
-                ). Pourtant depuis 1982, plus de 17000 communes ont été
-                reconnues au moins 5 fois en état de catastrophe naturelle. De
-                plus, la moitié des PPR inondations actifs datent de plus de 10
-                ans.
+                ). La prescription de ce dispositif de prévention relève
+                pourtant de ses compétences. Ce chiffre atteint plus 85% pour
+                les communes reconnues en état de catastrophe naturelle au titre
+                du risque de retrait gonflement des argiles.{" "}
+              </p>
+              <p className="pb-4">
+                Alors que le réassureur public français (CCR) prévoit une
+                multiplication par deux du risque de retrait gonflement des
+                argiles d’ici à 2050, il devient urgent pour les communes
+                exposées de disposer d’un PPRN.
+              </p>
+              <p>
+                À l'échelle nationale, près de 12 000 communes disposent au
+                moins d’un Plan de prévention des risques naturels (PPRN
+                inondation ou RGA). Beaucoup sont cependant obsolètes et
+                nécessitent une mise à jour : en moyenne, les PPRN inondations
+                dont disposent les communes françaises ont été mis en place il y
+                a plus de 16 ans. Les PPRN RGA ont été mis en place il y a plus
+                de 14 ans en moyenne.
               </p>
             </>
           }

@@ -6,7 +6,7 @@ type Props = {
   value: string;
   title: { text: string; highlight: string };
   subtitle: ReactNode;
-  variant?: "primary" | "secondary" | "fullGreen";
+  variant?: "primary" | "secondary" | "fullGreen" | "grayLight";
 };
 
 const StatCallout: React.FC<Props> = ({
@@ -30,6 +30,11 @@ const StatCallout: React.FC<Props> = ({
       value: "text-rf-green-dark",
       before: "text-rf-green-dark",
       after: "text-rf-green-dark/80",
+    },
+    grayLight: {
+      value: "text-rf-green-light",
+      before: "text-rf-green-dark",
+      after: "text-[#7C7AA1]",
     },
   };
 

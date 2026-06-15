@@ -57,7 +57,7 @@ const IntroSection: React.FC = () => {
           Pour mieux comprendre la vulnérabilité des communes française, Reclaim
           Finance et Data For Good ont développé un{" "}
           <span className="font-bold">indice de vulnérabilité</span> reposant
-          sur quatre facteurs: Exposition aux évènements climatiques extrêmes,
+          sur quatre facteurs: exposition aux évènements climatiques extrêmes,
           prévention des risques, situation économique et dépenses d’assurance.
         </p>
       </div>
@@ -101,7 +101,7 @@ const IntroSection: React.FC = () => {
         <div className="flex flex-col gap-[16px]">
           <p className="text-lg text-[#7C7AA1] lg:max-w-[900px]">
             “Assurer ma ville” est une cartographie pensée comme un outil pour
-            les élus locaux et leurs citoyens. Cet outil offre une vision locale
+            les élus locaux et les citoyens. Cet outil offre une vision locale
             et nationale des difficultés vécues par les communes françaises face
             aux impacts des évènements climatiques extrêmes.
           </p>
@@ -113,8 +113,7 @@ const IntroSection: React.FC = () => {
           </p>
           <p className="text-lg text-[#7C7AA1] font-bold lg:max-w-[900px]">
             Citoyens, élus locaux, chacun peut agir. Reclaim Finance en fait une
-            de ses priorités. Rejoignez l’initiative pour en savoir plus et
-            agir.{" "}
+            de ses priorités. Rejoignez l’initiative pour en savoir plus.{" "}
             <span className="mx-1 text-rf-green-light font-bold">
               Mobilisons-nous !
             </span>

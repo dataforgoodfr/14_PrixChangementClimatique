@@ -74,7 +74,7 @@ const ChartContent: React.FC = () => {
                 style={{
                   textAnchor: "middle",
                   fill: "#6B7280",
-                  fontSize: isMd ? 12 : 10,
+                  fontSize: 14,
                 }}
               />
             </XAxis>
@@ -95,7 +95,7 @@ const ChartContent: React.FC = () => {
                 style={{
                   textAnchor: "middle",
                   fill: "#6B7280",
-                  fontSize: isMd ? 12 : 10,
+                  fontSize: 14,
                 }}
               />
             </YAxis>

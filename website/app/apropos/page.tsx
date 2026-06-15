@@ -20,26 +20,33 @@ export default function AProposPage() {
           <h1 className="font-sans font-bold text-rf-green-dark leading-[100%] tracking-[-0.034em] text-4xl  lg:text-6xl">
             À propos
           </h1>
-          <p className="font-sans font-normal text-rf-subtitle text-3xl leading-[120%] tracking-[-0.034em]">
-            Sous-titre qui introduit les informations affichées sur cet écran
-          </p>
         </div>
       </section>
 
       {/* ── 2. INTRODUCTION ── */}
       <section className={sectionClass}>
         <p className={bodyClass}>
-          Face à l&apos;intensification des évènements climatiques extrêmes, les
-          communes françaises sont de plus en plus exposées au risque de
-          catastrophes naturelles. S&apos;ajoutant à cette pression croissante,
-          les collectivités voient leur assurabilité se dégrader petit à
-          petit&nbsp;: hausse des primes, hausses des franchises, ou encore
-          résiliation unilatérale de leur contrat par leur assureur.
+          La France dispose depuis 1982 d’un régime permettant aux particuliers,
+          entreprises et collectivités locales d’être couverts contre les
+          risques dits de “catastrophes naturelles”. Malgré ce régime, connu
+          pour être l’un des plus protecteurs au monde, les collectivités voient
+          leurs conditions d’accès à l’assurance se dégrader (augmentation des
+          tarifs, hausse des franchises, difficulté de renouvellement des
+          contrats). Dans les cas les plus préoccupants, les communes en
+          viennent à assumer seules la réparation des dommages causés par les
+          événements climatiques extrêmes, faute d’assureur.
         </p>
         <p className={bodyClass}>
-          Reclaim Finance et Data for Good ont donc souhaité travailler ensemble
-          à un projet inédit de cartographie permettant de visualiser ces
-          difficultés sur l&apos;ensemble du territoire français.
+          Pour mieux comprendre la situation des communes françaises, Reclaim
+          Finance et Data4Good ont développé une cartographie permettant
+          d’évaluer la vulnérabilité des communes françaises aux événements
+          climatiques extrêmes.
+        </p>
+        <p className={bodyClass}>
+          Cette cartographie inédite regroupe de nombreuses données publiques
+          sur l’exposition des communes françaises aux catastrophes naturelles,
+          la mise en place de plans de prévention, leur situation
+          socio-économique et leurs contrats d’assurance.
         </p>
       </section>
 
