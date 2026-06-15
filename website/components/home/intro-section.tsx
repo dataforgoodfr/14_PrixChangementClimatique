@@ -46,8 +46,8 @@ const IntroSection: React.FC = () => {
     <div className="flex flex-col gap-[40px] w-full px-[16px] lg:px-[104px] pt-[40px] pb-[72px]">
       {/* Titre + description */}
       <div className="flex flex-col gap-[20px]">
-        <p className="text-[13px] md:text-[15px] lg:text-[16px] text-[#7C7AA1] font-[400]">
-          <span className="mx-1 text-rf-green-light font-[700]">
+        <p className="text-lg text-[#7C7AA1]">
+          <span className=" text-rf-green-light font-bold">
             Le territoire français subit depuis plusieurs années la hausse de la
             fréquence et de l’intensité des événements climatiques extrêmes.
           </span>
@@ -56,8 +56,8 @@ const IntroSection: React.FC = () => {
           nouvelles difficultés, notamment pour s’assurer contre ces phénomènes.
           Pour mieux comprendre la vulnérabilité des communes française, Reclaim
           Finance et Data For Good ont développé un{" "}
-          <span className="font-[700]">indice de vulnérabilité</span> reposant
-          sur quatre facteurs: Exposition aux évènements climatiques extrêmes,
+          <span className="font-bold">indice de vulnérabilité</span> reposant
+          sur quatre facteurs: exposition aux évènements climatiques extrêmes,
           prévention des risques, situation économique et dépenses d’assurance.
         </p>
       </div>
@@ -86,7 +86,7 @@ const IntroSection: React.FC = () => {
             </div>
             <span
               className={cn(
-                "text-[12px] lg:text-[16px] text-center font-[600] whitespace-pre-line",
+                "text-lg text-center font-bold whitespace-pre-line",
                 dim.active ? "text-rf-green-dark" : "text-[#9E9DB8]",
               )}
             >
@@ -99,29 +99,28 @@ const IntroSection: React.FC = () => {
       {/* Bas de section : texte + CTA */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-[24px]">
         <div className="flex flex-col gap-[16px]">
-          <p className="text-[13px] md:text-[15px] text-[#7C7AA1] font-[400] lg:max-w-[700px]">
+          <p className="text-lg text-[#7C7AA1] lg:max-w-[900px]">
             “Assurer ma ville” est une cartographie pensée comme un outil pour
-            les élus locaux et leurs citoyens. Cet outil offre une vision locale
+            les élus locaux et les citoyens. Cet outil offre une vision locale
             et nationale des difficultés vécues par les communes françaises face
             aux impacts des évènements climatiques extrêmes.
           </p>
-          <p className="text-[13px] md:text-[15px] text-[#7C7AA1] font-[400] lg:max-w-[700px]">
+          <p className="text-lg text-[#7C7AA1] lg:max-w-[900px]">
             Incluant pour la première fois les dépenses d’assurance des
             communes, cette cartographie illustre la nécessité de se mobiliser
             pour protéger les communes françaises et leur permettre d’accéder à
             des conditions d’assurance justes et abordables.
           </p>
-          <p className="text-[13px] md:text-[15px] text-[#7C7AA1] font-[700] lg:max-w-[700px]">
+          <p className="text-lg text-[#7C7AA1] font-bold lg:max-w-[900px]">
             Citoyens, élus locaux, chacun peut agir. Reclaim Finance en fait une
-            de ses priorités. Rejoignez l’initiative pour en savoir plus et
-            agir.{" "}
-            <span className="mx-1 text-rf-green-light font-[700]">
+            de ses priorités. Rejoignez l’initiative pour en savoir plus.{" "}
+            <span className="mx-1 text-rf-green-light font-bold">
               Mobilisons-nous !
             </span>
           </p>
         </div>
         <RFButton
-          title="Agissez pour protéger votre commune"
+          title="J’agis pour protéger ma commune"
           path="/#contact"
           variant="secondary"
           icon={<ArrowRight className="w-5 h-5" />}

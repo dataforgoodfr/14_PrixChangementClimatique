@@ -29,7 +29,7 @@ const renderSegment = (
   variant: "primary" | "secondary" | "tertiary",
 ) => {
   const className = cn(
-    "text-[18px] md:text-[26px] lg:text-[36px] py-[2px] lg:py-[8px] px-[8px] rotate-[-1deg]",
+    "text-3xl py-[2px] lg:py-[8px] px-[8px] rotate-[-1deg]",
     segment.highlight && highlightStyles[variant],
   );
 

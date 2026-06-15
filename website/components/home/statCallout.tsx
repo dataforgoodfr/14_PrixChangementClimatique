@@ -6,7 +6,7 @@ type Props = {
   value: string;
   title: { text: string; highlight: string };
   subtitle: ReactNode;
-  variant?: "primary" | "secondary" | "fullGreen";
+  variant?: "primary" | "secondary" | "fullGreen" | "grayLight";
 };
 
 const StatCallout: React.FC<Props> = ({
@@ -31,30 +31,27 @@ const StatCallout: React.FC<Props> = ({
       before: "text-rf-green-dark",
       after: "text-rf-green-dark/80",
     },
+    grayLight: {
+      value: "text-rf-green-light",
+      before: "text-rf-green-dark",
+      after: "text-[#7C7AA1]",
+    },
   };
 
   const s = styles[variant];
 
   return (
     <div>
-      <span
-        className={`text-[28px] md:text-[40px] lg:text-[48px] font-[700] mr-[4px] ${s.value}`}
-      >
-        {value}
-      </span>
+      <span className={`text-5xl font-bold mr-[4px] ${s.value}`}>{value}</span>
 
-      <span
-        className={`text-[16px] md:text-[25px] lg:text-[28px] font-[400] ${s.before}`}
-      >
+      <span className={`text-3xl font-[400] ${s.before}`}>
         {`${title.text} `}
         <strong>{title.highlight}</strong>
       </span>
 
       <br />
 
-      <span className={`text-[14px] lg:text-[21px] font-[400] ${s.after}`}>
-        {subtitle}
-      </span>
+      <span className={`text-lg ${s.after}`}>{subtitle}</span>
     </div>
   );
 };

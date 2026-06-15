@@ -164,51 +164,6 @@ const droughtsData: DataPoint[] = [
   { year: 2025, value: 11 },
 ];
 
-const recognitionData: DataPoint[] = [
-  { year: 1984, value: 100 },
-  { year: 1985, value: 100 },
-  { year: 1986, value: 100 },
-  { year: 1987, value: 100 },
-  { year: 1988, value: 100 },
-  { year: 1989, value: 100 },
-  { year: 1990, value: 100 },
-  { year: 1991, value: 100 },
-  { year: 1992, value: 100 },
-  { year: 1993, value: 100 },
-  { year: 1994, value: 100 },
-  { year: 1995, value: 100 },
-  { year: 1996, value: 100 },
-  { year: 1997, value: 100 },
-  { year: 1998, value: 100 },
-  { year: 1999, value: 100 },
-  { year: 2000, value: 100 },
-  { year: 2001, value: 100 },
-  { year: 2002, value: 100 },
-  { year: 2003, value: 100 },
-  { year: 2004, value: 100 },
-  { year: 2005, value: 43 },
-  { year: 2006, value: 84 },
-  { year: 2007, value: 78 },
-  { year: 2008, value: 67 },
-  { year: 2009, value: 91 },
-  { year: 2010, value: 81 },
-  { year: 2011, value: 56 },
-  { year: 2012, value: 59 },
-  { year: 2013, value: 60 },
-  { year: 2014, value: 69 },
-  { year: 2015, value: 70 },
-  { year: 2016, value: 56 },
-  { year: 2017, value: 49 },
-  { year: 2018, value: 78 },
-  { year: 2019, value: 70 },
-  { year: 2020, value: 55 },
-  { year: 2021, value: 62 },
-  { year: 2022, value: 44 },
-  { year: 2023, value: 74 },
-  { year: 2024, value: 56 },
-  { year: 2025, value: 39 },
-];
-
 const catnatAnnotation = (
   <span className="text-xs lg:text-sm text-gray-600">
     En 2024, <strong>34</strong> CatNat sont survenues
@@ -224,13 +179,6 @@ const floodsAnnotation = (
 const droughtsAnnotation = (
   <span className="text-xs lg:text-sm text-gray-600">
     Les Sécheresses représentent <strong>56%</strong> des CatNat depuis 2010
-  </span>
-);
-
-const recognitionAnnotation = (
-  <span className="text-xs lg:text-sm text-gray-600">
-    La <strong>reconnaissance</strong> de CatNat a atteint un taux minimum de{" "}
-    <strong>39%</strong> en 2025
   </span>
 );
 
@@ -258,14 +206,6 @@ const desktopStats = [
     colors: COLORS_DROUGHTS,
     unit: "événements",
     annotation: droughtsAnnotation,
-  },
-  {
-    id: 4,
-    caption: "Taux de reconnaissance",
-    data: recognitionData,
-    colors: COLORS_RECOGNITION,
-    unit: "%",
-    annotation: recognitionAnnotation,
   },
 ];
 

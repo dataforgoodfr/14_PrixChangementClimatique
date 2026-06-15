@@ -27,7 +27,7 @@ const Caption: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-[8px] items-center self-center lg:self-end w-fit">
-      <p className="text-[16px] font-[600] text-white">Niveau de risque</p>
+      <p className="font-bold text-white">Niveau de risque</p>
       <div className="flex lg:flex-col gap-[16px] w-full flex-wrap justify-center">
         {list.map((el) => (
           <CaptionItem

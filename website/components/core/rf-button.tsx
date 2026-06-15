@@ -24,7 +24,7 @@ interface RFButtonElement extends RFButtonBaseProps {
 type RFButtonProps = RFLinkProps | RFButtonElement;
 
 const baseClasses = clsx(
-  "inline-flex items-center gap-[8px] px-5 py-2 w-fit text-sm font-semibold border rounded-none transition-all duration-150",
+  "inline-flex items-center gap-[8px] px-5 py-2 w-fit text-base font-bold border rounded-none transition-all duration-150",
   "hover:shadow-none hover:translate-x-1 hover:translate-y-1",
 );
 

@@ -7,11 +7,9 @@ export const metadata: Metadata = {
     "En savoir plus sur Reclaim Finance et notre mission de lutte contre le changement climatique.",
 };
 
-const sectionClass =
-  "max-w-[1200px] mx-auto px-5 sm:px-8 md:px-10 py-12 flex flex-col gap-6";
+const sectionClass = "max-w-[1200px] mx-auto px-5 pb-10 flex flex-col gap-6";
 
-const bodyClass =
-  "font-sans font-normal text-[#7C7AA1] text-[14px] md:text-[20px] lg:text-[24px]";
+const bodyClass = "text-[#7C7AA1] text-lg";
 
 export default function AProposPage() {
   return (
@@ -19,29 +17,36 @@ export default function AProposPage() {
       {/* ── 1. HERO ── */}
       <section className="overflow-hidden text-center bg-[#FDF7EE] bg-[linear-gradient(to_bottom,#FDF7EE22_10%,#FDF7EE66_60%,#FFFFFF_100%),url('/home-background.svg')] bg-cover bg-top px-6 pt-14 pb-24 md:pt-20 md:pb-32">
         <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-6">
-          <h1 className="font-sans font-bold text-rf-green-dark leading-[100%] tracking-[-0.034em] text-[36px] md:text-[48px] lg:text-[64px]">
+          <h1 className="font-sans font-bold text-rf-green-dark leading-[100%] tracking-[-0.034em] text-4xl  lg:text-6xl">
             À propos
           </h1>
-          <p className="font-sans font-normal text-rf-subtitle text-[18px] md:text-[24px] leading-[120%] tracking-[-0.034em]">
-            Sous-titre qui introduit les informations affichées sur cet écran
-          </p>
         </div>
       </section>
 
       {/* ── 2. INTRODUCTION ── */}
       <section className={sectionClass}>
         <p className={bodyClass}>
-          Face à l&apos;intensification des évènements climatiques extrêmes, les
-          communes françaises sont de plus en plus exposées au risque de
-          catastrophes naturelles. S&apos;ajoutant à cette pression croissante,
-          les collectivités voient leur assurabilité se dégrader petit à
-          petit&nbsp;: hausse des primes, hausses des franchises, ou encore
-          résiliation unilatérale de leur contrat par leur assureur.
+          La France dispose depuis 1982 d’un régime permettant aux particuliers,
+          entreprises et collectivités locales d’être couverts contre les
+          risques dits de “catastrophes naturelles”. Malgré ce régime, connu
+          pour être l’un des plus protecteurs au monde, les collectivités voient
+          leurs conditions d’accès à l’assurance se dégrader (augmentation des
+          tarifs, hausse des franchises, difficulté de renouvellement des
+          contrats). Dans les cas les plus préoccupants, les communes en
+          viennent à assumer seules la réparation des dommages causés par les
+          événements climatiques extrêmes, faute d’assureur.
         </p>
         <p className={bodyClass}>
-          Reclaim Finance et Data for Good ont donc souhaité travailler ensemble
-          à un projet inédit de cartographie permettant de visualiser ces
-          difficultés sur l&apos;ensemble du territoire français.
+          Pour mieux comprendre la situation des communes françaises, Reclaim
+          Finance et Data4Good ont développé une cartographie permettant
+          d’évaluer la vulnérabilité des communes françaises aux événements
+          climatiques extrêmes.
+        </p>
+        <p className={bodyClass}>
+          Cette cartographie inédite regroupe de nombreuses données publiques
+          sur l’exposition des communes françaises aux catastrophes naturelles,
+          la mise en place de plans de prévention, leur situation
+          socio-économique et leurs contrats d’assurance.
         </p>
       </section>
 

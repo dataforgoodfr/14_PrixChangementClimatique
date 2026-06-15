@@ -19,11 +19,7 @@ export const SectionTitle = ({
       >
         {title}
       </h2>
-      {subTitle && (
-        <p className="text-base font-normal italic text-rf-gray-lightest">
-          {subTitle}
-        </p>
-      )}
+      {subTitle && <p className="italic text-rf-gray-lightest">{subTitle}</p>}
     </div>
   );
 };

@@ -43,7 +43,7 @@ const StatsChart: React.FC<Props> = ({
     <div className="flex flex-col">
       <div className="flex justify-between items-start gap-[16px]">
         <div className="flex gap-[8px] items-center shrink-0">
-          <span className="text-[16px] lg:text-[24px]">{caption}</span>
+          <span className="text-lg">{caption}</span>
         </div>
       </div>
       <div className="w-full flex flex-col gap-[8px]">

@@ -140,13 +140,13 @@ export const CatnatHistoryTimeline = ({ data }: { data: CatnatResponse[] }) => {
                       </div>
 
                       <div className="space-y-1">
-                        <p className="text-base font-semibold text-rf-gray-darkest">
+                        <p className="font-bold text-rf-gray-darkest">
                           {formatDate(event.date_debut)}
                           {event.date_debut !== event.date_fin && (
                             <> – {formatDate(event.date_fin)}</>
                           )}
                         </p>
-                        <p className="text-base font-normal text-rf-gray-light">
+                        <p className=" text-rf-gray-light">
                           {event.type_catnat}
                           {event.is_reconnue && (
                             <span>

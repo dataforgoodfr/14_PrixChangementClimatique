@@ -27,9 +27,6 @@ const CATEGORIES = [
   { key: "p5plus", color: "#B91C1C", label: "> 5 %" },
 ];
 
-const LEGEND_TITLE =
-  "Part des dépenses d'assurance dans le budget des communes";
-
 const ChartContent: React.FC = () => {
   const [isMd, setIsMd] = useState(false);
 
@@ -54,7 +51,7 @@ const ChartContent: React.FC = () => {
               className="w-3 h-3 flex-shrink-0"
               style={{ backgroundColor: cat.color }}
             />
-            <span className="text-[11px] text-gray-600">{cat.label}</span>
+            <span className="text-sm text-gray-600">{cat.label}</span>
           </div>
         ))}
       </div>
@@ -77,7 +74,7 @@ const ChartContent: React.FC = () => {
                 style={{
                   textAnchor: "middle",
                   fill: "#6B7280",
-                  fontSize: isMd ? 12 : 10,
+                  fontSize: 14,
                 }}
               />
             </XAxis>
@@ -98,7 +95,7 @@ const ChartContent: React.FC = () => {
                 style={{
                   textAnchor: "middle",
                   fill: "#6B7280",
-                  fontSize: isMd ? 12 : 10,
+                  fontSize: 14,
                 }}
               />
             </YAxis>

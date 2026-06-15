@@ -118,7 +118,7 @@ function FeaturePanel({
     <div className="absolute top-0 right-0 h-full w-80 bg-white shadow-2xl z-10 flex flex-col">
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
         <div>
-          <div className="font-bold text-gray-900 text-base">
+          <div className="font-bold text-gray-900">
             {String(properties.nom_commune ?? "—")}
           </div>
           <div className="text-xs text-gray-500">

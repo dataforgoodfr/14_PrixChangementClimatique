@@ -27,11 +27,15 @@ const FourthSection: React.FC = () => {
             },
           ]}
         />
-        <p className="text-[14px] md:text-[20px] lg:text-[24px] text-[#7C7AA1] font-[400]">
-          Face au changement climatique, toutes les communes ne sont pas égales,
-          et celles qui possèdent un petit budget sont les premières à avoir des
-          difficultés à financer la réparation des dommages et la prévention des
-          risques de catastrophes naturelles.
+        <p className="text-lg text-[#7C7AA1]">
+          Pour 3 % des communes françaises, les dépenses d’assurance multirisque
+          représentent plus de 5 % de leur dépenses annuelles.
+        </p>
+        <p className="text-lg text-[#7C7AA1]">
+          Les petites communes (budget annuel inférieur à 200K €) sont les plus
+          impactées par le coût de leurs couvertures d’assurance multirisque :
+          pour 7,5 % d’entre elles, ces dépenses représentent plus de 5 % de
+          leur budget annuel.
         </p>
       </div>
       <Chart />
