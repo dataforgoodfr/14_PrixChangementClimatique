@@ -9,7 +9,6 @@ when the remote ETag differs from the local one.
 No idenfication is needed to download the file.
 """
 
-
 import sys
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -105,7 +104,10 @@ def main():
 
     # Files to download
     files = [
-        ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
+        (
+            "https://cellar-c2.services.clever-cloud.com/assurermaville/dev.duckdb",
+            "dev.duckdb",
+        ),
     ]
 
     success_count = 0
