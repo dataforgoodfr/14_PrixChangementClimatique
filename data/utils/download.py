@@ -14,6 +14,8 @@ import sys
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+BUCKET_URL = "https://cellar-c2.services.clever-cloud.com/assurermaville/"
+DEV_DB = "dev.duckdb"
 
 def _get_remote_etag(url: str) -> str | None:
     """Return the remote ETag using a HEAD request."""
@@ -105,7 +107,7 @@ def main():
 
     # Files to download
     files = [
-        ("https://s3.fr-par.scw.cloud/qppcc-upload/dev.duckdb", "dev.duckdb"),
+        (BUCKET_URL + DEV_DB, "dev.duckdb"),
     ]
 
     success_count = 0
