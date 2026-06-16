@@ -19,7 +19,7 @@ models:
         data_tests:
           - not_null
       - name: dettes
-        description: Solde net pour le type de compte "dettes"
+        description: Solde net pour le type de compte "dettes" passé en positif avec valeurs de dettes anormales (< 0) passées en null
         data_type: double
       - name: depenses
         description: Solde net pour le type de compte "depenses"

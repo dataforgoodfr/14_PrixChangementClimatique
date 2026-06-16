@@ -168,7 +168,7 @@ models:
         description: Part des impots locaux sur le budget total de la commune en 2024
         data_type: float
       - name: taux_endettement
-        description: "Taux d'endettement de la commune : ratio dettes/dépenses 2024, exprimé en pourcentage (signe inversé pour obtenir une valeur positive)"
+        description: "Taux d'endettement de la commune : ratio dettes/dépenses 2024, exprimé en pourcentage"
         data_type: float
       - name: rank_part_prime_budget
         description: Pourcentage de communes françaises ayant une part de primes d'assurance dans le budget plus élevée.
