@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
   return (
     <div className="relative px-[16px] pt-[60px] lg:pt-[74px] lg:pb-[150px] lg:pr-[88px] lg:pl-[104px] bg-[#FDF7EE] bg-[linear-gradient(to_bottom,#FDF7EE22_10%,#FDF7EE66_60%,#FFFFFF_100%),url('/home-background.svg')] bg-cover bg-top">
       {/* image desktop - absolute position behind text */}
-      <div className="hidden lg:block absolute right-0 top-[10%] -translate-y-1/2 w-[clamp(400px,50vw,771px)] max-h-[10vh]">
+      <div className="hidden lg:block absolute right-0 top-[10%] -translate-y-1/2 w-[clamp(400px,50vw,771px)] max-h-[10vh] px-[16px]">
         <Image
           src="/carte_score_vulnerabilite.png"
           alt="Map"
@@ -17,7 +17,7 @@ const Hero: React.FC = () => {
           unoptimized
         />
       </div>
-      <div className="hidden lg:block absolute left-[65%] top-[50%] -translate-y-1/2 w-[clamp(400px,50vw,771px)] max-h-[10vh]">
+      <div className="hidden lg:block absolute left-[65%] top-[50%] -translate-y-1/2 max-h-[10vh]">
         <Button
           title="Ma commune est-elle vulnérable ?"
           path="/carte"
