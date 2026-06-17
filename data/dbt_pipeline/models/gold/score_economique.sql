@@ -119,6 +119,7 @@ indices AS (
 
         -- Indice endettement : -ratio normalisé sur [0, dette_x_max]
         CASE
+            WHEN c.ratio_dettes_depenses IS NULL THEN NULL
             WHEN b.dette_x_max = 0 THEN 0
             ELSE
                 least(1.0, greatest(
