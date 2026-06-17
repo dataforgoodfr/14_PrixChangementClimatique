@@ -82,19 +82,34 @@ export function InsuranceEvolutionChart({
   const chartData = useMemo(() => {
     const yearData = [];
 
-    if (data.prime_assurance_2020) {
+    if (
+      data.prime_assurance_2020 !== undefined &&
+      data.prime_assurance_2020 !== null
+    ) {
       yearData.push({ year: "2020", expenses: data.prime_assurance_2020 });
     }
-    if (data.prime_assurance_2021) {
+    if (
+      data.prime_assurance_2021 !== undefined &&
+      data.prime_assurance_2021 !== null
+    ) {
       yearData.push({ year: "2021", expenses: data.prime_assurance_2021 });
     }
-    if (data.prime_assurance_2022) {
+    if (
+      data.prime_assurance_2022 !== undefined &&
+      data.prime_assurance_2022 !== null
+    ) {
       yearData.push({ year: "2022", expenses: data.prime_assurance_2022 });
     }
-    if (data.prime_assurance_2023) {
+    if (
+      data.prime_assurance_2023 !== undefined &&
+      data.prime_assurance_2023 !== null
+    ) {
       yearData.push({ year: "2023", expenses: data.prime_assurance_2023 });
     }
-    if (data.prime_assurance_2024) {
+    if (
+      data.prime_assurance_2024 !== undefined &&
+      data.prime_assurance_2024 !== null
+    ) {
       yearData.push({ year: "2024", expenses: data.prime_assurance_2024 });
     }
 
