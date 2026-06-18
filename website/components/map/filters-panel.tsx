@@ -195,19 +195,19 @@ export function FiltersPanel({
                 title="Prime d'assurance (€)"
                 filterKey={FilterRangeKey.PRIME_ASSURANCE_2024}
                 step={1_000}
-                caption="Primes d'assurance payées par la commune en 2024 (€)"
+                caption="Primes d'assurance multirisques payées par la commune en 2024 (€)"
               />
               <ChartRangeFilter
                 title="Évolution des primes d'assurance (%)"
                 filterKey={FilterRangeKey.TAUX_EVOLUTION_PRIME_ASSURANCE}
-                caption="Évolution des primes d'assurance payées par la commune entre 2020 et 2024 (%)"
+                caption="Évolution des primes d'assurance multirisques payées par la commune entre 2020 et 2024 (%)"
                 step={1}
               />
               <ChartRangeFilter
                 title="Part des primes dans le budget (%)"
                 filterKey={FilterRangeKey.PART_PRIME_BUDGET_2024}
                 step={0.001}
-                caption="Part des primes d'assurance dans le budget de fonctionnement annuel de la commune en 2024 (%)"
+                caption="Part des primes d'assurance multirisques dans le budget de fonctionnement annuel de la commune en 2024 (%)"
               />
             </div>
           )}
