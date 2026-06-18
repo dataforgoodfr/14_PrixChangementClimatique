@@ -24,9 +24,23 @@ def _():
     import seaborn as sns
     import matplotlib.colors as mcolors
     from datetime import datetime
+    from matplotlib.patches import Patch
+    import matplotlib.patches as mpatches
 
 
-    return MinMaxScaler, datetime, duckdb, gpd, mo, np, pd, plt, stats, wkt
+    return (
+        MinMaxScaler,
+        datetime,
+        duckdb,
+        gpd,
+        mo,
+        mpatches,
+        np,
+        pd,
+        plt,
+        stats,
+        wkt,
+    )
 
 
 @app.cell
@@ -34,10 +48,10 @@ def _(duckdb, wkt):
     PCC_DUCKDB_FILE = "data/exploration/dev.duckdb"
     con = duckdb.connect(database=PCC_DUCKDB_FILE, read_only=True)
 
-    resultats_website_par_commune = con.sql("""SELECT	* FROM dev.main.resultats_website_par_commune""").df()
+    resultats_website_par_commune = con.sql("""SELECT	* FROM dev.main_serving.resultats_website_par_commune""").df()
 
     resultats_website_par_commune["geometry"] = resultats_website_par_commune["geometry"].apply(wkt.loads)
-    return (resultats_website_par_commune,)
+    return con, resultats_website_par_commune
 
 
 @app.cell
@@ -301,6 +315,163 @@ def _(maks, np, plt, stats):
         plt.tight_layout()
         plt.show()
 
+    return
+
+
+@app.cell
+def _(mpatches, plt, prepare_france_geometry):
+    def carte_discret_save(df, col_color, communes_geo):
+
+        # --- 1. Merge avec la géo ---
+        geo_full = communes_geo.merge(
+            df[['code_insee',col_color]].rename(columns={"code_insee": "code"}),
+            on="code",
+            how="left"
+        )
+        # geo_full = geo_full.set_geometry("geometry_x")
+        # geo_full = geo_full.rename(columns={"geometry_x": "geometry"})
+        # geo_full = geo_full.drop(columns=["geometry_y"], errors="ignore")
+        # --- 2. Préparer la géométrie (DROM repositionnés) ---
+        geo_ready, drom_configs = prepare_france_geometry(geo_full)
+
+        # --- 3. Création des couleurs discrètes ---
+        vals = sorted(geo_ready[col_color].dropna().unique())
+
+        colors = ['#608D83','#AFA15D','#F4BA5F','#D9622C','#AA2E26']
+
+        # sécurité si plus de valeurs que de couleurs
+        if len(vals) > len(colors):
+            raise ValueError("Plus de classes que de couleurs disponibles")
+
+        color_map = {val: col for val, col in zip(vals, colors)}
+
+        geo_ready["color"] = geo_ready[col_color].map(
+            lambda x: color_map.get(x, '#D3D3D3')
+        )
+
+        # --- 4. Plot ---
+        fig, ax = plt.subplots(figsize=(28, 24))
+
+        geo_ready.plot(
+            color=geo_ready["color"],
+            linewidth=0.2,
+            ax=ax,
+            edgecolor="lightgrey"
+        )
+
+        # --- 5. Ajout des cadres DROM ---
+        box_w, box_h = 180000, 150000 
+
+        for code, cfg in drom_configs.items():
+            x, y = cfg['pos']
+
+            rect = mpatches.Rectangle(
+                (x - box_w/2, y - box_h/2),
+                box_w, box_h,
+                linewidth=1,
+                edgecolor='gray',
+                facecolor='none',
+                linestyle='--',
+                alpha=0.6
+            )
+            ax.add_patch(rect)
+
+            ax.text(
+                x,
+                y + (box_h/2) + 12500,
+                cfg['name'],
+                fontsize=14,
+                ha='center',
+                color='dimgray'
+            )
+
+        # --- 6. Légende (optionnelle mais utile) ---
+        legend_elements = [
+            mpatches.Patch(color=c, label=str(v))
+            for v, c in color_map.items()
+        ]
+        legend_elements.append(
+            mpatches.Patch(color="#D3D3D3", label="Donnée manquante")
+        )
+
+        ax.legend(
+            handles=legend_elements,
+            loc='upper right',
+            frameon=True,
+            fontsize=14,
+            facecolor='none',
+            edgecolor='none'
+        )
+
+        # --- 7. Cadrage IDENTIQUE ---
+        ax.set_xlim(-40000, 1250000)
+        ax.set_ylim(5700000, 7150000)
+
+        # --- 8. Finition ---
+        # ax.set_title(col_color, fontsize=20)
+        ax.axis('off')
+
+        plt.savefig('carte_discrete.svg', transparent=True)
+        plt.savefig('carte_discrete.png', transparent=True)
+
+        plt.show()
+
+    return (carte_discret_save,)
+
+
+@app.cell
+def _(gpd):
+    def prepare_france_geometry(df):
+        if df.crs != "EPSG:2154":
+            df = df.to_crs(epsg=2154)
+
+        df['dept_temp'] = df['code'].apply(lambda x: x[:3] if x.startswith('97') else x[:2])
+        # Guadeloupe intial : (GD) -150000 6540000 (HB)
+        drom_configs = {
+            '971': {'pos': (300000, 5870000), 'scale': 1.3, 'name': "Guadeloupe"},
+            '972': {'pos': (500000, 5870000),   'scale': 1.8, 'name': "Martinique"},
+            '973': {'pos': (700000, 5870000), 'scale': 0.25, 'name': "Guyane"},
+            '974': {'pos': (900000, 5870000), 'scale': 1, 'name': "La Réunion"},
+            '976': {'pos': (1100000, 5870000),   'scale': 2.5, 'name': "Mayotte"},
+        }
+
+        df_main = df[~df['dept_temp'].str.startswith('97')].copy()
+        df_droms = []
+
+        for code, cfg in drom_configs.items():
+            drom = df[df['dept_temp'] == code].copy()
+            if not drom.empty:
+                centroid = drom.geometry.unary_union.centroid
+                drom.geometry = drom.geometry.translate(xoff=-centroid.x, yoff=-centroid.y)
+                drom.geometry = drom.geometry.scale(xfact=cfg['scale'], yfact=cfg['scale'], origin=(0,0))
+
+                # Box Position
+                drom.geometry = drom.geometry.translate(xoff=cfg['pos'][0], yoff=cfg['pos'][1])
+                df_droms.append(drom)
+
+        return gpd.pd.concat([df_main] + df_droms), drom_configs
+
+    return (prepare_france_geometry,)
+
+
+@app.cell
+def _(gpd):
+    communes_geojson_url = "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/communes-avec-outre-mer.geojson"
+
+    # dept_geo = gpd.read_file(dept_geojson_url)
+    communes_geo = gpd.read_file(communes_geojson_url)
+    return (communes_geo,)
+
+
+@app.cell
+def _(gdf, np):
+    gdf['indive_vuln'] =  np.floor(gdf['indice_vulnerabilite_niveau'] ).clip(0, 4).astype('Int64')
+    return
+
+
+@app.cell
+def _(carte_discret_save, communes_geo, gdf):
+    carte_discret_save(gdf, 'indive_vuln', communes_geo)
     return
 
 
@@ -1511,6 +1682,143 @@ def _(df_filtered, mo, score, sous_score, tableau):
             )
 
     mo.ui.table(df_filtered)  # ou styled si vous préférez le styling pandas
+    return
+
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune
+    return
+
+
+@app.cell
+def _(con):
+    primes_par_communes = con.sql("""SELECT	* FROM dev.main_silver.primes_par_communes""").df()
+    return (primes_par_communes,)
+
+
+@app.cell
+def _(con):
+    indicateurs_budget = con.sql("""SELECT	* FROM dev.main_silver.indicateurs_budget""").df()
+    return (indicateurs_budget,)
+
+
+@app.cell
+def _(indicateurs_budget):
+    indicateurs_budget.loc[indicateurs_budget['ratio_dettes_depenses']>0]
+    return
+
+
+@app.cell
+def _(indicateurs_budget):
+    indicateurs_budget.loc[(indicateurs_budget['dettes']>0)&(indicateurs_budget['annee']==2024)]
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['taux_endettement']<0]
+    return
+
+
+@app.cell
+def _(primes_par_communes):
+    primes_par_communes
+    return
+
+
+@app.cell
+def _(primes_assurances_communes):
+    primes_assurances_communes.sql
+    return
+
+
+@app.cell
+def _(con):
+    primes_assurances_communes = con.sql("""SELECT	* FROM dev.main_bronze.primes_assurances_communes""").df()
+    return (primes_assurances_communes,)
+
+
+@app.cell
+def _(con):
+    prime = con.sql("""SELECT	* FROM dev.main_gold.prime""").df()
+    return (prime,)
+
+
+@app.cell
+def _(prime):
+    prime.loc[prime['prime_assurance_2024'].isna()]
+    return
+
+
+@app.cell
+def _(prime):
+    prime.loc[prime['code_geo']=='83146']
+    return
+
+
+@app.cell
+def _(primes_assurances_communes):
+    primes_assurances_communes.loc[primes_assurances_communes['code_geo_from_siren']=='83146']
+    return
+
+
+@app.cell
+def _(primes_assurances_communes):
+    primes_assurances_communes
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['code_insee']=='83146']
+    return
+
+
+@app.cell
+def _(np, resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['taux_endettement']<0]['indice_vulnerabilite_niveau'] = np.nan
+    return
+
+
+@app.cell
+def _(np, resultats_website_par_commune):
+    resultats_website_par_commune.loc[
+        resultats_website_par_commune['taux_endettement'] < 0,
+        'indice_vulnerabilite_niveau'
+    ] = np.nan
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[
+        resultats_website_par_commune['taux_endettement'] < 0,
+        'indice_vulnerabilite_niveau'
+    ]
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['prime_assurance_2024']==0]
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune.loc[resultats_website_par_commune['prime_assurance_2024'].isna()]
+    return
+
+
+@app.cell
+def _(resultats_website_par_commune):
+    resultats_website_par_commune
     return
 
 
