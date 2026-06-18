@@ -39,11 +39,11 @@ export const DEFAULT_FILTERS: CommuneFilters = {};
 export const FILTER_BOUNDS = {
   indice_vulnerabilite_niveau: { min: 0, max: 5 },
   population: { min: 0, max: 30_000 },
-  depenses_per_pop: { min: 0, max: 4_000 },
+  depenses_per_pop: { min: 0, max: 5_000 },
   indicateur_rga: { min: 0, max: 1 },
   indicateur_tri: { min: 0, max: 1 },
   nb_total_arretes_recon: { min: 0, max: 65 },
-  taux_endettement: { min: -100, max: 500 },
+  taux_endettement: { min: 0, max: 500 },
   impots_locaux_2024: { min: 0, max: 25_000_000 },
   impots_locaux_evolution: { min: -1, max: 3 },
   prime_assurance_2024: { min: 0, max: 200_000 },
