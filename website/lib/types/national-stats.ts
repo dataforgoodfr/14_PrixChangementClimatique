@@ -10,7 +10,7 @@ export interface NationalStats {
   primes_assurances_2020_somme?: string;
   impots_locaux_2024_somme?: string;
   impots_locaux_2020_somme?: string;
-  evolution_prime_assurance_mediane?: string;
+  taux_evolution_prime_assurance_mediane?: string;
   part_prime_budget_2024_mediane?: string;
   depenses_per_pop_mediane?: string;
   taux_endettement_mediane?: string;
