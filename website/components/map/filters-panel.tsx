@@ -99,9 +99,15 @@ export function FiltersPanel({
 
         {/* Indicator selector */}
         <div className="px-4 pt-5 pb-8 border-b-2 border-b-neutral-100">
-          <p className="text-sm font-semibold text-gray-700 mb-3">
-            Exploration
-          </p>
+          <div className="flex justify-between items-center mb-3">
+            <p className="text-sm font-semibold text-gray-700">Exploration</p>
+            <a
+              href="/methodologie"
+              className="text-xs text-blue-700 hover:underline"
+            >
+              Lire la méthodologie
+            </a>
+          </div>
           <div className="grid grid-cols-5 gap-2">
             {INDICATOR_OPTIONS.map(({ value, label, Icon }) => (
               <IndicatorSelector
