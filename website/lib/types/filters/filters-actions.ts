@@ -19,7 +19,7 @@ export enum FilterRangeKey {
   IMPOTS_LOCAUX_2024 = "impots_locaux_2024",
   IMPOTS_LOCAUX_EVOLUTION = "impots_locaux_evolution",
   PRIME_ASSURANCE_2024 = "prime_assurance_2024",
-  EVOLUTION_PRIME_ASSURANCE = "evolution_prime_assurance",
+  TAUX_EVOLUTION_PRIME_ASSURANCE = "taux_evolution_prime_assurance",
   PART_PRIME_BUDGET_2024 = "part_prime_budget_2024",
 }
 

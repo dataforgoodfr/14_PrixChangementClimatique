@@ -69,11 +69,11 @@ export function buildMaplibreFilter(
     all.push(
       ...rangeExpressions("prime_assurance_2024", filters.prime_assurance_2024),
     );
-  if (filters.evolution_prime_assurance)
+  if (filters.taux_evolution_prime_assurance)
     all.push(
       ...rangeExpressions(
-        "evolution_prime_assurance",
-        filters.evolution_prime_assurance,
+        "taux_evolution_prime_assurance",
+        filters.taux_evolution_prime_assurance,
       ),
     );
   if (filters.part_prime_budget_2024)

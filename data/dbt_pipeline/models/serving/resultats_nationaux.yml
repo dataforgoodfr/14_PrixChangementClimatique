@@ -39,9 +39,9 @@ models:
       - name: impots_locaux_2020_somme
         description: "Total national des impots locaux en 2020"
         type: DECIMAL(15,2)
-      - name: evolution_prime_assurance_mediane
-        description: "Evolution des primes entre 2020 et 2024"
-        type: DECIMAL(10,2)
+      - name: taux_evolution_prime_assurance_mediane
+        description: "Taux d'évolution des primes entre 2020 et 2024 (%)"
+        type: DECIMAL(10,0)
       - name: part_prime_budget_2024_mediane
         description: "Somme des primes d'assurances et budget de 2024"
         type: DECIMAL(10,3)

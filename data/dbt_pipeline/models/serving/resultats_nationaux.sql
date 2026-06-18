@@ -80,7 +80,7 @@ SELECT
     CAST(p.primes_assurances_2020_somme AS DECIMAL(15, 2)) AS primes_assurances_2020_somme,
     CAST(i.impots_locaux_2024_somme AS DECIMAL(15, 2)) AS impots_locaux_2024_somme,
     CAST(i.impots_locaux_2020_somme AS DECIMAL(15, 2)) AS impots_locaux_2020_somme,
-    CAST(p.evolution_prime_assurance_mediane AS DECIMAL(10, 2)) AS evolution_prime_assurance_mediane,
+    CAST(p.evolution_prime_assurance_mediane * 100 AS DECIMAL(10, 0)) AS taux_evolution_prime_assurance_mediane,
     CAST(p.part_prime_budget_2024_mediane AS DECIMAL(10, 4)) AS part_prime_budget_2024_mediane,
     CAST(b.depenses_per_pop_mediane AS DECIMAL(10, 2)) AS depenses_per_pop_mediane,
     CAST(b.ratio_dettes_depenses_mediane * 100 AS DECIMAL(10, 2)) AS taux_endettement_mediane
