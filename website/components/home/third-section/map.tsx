@@ -6,8 +6,8 @@ const Map: React.FC = () => {
     <div className="flex flex-col gap-[16px] w-full min-width-[550px]">
       <div className="flex flex-col gap-[4px] text-center ">
         <p className="text-2xl font-bold text-white">
-          Exposition du territoire métropolitain au risque retrait-gonflement
-          des argiles (RGA)
+          Exposition de la France hexagonale au risque retrait-gonflement des
+          argiles (RGA)
         </p>
         <p className=" text-white/70">
           Corrélation spatiale avec l&apos;existence d&apos;un PPRN

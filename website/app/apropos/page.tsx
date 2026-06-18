@@ -91,11 +91,11 @@ export default function AProposPage() {
       {/* ── 4. RECLAIM FINANCE ── */}
       <section className={`${sectionClass} pb-24`}>
         <Image
-          src="/logo-rf.svg"
+          src="/Reclaim-Finance.png"
           alt="Reclaim Finance"
-          width={200}
-          height={56}
-          className="h-12 w-auto object-contain object-left"
+          width={300}
+          height={173}
+          className=""
         />
         <p className={bodyClass}>
           Reclaim Finance est une ONG de recherche et de plaidoyer 100 % dédiée
