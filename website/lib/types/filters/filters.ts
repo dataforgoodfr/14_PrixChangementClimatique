@@ -29,7 +29,7 @@ export interface CommuneFilters {
 
   // --- Assurance ---
   prime_assurance_2024?: RangeFilter;
-  evolution_prime_assurance?: RangeFilter;
+  taux_evolution_prime_assurance?: RangeFilter;
   part_prime_budget_2024?: RangeFilter;
 }
 
@@ -47,6 +47,6 @@ export const FILTER_BOUNDS = {
   impots_locaux_2024: { min: 0, max: 25_000_000 },
   impots_locaux_evolution: { min: -1, max: 3 },
   prime_assurance_2024: { min: 0, max: 200_000 },
-  evolution_prime_assurance: { min: -1, max: 5 },
+  taux_evolution_prime_assurance: { min: -100, max: 500 },
   part_prime_budget_2024: { min: 0, max: 0.1 },
 } as const satisfies Record<string, RangeFilter>;

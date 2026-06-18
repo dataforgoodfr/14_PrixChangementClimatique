@@ -179,7 +179,7 @@ export function FiltersPanel({
                 step={100_000}
               />
               <ChartRangeFilter
-                title="Évolution des impôts locaux"
+                title="Taux d'évolution des impôts locaux (%)"
                 filterKey={FilterRangeKey.IMPOTS_LOCAUX_EVOLUTION}
                 step={0.1}
               />
@@ -189,9 +189,9 @@ export function FiltersPanel({
                 step={1_000}
               />
               <ChartRangeFilter
-                title="Évolution des primes d'assurance"
-                filterKey={FilterRangeKey.EVOLUTION_PRIME_ASSURANCE}
-                step={0.1}
+                title="Taux d'évolution des primes d'assurance (%)"
+                filterKey={FilterRangeKey.TAUX_EVOLUTION_PRIME_ASSURANCE}
+                step={1}
               />
               <ChartRangeFilter
                 title="Part des primes dans le budget"
