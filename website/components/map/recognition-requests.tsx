@@ -65,9 +65,9 @@ export const RecognitionRequests = ({
         </div>
         <Separator orientation="vertical" className="hidden md:block" />
         <div className="w-full text-muted-foreground">
-          Le maire dispose d’un délai de 24 mois après la survenue du phénomène
-          pour déposer sa demande de reconnaissance de l’état de catastrophe
-          naturelle auprès du préfet de département. Une commission
+          Le ou la maire dispose d’un délai de 24 mois après la survenue du
+          phénomène pour déposer sa demande de reconnaissance de l’état de
+          catastrophe naturelle auprès du préfet de département. Une commission
           interministérielle est chargée de donner un avis sur chaque dossier
           communal. Elle se prononce sur le caractère naturel et l’intensité
           anormale du phénomène en se basant sur les expertises techniques

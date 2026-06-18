@@ -1,4 +1,5 @@
 import SectionTitle from "../section-title";
+import StatCallout from "../statCallout";
 import Chart from "./chart";
 
 const FourthSection: React.FC = () => {
@@ -27,13 +28,20 @@ const FourthSection: React.FC = () => {
             },
           ]}
         />
-        <p className="text-lg text-[#7C7AA1]">
-          Pour 3 % des communes françaises, les dépenses d’assurance multirisque
-          représentent plus de 5 % de leur dépenses annuelles.
-        </p>
-        <p className="text-lg text-[#7C7AA1]">
-          Les petites communes (budget annuel inférieur à 200K €) sont les plus
-          impactées par le coût de leurs couvertures d’assurance multirisque :
+
+        <StatCallout
+          value={"3%"}
+          title={{ text: "des", highlight: "communes" }}
+          subtitle={
+            <>
+              enregistrent des dépenses d’assurance multirisques représentant
+              plus de 5 % de leur budget annuel.
+            </>
+          }
+        />
+        <p className="text-lg text-rf-gray">
+          Les petites communes (budget annuel inférieur à 200 k€) sont les plus
+          impactées par le coût de leurs couvertures d’assurance multirisques :
           pour 7,5 % d’entre elles, ces dépenses représentent plus de 5 % de
           leur budget annuel.
         </p>

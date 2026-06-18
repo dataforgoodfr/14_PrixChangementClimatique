@@ -121,7 +121,6 @@ export function ComparisonPanel({
             <SectionSubtitle title="Indice de vulnérabilité" />
             {selectedCommune.indice_vulnerabilite_niveau ? (
               <RfVulnerabilityIndex
-                mode="continuous"
                 value={selectedCommune.indice_vulnerabilite_niveau}
               />
             ) : (
@@ -129,7 +128,6 @@ export function ComparisonPanel({
             )}
             {comparedCommune.indice_vulnerabilite_niveau ? (
               <RfVulnerabilityIndex
-                mode="continuous"
                 value={comparedCommune.indice_vulnerabilite_niveau}
               />
             ) : (

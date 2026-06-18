@@ -27,60 +27,9 @@ export default function MethodologiePage() {
             Méthodologie
           </h1>
           <p className="font-sans font-normal text-rf-subtitle text-3xl leading-[120%] tracking-[-0.034em]">
-            Sous-titre qui introduit les informations affichées sur cet écran
+            Disponible le 1er juillet 2026
           </p>
         </div>
-      </section>
-
-      {/* ── 2. EXPOSITION AUX CATASTROPHES NATURELLES ── */}
-      <section className={sectionClass}>
-        <SectionTitle
-          highlightVariant="secondary"
-          topLine={[{ parts: [{ text: "Exposition aux" }] }]}
-          bottomLine={[
-            {
-              highlight: true,
-              parts: [{ text: "catastrophes naturelles" }],
-            },
-          ]}
-        />
-        <p className={bodyClass}>{placeholderText1}</p>
-        <p className={bodyClass}>{placeholderText2}</p>
-      </section>
-
-      {/* ── 3. PRÉVENTION ── */}
-      <section className={sectionClass}>
-        <SectionTitle
-          highlightVariant="secondary"
-          topLine={[{ highlight: true, parts: [{ text: "Prévention" }] }]}
-          bottomLine={[]}
-        />
-        <p className={bodyClass}>{placeholderText1}</p>
-        <p className={bodyClass}>{placeholderText2}</p>
-      </section>
-
-      {/* ── 4. SITUATION ÉCONOMIQUE ── */}
-      <section className={sectionClass}>
-        <SectionTitle
-          highlightVariant="secondary"
-          topLine={[
-            { highlight: true, parts: [{ text: "Situation économique" }] },
-          ]}
-          bottomLine={[]}
-        />
-        <p className={bodyClass}>{placeholderText1}</p>
-        <p className={bodyClass}>{placeholderText2}</p>
-      </section>
-
-      {/* ── 5. ASSURANCE ── */}
-      <section className={`${sectionClass} pb-24`}>
-        <SectionTitle
-          highlightVariant="secondary"
-          topLine={[{ highlight: true, parts: [{ text: "Assurance" }] }]}
-          bottomLine={[]}
-        />
-        <p className={bodyClass}>{placeholderText1}</p>
-        <p className={bodyClass}>{placeholderText2}</p>
       </section>
     </main>
   );

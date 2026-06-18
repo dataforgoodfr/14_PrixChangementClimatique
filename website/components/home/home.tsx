@@ -13,11 +13,11 @@ const Home: React.FC = () => {
       <Hero />
       <div>
         <IntroSection />
+        <FifthSection />
         <FirstSection />
         <SecondSection />
         <ThirdSection />
         <FourthSection />
-        <FifthSection />
       </div>
       <ContactSection />
     </div>

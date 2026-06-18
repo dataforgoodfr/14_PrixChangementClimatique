@@ -13,6 +13,7 @@ interface IndicatorMeta {
   title: string;
   labelMin?: string;
   labelMax?: string;
+  labelSize?: string;
   gradient?: string;
   discrete?: DiscreteSeg[];
 }
@@ -20,8 +21,9 @@ interface IndicatorMeta {
 const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
   indice_vulnerabilite_niveau: {
     title: "Niveau de vulnérabilité",
-    labelMin: "Peu vulnérable",
-    labelMax: "Très vulnérable",
+    labelMin: "Très peu vulnérable",
+    labelMax: "Très fortement vulnérable",
+    labelSize: "text-[0.7rem]",
     discrete: [
       { color: "#518F83" },
       { color: "#B2A052" },
@@ -32,8 +34,8 @@ const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
   },
   score_exposition: {
     title: "Exposition aux risques climatiques",
-    labelMin: "Peu élevé",
-    labelMax: "Très élevé",
+    labelMin: "Peu élevée",
+    labelMax: "Très élevée",
     gradient: "linear-gradient(to right, #FFF0EE, #7F1D1D)",
   },
   prevention: {
@@ -47,14 +49,14 @@ const INDICATOR_META: Record<IndicatorField, IndicatorMeta> = {
   },
   score_economique: {
     title: "Situation économique",
-    labelMin: "Faible",
-    labelMax: "Élevé",
+    labelMin: "Satisfaisante",
+    labelMax: "Dégradée",
     gradient: "linear-gradient(to right, #FFF7ED, #7C2D12)",
   },
   score_assurance: {
-    title: "Exposition assurance",
-    labelMin: "Faible",
-    labelMax: "Élevé",
+    title: "Situation assurancielle",
+    labelMin: "Satisfaisante",
+    labelMax: "Dégradée",
     gradient: "linear-gradient(to right, #FEF2F2, #1E3A5F)",
   },
 };
@@ -106,8 +108,16 @@ export function Legend() {
                 ))}
               </div>
               <div className="flex justify-between mt-1">
-                <span className="text-xs text-gray-500">{meta.labelMin}</span>
-                <span className="text-xs text-gray-500">{meta.labelMax}</span>
+                <span
+                  className={`${meta.labelSize || "text-xs"} text-gray-500`}
+                >
+                  {meta.labelMin}
+                </span>
+                <span
+                  className={`${meta.labelSize || "text-xs"} text-gray-500`}
+                >
+                  {meta.labelMax}
+                </span>
               </div>
             </>
           )
@@ -118,8 +128,12 @@ export function Legend() {
               style={{ background: meta.gradient }}
             />
             <div className="flex justify-between mt-1">
-              <span className="text-xs text-gray-500">{meta.labelMin}</span>
-              <span className="text-xs text-gray-500">{meta.labelMax}</span>
+              <span className={`${meta.labelSize || "text-xs"} text-gray-500`}>
+                {meta.labelMin}
+              </span>
+              <span className={`${meta.labelSize || "text-xs"} text-gray-500`}>
+                {meta.labelMax}
+              </span>
             </div>
           </>
         )}

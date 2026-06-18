@@ -136,18 +136,19 @@ export function InsuranceEvolutionChart({
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-1.5">
-          Evolution des dépenses d&apos;assurance
+          Évolution des dépenses d&apos;assurance
           <TooltipProvider>
             <UITooltip>
               <TooltipTrigger asChild>
                 <Info className="size-3.5 shrink-0 cursor-pointer text-gray-400" />
               </TooltipTrigger>
               <TooltipContent>
-                Les dépenses d&apos;assurance multirisque d&apos;une commune
-                représentent les coût des contrats d&apos;assurance souscrits
-                par celle-ci pour protéger ses biens (bâtiments, véhicules)
-                contre les dégâts matériaux (évènements climatiques extrêmes,
-                etc.)
+                Les dépenses d&apos;assurance multirisques d&apos;une commune
+                représentent les coûts des contrats d&apos;assurance souscrits
+                par celle-ci contre un certain nombre de risques, notamment pour
+                protéger ses biens contre les dégâts matériaux (évènements
+                climatiques extrêmes, incendie, dégâts des eaux, vol,
+                vandalisme, etc.).
               </TooltipContent>
             </UITooltip>
           </TooltipProvider>

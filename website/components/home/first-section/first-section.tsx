@@ -12,7 +12,7 @@ import { Info } from "lucide-react";
 
 const FirstSection: React.FC = () => {
   return (
-    <div className="flex flex-col gap-[40px] lg:gap-[96px] w-full px-[16px] lg:px-[104px] mb-[72px]">
+    <div className="flex flex-col gap-[40px] lg:gap-[96px] w-full px-[16px] lg:px-[104px] pt-[40px] mb-[72px]">
       <div className="flex flex-col gap-[20px]">
         <SectionTitle
           highlightVariant="secondary"
@@ -43,20 +43,21 @@ const FirstSection: React.FC = () => {
       </div>
 
       <div className="block">
-        <div className="flex flex-col gap-[4px] text-center text-2xl font-bold pb-12">
-          Evolution du nombre d&apos;évènements ayant donné lieu à une
+        <div className="text-center text-2xl font-bold pb-12">
+          Évolution du nombre d&apos;évènements ayant donné lieu à une
           reconnaissance d&apos;état de catastrophe naturelle (1984-2025)
           <TooltipProvider>
             <UITooltip>
               <TooltipTrigger asChild>
-                <Info className="size-3.5 shrink-0 cursor-pointer text-gray-400" />
+                <Info className="inline size-3.5 ml-1 cursor-pointer text-gray-400" />
               </TooltipTrigger>
               <TooltipContent>
                 Les communes touchées par un événement climatique extrême
-                peuvent demander une reconnaissance de l'état de catastrophe
-                naturelle auprès du préfet dans un délai maximum de 24 mois
-                après l'événement. Cette requête remonte alors jusqu'au
-                gouvernement, seul habilité à reconnaître cette situation.
+                peuvent demander une reconnaissance de l&apos;état de
+                catastrophe naturelle auprès du préfet dans un délai maximum de
+                24 mois après l&apos;événement. Cette requête remonte alors
+                jusqu&apos;au gouvernement, seul habilité à reconnaître cette
+                situation.
               </TooltipContent>
             </UITooltip>
           </TooltipProvider>
