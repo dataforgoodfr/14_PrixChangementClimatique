@@ -149,7 +149,7 @@ SELECT
         ELSE ROUND(
             (
                 RANK() OVER (
-                    ORDER BY b.ratio_dettes_depenses ASC
+                    ORDER BY b.ratio_dettes_depenses DESC
                 ) - 1
             ) * 100.0
             /
