@@ -88,7 +88,7 @@ SELECT
     ROUND(p.prime_assurance_2022, 2) AS prime_assurance_2022,
     ROUND(p.prime_assurance_2021, 2) AS prime_assurance_2021,
     ROUND(p.prime_assurance_2020, 2) AS prime_assurance_2020,
-    ROUND(p.evolution_prime_assurance, 2) AS evolution_prime_assurance,
+    ROUND(p.evolution_prime_assurance * 100, 0) AS taux_evolution_prime_assurance,
     ROUND(p.part_prime_budget_2024, 4) AS part_prime_budget_2024,
     ROUND(p.part_prime_budget_2023, 4) AS part_prime_budget_2023,
     ROUND(p.part_prime_budget_2022, 4) AS part_prime_budget_2022,
@@ -149,7 +149,7 @@ SELECT
         ELSE ROUND(
             (
                 RANK() OVER (
-                    ORDER BY b.ratio_dettes_depenses ASC
+                    ORDER BY b.ratio_dettes_depenses DESC
                 ) - 1
             ) * 100.0
             /

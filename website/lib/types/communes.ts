@@ -66,5 +66,5 @@ export interface Commune {
   part_prime_budget_2022?: number;
   part_prime_budget_2021?: number;
   part_prime_budget_2020?: number;
-  evolution_prime_assurance?: number;
+  taux_evolution_prime_assurance?: number;
 }

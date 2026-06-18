@@ -171,38 +171,43 @@ export function FiltersPanel({
                 title="Budget par habitant (€)"
                 filterKey={FilterRangeKey.DEPENSES_PER_POP}
                 step={100}
-                caption="Le budget par habitant est calculé à partir du budget de fonctionnement annuel des communes, divisé par le nombre d’habitants”"
+                caption="Budget par habitant en 2024, calculé à partir du budget de fonctionnement annuel de la commune, divisé par le nombre d’habitants (€)"
               />
               <ChartRangeFilter
                 title="Taux d’endettement (%)"
                 filterKey={FilterRangeKey.TAUX_ENDETTEMENT}
                 step={1}
-                caption="Le taux d’endettement permet d’évaluer la dette d’une commune en fonction de son budget de fonctionnement annuel"
+                caption="Taux d'endettement de la commune en 2024, permettant d’évaluer la dette de la commune en fonction de son budget de fonctionnement annuel (%)"
               />
               <ChartRangeFilter
                 title="Impôts locaux (€)"
                 filterKey={FilterRangeKey.IMPOTS_LOCAUX_2024}
+                caption="Impôts locaux collectés par la commune auprès de ses habitants en 2024 (€)"
                 step={100_000}
               />
               <ChartRangeFilter
-                title="Évolution des impôts locaux"
+                title="Évolution des impôts locaux (%)"
                 filterKey={FilterRangeKey.IMPOTS_LOCAUX_EVOLUTION}
                 step={0.1}
+                caption="Évolution des impôts locaux collectés par la commune auprès de ses habitants entre 2020 et 2024 (%)"
               />
               <ChartRangeFilter
                 title="Prime d'assurance (€)"
                 filterKey={FilterRangeKey.PRIME_ASSURANCE_2024}
                 step={1_000}
+                caption="Primes d'assurance payées par la commune en 2024 (€)"
               />
               <ChartRangeFilter
-                title="Évolution des primes d'assurance"
-                filterKey={FilterRangeKey.EVOLUTION_PRIME_ASSURANCE}
-                step={0.1}
+                title="Évolution des primes d'assurance (%)"
+                filterKey={FilterRangeKey.TAUX_EVOLUTION_PRIME_ASSURANCE}
+                caption="Évolution des primes d'assurance payées par la commune entre 2020 et 2024 (%)"
+                step={1}
               />
               <ChartRangeFilter
-                title="Part des primes dans le budget"
+                title="Part des primes dans le budget (%)"
                 filterKey={FilterRangeKey.PART_PRIME_BUDGET_2024}
                 step={0.001}
+                caption="Part des primes d'assurance dans le budget de fonctionnement annuel de la commune en 2024 (%)"
               />
             </div>
           )}

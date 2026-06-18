@@ -95,8 +95,8 @@ models:
       - name: prime_assurance_2020
         description: Somme des primes d'assurances pour le compte 6161 en 2020
         data_type: float
-      - name: evolution_prime_assurance
-        description: Evolution des primes entre 2020 et 2024
+      - name: taux_evolution_prime_assurance
+        description: Taux d'évolution des primes d'assurance entre 2020 et 2024 (%)
         data_type: float
       - name: part_prime_budget_2024
         description: Primes sur dépense 2024
