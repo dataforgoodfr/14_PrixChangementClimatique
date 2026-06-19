@@ -77,7 +77,7 @@ SELECT
     -- Indicateurs économiques
     pr.pprn_rga IS TRUE AS pprn_rga,
     pr.pprn_ino IS TRUE AS pprn_ino,
-    ROUND(i_loc.impots_locaux_evolution, 2) AS impots_locaux_evolution,
+    ROUND(i_loc.impots_locaux_evolution * 100, 1) AS taux_evolution_impots_locaux,
     ROUND(i_loc.part_impots_locaux, 2) AS part_impots_locaux,
     ROUND(b.ratio_dettes_depenses * 100, 1) AS taux_endettement,
 

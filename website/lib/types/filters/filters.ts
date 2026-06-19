@@ -25,7 +25,7 @@ export interface CommuneFilters {
   // --- Situation économique ---
   taux_endettement?: RangeFilter;
   impots_locaux_2024?: RangeFilter;
-  impots_locaux_evolution?: RangeFilter;
+  taux_evolution_impots_locaux?: RangeFilter;
 
   // --- Assurance ---
   prime_assurance_2024?: RangeFilter;
@@ -45,7 +45,7 @@ export const FILTER_BOUNDS = {
   nb_total_arretes_recon: { min: 0, max: 65 },
   taux_endettement: { min: 0, max: 500 },
   impots_locaux_2024: { min: 0, max: 25_000_000 },
-  impots_locaux_evolution: { min: -1, max: 3 },
+  taux_evolution_impots_locaux: { min: -100, max: 300 },
   prime_assurance_2024: { min: 0, max: 200_000 },
   taux_evolution_prime_assurance: { min: -100, max: 500 },
   part_prime_budget_2024: { min: 0, max: 0.1 },

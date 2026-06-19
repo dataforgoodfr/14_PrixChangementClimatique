@@ -17,7 +17,7 @@ export enum FilterRangeKey {
   NB_TOTAL_ARRETES_RECON = "nb_total_arretes_recon",
   TAUX_ENDETTEMENT = "taux_endettement",
   IMPOTS_LOCAUX_2024 = "impots_locaux_2024",
-  IMPOTS_LOCAUX_EVOLUTION = "impots_locaux_evolution",
+  TAUX_EVOLUTION_IMPOTS_LOCAUX = "taux_evolution_impots_locaux",
   PRIME_ASSURANCE_2024 = "prime_assurance_2024",
   TAUX_EVOLUTION_PRIME_ASSURANCE = "taux_evolution_prime_assurance",
   PART_PRIME_BUDGET_2024 = "part_prime_budget_2024",

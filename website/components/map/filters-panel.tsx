@@ -187,8 +187,8 @@ export function FiltersPanel({
               />
               <ChartRangeFilter
                 title="Évolution des impôts locaux (%)"
-                filterKey={FilterRangeKey.IMPOTS_LOCAUX_EVOLUTION}
-                step={0.1}
+                filterKey={FilterRangeKey.TAUX_EVOLUTION_IMPOTS_LOCAUX}
+                step={1}
                 caption="Évolution des impôts locaux collectés par la commune auprès de ses habitants entre 2020 et 2024 (%)"
               />
               <ChartRangeFilter
