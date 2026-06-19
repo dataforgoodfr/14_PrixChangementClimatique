@@ -161,8 +161,8 @@ models:
       - name: impots_locaux_2024
         description: Somme des impots locaux pour 2024 (Source OFGL)
         data_type: float
-      - name: impots_locaux_evolution
-        description: Evolution des impots locaux entre 2020 et 2024
+      - name: taux_evolution_impots_locaux
+        description: Taux d'évolution des impots locaux entre 2020 et 2024 (%)
         data_type: float
       - name: part_impots_locaux
         description: Part des impots locaux sur le budget total de la commune en 2024

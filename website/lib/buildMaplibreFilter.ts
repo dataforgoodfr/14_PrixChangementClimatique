@@ -56,11 +56,11 @@ export function buildMaplibreFilter(
     all.push(...rangeExpressions("taux_endettement", filters.taux_endettement));
   if (filters.impots_locaux_2024)
     all.push(...rangeExpressions("impots_locaux_2024", filters.impots_locaux_2024));
-  if (filters.impots_locaux_evolution)
+  if (filters.taux_evolution_impots_locaux)
     all.push(
       ...rangeExpressions(
-        "impots_locaux_evolution",
-        filters.impots_locaux_evolution,
+        "taux_evolution_impots_locaux",
+        filters.taux_evolution_impots_locaux,
       ),
     );
 

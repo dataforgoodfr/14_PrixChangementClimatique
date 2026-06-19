@@ -31,7 +31,7 @@ export interface Commune {
   taux_endettement?: number;
   depenses_per_pop: number;
   part_impots_locaux?: number;
-  impots_locaux_evolution?: number;
+  taux_evolution_impots_locaux?: number;
   impots_locaux_2024?: number;
 
   // CCR

@@ -35,8 +35,8 @@ export function TaxesCard({ commune }: { commune: Commune }) {
       unit={localTaxes.unit}
       tooltip="Les impôts locaux représentent l'ensemble des impôts collectés par la commune auprès de ses habitants"
       variationPercentage={
-        commune.impots_locaux_evolution &&
-        Math.round(commune.impots_locaux_evolution * 10) / 10
+        commune.taux_evolution_impots_locaux &&
+        Math.round(commune.taux_evolution_impots_locaux * 10) / 10
       }
       comparisonText="2020 vs 2024"
     />
