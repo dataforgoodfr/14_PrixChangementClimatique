@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { FiltersProvider } from "@/components/filters/filter-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { PlausibleTracker } from "@/components/PlausibleTracker";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             </NuqsAdapter>
           </FiltersProvider>
         </Providers>
+        <PlausibleTracker />
       </body>
     </html>
   );
