@@ -1,5 +1,6 @@
 import SectionTitle from "./section-title";
 import { RFButton } from "@/components/core/rf-button";
+import { CitizenModal } from "./citizen-modal";
 import { ArrowRight } from "lucide-react";
 
 const ContactSection: React.FC = () => {
@@ -87,13 +88,7 @@ const ContactSection: React.FC = () => {
               alertant vos élus de notre initiative pour protéger
               l&apos;assurabilité des communes françaises.
             </p>
-            <RFButton
-              title="Agir maintenant"
-              path="/#contact"
-              variant="tertiary"
-              icon={<ArrowRight className="w-5 h-5" />}
-              iconPosition="right"
-            />
+            <CitizenModal />
           </div>
 
           {/* Maire / Élu card */}
