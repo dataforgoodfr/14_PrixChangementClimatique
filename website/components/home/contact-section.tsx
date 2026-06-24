@@ -2,9 +2,9 @@ import SectionTitle from "./section-title";
 import { RFButton } from "@/components/core/rf-button";
 import { ArrowRight } from "lucide-react";
 
-const ContactSectionV2: React.FC = () => {
+const ContactSection: React.FC = () => {
   return (
-    <section>
+    <section id="contact">
       {/* Header with background pattern */}
       <div className="px-[16px] lg:px-[104px] py-16 bg-[linear-gradient(to_bottom,rgba(200,240,105,0.15)_0%,rgba(255,255,255,0.95)_100%),url('/contact-background.svg')] bg-cover bg-top flex flex-col items-center gap-4 text-center">
         <div className="max-w-[1200px] text-rf-green-dark mx-auto flex flex-col items-center">
@@ -130,4 +130,4 @@ const ContactSectionV2: React.FC = () => {
   );
 };
 
-export default ContactSectionV2;
+export default ContactSection;
