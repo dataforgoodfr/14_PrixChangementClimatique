@@ -1,11 +1,12 @@
 import Link from "next/link";
 import clsx from "clsx";
 import { ReactNode } from "react";
+import { badgeVariants } from "../ui/badge";
 
 interface RFButtonBaseProps {
   title: string;
   onClick?: () => void;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary";
   icon?: ReactNode;
   iconPosition?: "left" | "right";
 }
@@ -24,7 +25,7 @@ interface RFButtonElement extends RFButtonBaseProps {
 type RFButtonProps = RFLinkProps | RFButtonElement;
 
 const baseClasses = clsx(
-  "inline-flex items-center gap-[8px] px-5 py-2 w-fit text-base font-bold border rounded-none transition-all duration-150",
+  "inline-flex items-center gap-[8px] px-5 py-2 w-fit text-base font-bold rounded-none transition-all duration-150",
   "hover:shadow-none hover:translate-x-1 hover:translate-y-1",
 );
 
@@ -33,6 +34,10 @@ const variantClasses = {
     "bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-lime)]",
   secondary:
     "bg-rf-lime text-rf-green-dark border-rf-lime shadow-[4px_4px_0px_var(--color-rf-green-dark)]",
+  tertiary:
+    "bg-rf-lime text-rf-green-dark border-rf-lime shadow-[4px_4px_0px_var(--color-rf-green-light)]",
+  quaternary:
+    "bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-green-light)]",
 };
 
 function renderContent(
@@ -56,7 +61,6 @@ export function RFButton(props: RFButtonProps) {
     variant = "primary",
     icon,
     iconPosition = "left",
-    as = "link",
   } = props;
 
   const className = clsx(baseClasses, variantClasses[variant]);

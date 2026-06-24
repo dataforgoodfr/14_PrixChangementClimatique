@@ -5,7 +5,7 @@ import Hero from "./hero";
 import IntroSection from "./intro-section";
 import SecondSection from "./second-section";
 import ThirdSection from "./third-section/third-section";
-import ContactSection from "./contact-section";
+import ContactSection from "./contact-section-v2";
 
 const Home: React.FC = () => {
   return (
@@ -18,8 +18,8 @@ const Home: React.FC = () => {
         <SecondSection />
         <ThirdSection />
         <FourthSection />
+        <ContactSection />
       </div>
-      <ContactSection />
     </div>
   );
 };
