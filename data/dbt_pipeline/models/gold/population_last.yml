@@ -1,0 +1,17 @@
+version: 1
+
+models:
+  - name: population_last
+    description: >
+      Gold layer: Dernièree population disponible pour la commune
+      Source: Silver layer (population_par_com_annee)
+    columns:
+      - name: code_geo
+        description: "Code INSEE de la commune (5 caractères)"
+        type: STRING
+      - name: population
+        description: "Dernière population disponible pour la commune"
+        type: INT
+      - name: annee_recensement
+        description: "Année du dernier recensement disponible pour la commune"
+        type: INT
