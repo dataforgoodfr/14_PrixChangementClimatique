@@ -1,7 +1,6 @@
 import SectionTitle from "./section-title";
-import { RFButton } from "@/components/core/rf-button";
 import { CitizenModal } from "./citizen-modal";
-import { ArrowRight } from "lucide-react";
+import { MayorModal } from "./mayor-modal";
 
 const ContactSection: React.FC = () => {
   return (
@@ -111,13 +110,7 @@ const ContactSection: React.FC = () => {
               Construisons des solutions justes et abordables ensemble, afin de
               protéger l&apos;assurabilité des communes françaises.
             </p>
-            <RFButton
-              title="Agir maintenant"
-              path="/#contact"
-              variant="quaternary"
-              icon={<ArrowRight className="w-5 h-5" />}
-              iconPosition="right"
-            />
+            <MayorModal />
           </div>
         </div>
       </div>
