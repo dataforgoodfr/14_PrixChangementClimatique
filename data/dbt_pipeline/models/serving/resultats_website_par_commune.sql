@@ -108,7 +108,7 @@ SELECT
             NULLIF(
                 COUNT(p.part_prime_budget_2024) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_part_prime_budget,
 
@@ -124,7 +124,7 @@ SELECT
             NULLIF(
                 COUNT(p.evolution_prime_assurance) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_evolution_prime,
 
@@ -140,7 +140,7 @@ SELECT
             NULLIF(
                 COUNT(t.part_arretes_non_reconnus) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_part_arretes_non_reconnus,
 
@@ -156,7 +156,7 @@ SELECT
             NULLIF(
                 COUNT(b.ratio_dettes_depenses) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_ratio_dettes_depenses,
 
@@ -172,7 +172,7 @@ SELECT
             NULLIF(
                 COUNT(b.depenses_per_pop) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_depenses_per_pop
 
