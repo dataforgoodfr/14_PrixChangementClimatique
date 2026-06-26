@@ -8,6 +8,7 @@ export interface ContactFormData {
   city: string;
   email: string;
   message: string;
+  insuranceQuestion?: "oui" | "non";
 }
 
 /**
@@ -20,4 +21,5 @@ export interface GoogleScriptPayload {
   ville: string;
   email: string;
   message: string;
+  assurance_climatique: string;
 }

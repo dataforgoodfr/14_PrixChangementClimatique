@@ -31,7 +31,12 @@ export async function POST(req: NextRequest) {
       email: formData.email,
       message: formData.message,
       ville: formData.city,
+      assurance_climatique: formData.insuranceQuestion || "",
     };
+
+    if (formData.insuranceQuestion) {
+      gsPayload.assurance_climatique = formData.insuranceQuestion;
+    }
 
     const gsRes = await fetch(GOOGLE_SCRIPT_URL, {
       method: "POST",

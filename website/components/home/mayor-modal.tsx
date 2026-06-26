@@ -20,6 +20,7 @@ export function MayorModal() {
     city: "",
     email: "",
     message: "",
+    insuranceQuestion: undefined,
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,6 @@ export function MayorModal() {
   const handleSubmit = async () => {
     const newErrors: FormErrors = {
       name: !formData.name.trim(),
-      userType: !formData.userType,
       city: !formData.city.trim(),
       email: !formData.email.trim(),
       message: !formData.message.trim(),
@@ -154,35 +154,32 @@ export function MayorModal() {
               className={inputClass(errors.city)}
             />
 
-            {/* Vous êtes */}
             <div className="flex flex-col gap-2">
               <label className="text-rf-green-dark font-medium text-lg">
-                Vous êtes :
+                Votre ville est-elle assurée contre les risques climatiques ?
               </label>
               <div className="flex gap-6 md:gap-8">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
-                    name="mayor-modal-userType"
-                    value="citoyen"
-                    checked={formData.userType === "citoyen"}
-                    onChange={() => handleChange("userType", "citoyen")}
+                    name="insuranceQuestion"
+                    value="oui"
+                    checked={formData.insuranceQuestion === "oui"}
+                    onChange={() => handleChange("insuranceQuestion", "oui")}
                     className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                   />
-                  <span className="text-lg text-rf-green-dark">Citoyen.ne</span>
+                  <span className="text-lg text-rf-green-dark">Oui</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
-                    name="mayor-modal-userType"
-                    value="maire_ou_elu"
-                    checked={formData.userType === "maire_ou_elu"}
-                    onChange={() => handleChange("userType", "maire_ou_elu")}
+                    name="insuranceQuestion"
+                    value="non"
+                    checked={formData.insuranceQuestion === "non"}
+                    onChange={() => handleChange("insuranceQuestion", "non")}
                     className="w-5 h-5 cursor-pointer accent-rf-green-dark"
                   />
-                  <span className="text-lg text-rf-green-dark">
-                    Maire ou élu.e
-                  </span>
+                  <span className="text-lg text-rf-green-dark">Non</span>
                 </label>
               </div>
             </div>
