@@ -7,13 +7,25 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { RFButton } from "@/components/core/rf-button";
 import SectionTitle from "./section-title";
 
-const MAIL_TEMPLATE = `Madame, Monsieur le Maire,
+const MAIL_TEMPLATE = `Madame la Maire / Monsieur le Maire,
 
-Je vous contacte au sujet de l'initiative "Prix du Changement Climatique" portée par Reclaim Finance, qui analyse l'exposition au risque climatique des communes françaises et ses conséquences sur leur assurabilité.
+En consultant le site « Assurer ma ville », j'ai découvert que notre commune figure parmi les territoires exposés à des difficultés croissantes en matière d'assurance face aux risques climatiques.
 
-Notre commune est concernée par ces enjeux croissants. Je vous invite à consulter les données disponibles sur leur plateforme et à rejoindre cette démarche pour défendre des solutions d'assurance justes et abordables pour les collectivités.
+Selon les données présentées sur la plateforme, notre commune obtient un score de vulnérabilité de [SCORE]. Ce score s'appuie notamment sur l'exposition aux catastrophes naturelles, l'évolution des conditions d'assurance des collectivités et leur situation financière.
 
-Cordialement`;
+C'est pourquoi je souhaitais porter cette initiative à votre connaissance et vous inviter à consulter les informations disponibles sur le site : assurermaville.fr.
+
+Cette situation m'interpelle en tant qu'habitant(e). Partout en France, de plus en plus de collectivités font face à des augmentations importantes de primes, à des franchises plus élevées, à des résiliations de contrats ou à des appels d'offres qui ne reçoivent aucune réponse. Ces difficultés peuvent avoir des conséquences directes sur les finances locales et sur la capacité des communes à protéger leurs équipements et services publics.
+
+Reclaim Finance appelle le gouvernement à mettre en place des solutions d'assurance justes et abordables pour les collectivités territoriales. Pour que ces solutions répondent aux réalités du terrain, il est essentiel que les maires et les élus locaux puissent faire entendre leur expérience et leurs besoins.
+
+J'espère que notre commune pourra s'intéresser à cette démarche et, le cas échéant, contribuer aux réflexions visant à garantir un accès durable à l'assurance pour l'ensemble des collectivités.
+
+Je vous remercie pour votre attention et vous prie d'agréer, Madame la Maire / Monsieur le Maire, l'expression de mes salutations respectueuses.
+
+[Nom]
+[Commune]
+`;
 
 export function CitizenModal() {
   const [open, setOpen] = useState(false);
