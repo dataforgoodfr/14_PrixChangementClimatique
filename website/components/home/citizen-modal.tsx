@@ -38,9 +38,7 @@ export function CitizenModal() {
   };
 
   const handleEmail = () => {
-    const subject = encodeURIComponent(
-      "Initiative pour l'assurabilité des communes françaises — Reclaim Finance",
-    );
+    const subject = encodeURIComponent("Notre commune est vulnérable");
     const body = encodeURIComponent(MAIL_TEMPLATE);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
