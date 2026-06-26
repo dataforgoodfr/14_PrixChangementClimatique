@@ -108,7 +108,7 @@ SELECT
             NULLIF(
                 COUNT(p.part_prime_budget_2024) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_part_prime_budget,
 
@@ -124,7 +124,7 @@ SELECT
             NULLIF(
                 COUNT(p.evolution_prime_assurance) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_evolution_prime,
 
@@ -140,7 +140,7 @@ SELECT
             NULLIF(
                 COUNT(t.part_arretes_non_reconnus) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_part_arretes_non_reconnus,
 
@@ -156,7 +156,7 @@ SELECT
             NULLIF(
                 COUNT(b.ratio_dettes_depenses) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_ratio_dettes_depenses,
 
@@ -172,7 +172,7 @@ SELECT
             NULLIF(
                 COUNT(b.depenses_per_pop) OVER () - 1,
                 0
-            )
+            ), 3
         )
     END AS rank_depenses_per_pop
 
@@ -184,10 +184,9 @@ LEFT JOIN {{ ref('scenario_2050') }} AS r
 LEFT JOIN {{ ref('indicateurs_tri_rga_bats_par_com') }} AS tr
     ON c.code_geo = tr.code_geo
 
-LEFT JOIN {{ ref('population_par_com_annee') }} AS pop
+LEFT JOIN {{ ref('population_last') }} AS pop
     ON
         c.code_geo = pop.code_geo
-        AND pop.annee_recensement = 2023
 
 LEFT JOIN {{ ref('budget_last') }} AS b
     ON c.code_geo = b.code_geo
