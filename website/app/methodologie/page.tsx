@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SectionTitle from "@/components/home/section-title";
-import StatCallout from "@/components/home/statCallout";
+import { RFButton } from "@/components/core/rf-button";
+import { Download } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Méthodologie | Assurer ma ville",
@@ -24,7 +25,7 @@ export default function MethodologiePage() {
   return (
     <main>
       {/* ── 1. HERO ── */}
-      <section className="overflow-hidden text-center bg-[#FDF7EE] bg-[linear-gradient(to_bottom,#FDF7EE22_10%,#FDF7EE66_60%,#FFFFFF_100%),url('/home-background.svg')] bg-cover bg-top px-6 pt-14 pb-24">
+      <section className="overflow-hidden text-center bg-[#FDF7EE] bg-[linear-gradient(to_bottom,#FDF7EE22_10%,#FDF7EE66_60%,#FFFFFF_100%),url('/home-background.svg')] bg-cover bg-top px-[16px] lg:px-[104px] pt-14 pb-24">
         <div className="max-w-[1200px] flex flex-col items-center gap-6">
           <h1 className="font-sans font-bold text-rf-green-dark leading-[110%] tracking-[0] text-4xl  lg:text-6xl">
             Méthodologie
@@ -40,6 +41,17 @@ export default function MethodologiePage() {
           Cet indice repose sur 4 piliers : Exposition aux catastrophes
           naturelles, Prévention, Situation économique et Assurance.
         </p>
+        {/* TODO: remplacer par l'URL réelle du PDF */}
+        <div className="flex justify-center">
+          <RFButton
+            title="Télécharger la méthodologie complète"
+            path="/methodologie-pcc.pdf"
+            variant="secondary"
+            icon={<Download className="w-5 h-5" />}
+            iconPosition="right"
+            download="methodologie-pcc.pdf"
+          />
+        </div>
       </section>
       <div className="flex flex-col gap-[40px] w-full px-[16px] lg:px-[104px] pt-[40px] mb-[72px]">
         <div className="flex flex-col gap-[20px]">

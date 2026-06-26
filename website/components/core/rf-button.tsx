@@ -13,6 +13,7 @@ interface RFButtonBaseProps {
 interface RFLinkProps extends RFButtonBaseProps {
   as?: "link";
   path: string;
+  download?: string | boolean;
 }
 
 interface RFButtonElement extends RFButtonBaseProps {
@@ -74,7 +75,12 @@ export function RFButton(props: RFButtonProps) {
   }
 
   return (
-    <Link href={props.path} onClick={onClick} className={className}>
+    <Link
+      href={props.path}
+      onClick={onClick}
+      className={className}
+      download={props.download}
+    >
       {renderContent(icon, title, iconPosition)}
     </Link>
   );
