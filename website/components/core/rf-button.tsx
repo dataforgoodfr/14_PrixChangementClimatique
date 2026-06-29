@@ -9,11 +9,13 @@ interface RFButtonBaseProps {
   variant?: "primary" | "secondary" | "tertiary" | "quaternary";
   icon?: ReactNode;
   iconPosition?: "left" | "right";
+  className?: string;
 }
 
 interface RFLinkProps extends RFButtonBaseProps {
   as?: "link";
   path: string;
+  target?: string;
 }
 
 interface RFButtonElement extends RFButtonBaseProps {
@@ -61,9 +63,10 @@ export function RFButton(props: RFButtonProps) {
     variant = "primary",
     icon,
     iconPosition = "left",
+    className: extraClassName,
   } = props;
 
-  const className = clsx(baseClasses, variantClasses[variant]);
+  const className = clsx(baseClasses, variantClasses[variant], extraClassName);
 
   if (props.as === "button") {
     return (
@@ -78,7 +81,7 @@ export function RFButton(props: RFButtonProps) {
   }
 
   return (
-    <Link href={props.path} onClick={onClick} className={className}>
+    <Link href={props.path} onClick={onClick} className={className} target={props.target}>
       {renderContent(icon, title, iconPosition)}
     </Link>
   );

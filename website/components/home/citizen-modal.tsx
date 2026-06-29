@@ -43,14 +43,6 @@ export function CitizenModal() {
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
-  const handleInstagram = () => {
-    window.open(
-      "https://www.instagram.com/reclaimfinance/",
-      "_blank",
-      "noopener,noreferrer",
-    );
-  };
-
   return (
     <>
       <RFButton
@@ -103,7 +95,7 @@ export function CitizenModal() {
           {/* Action cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-8">
             {/* Email card */}
-            <div className="flex flex-col items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm">
+            <div className="flex flex-col items-center gap-8 rounded-[32px] bg-white p-6 text-center shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-rf-green-dark">
                 <Mail className="h-8 w-8 text-rf-lime" />
               </div>
@@ -113,19 +105,19 @@ export function CitizenModal() {
                   <span className="text-rf-green-light">1.</span> Contacter ma
                   mairie
                 </p>
-                <p className="text-xs leading-relaxed text-rf-gray-lightest">
+                <p className="text-sm leading-relaxed text-rf-subtitle">
                   Aidez-nous en partageant la situation de votre commune
                 </p>
               </div>
 
               <button
                 onClick={handleCopy}
-                className="flex w-full items-center justify-center gap-1.5 rounded border border-gray-200 px-3 py-2 text-xs text-rf-gray transition-colors hover:bg-gray-50"
+                className="inline-flex w-full items-center justify-center gap-2 border border-rf-green-dark bg-white px-5 py-2 text-base font-bold text-rf-green-dark shadow-[4px_4px_0px_var(--color-rf-green-dark)] transition-all duration-150 hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
               >
                 {copied ? (
-                  <Check className="h-3.5 w-3.5 shrink-0" />
+                  <Check className="h-4 w-4 shrink-0" />
                 ) : (
-                  <Copy className="h-3.5 w-3.5 shrink-0" />
+                  <Copy className="h-4 w-4 shrink-0" />
                 )}
                 {copied ? "Copié !" : "Copier le mail type"}
               </button>
@@ -137,11 +129,12 @@ export function CitizenModal() {
                 icon={<Mail className="h-4 w-4" />}
                 iconPosition="left"
                 onClick={handleEmail}
+                className="w-full justify-center"
               />
             </div>
 
             {/* Instagram card */}
-            <div className="flex flex-col items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm">
+            <div className="flex flex-col items-center gap-8 rounded-[32px] bg-white p-6 text-center shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-rf-lime">
                 <Instagram className="h-8 w-8 text-rf-green-dark" />
               </div>
@@ -151,21 +144,21 @@ export function CitizenModal() {
                   <span className="text-rf-green-light">2.</span> Tagger votre
                   mairie en commentaires
                 </p>
-                <p className="text-xs leading-relaxed text-rf-gray-lightest">
+                <p className="text-sm leading-relaxed text-rf-subtitle">
                   Aidez-nous en partageant la situation de votre commune
                 </p>
               </div>
 
-              <div className="mt-auto">
-                <RFButton
-                  as="button"
-                  title="Ouvrir Instagram"
-                  variant="quaternary"
-                  icon={<Instagram className="h-4 w-4" />}
-                  iconPosition="left"
-                  onClick={handleInstagram}
-                />
-              </div>
+              <RFButton
+                as="link"
+                path="https://www.instagram.com/reclaimfinance/"
+                target="_blank"
+                title="Ouvrir Instagram"
+                variant="quaternary"
+                icon={<Instagram className="h-4 w-4" />}
+                iconPosition="left"
+                className="mt-auto w-full justify-center"
+              />
             </div>
           </div>
 
