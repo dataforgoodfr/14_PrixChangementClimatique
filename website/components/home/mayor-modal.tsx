@@ -107,7 +107,7 @@ export function MayorModal() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           showCloseButton={false}
-          className="sm:max-w-4xl gap-0 overflow-hidden overflow-y-auto scrollbar-hide bg-white p-0 max-h-[90dvh]"
+          className="sm:max-w-4xl gap-0 overflow-hidden overflow-y-auto bg-white p-0 max-h-[90dvh]"
         >
           {/* Header with topographic background */}
           <div className="relative flex flex-col items-center gap-4 bg-[linear-gradient(to_bottom,rgba(200,240,105,0.15)_0%,rgba(255,255,255,0.95)_100%),url('/contact-background.svg')] bg-cover bg-top p-8 text-center">

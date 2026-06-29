@@ -82,13 +82,6 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-@utility scrollbar-hide {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 :root {
   /* Custom colors also in :root for direct CSS access */
   --color-rf-gray-light: #7c7aa1;
