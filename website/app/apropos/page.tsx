@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "À propos | Assurer ma ville",
@@ -119,6 +120,7 @@ export default function AProposPage() {
           France, à Berlin, Bristol, Amsterdam, Singapour et San Francisco.
         </p>
       </section>
+      <Footer />
     </main>
   );
 }

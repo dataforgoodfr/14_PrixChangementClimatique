@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SectionTitle from "@/components/home/section-title";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Méthodologie | Assurer ma ville",
@@ -19,7 +20,7 @@ const placeholderText2 =
 
 export default function MethodologiePage() {
   return (
-    <main>
+    <main className="min-h-[calc(100vh-4rem)] flex flex-col justify-between">
       {/* ── 1. HERO ── */}
       <section className="overflow-hidden text-center bg-[#FDF7EE] bg-[linear-gradient(to_bottom,#FDF7EE22_10%,#FDF7EE66_60%,#FFFFFF_100%),url('/home-background.svg')] bg-cover bg-top px-6 pt-14 pb-24">
         <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-6">
@@ -31,6 +32,7 @@ export default function MethodologiePage() {
           </p>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }
