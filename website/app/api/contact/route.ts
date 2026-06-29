@@ -27,7 +27,6 @@ export async function POST(req: NextRequest) {
     // Convert ContactFormData (camelCase) to GoogleScriptPayload (snake_case)
     const gsPayload: GoogleScriptPayload = {
       nom: formData.name,
-      situation: formData.userType,
       email: formData.email,
       message: formData.message,
       ville: formData.city,

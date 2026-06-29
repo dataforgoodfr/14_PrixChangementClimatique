@@ -4,11 +4,10 @@
  */
 export interface ContactFormData {
   name: string;
-  userType: "citoyen" | "maire_ou_elu";
   city: string;
-  insuranceQuestion?: "oui" | "non";
   email: string;
   message: string;
+  insuranceQuestion?: "oui" | "non";
 }
 
 /**
@@ -17,9 +16,8 @@ export interface ContactFormData {
  */
 export interface GoogleScriptPayload {
   nom: string;
-  situation: string;
   ville: string;
-  assurance_climatique: string;
   email: string;
   message: string;
+  assurance_climatique: string;
 }

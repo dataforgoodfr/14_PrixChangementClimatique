@@ -18,8 +18,8 @@ const Home: React.FC = () => {
         <SecondSection />
         <ThirdSection />
         <FourthSection />
+        <ContactSection />
       </div>
-      <ContactSection />
     </div>
   );
 };

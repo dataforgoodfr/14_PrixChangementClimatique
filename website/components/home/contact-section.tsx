@@ -1,245 +1,120 @@
-"use client";
+import SectionTitle from "./section-title";
+import { CitizenModal } from "./citizen-modal";
+import { MayorModal } from "./mayor-modal";
 
-import { useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
-import { toast } from "sonner";
-import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/utils";
-import type { ContactFormData } from "@/lib/types/contact";
-
-type FormErrors = Partial<Record<keyof ContactFormData, boolean>>;
-
-const ContactSection = () => {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: "",
-    userType: "citoyen",
-    city: "",
-    insuranceQuestion: undefined,
-    email: "",
-    message: "",
-  });
-
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const isMayor = formData.userType === "maire_ou_elu";
-
-  const handleChange = (field: keyof ContactFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = async () => {
-    const newErrors: FormErrors = {
-      name: !formData.name.trim(),
-      userType: !formData.userType,
-      city: !formData.city.trim(),
-      email: !formData.email.trim(),
-      message: !formData.message.trim(),
-    };
-    if (isMayor) {
-      newErrors.insuranceQuestion = !formData.insuranceQuestion;
-    }
-    setErrors(newErrors);
-    if (Object.values(newErrors).some(Boolean)) {
-      toast.error("Veuillez remplir tous les champs obligatoires.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (res.ok) {
-        setSubmitted(true);
-        toast.success(
-          "Message envoyé à Reclaim Finance ! Merci pour votre engagement.",
-        );
-      } else {
-        const errorText = await res.text();
-        console.error("Erreur lors de l'envoi du formulaire", errorText);
-        toast.error("Erreur lors de l'envoi du message. Veuillez réessayer.");
-      }
-    } catch (err) {
-      console.error("Erreur réseau:", err);
-      toast.error(
-        "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const inputClass = (error: boolean | undefined) =>
-    cn(
-      "w-full bg-transparent border-b pb-3 pt-1 outline-none text-lg transition-colors",
-      "placeholder:transition-colors",
-      error
-        ? "border-red-500 text-red-500 placeholder:text-red-500"
-        : "border-rf-green-light text-rf-green-dark placeholder:text-black",
-    );
-
+const ContactSection: React.FC = () => {
   return (
-    <>
-      <section
-        id="contact"
-        className="max-w-[800px] mx-auto px-5 sm:px-8 md:px-10 py-16 pb-24 flex flex-col items-center gap-10"
-      >
-        {/* ── Titre ── */}
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div>
-            <span className="inline-block bg-rf-green-dark text-rf-lime font-bold rotate-[-1deg] px-3 py-1 text-3xl leading-[110%]">
-              Contactez-nous
-            </span>
-          </div>
-          <h2 className="text-rf-green-dark font-normal text-3xl leading-[110%]">
+    <section id="contact">
+      {/* Header with background pattern */}
+      <div className="px-[16px] lg:px-[104px] py-16 bg-[linear-gradient(to_bottom,rgba(200,240,105,0.15)_0%,rgba(255,255,255,0.95)_100%),url('/contact-background.svg')] bg-cover bg-top flex flex-col items-center gap-4 text-center">
+        <div className="max-w-[1200px] text-rf-green-dark mx-auto flex flex-col items-center">
+          <h1 className="font-sans font-bold leading-[110%] tracking-[0] text-4xl  lg:text-6xl">
+            Contactez-nous
+          </h1>
+          <p className="font-sans font-normal text-3xl leading-[120%] tracking-[-0.034em]">
             pour agir dès maintenant
-          </h2>
-          <p className="text-[#4E4E5C] text-lg">
-            Vous êtes citoyen.ne ou élu.e, contactez-nous dès maintenant pour en
-            savoir plus
+          </p>
+        </div>
+        <p className="text-[#4E4E5C] text-lg max-w-[600px]">
+          Vous êtes citoyen ou élu, contactez-nous dès maintenant pour en savoir
+          plus
+        </p>
+      </div>
+
+      {/* Content section */}
+      <div className="flex flex-col gap-10 px-[16px] lg:px-[104px] pb-12">
+        <SectionTitle
+          topLine={[
+            {
+              parts: [{ text: "L'assurabilité des communes" }],
+              highlight: true,
+            },
+          ]}
+          bottomLine={[
+            {
+              parts: [
+                { text: "françaises est un " },
+                { text: "enjeu national", bold: true },
+              ],
+            },
+          ]}
+          highlightVariant="secondary"
+        />
+
+        <div className="flex flex-col gap-5 text-lg text-[#7C7AA1]">
+          <p>
+            Car aujourd&apos;hui, maires, élus et citoyens sont déjà confrontés
+            à la dégradation des conditions d&apos;assurance de leur commune
+            (augmentation des tarifs, des franchises, résiliations unilatérales,
+            appels d&apos;offre sans réponse, etc.).
+          </p>
+          <p>
+            <strong>Reclaim Finance appelle le gouvernement</strong> à mettre en
+            place des{" "}
+            <strong>solutions d&apos;assurance justes et abordables</strong>{" "}
+            pour les collectivités territoriales en France. Pour défendre ces
+            solutions auprès du gouvernement et des assureurs français,{" "}
+            <strong>nous avons besoin de vous !</strong>
+          </p>
+          <p>
+            <strong>
+              Citoyens, maires et élus, chacun peut avoir un impact, alors
+              rejoignez l&apos;initiative pour en savoir plus et agir.
+            </strong>
           </p>
         </div>
 
-        {/* ── Formulaire ── */}
-        <div className="w-full flex flex-col gap-8">
-          <input
-            type="text"
-            placeholder="Prénom / Nom"
-            value={formData.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-            className={inputClass(errors.name)}
-          />
-
-          <input
-            type="text"
-            placeholder="Votre ville"
-            value={formData.city}
-            onChange={(e) => handleChange("city", e.target.value)}
-            className={inputClass(errors.city)}
-          />
-
-          {/* ── Sélecteur Vous êtes: ── */}
-          <div className="flex flex-col gap-2">
-            <label className="text-rf-green-dark font-medium text-lg">
-              Vous êtes:
-            </label>
-            <div className="flex gap-6 md:gap-8">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="userType"
-                  value="citoyen"
-                  checked={formData.userType === "citoyen"}
-                  onChange={() => handleChange("userType", "citoyen")}
-                  className="w-5 h-5 cursor-pointer accent-rf-green-dark"
-                />
-                <span className="text-lg text-rf-green-dark">Citoyen.ne</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="userType"
-                  value="maire_ou_elu"
-                  checked={formData.userType === "maire_ou_elu"}
-                  onChange={() => handleChange("userType", "maire_ou_elu")}
-                  className="w-5 h-5 cursor-pointer accent-rf-green-dark"
-                />
-                <span className="text-lg text-rf-green-dark">
-                  Maire ou élu.e
-                </span>
-              </label>
-            </div>
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-4">
+          {/* Citoyen card */}
+          <div className="bg-rf-green-dark text-white rounded-2xl p-8 flex flex-col items-center gap-6 text-center">
+            <SectionTitle
+              highlightVariant="primary"
+              topLine={[
+                {
+                  parts: [{ text: "Je suis" }],
+                },
+              ]}
+              bottomLine={[
+                {
+                  highlight: true,
+                  parts: [{ text: "citoyen.ne", bold: true }],
+                },
+              ]}
+            />
+            <p className="text-white/80 text-base text-lg leading-relaxed">
+              Aidez-nous en partageant la situation de votre commune, et en
+              alertant vos élus de notre initiative pour protéger
+              l&apos;assurabilité des communes françaises.
+            </p>
+            <CitizenModal />
           </div>
 
-          {/* ── Sélecteur conditionnel pour maire/élu ── */}
-          {isMayor && (
-            <div className="flex flex-col gap-2">
-              <label className="text-rf-green-dark font-medium text-lg">
-                Votre ville est-elle assurée contre les risques climatiques ?
-              </label>
-              <div className="flex gap-6 md:gap-8">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="insuranceQuestion"
-                    value="oui"
-                    checked={formData.insuranceQuestion === "oui"}
-                    onChange={() => handleChange("insuranceQuestion", "oui")}
-                    className="w-5 h-5 cursor-pointer accent-rf-green-dark"
-                  />
-                  <span className="text-lg text-rf-green-dark">Oui</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="insuranceQuestion"
-                    value="non"
-                    checked={formData.insuranceQuestion === "non"}
-                    onChange={() => handleChange("insuranceQuestion", "non")}
-                    className="w-5 h-5 cursor-pointer accent-rf-green-dark"
-                  />
-                  <span className="text-lg text-rf-green-dark">Non</span>
-                </label>
-              </div>
-            </div>
-          )}
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => handleChange("email", e.target.value)}
-            className={inputClass(errors.email)}
-          />
-          <textarea
-            placeholder="Tapez ici votre message"
-            value={formData.message}
-            onChange={(e) => handleChange("message", e.target.value)}
-            rows={6}
-            className={cn(
-              "w-full bg-transparent border p-4 outline-none resize-none text-lg transition-colors",
-              "placeholder:transition-colors",
-              errors.message
-                ? "border-red-500 text-red-500 placeholder:text-red-500"
-                : "border-rf-green-light text-rf-green-dark placeholder:text-black",
-            )}
-          />
+          {/* Maire / Élu card */}
+          <div className="bg-rf-lime rounded-2xl p-8 flex flex-col items-center gap-6 text-center">
+            <SectionTitle
+              highlightVariant="tertiary"
+              topLine={[
+                {
+                  parts: [{ text: "Je suis" }],
+                },
+              ]}
+              bottomLine={[
+                {
+                  highlight: true,
+                  parts: [{ text: "maire, élu.e", bold: true }],
+                },
+              ]}
+            />
+            <p className="text-rf-green-dark/80 text-lg text-base leading-relaxed">
+              Construisons des solutions justes et abordables ensemble, afin de
+              protéger l&apos;assurabilité des communes françaises.
+            </p>
+            <MayorModal />
+          </div>
         </div>
-
-        {/* ── Bouton ── */}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={loading || submitted}
-          className={cn(
-            "inline-flex items-center justify-center gap-2 px-5 py-2 min-w-[160px] font-bold border rounded-none transition-all duration-150",
-            "disabled:translate-x-0 disabled:translate-y-0 disabled:cursor-default",
-            "bg-rf-green-dark text-rf-lime border-rf-lime shadow-[4px_4px_0px_var(--color-rf-lime)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 disabled:shadow-[4px_4px_0px_var(--color-rf-lime)]",
-          )}
-        >
-          {loading ? (
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-rf-lime animate-bounce [animation-delay:0ms]" />
-              <span className="w-2 h-2 rounded-full bg-rf-lime animate-bounce [animation-delay:150ms]" />
-              <span className="w-2 h-2 rounded-full bg-rf-lime animate-bounce [animation-delay:300ms]" />
-            </span>
-          ) : submitted ? (
-            <Check className="w-5 h-5 animate-in zoom-in duration-300" />
-          ) : (
-            <>
-              Nous contacter
-              <ArrowRight className="w-5 h-5" />
-            </>
-          )}
-        </button>
-      </section>
-      <Toaster />
-    </>
+      </div>
+    </section>
   );
 };
 
