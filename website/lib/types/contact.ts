@@ -4,7 +4,6 @@
  */
 export interface ContactFormData {
   name: string;
-  userType: "citoyen" | "maire_ou_elu";
   city: string;
   email: string;
   message: string;
@@ -17,7 +16,6 @@ export interface ContactFormData {
  */
 export interface GoogleScriptPayload {
   nom: string;
-  situation: string;
   ville: string;
   email: string;
   message: string;

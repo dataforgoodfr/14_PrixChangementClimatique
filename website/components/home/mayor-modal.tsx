@@ -16,7 +16,6 @@ export function MayorModal() {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
-    userType: "maire_ou_elu",
     city: "",
     email: "",
     message: "",
@@ -33,7 +32,6 @@ export function MayorModal() {
   const handleOpen = () => {
     setFormData({
       name: "",
-      userType: "maire_ou_elu",
       city: "",
       email: "",
       message: "",
@@ -58,6 +56,7 @@ export function MayorModal() {
 
     setLoading(true);
     try {
+      console.log("Envoi du formulaire:", formData);
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
