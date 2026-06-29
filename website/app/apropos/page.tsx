@@ -39,7 +39,7 @@ export default function AProposPage() {
         </p>
         <p className={bodyClass}>
           Pour mieux comprendre la situation des communes françaises, Reclaim
-          Finance et Data4Good ont développé une cartographie permettant
+          Finance et Data For Good ont développé une cartographie permettant
           d’évaluer la vulnérabilité des communes françaises aux événements
           climatiques extrêmes.
         </p>
