@@ -6,6 +6,7 @@ import IntroSection from "./intro-section";
 import SecondSection from "./second-section";
 import ThirdSection from "./third-section/third-section";
 import ContactSection from "./contact-section";
+import { Footer } from "@/components/footer";
 
 const Home: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const Home: React.FC = () => {
         <FourthSection />
         <ContactSection />
       </div>
+      <Footer />
     </div>
   );
 };
