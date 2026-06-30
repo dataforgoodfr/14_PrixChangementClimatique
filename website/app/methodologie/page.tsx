@@ -56,7 +56,8 @@ export default function MethodologiePage() {
         </p>
         <div>
           <a
-            href="#"
+            href="/methodologie.pdf"
+            target="_blank"
             className="inline-flex items-center gap-2 bg-rf-green-dark text-rf-lime font-semibold text-lg px-6 py-4 rounded-xl hover:opacity-90 transition-opacity"
           >
             <svg
