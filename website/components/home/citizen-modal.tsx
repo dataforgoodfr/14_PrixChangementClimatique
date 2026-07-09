@@ -1,8 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Mail, Instagram, Copy, Check, X } from "lucide-react";
 import Image from "next/image";
+import {
+  ArrowRight,
+  Mail,
+  Instagram,
+  Copy,
+  Check,
+  X,
+  Megaphone,
+} from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { RFButton } from "@/components/core/rf-button";
 import SectionTitle from "./section-title";
@@ -93,7 +101,7 @@ export function CitizenModal() {
           </div>
 
           {/* Action cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-8">
             {/* Email card */}
             <div className="flex flex-col items-center gap-8 rounded-[32px] bg-white p-6 text-center shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-rf-green-dark">
@@ -160,28 +168,42 @@ export function CitizenModal() {
                 className="mt-auto w-full justify-center"
               />
             </div>
-          </div>
 
-          {/* L'affaire du siècle section */}
-          {/* TODO: replace logo-assurer-ma-ville.svg with the actual L'affaire du siècle logo once added to /public */}
-          <div className="flex flex-col items-center gap-3 px-8 pb-8 text-center">
-            <Image
-              src="/logo-laffaire-du-siecle.png"
-              alt="L'affaire du siècle"
-              width={80}
-              height={40}
-              className="object-contain"
-            />
-            <p className="text-sm leading-relaxed text-rf-green-dark">
-              <strong>Vous vous trouvez dans une commune</strong>{" "}
-              particulièrement <strong>exposée ?</strong>
-              <br />
-              Vérifiez si vous êtes vous-même sinistré-e climatique et
-              interpellez l&apos;Etat pour qu&apos;il assure votre protection
-            </p>
-            <span className="inline-flex cursor-not-allowed items-center px-5 py-2 text-base font-bold text-rf-green-dark opacity-80 bg-rf-lime">
-              Disponible le 9 juillet 2026
-            </span>
+            {/* Se compter pour peser card */}
+            <div className="flex flex-col items-center gap-8 rounded-[32px] bg-white p-6 text-center shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-rf-green-dark">
+                <Megaphone className="h-8 w-8 text-rf-lime" />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-semibold leading-tight text-rf-green-dark">
+                  <span className="text-rf-green-light">3.</span> Répondre au
+                  questionnaire
+                </p>
+                <p className="text-sm leading-relaxed text-rf-subtitle">
+                  Sinistré·e climatique ? Faites compter votre vécu
+                </p>
+              </div>
+
+              <Image
+                src="/logo-laffaire-du-siecle.png"
+                alt="L'affaire du siècle"
+                width={80}
+                height={40}
+                className="object-contain"
+              />
+
+              <RFButton
+                as="link"
+                path="https://secompterpourpeser.org"
+                target="_blank"
+                title="Je témoigne"
+                variant="quaternary"
+                icon={<Megaphone className="h-4 w-4" />}
+                iconPosition="left"
+                className="mt-auto w-full justify-center"
+              />
+            </div>
           </div>
         </DialogContent>
       </Dialog>
